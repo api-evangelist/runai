@@ -1,0 +1,123 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/runai-openapi-original.json
+docs: https://run-ai-docs.nvidia.com/api/readme.md
+note: Entity-relationship graph derived from the control-plane OpenAPI tags, schemas,
+  and id-reference fields. Workspaces, Trainings, Inferences and Distributed are specializations
+  of the Workload resource.
+entities:
+- Cluster
+- NodePool
+- Node
+- Department
+- Project
+- Workload
+- Workspace
+- Training
+- Inference
+- Distributed
+- WorkloadTemplate
+- Policy
+- Compute
+- Environment
+- Datasource
+- Credential
+- AccessKey
+- AccessRule
+- Role
+- User
+- ServiceAccount
+- Application
+- Report
+- AuditLog
+- Datavolume
+- NotificationChannel
+relationships:
+- from: Cluster
+  type: has_many
+  to: NodePool
+  via: clusterId
+- from: Cluster
+  type: has_many
+  to: Node
+  via: clusterId
+- from: NodePool
+  type: has_many
+  to: Node
+  via: nodePoolId
+- from: Department
+  type: has_many
+  to: Project
+  via: departmentId
+- from: Department
+  type: belongs_to
+  to: Cluster
+  via: clusterId
+- from: Project
+  type: belongs_to
+  to: Department
+  via: departmentId
+- from: Project
+  type: has_many
+  to: Workload
+  via: projectId
+- from: Workload
+  type: belongs_to
+  to: Project
+  via: projectId
+- from: Workload
+  type: belongs_to
+  to: Cluster
+  via: clusterId
+- from: Workspace
+  type: is_a
+  to: Workload
+  via: workloadId
+- from: Training
+  type: is_a
+  to: Workload
+  via: workloadId
+- from: Inference
+  type: is_a
+  to: Workload
+  via: workloadId
+- from: Distributed
+  type: is_a
+  to: Workload
+  via: workloadId
+- from: Workload
+  type: has_many
+  to: Pod
+  via: workloadId
+- from: Workload
+  type: has_one
+  to: Compute
+  via: computeId
+- from: Workload
+  type: has_many
+  to: Datasource
+  via: datasourceId
+- from: Workload
+  type: has_one
+  to: Environment
+  via: environmentId
+- from: WorkloadTemplate
+  type: has_one
+  to: Compute
+  via: computeId
+- from: AccessRule
+  type: binds
+  to: Role
+  via: roleId
+- from: AccessRule
+  type: binds
+  to: ServiceAccount
+  via: subjectId
+- from: ServiceAccount
+  type: has_many
+  to: AccessKey
+  via: serviceAccountId
+- from: Policy
+  type: applies_to
+  to: Project
+  via: scope

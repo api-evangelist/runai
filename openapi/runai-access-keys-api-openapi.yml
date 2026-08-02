@@ -1,0 +1,579 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Access Keys
+  description: 'Access Keys allow users to authenticate and interact programmatically with the NVIDIA Run:ai API.
+
+    Each access key consists of a client ID and secret that can be used to obtain authentication tokens.
+
+    Access keys can be managed by individual users for their own use, or by administrators for organization-wide access.
+
+    For more information, see [Access control](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/overview/#role-based-access-control).
+
+    '
+paths:
+  /api/v1/access-keys:
+    get:
+      summary: Get a list of access keys.
+      description: Retrieve a list of the user's access keys.
+      operationId: get_access_keys
+      tags:
+      - Access Keys
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessKeys'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Create an access key.
+      description: Used to create an access key.
+      operationId: create_access_key1
+      tags:
+      - Access Keys
+      requestBody:
+        description: Access key object to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AccessKeyCreationRequest1'
+      responses:
+        '201':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessKeyPostResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/access-keys/{accessKeyId}:
+    get:
+      summary: Get access key by id.
+      description: Retrieve the details of an access key by id.
+      operationId: get_access_key_by_id1
+      tags:
+      - Access Keys
+      parameters:
+      - $ref: '#/components/parameters/accessKeyId'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessKey1'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    delete:
+      summary: Delete an access key by id.
+      description: Use to delete an access key by id.
+      operationId: delete_access_key_by_id
+      tags:
+      - Access Keys
+      parameters:
+      - $ref: '#/components/parameters/accessKeyId'
+      responses:
+        '204':
+          description: Executed successfully.
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/access-keys/{accessKeyId}/secret:
+    post:
+      summary: Regenerate an access key secret.
+      description: Use to regenerate the access key secret by id.
+      operationId: regenerate_access_key_secret
+      tags:
+      - Access Keys
+      parameters:
+      - $ref: '#/components/parameters/accessKeyId'
+      responses:
+        '200':
+          description: Regenerated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  clientSecret:
+                    type: string
+                    description: Secret credential paired with the client ID. Used to obtain authentication tokens.
+                example:
+                  clientSecret: this-is-my-secret
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/administration/access-keys:
+    get:
+      summary: Get a list of all access keys.
+      description: Retrieve a list of all access keys.
+      operationId: get_access_keys_administration
+      tags:
+      - Access Keys
+      parameters:
+      - description: Filter results by clientId
+        in: query
+        name: clientId
+        required: false
+        schema:
+          type: string
+        example: 3434c-12323ab-4ce2ea6-b44fc-db344d
+      - description: Filter results by creatdBy
+        in: query
+        name: createdBy
+        required: false
+        schema:
+          type: string
+        example: test@run.ai
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AccessKeysAdministration'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/administration/access-keys/{accessKeyId}:
+    delete:
+      summary: Delete an access key by id for administrations.
+      description: Use to delete an access key by id for administrations.
+      operationId: delete_access_key_by_id_administration
+      tags:
+      - Access Keys
+      parameters:
+      - $ref: '#/components/parameters/accessKeyId'
+      responses:
+        '204':
+          description: Executed successfully.
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+  schemas:
+    AccessKeyAdministration:
+      type: object
+      required:
+      - name
+      - id
+      - clientId
+      - createdBy
+      - createdAt
+      - lastLogin
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        clientId:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          nullable: true
+        lastLogin:
+          type: string
+          format: date-time
+          nullable: true
+      example:
+        name: my-access-key
+        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+        clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
+        createdBy: test@run.ai
+        createdAt: '2020-01-01T00:00:00Z'
+        lastLogin: '2020-01-01T00:00:00Z'
+    AccessKeys:
+      type: object
+      required:
+      - accessKeys
+      properties:
+        accessKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessKey1'
+      example:
+        accessKeys:
+        - name: my-access-key
+          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+          clientId: 3434c-12323ab-4ce2ea6
+          createdAt: '2019-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+        - name: another-access-key
+          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
+          clientId: 5656d-45645cd-6de3fb7
+          createdAt: '2019-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+    AccessKeyCreationRequest1:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
+          description: The name of the access key. The name must be unique within the user's access keys list and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
+      example:
+        name: access-key-name
+    AccessKeyPostResponse:
+      type: object
+      required:
+      - id
+      - name
+      - clientSecret
+      - clientId
+      - createdAt
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the access key.
+        clientId:
+          type: string
+          description: The client identifier associated with the access key. Used when requesting authentication tokens.
+        name:
+          type: string
+          description: The name of the access key.
+        clientSecret:
+          type: string
+          description: Secret credential paired with the client ID. Used to obtain authentication tokens. Displayed only once upon creation.
+        createdAt:
+          format: date-time
+          nullable: true
+          type: string
+          description: The timestamp for when the access key was created.
+      example:
+        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
+        clientId: 5e7b3b7b4b7b4b7b
+        name: access-key-123
+        clientSecret: this-is-the-access-key-secret
+        createdAt: '2020-01-01T00:00:00Z'
+    AccessKeysAdministration:
+      type: object
+      required:
+      - accessKeys
+      properties:
+        accessKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessKeyAdministration'
+      example:
+        accessKeys:
+        - name: my-access-key
+          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+          clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
+          createdBy: test@run.ai
+          createdAt: '2020-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+        - name: another-access-key
+          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
+          clientId: 2545e-234344bc-5df4gc8-d66he-fg566f
+          createdBy: user@run.ai
+          createdAt: '2020-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    AccessKey1:
+      type: object
+      required:
+      - name
+      - id
+      - clientId
+      - createdAt
+      - lastLogin
+      properties:
+        name:
+          type: string
+          description: The name of the access key.
+        clientId:
+          type: string
+          description: The client identifier associated with the access key. Used when requesting authentication tokens.
+        id:
+          type: string
+          description: The unique identifier of the access key.
+        createdAt:
+          type: string
+          format: date-time
+          nullable: true
+          description: The timestamp for when the access key was created.
+        lastLogin:
+          type: string
+          format: date-time
+          nullable: true
+          description: The timestamp of the last time the access key was used to authenticate.
+      example:
+        name: my-access-key
+        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+        clientId: 3434c-12323ab-4ce2ea6
+        createdAt: '2019-01-01T00:00:00Z'
+        lastLogin: '2020-01-01T00:00:00Z'
+  parameters:
+    accessKeyId:
+      name: accessKeyId
+      in: path
+      required: true
+      description: The access key ID
+      schema:
+        type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

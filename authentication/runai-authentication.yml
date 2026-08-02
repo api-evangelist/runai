@@ -1,0 +1,33 @@
+generated: '2026-07-21'
+method: searched
+source: openapi/runai-openapi-original.json
+docs: https://run-ai-docs.nvidia.com/api/getting-started/how-to-authenticate-to-the-api.md
+summary:
+  types:
+  - http
+  model: bearer-jwt via client-credentials access key
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  bearerFormat: JWT
+  description: Bearer authentication
+  sources:
+  - openapi/runai-openapi-original.json
+token_exchange:
+  endpoint: POST https://<COMPANY-URL>/api/v1/token
+  grant_type: client_credentials
+  request: '{"grantType":"client_credentials","clientId":"<CLIENT ID>","clientSecret":"<CLIENT SECRET>"}'
+  response: '{"accessToken":"<TOKEN>"}'
+  usage: Pass accessToken as a Bearer token in the Authorization header.
+  company_url:
+    saas: <tenant-name>.run.ai
+    self_hosted: the Run:ai user interface URL
+credentials:
+  access_key: clientId + clientSecret, issued to a user or a service account
+  user_access_keys: https://run-ai-docs.nvidia.com/saas/settings/user-settings/user-access-keys.md
+  service_accounts: https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/service-accounts.md
+  authorization: Access rules bind roles to subjects (see docs access rules / roles).
+sso:
+  user_login: SAML and OpenID Connect (OIDC) supported for UI/user login (not the API token flow).
+  docs: https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/sso.md

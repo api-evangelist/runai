@@ -1,0 +1,636 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys Users API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Users
+paths:
+  /api/v1/users:
+    get:
+      summary: Get users.
+      description: Retrieve a list of platform users.
+      operationId: get_users
+      tags:
+      - Users
+      parameters:
+      - description: Filter results by user attribute.
+        in: query
+        name: filter
+        required: false
+        deprecated: true
+        schema:
+          type: string
+        example: runai.is_local:true
+      - $ref: '#/components/parameters/usersFilterBy'
+      - $ref: '#/components/parameters/usersSortBy'
+      - $ref: '#/components/parameters/SortOrder'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/limit'
+      - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Users1'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Create a local user.
+      description: Use to create a local platform user.
+      operationId: create_user
+      tags:
+      - Users
+      requestBody:
+        description: User object to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserCreationRequest1'
+      responses:
+        '201':
+          description: Created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserPostResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/users/count:
+    get:
+      summary: Count users
+      operationId: count_users
+      description: count users
+      tags:
+      - Users
+      parameters:
+      - $ref: '#/components/parameters/usersFilterBy'
+      - $ref: '#/components/parameters/search'
+      responses:
+        '200':
+          description: ok
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - count
+                properties:
+                  count:
+                    type: integer
+                    format: int64
+                    example: 1
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/users/{userId}/logout:
+    post:
+      summary: Logout a user.
+      description: Use to force a user to logout.
+      operationId: logout_user
+      tags:
+      - Users
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: Executed successfully.
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/users/{userId}/password:
+    post:
+      summary: Reset a user's password.
+      description: Use to to reset a user's password.
+      operationId: reset_user_password
+      tags:
+      - Users
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: Regenerated successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tempPassword:
+                    type: string
+                example:
+                  tempPassword: asdasidjn9d
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/users/{userId}:
+    get:
+      summary: Get a user by id.
+      description: Retrieve a user's details by id.
+      operationId: get_user_by_id
+      tags:
+      - Users
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User2'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    delete:
+      summary: Delete a user by id.
+      description: Use to delete a user by id.
+      operationId: delete_user_by_id
+      tags:
+      - Users
+      parameters:
+      - $ref: '#/components/parameters/userId'
+      responses:
+        '204':
+          description: Executed successfully.
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/me/password:
+    post:
+      summary: change user password
+      operationId: change_user_password
+      tags:
+      - Users
+      requestBody:
+        description: Password to change
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserChangePasswordRequest'
+      responses:
+        '200':
+          description: Password changed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  currentPassword:
+                    type: string
+                  newPassword:
+                    type: string
+                example:
+                  tempPassword: Abcd!234
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  schemas:
+    UserChangePasswordRequest:
+      type: object
+      required:
+      - currentPassword
+      - newPassword
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+      example:
+        currentPassword: Abcd!234
+        newPassword: Zxcv!567
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    UserCreationRequest1:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+          description: The email of the user. Must be a valid email address.
+        resetPassword:
+          type: boolean
+          nullable: true
+        notify:
+          type: boolean
+          description: When true, send an email to the user. The email includes a link to reset the password.
+          nullable: true
+      example:
+        email: test@run.ai
+        resetPassword: false
+        notify: true
+    UsersFilterSortFields:
+      type: string
+      enum:
+      - username
+      - createdBy
+      - lastLogin
+      - creationTime
+      - lastUpdated
+      - type
+    Users1:
+      type: array
+      items:
+        $ref: '#/components/schemas/User2'
+    User2:
+      type: object
+      required:
+      - id
+      - username
+      - createdBy
+      - createdAt
+      - updatedAt
+      - lastLogin
+      - isLocal
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+        lastLogin:
+          type: string
+          format: date-time
+          nullable: true
+        isLocal:
+          type: boolean
+          nullable: true
+        groups:
+          type: array
+          items:
+            type: string
+          nullable: true
+      example:
+        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+        username: test@run.ai
+        createdBy: devops@run.ai
+        createdAt: '2020-01-01T00:00:00Z'
+        updatedAt: '2022-01-01T00:00:00Z'
+        lastLogin: '2023-02-01T00:00:00Z'
+        isLocal: true
+        groups:
+        - groupA
+        - groupB
+    UserPostResponse:
+      type: object
+      required:
+      - id
+      - username
+      - tempPassword
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        tempPassword:
+          type: string
+      example:
+        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
+        username: test@run.ai
+        tempPassword: asdasidjn9d
+  parameters:
+    usersSortBy:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results by a parameters.
+      schema:
+        $ref: '#/components/schemas/UsersFilterSortFields'
+    search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test@run
+    usersFilterBy:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are <= Less than or equal, >= Greater than or equal, =@ contains. Dates are in ISO 8601 timestamp format and available for operators <=, >= and ==.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(username|createdBy|lastLogin|creationTime|lastUpdated|isLocal)(==|<=|>=|=@).+$
+        example:
+        - username=@test,lastLogin>=2024-09-24T00:00:00.00Z,isLocal==false
+      explode: false
+    userId:
+      name: userId
+      in: path
+      required: true
+      description: The id of the user
+      schema:
+        type: string
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 500
+        minimum: 1
+        maximum: 500
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+  responses:
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

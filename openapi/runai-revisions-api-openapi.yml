@@ -1,0 +1,622 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys Revisions API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Revisions
+  description: Revisions are associated with an inference workload and represent a snapshot of its configuration. A revision is created on each change to the inference workload.
+paths:
+  /api/v1/workloads/inferences/{workloadId}/revisions:
+    get:
+      summary: Get inference workload revisions by id. [Experimental]
+      description: Retrieve the details of inference workload revisions by workload id. Supported for clusters v2.21+.
+      operationId: get_inference_workload_revisions
+      tags:
+      - Revisions
+      parameters:
+      - $ref: '#/components/parameters/WorkloadId'
+      - $ref: '#/components/parameters/Deleted'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - revisions
+                properties:
+                  revisions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Revision'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/workloads/inferences/{workloadId}/revisions/count:
+    get:
+      summary: Get inference workload revisions count. [Experimental]
+      description: Retrieve the number of an inference workload revisions from a cluster. Supported for clusters v2.21+.
+      operationId: count_inference_workload_revisions
+      tags:
+      - Revisions
+      parameters:
+      - $ref: '#/components/parameters/WorkloadId'
+      - $ref: '#/components/parameters/Deleted'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - count
+                properties:
+                  count:
+                    type: integer
+                    format: int64
+                    example: 1
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/workloads/inferences/revisions/{revisionId}:
+    get:
+      summary: Get revision data. [Experimental]
+      operationId: get_revision
+      description: Retrieve revision details using a revision id. Supported for clusters v2.21+.
+      tags:
+      - Revisions
+      parameters:
+      - $ref: '#/components/parameters/RevisionId'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Revision'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  schemas:
+    GpuRequestType:
+      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
+      type: string
+      minLength: 1
+      enum:
+      - portion
+      - memory
+      nullable: true
+    DepartmentId2:
+      description: The id of the department.
+      type: string
+      minLength: 1
+      example: 2
+      pattern: .*
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    WorkloadAllocatedResources:
+      type: object
+      nullable: true
+      properties:
+        gpu:
+          type: number
+          nullable: true
+          format: double
+          example: 1.5
+          description: Required if and only if gpuRequestType is portion. States the number of GPUs allocated for the created workload. The default is no allocated GPUs.
+        gpuMemory:
+          type: string
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          nullable: true
+          example: 200Mi
+        cpu:
+          type: number
+          nullable: true
+          format: double
+          description: States the amount of CPU cores used by the workload running.
+          example: 0.5
+        cpuMemory:
+          type: string
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          nullable: true
+          example: 0B
+        extendedResources:
+          $ref: '#/components/schemas/WorkloadsExtendedResources'
+    Revision:
+      type: object
+      required:
+      - type
+      - name
+      - id
+      - workloadId
+      - tenantId
+      - clusterId
+      - departmentId
+      - projectId
+      - createdAt
+      - phase
+      properties:
+        type:
+          type: string
+          example: runai-revision
+        name:
+          type: string
+          example: very-important-job
+        id:
+          type: string
+          format: uuid
+        workloadId:
+          type: string
+          format: uuid
+        tenantId:
+          $ref: '#/components/schemas/TenantId'
+        clusterId:
+          $ref: '#/components/schemas/ClusterId'
+        projectId:
+          $ref: '#/components/schemas/ProjectId'
+        departmentId:
+          $ref: '#/components/schemas/DepartmentId2'
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        deletedAt:
+          type: string
+          format: date-time
+          example: '2022-08-12T19:28:24.131Z'
+          nullable: true
+        revisionRequestedResources:
+          $ref: '#/components/schemas/WorkloadRequestResources'
+        podsRequestedResources:
+          $ref: '#/components/schemas/WorkloadRequestResources'
+        requestedPods:
+          $ref: '#/components/schemas/RequestedPods'
+        requestedNodePools:
+          type: array
+          items:
+            type: string
+            example: default
+        allocatedResources:
+          $ref: '#/components/schemas/WorkloadAllocatedResources'
+        currentNodePools:
+          type: array
+          items:
+            type: string
+            example: default
+        runningPods:
+          type: integer
+          format: int32
+          example: 1
+        images:
+          type: array
+          items:
+            type: string
+            example: alpine:latest
+        environmentVariables:
+          type: object
+          additionalProperties:
+            type: string
+        command:
+          type: string
+          example: sleep
+        arguments:
+          type: string
+          example: '1000'
+        childrenIds:
+          type: array
+          writeOnly: true
+          items:
+            type: object
+            required:
+            - id
+            properties:
+              id:
+                type: string
+                format: uuid
+              type:
+                type: string
+        conditions:
+          $ref: '#/components/schemas/Conditions'
+        phase:
+          $ref: '#/components/schemas/Phase'
+        phaseMessage:
+          type: string
+          example: Not enough resources in the requested nodepool
+        phaseUpdatedAt:
+          type: string
+          format: date-time
+          example: '2022-06-08T11:28:24.131Z'
+        additionalFields:
+          type: object
+          additionalProperties: true
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    Conditions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Condition1'
+      x-schema-name: Conditions
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    Phase:
+      type: string
+      enum:
+      - Creating
+      - Initializing
+      - Resuming
+      - Pending
+      - Deleting
+      - Running
+      - Updating
+      - Stopped
+      - Stopping
+      - Degraded
+      - Failed
+      - Completed
+      - Terminating
+      - Unknown
+    RequestResourceCores:
+      type: object
+      properties:
+        limit:
+          type: number
+          nullable: true
+          format: double
+          example: 1.5
+        request:
+          type: number
+          nullable: true
+          format: double
+          example: 1
+      nullable: true
+    WorkloadsExtendedResources:
+      description: Set of extended resources with their quantity
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkloadsExtendedResource'
+      nullable: true
+    Condition1:
+      type: object
+      required:
+      - type
+      - status
+      properties:
+        type:
+          description: The type of the condition, such as Failed or Available. See Types of domain status conditions.
+          type: string
+          example: Ready
+        status:
+          type: string
+          description: The status of the condition, such as True, False or Unknown.
+          example: 'False'
+        message:
+          type: string
+          description: An optional, human-readable message providing more details about the condition.
+          example: 'Resource validation failed: ...'
+        reason:
+          type: string
+          description: The reason for the Failed condition. Not applicable to other types of condition.
+          example: ErrorConfig
+        lastTransitionTime:
+          description: A timestamp of when the condition was created or the last time the condition transitioned from one status to another.
+          type: string
+          nullable: true
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+    WorkloadsExtendedResource:
+      description: Quantity of an extended resource.
+      type: object
+      properties:
+        resource:
+          description: The name of the extended resource (mandatory)
+          type: string
+          example: hardware-vendor.example/foo
+          minLength: 1
+          nullable: true
+        quantity:
+          description: The requested quantity for the given resource.
+          type: string
+          example: 2
+          minLength: 1
+          nullable: true
+        exclude:
+          description: Whether to exclude this extended resource from the workload. This is necessary in case the extended resource is inherited from the policy defaults and it is desired not to include it in this workload.
+          type: boolean
+          example: false
+          nullable: true
+      nullable: true
+    WorkloadRequestResources:
+      type: object
+      nullable: true
+      properties:
+        gpuRequestType:
+          $ref: '#/components/schemas/GpuRequestType'
+        gpu:
+          $ref: '#/components/schemas/RequestResourceCores'
+        gpuMemory:
+          $ref: '#/components/schemas/RequestResourceQuantity'
+        cpu:
+          $ref: '#/components/schemas/RequestResourceCores'
+        cpuMemory:
+          $ref: '#/components/schemas/RequestResourceQuantity'
+        extendedResources:
+          $ref: '#/components/schemas/WorkloadsExtendedResources'
+    ProjectId:
+      description: The id of the project.
+      type: string
+      example: 1
+      pattern: .*
+    RequestResourceQuantity:
+      type: object
+      properties:
+        limit:
+          type: string
+          nullable: true
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 2G
+        request:
+          type: string
+          nullable: true
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 200M
+      nullable: true
+    RequestedPods:
+      type: object
+      properties:
+        number:
+          type: integer
+          format: int32
+          example: 1
+          nullable: true
+        min:
+          type: integer
+          format: int32
+          example: 2
+          nullable: true
+        max:
+          type: integer
+          format: int32
+          example: 5
+          nullable: true
+        parallelism:
+          type: integer
+          format: int32
+          description: specifies how many Pods can run in parallel
+          example: 3
+          nullable: true
+        completions:
+          type: integer
+          description: specifies how many Pods should terminate successfully before the Workload is completed
+          format: int32
+          example: 5
+          nullable: true
+  responses:
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+  parameters:
+    RevisionId:
+      name: revisionId
+      in: path
+      required: true
+      description: The  Universally Unique Identifier (UUID) of the revision.
+      schema:
+        type: string
+        format: uuid
+    Deleted:
+      name: deleted
+      in: query
+      description: Return only deleted resources when `true`.
+      schema:
+        type: boolean
+    WorkloadId:
+      name: workloadId
+      in: path
+      required: true
+      description: The  Universally Unique Identifier (UUID) of the workload.
+      schema:
+        type: string
+        format: uuid
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

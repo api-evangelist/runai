@@ -1,0 +1,127 @@
+generated: '2026-07-21'
+method: derived
+source: openapi/runai-openapi-original.json + https://run-ai-docs.nvidia.com/api/getting-started/using-the-rest-api/http-status-codes.md
+docs: https://run-ai-docs.nvidia.com/api/getting-started/using-the-rest-api/http-status-codes.md
+format: json-envelope
+note: NVIDIA Run:ai returns errors as a JSON envelope (not RFC 9457 problem+json).
+  The envelope schema is {code:int, message:string, details?:string}. The token endpoint
+  additionally returns OAuth 2.0 error objects (RFC 6749 §5.2).
+envelope:
+  fields:
+  - name: code
+    type: integer
+    description: Numeric error code (mirrors the HTTP status, 100-599).
+  - name: message
+    type: string
+    description: Human-readable error message.
+  - name: details
+    type: string
+    description: Optional additional detail about the error.
+  example:
+    code: 400
+    message: Bad request - Resource should have a name
+oauth2_error:
+  schema: OAuth2Error
+  spec: RFC 6749 Section 5.2
+  field: error
+  values:
+  - invalid_request
+  - invalid_client
+  - invalid_grant
+  - unauthorized_client
+  - unsupported_grant_type
+problems:
+- status: 400
+  title: Bad Request
+  meaning: Bad Request — the request is invalid (malformed body, missing required
+    fields, or failed validation).
+  example_operations:
+  - access_rules_batch
+  - access_rules_batch_create
+  - app_token
+- status: 401
+  title: Unauthorized
+  meaning: Unauthorized — authentication failed or the bearer token is missing/expired.
+  example_operations:
+  - V1GetStorageClasses
+  - access_rules_batch
+  - access_rules_batch_create
+- status: 403
+  title: Forbidden
+  meaning: Forbidden — the caller is authenticated but not authorized for this resource
+    or action.
+  example_operations:
+  - access_rules_batch
+  - access_rules_batch_create
+  - batch_workloads
+- status: 404
+  title: Not Found
+  meaning: Not Found — the requested resource does not exist.
+  example_operations:
+  - V1GetStorageClasses
+  - change_user_password
+  - createNotificationChannelConfig
+- status: 405
+  title: Method Not Allowed
+  meaning: Method Not Allowed — the HTTP method is not allowed for this endpoint.
+  example_operations: []
+- status: 409
+  title: Conflict
+  meaning: Conflict — the request conflicts with the current state of the resource.
+  example_operations:
+  - createNodePool
+  - createNotificationChannelConfig
+  - createProject
+- status: 412
+  title: Error
+  meaning: ''
+  example_operations:
+  - delete_access_key
+  - delete_docker_registry
+  - delete_generic_secret
+- status: 413
+  title: Error
+  meaning: ''
+  example_operations:
+  - upload_tenant_logo
+- status: 415
+  title: Error
+  meaning: ''
+  example_operations:
+  - upload_tenant_logo
+- status: 422
+  title: Error
+  meaning: ''
+  example_operations:
+  - get_cluster_metrics
+- status: 500
+  title: Internal Server Error
+  meaning: Internal Server Error — an unexpected server error occurred.
+  example_operations:
+  - access_rules_batch
+  - access_rules_batch_create
+  - app_token
+- status: 501
+  title: Not Implemented
+  meaning: Not Implemented — the server does not support the requested functionality.
+  example_operations:
+  - createNotificationChannelConfig
+  - createSlackApp
+  - createSubscription
+- status: 502
+  title: Bad Gateway
+  meaning: Bad Gateway — the gateway received an invalid response from an upstream
+    service.
+  example_operations: []
+- status: 503
+  title: Service Unavailable
+  meaning: Service Unavailable — the service is temporarily unavailable or a dependency
+    is failing.
+  example_operations:
+  - access_rules_batch
+  - access_rules_batch_create
+  - app_token
+- status: 504
+  title: Gateway Timeout
+  meaning: Gateway Timeout — the gateway timed out waiting for an upstream service.
+  example_operations: []

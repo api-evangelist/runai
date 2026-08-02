@@ -1,0 +1,432 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys AuditLogs API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: AuditLogs
+  description: The audit log provides audit trail information for user activity, changes to business objects and other important information. For more information, see [Audit log](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/procedures/event-history).
+paths:
+  /api/v1/audit/log:
+    get:
+      description: Get audit logs based on query params filter
+      summary: Get audit logs
+      operationId: getAuditLogs
+      tags:
+      - AuditLogs
+      parameters:
+      - $ref: '#/components/parameters/StartRequired'
+      - $ref: '#/components/parameters/EndRequired'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/NumberOfSamples'
+      - $ref: '#/components/parameters/SortOrder'
+      - $ref: '#/components/parameters/AuditLogSort'
+      - $ref: '#/components/parameters/AuditLogFilter'
+      responses:
+        '200':
+          description: Executed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - logs
+                properties:
+                  total:
+                    type: integer
+                    example: 2000
+                  next:
+                    type: integer
+                    example: 100
+                  audit_logs:
+                    $ref: '#/components/schemas/AuditLogs'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/audit/log/file:
+    get:
+      description: Download audit logs as a file, based on query params filter
+      summary: Download audit logs
+      operationId: downloadAuditLogs
+      tags:
+      - AuditLogs
+      parameters:
+      - in: query
+        name: file_type
+        schema:
+          type: string
+          enum:
+          - CSV
+          - JSON
+          default: CSV
+        required: false
+      - $ref: '#/components/parameters/StartRequired'
+      - $ref: '#/components/parameters/EndRequired'
+      - $ref: '#/components/parameters/NumberOfSamples'
+      - $ref: '#/components/parameters/AuditLogFilter'
+      responses:
+        '200':
+          description: File downloaded
+          content:
+            application/octet-stream: {}
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  schemas:
+    AuditLog:
+      type: object
+      required:
+      - tenant_id
+      - subject
+      - subject_type
+      - action
+      - result
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 0000-000000-00000-00000
+        timestamp:
+          type: string
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        tenant_id:
+          type: string
+          description: the ID of the tenant
+          example: 12345
+        subject:
+          type: string
+          description: the user/app which triggered this API
+          example: researcher@run.ai
+        subject_type:
+          type: string
+          enum:
+          - User
+          - App
+          default: User
+        source_ip:
+          type: string
+          format: ipv4
+        action:
+          type: string
+          enum:
+          - create
+          - update
+          - delete
+          - sign-in
+          - sign-out
+          - reset-password
+        http_method:
+          type: string
+          enum:
+          - GET
+          - POST
+          - PUT
+          - PATCH
+          - DELETE
+          - CREATE
+        url:
+          type: string
+          format: uri
+        entity_type:
+          type: string
+          example: project
+        entity_name:
+          type: string
+          example: project-1
+        entity_id:
+          type: string
+          example: '1234'
+        result:
+          type: string
+          enum:
+          - Succeeded
+          - Failed
+        http_status_code:
+          type: integer
+          example: 200
+        cluster_name:
+          type: string
+          example: my favorite cluster
+        cluster_id:
+          type: string
+          format: uuid
+        request_id:
+          type: string
+          format: uuid
+          example: bb0c4742-e52f-4d5e-bfee-2c4ff57c339c
+        metadata:
+          type: object
+          maxProperties: 10
+          additionalProperties:
+            type: string
+    AuditLogs:
+      type: array
+      items:
+        $ref: '#/components/schemas/AuditLog'
+      x-schema-name: AuditLog
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+  parameters:
+    AuditLogFilter:
+      name: filterBy
+      in: query
+      required: false
+      explode: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(timestamp|subject|subject_type|source_ip|action|result|url|entity_type|entity_name|cluster_name)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - cluster_name==my-cluster_name
+        - entity_type==cluster,entity_name==test
+    EndRequired:
+      name: end
+      in: query
+      description: End date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-07T12:09:18.211Z'
+    AuditLogSort:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results by a parameters.
+      schema:
+        type: string
+        enum:
+        - timestamp
+        - subject
+        - subject_type
+        - source_ip
+        - action
+        - http_method
+        - result
+        - url
+        - entity_type
+        - entity_name
+        - entity_id
+    NumberOfSamples:
+      name: numberOfSamples
+      in: query
+      description: The number of samples to take in the specified time range.
+      required: false
+      schema:
+        type: integer
+        example: 20
+        maximum: 1000
+        minimum: 0
+        default: 20
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    StartRequired:
+      name: start
+      in: query
+      description: Start date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-06T12:09:18.211Z'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

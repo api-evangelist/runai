@@ -1,0 +1,27 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for NVIDIA Run:ai Control Plane REST API
+  version: 1.0.0
+extends: openapi/runai-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-provider: runai
+    x-apievangelist-enriched: '2026-07-21'
+    x-apievangelist-auth: bearer-jwt (client_credentials access key via POST /api/v1/token)
+    x-apievangelist-pagination: offset-limit (limit default 50, range 1..500; next pointer)
+    x-apievangelist-error-format: json-envelope {code,message,details}
+    x-apievangelist-deprecation-policy: https://run-ai-docs.nvidia.com/api/getting-started/nvidia-run-ai-api-policy.md
+    x-apievangelist-conventions: conventions/runai-conventions.yml
+    x-apievangelist-errors: errors/runai-problem-types.yml
+    x-apievangelist-data-model: data-model/runai-data-model.yml
+- target: $.servers
+  update:
+  - url: https://app.run.ai
+    description: NVIDIA Run:ai SaaS control plane
+  - url: https://<COMPANY-URL>
+    description: Self-hosted / tenant control plane (replace with tenant UI URL)
+- target: $.externalDocs
+  update:
+    description: NVIDIA Run:ai REST API documentation
+    url: https://run-ai-docs.nvidia.com/api/readme.md

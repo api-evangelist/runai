@@ -1,0 +1,482 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys Tokens API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Tokens
+  description: "Use tokens to facilitate authentication to the NVIDIA Run:ai API. \nThe API server must be configured to use the NVIDIA Run:ai identity \nservice to validate authentication tokens.\n"
+paths:
+  /api/v1/token:
+    post:
+      tags:
+      - Tokens
+      summary: Create an access token v1
+      description: Create tokens using the `grant_type` parameter.
+      operationId: grant_token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenRequest'
+            examples:
+              client_credentials:
+                value:
+                  grantType: client_credentials
+                  clientID: clientID
+                  clientSecret: clientSecret
+                description: Obtain the clientID and the clientSecret using service accounts or access keys endpoints
+              refresh_token:
+                value:
+                  grantType: refresh_token
+                  refreshToken: refreshToken
+                  clientID: clientID
+              exchange_token:
+                value:
+                  grantType: exchange_token
+                  code: code
+                  clientID: clientID
+                  redirectUri: redirectUri
+              external_token_exchange:
+                value:
+                  grantType: external_token_exchange
+                  externalToken: access token from external idp
+              app_token (deprecated):
+                value:
+                  grantType: app_token
+                  appID: appID
+                  appSecret: appSecret
+                description: Deprecated - Obtain the appID and the appSecret using applications or user applications endpoints
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v2/token:
+    post:
+      tags:
+      - Tokens
+      summary: Create an access token v2
+      description: 'Use this endpoint to obtain an access token. Compliant with standard OAuth2 protocol and supports the common OAuth2 grant types.
+
+        '
+      operationId: grant_token_v2
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              required:
+              - grant_type
+              properties:
+                grant_type:
+                  type: string
+                  description: The OAuth2 grant type that determines how the token will be issued.
+                  enum:
+                  - authorization_code
+                  - client_credentials
+                  - password
+                  - refresh_token
+                client_id:
+                  type: string
+                  description: OAuth2 client identifier
+                client_secret:
+                  type: string
+                  description: OAuth2 client secret
+                  format: password
+                username:
+                  type: string
+                  description: Resource owner username (for password grant)
+                password:
+                  type: string
+                  description: The password of the resource owner. Required only when using the password grant type.
+                  format: password
+                refresh_token:
+                  type: string
+                  description: The refresh token used to obtain a new access token. Required only when using the refresh_token grant type.
+                code:
+                  type: string
+                  description: Authorization code issued by the authorization server. Used in the authorization_code grant to exchange the code for an access token.
+                redirect_uri:
+                  type: string
+                  description: The redirect URI used during the authorization request. Required for the authorization_code grant to validate the redirect destination.
+            examples:
+              authorization_code:
+                value:
+                  grant_type: authorization_code
+                  code: authorization_code_value
+                  redirect_uri: https://example.com/callback
+                  client_id: my-client-id
+              client_credentials:
+                value:
+                  grant_type: client_credentials
+                  client_id: my-client-id
+                  client_secret: my-client-secret
+                description: Obtain the clientID and the clientSecret using service accounts or access keys endpoints
+              password:
+                value:
+                  grant_type: password
+                  username: user@example.com
+                  password: password123
+                  client_id: my-client-id
+              refresh_token:
+                value:
+                  grant_type: refresh_token
+                  refresh_token: refresh_token_value
+                  client_id: my-client-id
+      responses:
+        '200':
+          description: Successfully issued token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2TokenResponse'
+              example:
+                access_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+                token_type: Bearer
+                expires_in: 3600
+                refresh_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+                id_token: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9...
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+        '401':
+          description: Client authentication failed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OAuth2Error'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /v1/k8s/auth/oauth/apptoken:
+    post:
+      deprecated: true
+      tags:
+      - Tokens
+      summary: get application token
+      description: 'Retrieve access token for an application.
+
+        The application token is retrieved from the authorization server.
+
+        This endpoint is deprecated.  Use /api/v1/token with the grantType parameter set to app_token instead, with AppID and appSecret set accordingly to get an application token
+
+        '
+      operationId: app_token
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppTokenRequest'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AppTokenResponse'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  schemas:
+    TokenRequest:
+      type: object
+      properties:
+        grantType:
+          $ref: '#/components/schemas/TokenRequestGrantTypeEnum'
+        appID:
+          deprecated: true
+          type: string
+        appSecret:
+          deprecated: true
+          type: string
+        code:
+          type: string
+        redirectUri:
+          type: string
+        refreshToken:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        clientID:
+          type: string
+        clientSecret:
+          type: string
+        externalToken:
+          type: string
+    AppTokenResponse:
+      type: object
+      required:
+      - access_token
+      - id_token
+      properties:
+        access_token:
+          type: string
+        id_token:
+          type: string
+    OAuth2Error:
+      type: object
+      description: OAuth 2.0 error response (RFC 6749 Section 5.2)
+      required:
+      - error
+      properties:
+        error:
+          type: string
+          description: A single ASCII error code
+          enum:
+          - invalid_request
+          - invalid_client
+          - invalid_grant
+          - unauthorized_client
+          - unsupported_grant_type
+          - invalid_scope
+          - server_error
+          - temporarily_unavailable
+          example: invalid_client
+        error_description:
+          type: string
+          description: Human-readable ASCII text providing additional information
+          example: Client authentication failed
+        error_uri:
+          type: string
+          description: URI identifying a human-readable web page with information about the error
+    AppTokenRequest:
+      type: object
+      required:
+      - id
+      - name
+      - secret
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        secret:
+          type: string
+    TokenRequestGrantTypeEnum:
+      enum:
+      - app_token
+      - client_credentials
+      - refresh_token
+      - exchange_token
+      - password
+      - external_token_exchange
+    OAuth2TokenResponse:
+      type: object
+      required:
+      - access_token
+      - token_type
+      properties:
+        access_token:
+          type: string
+          description: The access token issued by the authorization server
+        token_type:
+          type: string
+          description: The type of the token issued (typically "Bearer")
+          example: Bearer
+        expires_in:
+          type: integer
+          description: The lifetime in seconds of the access token
+          example: 3600
+        refresh_token:
+          type: string
+          description: The refresh token, which can be used to obtain new access tokens
+        id_token:
+          type: string
+          description: ID Token value associated with the authenticated session (OpenID Connect)
+        scope:
+          type: string
+          description: The scope of the access token
+    TokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        idToken:
+          type: string
+        refreshToken:
+          type: string
+        expiresIn:
+          type: integer
+          description: Token lifetime in seconds
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+  responses:
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

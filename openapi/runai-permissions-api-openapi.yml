@@ -1,0 +1,365 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys Permissions API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Permissions
+paths:
+  /api/v1/authorization/permissions:
+    get:
+      summary: Get a summary of user permissions.
+      description: Retrieve a summary of user permissions.
+      operationId: get_permissions
+      tags:
+      - Permissions
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Permissions'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/authorization/permitted-scopes:
+    post:
+      summary: Calculate permitted scopes.
+      description: Use to calculate user permitted scopes for an action on a resource.
+      operationId: get_permitted_scopes
+      tags:
+      - Permissions
+      requestBody:
+        description: The request parameters.
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - resourceType
+              properties:
+                resourceType:
+                  $ref: '#/components/schemas/ResourceType'
+                action:
+                  nullable: true
+                  type: string
+                  enum:
+                  - create
+                  - read
+                  - update
+                  - delete
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PermittedScopesActions'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  schemas:
+    PermittedScopes:
+      type: object
+      properties:
+        system:
+          type: boolean
+          example: false
+        tenants:
+          type: array
+          items:
+            type: string
+            example: '1'
+        tenant:
+          deprecated: true
+          type: string
+          example: '1'
+        clusters:
+          type: array
+          items:
+            type: string
+            example: a418ed33-9399-48c0-a890-122cadd13bfd
+        departments:
+          type: array
+          items:
+            type: string
+            example: '7'
+        projects:
+          type: array
+          items:
+            type: string
+    Permission:
+      type: object
+      required:
+      - resourceType
+      - actions
+      - groupId
+      - displayName
+      properties:
+        resourceType:
+          $ref: '#/components/schemas/ResourceType'
+        displayName:
+          type: string
+          example: Projects
+        groupId:
+          $ref: '#/components/schemas/ResourceTypeGroupId'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+    PermittedScopesActions:
+      type: object
+      required:
+      - create
+      - read
+      - update
+      - delete
+      properties:
+        create:
+          $ref: '#/components/schemas/PermittedScopes'
+        read:
+          $ref: '#/components/schemas/PermittedScopes'
+        update:
+          $ref: '#/components/schemas/PermittedScopes'
+        delete:
+          $ref: '#/components/schemas/PermittedScopes'
+    Permissions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Permission'
+      x-schema-name: Permissions
+    ResourceTypeGroupId:
+      type: string
+      enum:
+      - organization
+      - physical-resource
+      - iam
+      - dashboard
+      - workload
+      - workload-asset
+    ResourceType:
+      type: string
+      description: "Resource type enum for authorization. \n\nNote: The 'apps' resource type is DEPRECATED. Please use 'service-account' instead for managing service accounts.\n"
+      enum:
+      - department
+      - tenant
+      - project
+      - cluster
+      - cluster-config
+      - nodepools
+      - nodes
+      - settings
+      - security-settings
+      - branding-settings
+      - users
+      - apps
+      - service-account
+      - dashboards-overview
+      - dashboards-analytics
+      - dashboards-consumption
+      - roles
+      - access_rules
+      - jobs
+      - workloads
+      - workspaces
+      - trainings
+      - inferences
+      - environments
+      - pvc-assets
+      - git-assets
+      - host-path-assets
+      - nfs-assets
+      - s3-assets
+      - compute-resources
+      - templates
+      - credentials
+      - events-history
+      - policies
+      - cm-volume-assets
+      - datavolumes
+      - secret-volume-assets
+      - storage-class-configuration
+      - access-keys
+      - workload-properties
+      - network-topologies
+      - registries
+      - scrapeable-metrics
+    Action:
+      type: string
+      enum:
+      - create
+      - read
+      - update
+      - delete
+      - sync
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

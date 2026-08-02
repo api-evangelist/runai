@@ -1,0 +1,798 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys Workload properties API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Workload properties
+  description: 'Workload properties define the behavioral and scheduling characteristics of a workload submitted to the NVIDIA Run:ai platform. These properties such as type, category, and priority determine how workloads are classified, monitored, and scheduled.
+
+    - Type - Defines the functional behavior of a workload, such as training or inference, and serves as the foundation for how it is classified within the platform. Each workload type includes a default category (used for monitoring) and a default priority (used for scheduling within a project).
+
+    - Category - Represents the role or purpose of a workload, such as  Build, Train, Deploy. Each workload type is assigned a default category to ensure consistent classification across the platform for monitoring purposes. See [Monitor workloads by category](https://run-ai-docs.nvidia.com/saas/platform-management/monitor-performance/workload-categories).
+
+    - Priority - Determines the scheduling order of workloads within a project and whether a workload can be preempted. Higher-priority workloads are scheduled first and may become non-preemptible, preventing interruption by lower-priority workloads. See [Workload priority control](https://run-ai-docs.nvidia.com/saas/platform-management/runai-scheduler/scheduling/workload-priority-control).
+
+    '
+paths:
+  /api/v1/workload-categories:
+    get:
+      summary: List workload categories.
+      description: Retrieves a list of workload categories. These categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform.
+      operationId: list_categories
+      tags:
+      - Workload properties
+      responses:
+        '200':
+          description: List of categories retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - categories
+                properties:
+                  categories:
+                    $ref: '#/components/schemas/WorkloadCategories'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/workload-categories/{categoryId}:
+    get:
+      summary: Get workload category by id.
+      description: Retrieves a specific workload category by its ID. Workload categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform.
+      operationId: get_category_by_id
+      tags:
+      - Workload properties
+      parameters:
+      - name: categoryId
+        description: The unique identifier of the workload category.
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Category retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkloadCategory'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/workload-types:
+    get:
+      summary: List workload types.
+      description: Retrieves a list of workload types with their configurations - their corresponding workload categories and priorities.
+      operationId: list_workload_types
+      tags:
+      - Workload properties
+      parameters:
+      - $ref: '#/components/parameters/ExternalTypesOnly'
+      - $ref: '#/components/parameters/WorkloadTypesFilter'
+      responses:
+        '200':
+          description: List of types retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - types
+                properties:
+                  types:
+                    $ref: '#/components/schemas/WorkloadTypeConfigs'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Create a workload type. [Experimental]
+      description: Create a new workload type in the system by providing its identification details and configuration, making it available for use and management within the platform.
+      operationId: create_workload_type
+      tags:
+      - Workload properties
+      requestBody:
+        description: Workload type to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkloadTypeCreateFields'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkloadTypeConfig'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '409':
+          $ref: '#/components/responses/409Conflict'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/workload-types/{workloadTypeId}:
+    get:
+      summary: List workload type by id.
+      description: Retrieves a specific workload type by its ID.
+      operationId: get_workload_type
+      tags:
+      - Workload properties
+      parameters:
+      - $ref: '#/components/parameters/WorkloadTypeId'
+      responses:
+        '200':
+          description: Type retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkloadTypeConfig'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    put:
+      summary: Update a workload type by id.
+      description: Update the default category or priority assigned to a workload type.
+      operationId: update_workload_type
+      tags:
+      - Workload properties
+      parameters:
+      - $ref: '#/components/parameters/WorkloadTypeId'
+      requestBody:
+        description: Workload type to update.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WorkloadTypeUpdateFields'
+      responses:
+        '200':
+          description: Updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WorkloadTypeConfig'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    delete:
+      summary: Delete a workload type by id. [Experimental]
+      description: Deletes a specific workload type by its ID.
+      operationId: delete_workload_type
+      tags:
+      - Workload properties
+      parameters:
+      - $ref: '#/components/parameters/WorkloadTypeId'
+      responses:
+        '204':
+          $ref: '#/components/responses/204NoContent'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/workload-priorities:
+    get:
+      summary: Get workload priorities.
+      description: Retrieve the list of all workload priorities available in the system
+      operationId: get_workload_priorities
+      tags:
+      - Workload properties
+      parameters:
+      - $ref: '#/components/parameters/SortOrder'
+      - $ref: '#/components/parameters/WorkloadsPrioritiesSort'
+      - $ref: '#/components/parameters/WorkloadsPrioritiesFilter'
+      responses:
+        '200':
+          description: Request completed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - priorities
+                properties:
+                  priorities:
+                    $ref: '#/components/schemas/Priorities'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  schemas:
+    WorkloadTypeResourceInterfaces:
+      type: array
+      description: Lists the versions of the custom resource definition (CRD) supported for this workload type, such as v1, v1beta1, or v1alpha1. This enables the platform to correctly parse, interpret, and manage manifests for this workload type according to the specific structure and schema associated with each listed version. On update, you may only add or remove supported versions, modifying existing version entries is not allowed.
+      maxItems: 4
+      items:
+        $ref: '#/components/schemas/WorkloadTypeResourceInterface'
+    WorkloadPriority:
+      allOf:
+      - type: object
+      - properties:
+          aggregatedPhase:
+            type: string
+            example: Ready
+            description: Combined status of the priority across all clusters
+          status:
+            type: array
+            description: Per-cluster status details
+            items:
+              $ref: '#/components/schemas/PriorityStatus'
+          scopeType:
+            description: The type of scope the workload priority applies to.
+            type: string
+            example: tenant
+          scopeId:
+            description: The unique identifier of the scope the workload priority applies to.
+            type: string
+            example: '1'
+      - $ref: '#/components/schemas/BasePriority'
+    WorkloadTypeConfigs:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkloadTypeConfig'
+      x-schema-name: WorkloadTypes
+    WorkloadCategory:
+      type: object
+      required:
+      - id
+      - name
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the workload category.
+        name:
+          type: string
+          description: A unique, human-readable name for the workload category.
+        description:
+          type: string
+          description: An optional description providing additional details about the category.
+        createdAt:
+          type: string
+          format: date-time
+          description: The date and time when the workload category was created.
+        createdBy:
+          type: string
+          description: The user who created the workload category.
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    WorkloadTypeUpdateFields:
+      allOf:
+      - $ref: '#/components/schemas/WorkloadTypeCreateUpdateInnerFields'
+      - type: object
+        properties:
+          resourceInterfaces:
+            $ref: '#/components/schemas/WorkloadTypeResourceInterfaces'
+    WorkloadCategories:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkloadCategory'
+      x-schema-name: WorkloadCategories
+    WorkloadTypeConfig:
+      allOf:
+      - $ref: '#/components/schemas/WorkloadTypeCreateUpdateInnerFields'
+      - $ref: '#/components/schemas/WorkloadTypeAdditionalCreateFields'
+      - type: object
+        required:
+        - name
+        - group
+        - categoryId
+        - priorityId
+        properties:
+          id:
+            type: string
+            format: uuid
+            description: The unique identifier of the workload type.
+          categoryName:
+            type: string
+            example: Build
+            description: The name of the workload category.
+          priorityName:
+            type: string
+            example: medium
+            description: The name of the workload priority.
+          updatedAt:
+            type: string
+            format: date-time
+            description: The timestamp for the last time the workload type was updated.
+          updatedBy:
+            type: string
+            description: Identifier of the user who last updated the workload type.
+          createdAt:
+            type: string
+            format: date-time
+            description: The timestamp for when the workload type was created.
+          createdBy:
+            type: string
+            description: Identifier of the user who created the workload type.
+          resourceInterfaces:
+            $ref: '#/components/schemas/WorkloadTypeResourceInterfacesWithVersion'
+          clusterStatuses:
+            nullable: true
+            type: array
+            items:
+              $ref: '#/components/schemas/WorkloadTypeStatus'
+    WorkloadTypeResourceInterfacesWithVersion:
+      type: array
+      description: Lists the versions of the custom resource definition (CRD) supported for this workload type, such as v1, v1beta1, or v1alpha1. This enables the platform to correctly parse, interpret, and manage manifests for this workload type according to the specific structure and schema associated with each listed version.
+      items:
+        type: object
+        properties:
+          version:
+            type: string
+            example: v1
+            description: The version of the resource definition k8s crd.
+          resourceInterface:
+            $ref: '#/components/schemas/WorkloadTypeResourceInterface'
+    Conditions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Condition1'
+      x-schema-name: Conditions
+    WorkloadTypeResourceInterface:
+      type: object
+      description: The resource interface for the workload type.
+      additionalProperties: true
+      example:
+        spec:
+          structureDefinition:
+            rootComponent:
+              kind:
+                group: apps
+                version: v1
+                kind: Deployment
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    WorkloadTypeCreateUpdateInnerFields:
+      type: object
+      properties:
+        categoryId:
+          type: string
+          format: uuid
+          description: The unique identifier of the workload category.
+        priorityId:
+          type: string
+          format: uuid
+          description: The unique identifier of the workload priority.
+    Condition1:
+      type: object
+      required:
+      - type
+      - status
+      properties:
+        type:
+          description: The type of the condition, such as Failed or Available. See Types of domain status conditions.
+          type: string
+          example: Ready
+        status:
+          type: string
+          description: The status of the condition, such as True, False or Unknown.
+          example: 'False'
+        message:
+          type: string
+          description: An optional, human-readable message providing more details about the condition.
+          example: 'Resource validation failed: ...'
+        reason:
+          type: string
+          description: The reason for the Failed condition. Not applicable to other types of condition.
+          example: ErrorConfig
+        lastTransitionTime:
+          description: A timestamp of when the condition was created or the last time the condition transitioned from one status to another.
+          type: string
+          nullable: true
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+    BasePriority:
+      type: object
+      required:
+      - id
+      - name
+      - value
+      properties:
+        id:
+          type: string
+          example: d73a738f-fab3-430a-8fa3-5241493d7128
+          description: The unique identifier of the workload priority
+        source:
+          description: The source of the priority class. Indicates where the priority definition originated. Currently, the value is either Run:ai or empty.
+          type: string
+          example: Run:ai
+        name:
+          type: string
+          example: medium
+          description: The name of the workload priority (e.g., low, medium, high)
+        value:
+          type: integer
+          minimum: 0
+          example: 50
+          description: The scheduling value assigned to this priority
+        createdAt:
+          type: string
+          format: date-time
+          description: The timestamp for when the priority was created
+          example: '2022-01-01T03:49:52.531Z'
+        updatedAt:
+          type: string
+          format: date-time
+          description: The timestamp for when the priority was updated
+          example: '2022-06-08T11:28:24.131Z'
+    WorkloadTypeCreateFields:
+      allOf:
+      - $ref: '#/components/schemas/WorkloadTypeCreateUpdateInnerFields'
+      - $ref: '#/components/schemas/WorkloadTypeAdditionalCreateFields'
+      - type: object
+        required:
+        - name
+        - group
+        - categoryId
+        - priorityId
+        properties:
+          resourceInterfaces:
+            $ref: '#/components/schemas/WorkloadTypeResourceInterfaces'
+    WorkloadTypeStatusFields:
+      type: object
+      properties:
+        phase:
+          type: string
+          description: The current phase of the workload type in the cluster.
+          example: Ready
+        conditions:
+          $ref: '#/components/schemas/Conditions'
+        version:
+          type: string
+          description: The version of the resource definition's Kubernetes CRD.
+          example: v1
+    Priorities:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkloadPriority'
+    WorkloadTypeAdditionalCreateFields:
+      type: object
+      properties:
+        name:
+          type: string
+          example: Deployment
+          description: The unique name of the workload type. This value must exactly match the Kubernetes Kind that represents the workload type.
+          pattern: ^[A-Z][a-z0-9]*([A-Z][a-z0-9]*)*$
+        group:
+          type: string
+          example: apps
+          description: The Kubernetes group associated with the workload resource.
+          pattern: ^[a-z](?:[a-z0-9.-]*[a-z0-9])?$
+    PriorityStatus:
+      type: object
+      properties:
+        clusterId:
+          type: string
+          example: d73a738f-fab3-430a-8fa3-5241493d7128
+          description: The unique identifier of the cluster
+        phase:
+          type: string
+          description: Current phase of the priority in the specified cluster
+          example: Ready
+    WorkloadTypeStatus:
+      allOf:
+      - $ref: '#/components/schemas/WorkloadTypeStatusFields'
+      - type: object
+        properties:
+          clusterId:
+            $ref: '#/components/schemas/ClusterId'
+          updatedAt:
+            type: string
+            format: date-time
+            description: The date and time when the workload type status of this cluster was last updated.
+  parameters:
+    WorkloadsPrioritiesFilter:
+      name: filterBy
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=
+      in: query
+      required: false
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(name|source|value)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - name!=some-name
+      explode: false
+    WorkloadTypesFilter:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(name|group)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - name==Deployment
+        - group==apps
+      explode: false
+    ExternalTypesOnly:
+      name: externalTypesOnly
+      in: query
+      required: false
+      description: Return only external and user_external sourced workload types.
+      schema:
+        type: boolean
+        default: false
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    WorkloadTypeId:
+      name: workloadTypeId
+      in: path
+      required: true
+      description: The unique identifier of the workload type.
+      schema:
+        type: string
+        format: uuid
+    WorkloadsPrioritiesSort:
+      name: sortBy
+      description: Defines the field to sort the results by
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+        - name
+        - source
+        - value
+  responses:
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    204NoContent:
+      description: No Content.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

@@ -1,0 +1,50 @@
+generated: '2026-07-21'
+method: probed
+note: >-
+  Probed /.well-known/ discovery surface on app.run.ai and www.run.ai. No genuine
+  discovery documents are published: app.run.ai is a single-page application that
+  returns its HTML shell (HTTP 200, ~1967 bytes, Monaco editor app) for every
+  /.well-known/ path, so the 200s are SPA fallbacks, NOT real documents; www.run.ai
+  returns 404 for all paths (the marketing site has moved to NVIDIA). No raw files
+  saved and no WellKnown scoring pointer wired.
+hosts:
+- host: https://app.run.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    real: false
+    reason: SPA HTML shell fallback (not a security.txt)
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    real: false
+    reason: SPA HTML shell fallback
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    real: false
+    reason: SPA HTML shell fallback
+- host: https://www.run.ai
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null

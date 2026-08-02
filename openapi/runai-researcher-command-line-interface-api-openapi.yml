@@ -1,0 +1,476 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys Researcher Command Line Interface API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Researcher Command Line Interface
+paths:
+  /api/v1/cli-exposer/installer/unix:
+    get:
+      summary: Download Unix installer script
+      description: 'This endpoint returns a unix script that can be used to install the Run:ai CLI.
+
+        '
+      operationId: get_installer_unix
+      tags:
+      - Researcher Command Line Interface
+      responses:
+        '200':
+          description: File download successful
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Contents of the file
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/cli-exposer/installer/unix/commands:
+    get:
+      summary: Get Unix installer script commands
+      description: 'This endpoint returns a unix script commands that can be used to install the Run:ai CLI.
+
+        '
+      operationId: get_installer_unix_commands
+      tags:
+      - Researcher Command Line Interface
+      responses:
+        '200':
+          description: A text commands to install the CLI on Unix
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Command1'
+              example: Contents of the commands to install the CLI on Unix
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/cli-exposer/installer/mac:
+    get:
+      summary: Download Mac installer script
+      description: 'This endpoint returns a Mac script that can be used to install the Run:ai CLI.
+
+        '
+      operationId: get_installer_mac
+      tags:
+      - Researcher Command Line Interface
+      responses:
+        '200':
+          description: File download successful
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Contents of the file
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/cli-exposer/installer/mac/commands:
+    get:
+      summary: Get Mac installer script commands
+      description: 'This endpoint returns a Mac script commands that can be used to install the Run:ai CLI.
+
+        '
+      operationId: get_installer_mac_commands
+      tags:
+      - Researcher Command Line Interface
+      responses:
+        '200':
+          description: A text commands to install the CLI on Mac
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Command1'
+              example: Contents of the commands to install the CLI on Mac
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/cli-exposer/installer/linux:
+    get:
+      summary: Download Linux installer script
+      description: 'This endpoint returns a Linux script that can be used to install the Run:ai CLI.
+
+        '
+      operationId: get_installer_linux
+      tags:
+      - Researcher Command Line Interface
+      responses:
+        '200':
+          description: File download successful
+          content:
+            text/plain:
+              schema:
+                type: string
+              example: Contents of the file
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/cli-exposer/installer/linux/commands:
+    get:
+      summary: Get Linux installer script commands
+      description: 'This endpoint returns a linux script commands that can be used to install the Run:ai CLI.
+
+        '
+      operationId: get_installer_linux_commands
+      tags:
+      - Researcher Command Line Interface
+      responses:
+        '200':
+          description: A text commands to install the CLI on Linux
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Command1'
+              example: Contents of the commands to install the CLI on Linux
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/cli-exposer/installer/windows/commands:
+    get:
+      summary: Get Windows MSI installer script commands
+      description: 'This endpoint returns a windows script commands that can be used to install the Run:ai CLI.
+
+        '
+      operationId: get_installer_windows_commands
+      tags:
+      - Researcher Command Line Interface
+      responses:
+        '200':
+          description: A text commands to install the CLI on Windows
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Command1'
+              example: Contents of the commands to install the CLI on Windows
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/cli-exposer/dist/{operatingSystem}/{architecture}/runai:
+    get:
+      summary: Download RunAI Researcher command line binary
+      description: 'This endpoint returns a binary file that run the Run:ai CLI.
+
+        '
+      operationId: get_binary
+      tags:
+      - Researcher Command Line Interface
+      parameters:
+      - $ref: '#/components/parameters/OperatingSystem'
+      - $ref: '#/components/parameters/Architecture'
+      responses:
+        '200':
+          description: File download successful
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+              example: Contents of the file
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/cli-exposer/docs/{documentName}:
+    get:
+      summary: Get CLI document by name
+      description: 'This endpoint returns a document of help for the Run:ai CLI.
+
+        '
+      operationId: get_manual_document
+      tags:
+      - Researcher Command Line Interface
+      parameters:
+      - $ref: '#/components/parameters/DocumentName'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            text/html:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  schemas:
+    Command1:
+      type: object
+      required:
+      - command
+      properties:
+        command:
+          type: string
+          example: runai version
+          description: The commands that can be used to install the Run:ai CLI.
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+  parameters:
+    Architecture:
+      name: architecture
+      in: path
+      required: true
+      description: The architecture type.
+      schema:
+        type: string
+        minLength: 4
+        example: arm64
+    OperatingSystem:
+      name: operatingSystem
+      in: path
+      required: true
+      description: The operating system name.
+      schema:
+        type: string
+        enum:
+        - linux
+        - windows
+        - darwin
+        minLength: 4
+        example: linux
+    DocumentName:
+      name: documentName
+      in: path
+      required: true
+      description: The manual document name.
+      schema:
+        type: string
+        minLength: 4
+        pattern: ^[A-Za-z0-9_]+\.md$
+        example: runai.md
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

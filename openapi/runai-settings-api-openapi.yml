@@ -1,0 +1,362 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys Settings API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Settings
+  description: 'View and manage configuration settings for your organization.
+
+    '
+paths:
+  /api/v1/security/settings:
+    get:
+      summary: Get security settings
+      operationId: get_security_settings
+      tags:
+      - Settings
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SettingsGetResponse'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/security/settings/{key}:
+    put:
+      summary: Update security setting by key
+      operationId: update_security_setting_by_key
+      tags:
+      - Settings
+      parameters:
+      - $ref: '#/components/parameters/settingsKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              anyOf:
+              - $ref: '#/components/schemas/AutoRedirectSsoSetting'
+              - $ref: '#/components/schemas/BrowserSessionTimeoutSetting'
+              - $ref: '#/components/schemas/LogoutRedirectUriSetting'
+            examples:
+              autoRedirectSSO:
+                value:
+                  enabled: false
+                  idpAlias: oidc
+              browserSessionTimeout:
+                value:
+                  idleTimeout: 60
+              logoutRedirectUri:
+                value:
+                  uri: https://example.com/logout-success
+      responses:
+        '200':
+          description: Setting successfully updated
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    get:
+      summary: Get security setting by key
+      operationId: get_security_setting_by_key
+      tags:
+      - Settings
+      parameters:
+      - $ref: '#/components/parameters/settingsKey'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Settings'
+              examples:
+                autoRedirectSSO:
+                  value:
+                    enabled: false
+                    idpAlias: oidc
+                browserSessionTimeout:
+                  value:
+                    idleTimeout: 60
+                logoutRedirectUri:
+                  value:
+                    uri: https://example.com/logout-success
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  schemas:
+    Settings:
+      type: object
+      additionalProperties: true
+    SettingsGetResponse:
+      type: object
+      properties:
+        autoRedirectSSO:
+          $ref: '#/components/schemas/AutoRedirectSsoSetting'
+        browserSessionTimeout:
+          $ref: '#/components/schemas/BrowserSessionTimeoutSetting'
+        logoutRedirectUri:
+          $ref: '#/components/schemas/LogoutRedirectUriSetting'
+    AutoRedirectSsoSetting:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          nullable: true
+        idpAlias:
+          type: string
+          pattern: ^[a-z0-9_-]*$
+          nullable: true
+      example:
+        enabled: false
+        idpAlias: oidc
+    LogoutRedirectUriSetting:
+      type: object
+      description: Settings for configuring the logout redirect URI that determines where users are redirected after logging out.
+      properties:
+        uri:
+          type: string
+          description: The URI where users will be redirected after logging out of the application
+          nullable: true
+          pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
+          example: https://example.com/logout
+    settingsKeyEnum:
+      type: string
+      enum:
+      - autoRedirectSSO
+      - browserSessionTimeout
+      - logoutRedirectUri
+    BrowserSessionTimeoutSetting:
+      type: object
+      description: Settings for user session timeout configuration that manages automatic logout after periods of inactivity.
+      properties:
+        idleTimeout:
+          type: number
+          description: Duration in minutes that a user can remain inactive before their browser session automatically expires and requires re-authentication
+          default: 60
+          minimum: 1
+          nullable: true
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  parameters:
+    settingsKey:
+      name: key
+      in: path
+      required: true
+      description: The settings key
+      schema:
+        $ref: '#/components/schemas/settingsKeyEnum'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

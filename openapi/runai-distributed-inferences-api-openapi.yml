@@ -1,0 +1,1704 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys Distributed Inferences API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Distributed Inferences
+  description: "Distributed inference enables running inference workloads across multiple pods, typically to scale model serving beyond a single container or node. This approach is useful when a single instance cannot meet resource requirements.NVIDIA Run:ai supports this model using Leader Worker Set (LWS). \nEach pod plays a specific role, either as a leader or worker, and together they form a coordinated service. NVIDIA Run:ai manages the orchestration and configuration of these pods to ensure efficient and scalable inference execution\n"
+paths:
+  /api/v1/workloads/distributed-inferences:
+    post:
+      summary: Create a distributed inference. [Experimental]
+      operationId: create_distributed_inference
+      description: Create a distributed inference using container related fields.
+      tags:
+      - Distributed Inferences
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DistributedInferenceCreationRequest'
+      responses:
+        '202':
+          description: Request completed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DistributedInference'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/workloads/distributed-inferences/{workloadId}:
+    delete:
+      summary: Delete a distributed inference.
+      operationId: delete_distributed_inference
+      description: Delete a distributed inference using a workload id.
+      tags:
+      - Distributed Inferences
+      parameters:
+      - $ref: '#/components/parameters/WorkloadId'
+      responses:
+        '202':
+          $ref: '#/components/responses/202Accepted'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    get:
+      summary: Get a distributed inference data.
+      operationId: get_distributed_inference
+      description: Retrieve a distributed inference details using a workload id.
+      tags:
+      - Distributed Inferences
+      parameters:
+      - $ref: '#/components/parameters/WorkloadId'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DistributedInference'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    patch:
+      summary: Update distributed inference spec.
+      operationId: update_distributed_inference_spec
+      description: Update the specification of an existing distributed inference workload.
+      tags:
+      - Distributed Inferences
+      parameters:
+      - $ref: '#/components/parameters/WorkloadId'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRequest'
+      responses:
+        '202':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DistributedInference'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  schemas:
+    Category:
+      description: Specify the workload category assigned to the workload. Categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform.
+      type: string
+      nullable: true
+      pattern: .*
+    PvcFieldsNonUpdatable:
+      properties:
+        existingPvc:
+          description: Verify existing PVC. PVC is assumed to exist when set to `true`. If set to `false`, the PVC will be created, if it does not exist.
+          type: boolean
+          default: false
+          nullable: true
+        claimName:
+          description: Name for the PVC. Allow referencing it across workloads. If not provided, a name based on the workload name and scope will be auto-generated.
+          type: string
+          minLength: 1
+          maxLength: 63
+          example: my-claim
+          nullable: true
+          pattern: .*
+        readOnly:
+          description: Permit only read access to PVC.
+          type: boolean
+          default: false
+          nullable: true
+        ephemeral:
+          description: Use `true` to set PVC to ephemeral. If set to `true`, the PVC will be deleted when the workload is stopped. Not supported for inference workloads.
+          type: boolean
+          default: false
+          example: false
+          nullable: true
+        claimInfo:
+          $ref: '#/components/schemas/ClaimInfo'
+        dataSharing:
+          description: use `true` to share the PVC data to all projects under the selected scope.
+          type: boolean
+          default: false
+          example: false
+          nullable: true
+      nullable: true
+      type: object
+    Probe:
+      type: object
+      properties:
+        initialDelaySeconds:
+          description: Number of seconds after the container has started before liveness or readiness probes are initiated.
+          type: integer
+          format: int32
+          minimum: 0
+          nullable: true
+        periodSeconds:
+          description: How often (in seconds) to perform the probe.
+          type: integer
+          format: int32
+          minimum: 1
+          nullable: true
+        timeoutSeconds:
+          description: Number of seconds after which the probe times out.
+          type: integer
+          format: int32
+          minimum: 1
+          nullable: true
+        successThreshold:
+          description: Minimum consecutive successes for the probe to be considered successful after having failed.
+          type: integer
+          format: int32
+          minimum: 1
+          nullable: true
+        failureThreshold:
+          description: When a probe fails, the number of times to try before giving up.
+          type: integer
+          format: int32
+          minimum: 1
+          nullable: true
+        handler:
+          $ref: '#/components/schemas/ProbeHandler'
+      nullable: true
+    WorkloadId2:
+      description: A unique ID of the workload.
+      type: string
+      format: uuid
+    DistributedInference:
+      allOf:
+      - $ref: '#/components/schemas/WorkloadMeta1'
+      - $ref: '#/components/schemas/DistributedInferenceSpec'
+    NodeAffinityRequired:
+      type: object
+      description: If the affinity requirements specified by this field are not met at scheduling time, the pod will not be scheduled onto the node. If the affinity requirements specified by this field cease to be met at some point during pod execution (e.g. due to an update), the system may or may not try to eventually evict the pod from its node.
+      properties:
+        nodeSelectorTerms:
+          description: A list of node selector terms. The terms are ORed.
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeSelectorTerm'
+      nullable: true
+    UidGidSource:
+      description: Indicate the way to determine the user and group ids of the container. The options are a. `fromTheImage` - user and group ids are determined by the docker image that the container runs. this is the default option. b. `custom` - user and group ids can be specified in the environment asset and/or the workload creation request. c. `idpToken` - user and group IDs are automatically taken from the identity provider (IdP) token (available only in SSO-enabled installations). For more information, see [User Identity](https://docs.run.ai/latest/admin/runai-setup/config/non-root-containers/).
+      type: string
+      enum:
+      - fromTheImage
+      - fromIdpToken
+      - custom
+      nullable: true
+    SecretInstance2:
+      allOf:
+      - $ref: '#/components/schemas/StorageInstanceName'
+      - $ref: '#/components/schemas/Secret5'
+      - $ref: '#/components/schemas/ExcludeField'
+      nullable: true
+      type: object
+    Labels:
+      description: Set of labels to populate into the container running the workload.
+      type: array
+      items:
+        $ref: '#/components/schemas/Label'
+      nullable: true
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    ExcludeField:
+      properties:
+        exclude:
+          description: Use 'true' in case the item is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type: boolean
+          default: false
+          example: false
+          nullable: true
+      type: object
+      nullable: true
+    CpuMemoryLimit:
+      description: Limitations on the CPU memory to allocate for this workload (1G, 20M, .etc). The system guarantees that this workload will not be able to consume more than this amount of memory. The workload will receive an error when trying to allocate more memory than this limit.
+      type: string
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 30M
+      nullable: true
+    PvcClaimSize:
+      description: 'Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB'
+      type: string
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 1G
+      nullable: true
+    PvcAddedAttrValues:
+      description: an optional array of key-values pairs that are written as annotations on the created PVC. the allowed attributes are determined according to the storage class configuration (see k8s-objects-tracker for further info).
+      type: array
+      items:
+        $ref: '#/components/schemas/PvcAddedAttrValue'
+    DistributedInferenceSpec:
+      description: The specifications of the distributed inference to be created.
+      properties:
+        spec:
+          $ref: '#/components/schemas/DistributedInferenceSpecSpec'
+    Toleration:
+      description: Toleration details.
+      properties:
+        name:
+          description: The name of the toleration.
+          type: string
+          minLength: 1
+          nullable: true
+          pattern: .*
+        operator:
+          $ref: '#/components/schemas/TolerationOperator'
+        key:
+          description: The taint key that the toleration applies to. (mandatory)
+          type: string
+          nullable: true
+          pattern: .*
+        value:
+          description: The taint value the toleration matches to. Mandatory if operator is Exists, forbidden otherwise.
+          type: string
+          nullable: true
+          pattern: .*
+        effect:
+          $ref: '#/components/schemas/TolerationEffect'
+        seconds:
+          description: The period of time the toleration tolerates the taint. Valid only if effect is NoExecute. taint.
+          type: integer
+          minimum: 1
+          nullable: true
+        exclude:
+          description: Use 'true' in case the label is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type: boolean
+          example: false
+          nullable: true
+      nullable: true
+      type: object
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    SecretFieldsNonUpdatable:
+      properties:
+        secret:
+          description: The name of the Secret resource. (mandatory)
+          type: string
+          minLength: 1
+          nullable: true
+      nullable: true
+      type: object
+    Pvc:
+      allOf:
+      - $ref: '#/components/schemas/PvcFieldsUpdatable'
+      - $ref: '#/components/schemas/PvcFieldsNonUpdatable'
+    Capabilities:
+      description: Add POSIX capabilities to running containers. Defaults to the default set of capabilities granted by the container runtime.
+      type: array
+      items:
+        $ref: '#/components/schemas/Capability'
+      example:
+      - CHOWN
+      - KILL
+      nullable: true
+    GpuMemoryRequest:
+      description: Required if and only if gpuRequestType is memory. States the GPU memory to allocate for the created workload, per GPU device. Note that the workload will not be scheduled unless the system can guarantee this amount of GPU memory to the workload.
+      type: string
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 10M
+      nullable: true
+    DistributedInferenceCommonSpec:
+      allOf:
+      - nullable: true
+        properties:
+          category:
+            $ref: '#/components/schemas/Category'
+          nodePools:
+            $ref: '#/components/schemas/NodePools'
+          preemptibility:
+            $ref: '#/components/schemas/Preemptibility'
+          priorityClass:
+            $ref: '#/components/schemas/PriorityClass'
+          restartPolicy:
+            $ref: '#/components/schemas/DistributedInferenceRestartPolicy'
+          servingPort:
+            $ref: '#/components/schemas/DistributedInferenceServingPort'
+        type: object
+      - $ref: '#/components/schemas/DistributedInferenceStartupPolicyField'
+      - $ref: '#/components/schemas/DistributedInferenceWorkersField'
+      - $ref: '#/components/schemas/DistributedInferenceReplicasField'
+      nullable: true
+      type: object
+    SecretFieldsUpdatable:
+      properties:
+        mountPath:
+          description: Local path within the workload to which the Secret will be mapped to. (mandatory)
+          type: string
+          minLength: 1
+          nullable: true
+        defaultMode:
+          $ref: '#/components/schemas/DefaultMode'
+      nullable: true
+      type: object
+    EnvironmentVariable:
+      description: Details of an environment variable which is populated into the container.
+      properties:
+        name:
+          description: The name of the environment variable. (mandatory)
+          type: string
+          minLength: 1
+          example: HOME
+          nullable: true
+          pattern: .*
+        value:
+          description: The value of the environment variable. (mutually exclusive with secret, userCredential, configMap and podFieldRef)
+          type: string
+          example: /home/my-folder
+          nullable: true
+          pattern: .*
+        secret:
+          $ref: '#/components/schemas/EnvironmentVariableSecret'
+        configMap:
+          $ref: '#/components/schemas/EnvironmentVariableConfigMap'
+        podFieldRef:
+          $ref: '#/components/schemas/EnvironmentVariablePodFieldReference'
+        userCredential:
+          $ref: '#/components/schemas/EnvironmentVariableUserCredential'
+        exclude:
+          description: Use 'true' in case the environment variable is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type: boolean
+          example: false
+          nullable: true
+        description:
+          description: Description of the environment variable.
+          type: string
+          example: Home directory of the user.
+          nullable: true
+          pattern: .*
+      nullable: true
+      type: object
+    LargeShmRequest:
+      description: A large /dev/shm device to mount into a container running the created workload. An shm is a shared file system mounted on RAM.
+      type: boolean
+      example: false
+      nullable: true
+    DistributedInferenceWorkersField:
+      properties:
+        workers:
+          default: 0
+          description: Specifies the number of worker nodes to run. If set to 0, only the leader node will run, and no worker pods will be created. In this case, worker spec is not required.
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 1000
+          example: 4
+          nullable: true
+    RunAsGid:
+      description: The group id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsGid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
+      type: integer
+      format: int64
+      example: 30
+      nullable: true
+    EnvironmentVariableSecret:
+      description: Details of the secret and key use to populate the environment variable
+      properties:
+        name:
+          description: The name of the secret resource. (mandatory)
+          type: string
+          minLength: 1
+          example: postgress_secret
+          nullable: true
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        key:
+          description: The key in the secret resource. (mandatory)
+          type: string
+          minLength: 1
+          example: POSTGRES_PASSWORD
+          nullable: true
+          pattern: .*
+      nullable: true
+      type: object
+    Annotations:
+      description: Set of annotations to populate into the container running the workload.
+      type: array
+      items:
+        $ref: '#/components/schemas/Annotation'
+      nullable: true
+    WorkloadDesiredPhase:
+      description: The desired phase of the workload.
+      type: string
+      enum:
+      - Running
+      - Stopped
+      - Deleted
+    ProbeHandler:
+      description: The action taken to determine the health of the container. (mandatory)
+      type: object
+      properties:
+        httpGet:
+          description: An action based on HTTP Get requests.
+          type: object
+          properties:
+            path:
+              description: Path to access on the HTTP server, defaults to /.
+              type: string
+              pattern: ^(\x2F[a-zA-Z0-9\-_.\x2F]*)?$
+              example: /
+              nullable: true
+            port:
+              description: Number of the port to access on the container.
+              type: integer
+              format: int32
+              minimum: 1
+              maximum: 65535
+              nullable: true
+            host:
+              description: Host name to connect to, defaults to the pod IP.
+              type: string
+              format: hostname
+              example: example.com
+              nullable: true
+              pattern: .*
+            scheme:
+              $ref: '#/components/schemas/ProbeHandlerScheme'
+      nullable: true
+    DistributedInferenceLeaderWorkerSpec1:
+      properties:
+        annotations:
+          $ref: '#/components/schemas/Annotations'
+        args:
+          $ref: '#/components/schemas/Args'
+        command:
+          $ref: '#/components/schemas/Command'
+        compute:
+          nullable: true
+          properties:
+            cpuCoreLimit:
+              $ref: '#/components/schemas/CpuCoreLimit'
+            cpuCoreRequest:
+              $ref: '#/components/schemas/CpuCoreRequest'
+            cpuMemoryLimit:
+              $ref: '#/components/schemas/CpuMemoryLimit'
+            cpuMemoryRequest:
+              $ref: '#/components/schemas/CpuMemoryRequest'
+            extendedResources:
+              $ref: '#/components/schemas/ExtendedResources'
+            gpuDevicesRequest:
+              $ref: '#/components/schemas/GpuDevicesRequest'
+            gpuMemoryLimit:
+              $ref: '#/components/schemas/GpuMemoryLimit'
+            gpuMemoryRequest:
+              $ref: '#/components/schemas/GpuMemoryRequest'
+            gpuPortionLimit:
+              $ref: '#/components/schemas/GpuPortionLimit'
+            gpuPortionRequest:
+              $ref: '#/components/schemas/GpuPortionRequest'
+            gpuRequestType:
+              $ref: '#/components/schemas/GpuRequestType'
+            largeShmRequest:
+              $ref: '#/components/schemas/LargeShmRequest'
+          type: object
+        createHomeDir:
+          $ref: '#/components/schemas/CreateHomeDir'
+        environmentVariables:
+          $ref: '#/components/schemas/EnvironmentVariables'
+        image:
+          $ref: '#/components/schemas/Image'
+        imagePullPolicy:
+          $ref: '#/components/schemas/ImagePullPolicy'
+        imagePullSecrets:
+          $ref: '#/components/schemas/ImagePullSecrets'
+        labels:
+          $ref: '#/components/schemas/Labels'
+        nodeAffinityRequired:
+          $ref: '#/components/schemas/NodeAffinityRequired'
+        nodeType:
+          $ref: '#/components/schemas/NodeType3'
+        podAffinity:
+          $ref: '#/components/schemas/PodAffinity'
+        probes:
+          $ref: '#/components/schemas/Probes'
+        security:
+          nullable: true
+          properties:
+            capabilities:
+              $ref: '#/components/schemas/Capabilities'
+            readOnlyRootFilesystem:
+              $ref: '#/components/schemas/ReadOnlyRootFileSystem'
+            runAsGid:
+              $ref: '#/components/schemas/RunAsGid'
+            runAsNonRoot:
+              $ref: '#/components/schemas/RunAsNonRoot'
+            runAsUid:
+              $ref: '#/components/schemas/RunAsUid'
+            seccompProfileType:
+              $ref: '#/components/schemas/SeccompProfileType'
+            supplementalGroups:
+              $ref: '#/components/schemas/SupplementalGroups'
+            uidGidSource:
+              $ref: '#/components/schemas/UidGidSource'
+          type: object
+        storage:
+          nullable: true
+          properties:
+            configMapVolume:
+              $ref: '#/components/schemas/ConfigMapItems'
+            emptyDirVolume:
+              $ref: '#/components/schemas/EmptyDirItems'
+            pvc:
+              $ref: '#/components/schemas/PvcItems'
+            secretVolume:
+              $ref: '#/components/schemas/SecretItems1'
+          type: object
+        tolerations:
+          $ref: '#/components/schemas/Tolerations'
+        workingDir:
+          $ref: '#/components/schemas/WorkingDir'
+      type: object
+    TolerationEffect:
+      description: The taint effect to match. (mandatory)
+      type: string
+      enum:
+      - NoSchedule
+      - NoExecute
+      - PreferNoSchedule
+      - Any
+      nullable: true
+    MatchExpressionOperator:
+      description: Represents a key's relationship to a set of values (mandatory).
+      type: string
+      enum:
+      - In
+      - NotIn
+      - Exists
+      - DoesNotExist
+      - Gt
+      - Lt
+    ImagePullPolicy:
+      description: Image pull policy. Defaults to `Always` if `:latest` tag is specified, otherwise it is `IfNotPresent`.
+      type: string
+      minLength: 1
+      enum:
+      - Always
+      - Never
+      - IfNotPresent
+      nullable: true
+    WorkloadName:
+      description: The name of the workload.
+      type: string
+      minLength: 1
+      example: my-workload-name
+      pattern: .*
+    ClaimInfo:
+      description: Claim information for the newly created PVC. The information should not be provided when attempting to use existing PVC.
+      properties:
+        size:
+          $ref: '#/components/schemas/PvcClaimSize'
+        storageClass:
+          description: Storage class name to associate with the PVC. This parameter may be omitted if there is a single storage class in the system, or you are using the default storage class. For more information, see [Storage class](https://kubernetes.io/docs/concepts/storage/storage-classes).
+          type: string
+          minLength: 1
+          example: my-storage-class
+          nullable: true
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        accessModes:
+          $ref: '#/components/schemas/PvcAccessModes'
+        volumeMode:
+          $ref: '#/components/schemas/PvcVolumeMode'
+        addedAttrValues:
+          $ref: '#/components/schemas/PvcAddedAttrValues'
+      nullable: true
+      type: object
+    UpdateSpec:
+      description: The specifications of the inference to be updated.
+      properties:
+        spec:
+          allOf:
+          - type: object
+            properties:
+              replicas:
+                description: Specifies the number of leader-worker sets to deploy. Each replica represents a group consisting of one leader pod and multiple worker pods. For example, setting replicas to 3 will create 3 independent groups, each with its own leader and corresponding set of workers.
+                type: integer
+                format: int32
+                minimum: 0
+                maximum: 1000
+                example: 2
+                nullable: true
+            nullable: true
+    DistributedInferenceServingPort:
+      description: Defines the configuration for the inference serving endpoint. This determines how applications or services can send inference requests to the workload.
+      allOf:
+      - $ref: '#/components/schemas/DistributedInferenceServingPortContainerAndProtocol'
+      - $ref: '#/components/schemas/DistributedInferenceServingPortAccess'
+      nullable: true
+      type: object
+    DepartmentId2:
+      description: The id of the department.
+      type: string
+      minLength: 1
+      example: 2
+      pattern: .*
+    DistributedInferenceRestartPolicy:
+      description: 'Determines the behavior when a pod fails.
+
+        - `RecreateGroupOnPodRestart`: Restarts all pods in the group if any pod fails.
+
+        - `None`: No automatic restart behavior is applied.
+
+        '
+      type: string
+      enum:
+      - RecreateGroupOnPodRestart
+      - None
+      nullable: true
+      default: RecreateGroupOnPodRestart
+    StorageInstanceName:
+      properties:
+        name:
+          description: unique name to identify the instance. primarily used for policy locked rules.
+          type: string
+          minLength: 1
+          example: storage-instance-a
+          nullable: true
+      nullable: true
+      type: object
+    EnvironmentVariables:
+      description: Set of environment variables to populate into the container running the workload.
+      type: array
+      items:
+        $ref: '#/components/schemas/EnvironmentVariable'
+      nullable: true
+    CpuCoreRequest:
+      description: CPU units to allocate for the created workload (0.5, 1, .etc). The workload will receive at least this amount of CPU. Note that the workload will not be scheduled unless the system can guarantee this amount of CPUs to the workload.
+      format: double
+      type: number
+      example: 0.5
+      nullable: true
+      minimum: 0
+    Preemptibility:
+      description: Specifies whether the workload can be preempted by higher-priority workloads. Valid values are preemptible and non-preemptible. If explicitly set, this value takes precedence. If not set, the system derives the preemptibility from the priorityClassName field, ensuring backward compatibility. Each workload type has a default preemptibility. To view the default preemptibility for each workload type, use the GET /workload-types endpoint.
+      type: string
+      minLength: 1
+      enum:
+      - preemptible
+      - non-preemptible
+      nullable: true
+    DistributedInferenceWorkerSpecFields:
+      properties:
+        worker:
+          description: Defines the pod specification for the workers. Required only if the number of workers is greater than 0.
+          allOf:
+          - $ref: '#/components/schemas/DistributedInferenceLeaderWorkerSpec1'
+          nullable: true
+          type: object
+    SupplementalGroups:
+      description: Comma separated list of groups that the user running the container belongs to, in addition to the group indicated by runAsGid. Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled. Using an empty string implies reverting the supplementary groups of the image.
+      type: string
+      example: 2,3,5,8
+      nullable: true
+      pattern: .*
+    DistributedInferenceSpecSpec:
+      allOf:
+      - $ref: '#/components/schemas/DistributedInferenceCommonSpec'
+      - $ref: '#/components/schemas/DistributedInferenceLeaderSpecFields'
+      - $ref: '#/components/schemas/DistributedInferenceWorkerSpecFields'
+    ConfigMapItems:
+      description: Set of config map volumes to use in the workload
+      type: array
+      items:
+        $ref: '#/components/schemas/ConfigMapInstance'
+      nullable: true
+    DistributedInferenceServingPortAccess:
+      properties:
+        authorizationType:
+          $ref: '#/components/schemas/DistributedInferenceServingPortAccessAuthorizationTypeEnum'
+        authorizedUsers:
+          description: A list of users and service accounts allowed to send inference requests to the serving endpoint. `Note:` Cannot be used together with authorizedGroups.
+          type: array
+          items:
+            type: string
+            pattern: .*
+          example:
+          - user.a@example.com
+          - user.b@example.com
+          nullable: true
+        authorizedGroups:
+          description: A list of user groups allowed to send inference requests to the serving endpoint. `Note:` Cannot be used together with authorizedUsers.
+          type: array
+          items:
+            type: string
+            pattern: .*
+          example:
+          - group-a
+          - group-b
+          nullable: true
+        exposeExternally:
+          description: Indicates whether the inference serving endpoint should be accessible outside the cluster. If set to true, the endpoint will be exposed externally. To enable external access, your administrator must configure the cluster as described in the [inference requirements](https://run-ai-docs.nvidia.com/saas/getting-started/installation/system-requirements#inference). section.
+          type: boolean
+          nullable: true
+          default: true
+        exposedUrl:
+          description: The custom URL to use for the serving port. If empty (default), an autogenerated URL will be used.
+          type: string
+          nullable: true
+          pattern: .*
+    ImagePullSecrets:
+      description: A list of references to Kubernetes secrets in the same namespace used for pulling container images.
+      type: array
+      items:
+        $ref: '#/components/schemas/ImagePullSecret'
+      nullable: true
+    Image:
+      description: Docker image name. For more information, see [Images](https://kubernetes.io/docs/concepts/containers/images). The image name is mandatory for creating a workload.
+      type: string
+      minLength: 1
+      example: python:3.8
+      nullable: true
+      pattern: .*
+    EnvironmentVariableUserCredential:
+      description: Defines a reference to a user-created credential and a specific key within that credential whose value will populate the environment variable. User credentials can only be accessed by the user who created them.
+      properties:
+        name:
+          description: The name of the user credential.  (mandatory)
+          type: string
+          minLength: 1
+          example: my_postgres_user_and_password
+          nullable: true
+        key:
+          description: The key in the user credential resource. (mandatory)
+          type: string
+          minLength: 1
+          example: POSTGRES_PASSWORD
+          nullable: true
+      nullable: true
+      type: object
+    Annotation:
+      description: Annotation details to be populated into the container.
+      properties:
+        name:
+          description: The name of the annotation (mandatory)
+          type: string
+          minLength: 1
+          maxLength: 63
+          example: billing
+          nullable: true
+          pattern: .*
+        value:
+          description: The value of the annotation.
+          type: string
+          example: my-billing-unit
+          nullable: true
+          pattern: .*
+        exclude:
+          description: Use 'true' in case the annotation is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type: boolean
+          default: false
+          example: false
+          nullable: true
+      nullable: true
+      type: object
+    DistributedInferenceStartupPolicy:
+      description: "Determines when the worker pods should start during workload initialization. \n - `LeaderCreated`: Workers start after the leader pod is created.\n - `LeaderReady`: Workers start only after the leader pod is ready.\n"
+      type: string
+      enum:
+      - LeaderCreated
+      - LeaderReady
+      nullable: true
+      default: LeaderCreated
+    CreateHomeDir:
+      description: When set to `true`, creates a home directory for the container.
+      type: boolean
+      nullable: true
+    GpuMemoryLimit:
+      description: Limitation on the memory consumed by the workload, per GPU device. The system guarantees The gpuMemoryLimit must be no less than gpuMemoryRequest.
+      type: string
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 10M
+      nullable: true
+    EnvironmentVariableConfigMap:
+      description: Details of the configMap and key use to populate the environment variable
+      properties:
+        name:
+          description: The name of the config-map resource. (mandatory)
+          type: string
+          minLength: 1
+          example: my-config-map
+          nullable: true
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        key:
+          description: The key in the config-map resource. (mandatory)
+          type: string
+          minLength: 1
+          example: MY_POSTGRES_SCHEMA
+          nullable: true
+          pattern: .*
+      nullable: true
+      type: object
+    CpuCoreLimit:
+      description: Limitations on the number of CPUs consumed by the workload (0.5, 1, .etc). The system guarantees that this workload will not be able to consume more than this amount of CPUs.
+      format: double
+      type: number
+      example: 2
+      nullable: true
+      minimum: 0
+    DistributedInferenceServingPortAccessAuthorizationTypeEnum:
+      type: string
+      description: 'Specifies who can send inference requests to the serving endpoint:
+
+
+        Possible values:
+
+        - `public`: No authorization is required. (Default)
+
+        - `authenticatedUsers`: Any NVIDIA Run:ai authenticated user and service account can send requests.
+
+        - `authorizedUsers`: Only users listed in the authorizedUsers field can send requests.
+
+        - `authorizedGroups`: Only members of user groups listed in the authorizedGroups field can send requests.
+
+        '
+      enum:
+      - public
+      - authenticatedUsers
+      - authorizedUsers
+      - authorizedGroups
+      nullable: true
+    Capability:
+      type: string
+      enum:
+      - AUDIT_CONTROL
+      - AUDIT_READ
+      - AUDIT_WRITE
+      - BLOCK_SUSPEND
+      - CHOWN
+      - DAC_OVERRIDE
+      - DAC_READ_SEARCH
+      - FOWNER
+      - FSETID
+      - IPC_LOCK
+      - IPC_OWNER
+      - KILL
+      - LEASE
+      - LINUX_IMMUTABLE
+      - MAC_ADMIN
+      - MAC_OVERRIDE
+      - MKNOD
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_BROADCAST
+      - NET_RAW
+      - SETGID
+      - SETFCAP
+      - SETPCAP
+      - SETUID
+      - SYS_ADMIN
+      - SYS_BOOT
+      - SYS_CHROOT
+      - SYS_MODULE
+      - SYS_NICE
+      - SYS_PACCT
+      - SYS_PTRACE
+      - SYS_RAWIO
+      - SYS_RESOURCE
+      - SYS_TIME
+      - SYS_TTY_CONFIG
+      - SYSLOG
+      - WAKE_ALARM
+    DistributedInferenceReplicasField:
+      properties:
+        replicas:
+          default: 1
+          description: "Specifies the number of leader-worker sets to deploy. Each replica represents a group consisting of one leader pod and multiple worker pods. \nFor example, setting replicas: 3 will create 3 independent groups, each with its own leader and corresponding set of workers.\n"
+          type: integer
+          format: int32
+          minimum: 0
+          maximum: 1000
+          example: 2
+          nullable: true
+    WorkloadCreationMeta:
+      required:
+      - name
+      - projectId
+      - clusterId
+      properties:
+        name:
+          $ref: '#/components/schemas/WorkloadName'
+        useGivenNameAsPrefix:
+          description: When true, the requested name will be treated as a prefix. The final name of the workload will be composed of the name followed by a random set of characters.
+          type: boolean
+          example: true
+          default: false
+        projectId:
+          $ref: '#/components/schemas/ProjectId'
+        clusterId:
+          $ref: '#/components/schemas/ClusterId'
+    GpuDevicesRequest:
+      description: Requested number of GPU devices. Currently if more than one device is requested, it is not possible to provide values for gpuMemory or gpuPortion.
+      type: integer
+      format: int32
+      example: 1
+      nullable: true
+      minimum: 0
+    NodePools:
+      description: A prioritized list of node pools for the scheduler to run the workload on. The scheduler will always try to use the first node pool before moving to the next one if the first is not available.
+      type: array
+      items:
+        type: string
+        pattern: .*
+      example:
+      - my-node-pool-a
+      - my-node-pool-b
+      nullable: true
+    PvcAddedAttrValue:
+      type: object
+      required:
+      - key
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 63
+          pattern: ^([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]$
+          example: dnsname
+        value:
+          type: string
+          example: my.dns.com
+          pattern: .*
+    DistributedInferenceLeaderSpecFields:
+      properties:
+        leader:
+          description: Defines the pod specification for the leader. Must always be provided, regardless of the number of workers.
+          allOf:
+          - $ref: '#/components/schemas/DistributedInferenceLeaderWorkerSpec1'
+          nullable: true
+          type: object
+    SecretItems1:
+      description: Set of secret volumes to use in the workload
+      type: array
+      items:
+        $ref: '#/components/schemas/SecretInstance2'
+      nullable: true
+    PodAffinity:
+      description: Pod affinity scheduling rules (e.g. co-locate this workload in the same node, zone, etc. as some other workloads).
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/PodAffinityType'
+        key:
+          description: The label key to use. (mandatory)
+          type: string
+          nullable: true
+          pattern: .*
+      nullable: true
+    EnvironmentVariablePodFieldReference:
+      description: Details of the field-reference and key use to populate the environment variable
+      properties:
+        path:
+          description: The field path resource. (mandatory)
+          type: string
+          minLength: 1
+          example: metadata.name
+          nullable: true
+          pattern: .*
+      nullable: true
+      type: object
+    MatchExpression:
+      type: object
+      description: A selector that contains values, a key, and an operator that relates the key and values.
+      properties:
+        key:
+          description: The label key that the selector applies to (mandatory).
+          type: string
+          pattern: .*
+        operator:
+          $ref: '#/components/schemas/MatchExpressionOperator'
+        values:
+          description: An array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. If the operator is Gt or Lt, the values array must have a single element, which will be interpreted as an integer.
+          type: array
+          items:
+            type: string
+            pattern: .*
+      required:
+      - key
+      - operator
+      nullable: true
+    GpuRequestType:
+      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
+      type: string
+      minLength: 1
+      enum:
+      - portion
+      - memory
+      nullable: true
+    EmptyDir:
+      properties:
+        path:
+          description: Local path within the workload to which the EmptyDir volume will be mapped. (mandatory)
+          type: string
+          minLength: 1
+          example: /mnt/emptydir
+          nullable: true
+          pattern: .*
+        medium:
+          description: The type of storage medium for the volume. Use "Memory" for memory-backed storage, or leave empty for disk-backed storage.
+          type: string
+          minLength: 1
+          nullable: true
+          pattern: .*
+        sizeLimit:
+          description: The total amount of local storage or memory required for the emptyDir volume. Specify using Kubernetes quantity format (e.g., 1G, 500Mi).
+          type: string
+          pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 1G
+          nullable: true
+      nullable: true
+      type: object
+    PvcItems:
+      description: Set of pvc persistent volume claims to use in the workload.
+      type: array
+      items:
+        $ref: '#/components/schemas/PvcInstance'
+      nullable: true
+    DistributedInferenceServingPortProtocol:
+      description: The protocol used to access the port.
+      type: string
+      enum:
+      - http
+      nullable: true
+      default: http
+    PodAffinityType:
+      description: The affinity type, required or preferred. (mandatory)
+      type: string
+      enum:
+      - Required
+      - Preferred
+      nullable: true
+    ReadOnlyRootFileSystem:
+      description: If true, mounts the container's root filesystem as read-only.
+      type: boolean
+      example: false
+      nullable: true
+    ConfigMapInstance:
+      allOf:
+      - $ref: '#/components/schemas/StorageInstanceName'
+      - $ref: '#/components/schemas/ConfigMap'
+      - $ref: '#/components/schemas/ExcludeField'
+      nullable: true
+      type: object
+    Command:
+      description: A command to the server as the entry point of the container running the workload.
+      type: string
+      minLength: 1
+      nullable: true
+      example: python
+      pattern: .*
+    ProbeHandlerScheme:
+      description: Scheme to use for connecting to the host, defaults to HTTP.
+      type: string
+      enum:
+      - HTTP
+      - HTTPS
+      nullable: true
+    RunAsNonRoot:
+      description: Force the container to run as a non-root user.
+      type: boolean
+      example: true
+      nullable: true
+    SubmitWithTemplateId:
+      properties:
+        templateId:
+          description: The unique identifier of the template to use for submitting this workload. The combined values provided in the spec, template and assets will be used to create the workload.
+          type: string
+          format: uuid
+          example: 550e8400-e29b-41d4-a716-446655440000
+          nullable: true
+    Args:
+      description: Arguments to the command that the container running the workload executes.
+      type: string
+      minLength: 1
+      example: -x my-script.py
+      nullable: true
+      pattern: .*
+    PriorityClass:
+      description: 'Specifies the priority class for the workload, which determines its scheduling behavior. Valid values are: very-low, low, medium-low, medium, medium-high, high, and very-high. Each workload type has a default priority. To view the default priority for each workload type, use the GET /workload-types endpoint. Once you change the priority from the default value defined for that workload type, the preemptibility field is not automatically updated. Make sure to set the desired preemptibility value.'
+      type: string
+      nullable: true
+      pattern: .*
+    Phase:
+      type: string
+      enum:
+      - Creating
+      - Initializing
+      - Resuming
+      - Pending
+      - Deleting
+      - Running
+      - Updating
+      - Stopped
+      - Stopping
+      - Degraded
+      - Failed
+      - Completed
+      - Terminating
+      - Unknown
+    NodeSelectorTerm:
+      type: object
+      description: A null or empty node selector term matches no objects. The requirements of them are ANDed.
+      properties:
+        matchExpressions:
+          description: A list of node selector requirements by node's labels.
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchExpression'
+      nullable: true
+    WorkingDir:
+      description: Container's working directory. If not specified, the container runtime default will be used. This may be configured in the container image.
+      type: string
+      minLength: 1
+      nullable: true
+      example: /home/myfolder
+      pattern: .*
+    PvcVolumeMode:
+      description: Default volume mode for the PVC. Choose between Filesystem (default) or Block.
+      type: string
+      enum:
+      - Filesystem
+      - Block
+      nullable: true
+    DistributedInferenceCreationRequest:
+      allOf:
+      - $ref: '#/components/schemas/WorkloadCreationMeta'
+      - $ref: '#/components/schemas/SubmitWithTemplateId'
+      - $ref: '#/components/schemas/DistributedInferenceSpec'
+    Label:
+      description: Label details to be populated into the container.
+      properties:
+        name:
+          description: The name of the label (mandatory)
+          type: string
+          minLength: 1
+          maxLength: 63
+          example: stage
+          nullable: true
+          pattern: .*
+        value:
+          description: The value of the label.
+          type: string
+          example: initial-research
+          nullable: true
+          pattern: .*
+        exclude:
+          description: Use 'true' in case the label is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type: boolean
+          example: false
+          nullable: true
+      nullable: true
+      type: object
+    DistributedInferenceStartupPolicyField:
+      properties:
+        startupPolicy:
+          $ref: '#/components/schemas/DistributedInferenceStartupPolicy'
+      nullable: true
+      type: object
+    SeccompProfileType:
+      description: Indicates which kind of seccomp profile will be applied to the container. The options are a. `RuntimeDefault` - the container runtime default profile should be used. b. `Unconfined` - no profile should be applied. c. `Localhost` is not yet supported by Run:ai.
+      type: string
+      enum:
+      - RuntimeDefault
+      - Unconfined
+      - Localhost
+      nullable: true
+    DefaultMode:
+      type: string
+      description: 'File permission mode in octal string format. This value must be a 4-digit octal number, representing the default file mode when mounting a Secret or ConfigMap as a volume.
+
+        '
+      minLength: 4
+      maxLength: 4
+      example: '0644'
+      pattern: 0[0-7]{3}
+      nullable: true
+    Tolerations:
+      description: Set of tolerations to apply to the workload.
+      type: array
+      items:
+        $ref: '#/components/schemas/Toleration'
+      nullable: true
+    PvcInstance:
+      allOf:
+      - $ref: '#/components/schemas/StorageInstanceName'
+      - $ref: '#/components/schemas/Pvc'
+      - $ref: '#/components/schemas/ExcludeField'
+      nullable: true
+      type: object
+    WorkloadMeta1:
+      required:
+      - name
+      - requestedName
+      - workloadId
+      - projectId
+      - clusterId
+      - createdBy
+      - createdAt
+      - desiredPhase
+      properties:
+        name:
+          $ref: '#/components/schemas/WorkloadName'
+        requestedName:
+          description: The name as was requested for the workload. If useGivenNameAsPrefix, in the creation request, is false, name and requestedName should be identical. Otherwise, name should be composed of requestedName followed by a suffix of random characters.
+          type: string
+        workloadId:
+          $ref: '#/components/schemas/WorkloadId2'
+        projectId:
+          $ref: '#/components/schemas/ProjectId'
+        departmentId:
+          $ref: '#/components/schemas/DepartmentId2'
+        clusterId:
+          $ref: '#/components/schemas/ClusterId'
+        createdBy:
+          description: The user who created the workload
+          type: string
+          example: test@lab.com
+        createdAt:
+          description: The creation time of the workload.
+          type: string
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        deletedAt:
+          description: The deletion time of the workload.
+          type: string
+          nullable: true
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        desiredPhase:
+          $ref: '#/components/schemas/WorkloadDesiredPhase'
+        actualPhase:
+          $ref: '#/components/schemas/Phase'
+    ProjectId:
+      description: The id of the project.
+      type: string
+      example: 1
+      pattern: .*
+    CpuMemoryRequest:
+      description: The amount of CPU memory to allocate for this workload (1G, 20M, .etc). The workload will receive at least this amount of memory. Note that the workload will not be scheduled unless the system can guarantee this amount of memory to the workload
+      type: string
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 20M
+      nullable: true
+    ExtendedResource:
+      description: Quantity of an extended resource.
+      properties:
+        resource:
+          description: The name of the extended resource (mandatory)
+          type: string
+          example: hardware-vendor.example/foo
+          minLength: 1
+          nullable: true
+          pattern: .*
+        quantity:
+          description: The requested quantity for the resource.
+          type: string
+          example: 2
+          minLength: 1
+          nullable: true
+          pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+        exclude:
+          description: Use 'true' in case the extended resource is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type: boolean
+          example: false
+          nullable: true
+      nullable: true
+      type: object
+    HttpResponse:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+    EmptyDirItems:
+      description: A list of emptyDir volumes to mount in the workload.
+      type: array
+      items:
+        $ref: '#/components/schemas/EmptyDirInstance'
+      nullable: true
+    GpuPortionRequest:
+      description: Required if and only if gpuRequestType is portion. States the portion of the GPU to allocate for the created workload, per GPU device, between 0 and 1. The default is no allocated GPUs.
+      type: number
+      format: double
+      example: 0.5
+      nullable: true
+      minimum: 0
+    GpuPortionLimit:
+      description: Limitations on the portion consumed by the workload, per GPU device. The system guarantees The gpuPotionLimit must be no less than the gpuPortionRequest.
+      type: number
+      format: double
+      example: 0.5
+      nullable: true
+      minimum: 0
+    Probes:
+      description: Probes are used to determine if the container is healthy and ready to accept traffic.
+      type: object
+      properties:
+        readiness:
+          $ref: '#/components/schemas/Probe'
+      nullable: true
+    EmptyDirInstance:
+      allOf:
+      - $ref: '#/components/schemas/StorageInstanceName'
+      - $ref: '#/components/schemas/EmptyDir'
+      - $ref: '#/components/schemas/ExcludeField'
+      nullable: true
+      type: object
+    UpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/UpdateSpec'
+    NodeType3:
+      description: Nodes (machines), or a group of nodes on which the workload will run. To use this feature, your Administrator will need to label nodes. For more information, see [Group Nodes](https://docs.run.ai/latest/admin/researcher-setup/limit-to-node-group). When using this flag with with Project-based affinity, it refines the list of allowable node groups set in the Project. For more information, see [Projects](https://docshub.run.ai/guides/platform-management/aiinitiatives/organization/projects).
+      type: string
+      minLength: 1
+      example: my-node-type
+      nullable: true
+      pattern: .*
+    ExtendedResources:
+      description: Extended resources and their quantity.
+      type: array
+      items:
+        $ref: '#/components/schemas/ExtendedResource'
+      nullable: true
+    DistributedInferenceServingPortContainerAndProtocol:
+      properties:
+        port:
+          description: The port exposed by the container running the distributed inference service.
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 65535
+          example: 8080
+          nullable: true
+        protocol:
+          $ref: '#/components/schemas/DistributedInferenceServingPortProtocol'
+    ConfigMap:
+      properties:
+        configMap:
+          description: The name of the ConfigMap resource. (mandatory)
+          type: string
+          minLength: 1
+          nullable: true
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        mountPath:
+          description: Local path within the workload to which the ConfigMap will be mapped to. (mandatory)
+          type: string
+          minLength: 1
+          nullable: true
+          pattern: .*
+        subPath:
+          description: Path within the volume from which the container's volume should be mounted.
+          type: string
+          minLength: 1
+          nullable: true
+          pattern: .*
+        defaultMode:
+          $ref: '#/components/schemas/DefaultMode'
+      nullable: true
+      type: object
+    Secret5:
+      allOf:
+      - $ref: '#/components/schemas/SecretFieldsUpdatable'
+      - $ref: '#/components/schemas/SecretFieldsNonUpdatable'
+    ImagePullSecret:
+      description: A reference to a secret in the same namespace used to pull container images.
+      properties:
+        name:
+          type: string
+          description: The name of the Kubernetes secret containing the image pull credentials.
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        userCredential:
+          type: boolean
+          description: Indicates whether the secret is a user credential. Set to true if the secret was created by the user and is only accessible by them.
+          nullable: true
+        exclude:
+          description: Use 'true' in case the secret is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type: boolean
+          default: false
+          example: false
+          nullable: true
+      nullable: true
+      type: object
+    TolerationOperator:
+      description: A key's relationship to the value. Equal uses key and value. Exists is equivalent to wildcard for value, so that a workload can tolerate all taints of a particular category. (mandatory)
+      type: string
+      enum:
+      - Equal
+      - Exists
+      nullable: true
+    RunAsUid:
+      description: The user id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsUid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
+      type: integer
+      format: int64
+      example: 500
+      nullable: true
+    PvcFieldsUpdatable:
+      properties:
+        path:
+          description: Local path within the workload to which the PVC bucket will be mapped. (mandatory)
+          type: string
+          minLength: 1
+          example: /container/my-claim
+          nullable: true
+          pattern: .*
+      nullable: true
+      type: object
+    PvcAccessModes:
+      description: Default access mode(s) applied to newly created PVCs unless explicitly overridden.
+      properties:
+        readWriteOnce:
+          description: Mount the volume as read/write by a single node.
+          type: boolean
+          default: true
+          nullable: true
+        readOnlyMany:
+          description: Mount the volume as read-only by many nodes.
+          type: boolean
+          default: false
+          nullable: true
+        readWriteMany:
+          description: Mount the volume as read/write by many nodes.
+          type: boolean
+          default: false
+          nullable: true
+      nullable: true
+      type: object
+  responses:
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    202Accepted:
+      description: Accepted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpResponse'
+          example:
+            code: 202
+            message: Request has been accepted.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+  parameters:
+    WorkloadId:
+      name: workloadId
+      in: path
+      required: true
+      description: The  Universally Unique Identifier (UUID) of the workload.
+      schema:
+        type: string
+        format: uuid
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

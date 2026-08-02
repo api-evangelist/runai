@@ -1,0 +1,514 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys Events API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Events
+  description: Workload events that occurred while the workload was running. Use to diagnose issue around workload scheduling.
+paths:
+  /api/v1/workloads/{workloadId}/events:
+    get:
+      summary: Get the workload events.
+      description: Retrieve all the workload events using a workload id.
+      operationId: get_workload_events
+      tags:
+      - Events
+      parameters:
+      - $ref: '#/components/parameters/WorkloadId'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/EventsSort'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - events
+                properties:
+                  next:
+                    type: integer
+                    example: 1
+                  events:
+                    $ref: '#/components/schemas/Events'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/workloads/{workloadId}/history:
+    get:
+      summary: Get the workload history.
+      description: Retrieve workload history details, including events, using a workload id.
+      operationId: get_workload_history
+      tags:
+      - Events
+      parameters:
+      - $ref: '#/components/parameters/WorkloadId'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - records
+                properties:
+                  next:
+                    type: integer
+                    example: 1
+                  records:
+                    $ref: '#/components/schemas/HistoryRecords1'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/workloads/inferences/revisions/{revisionId}/events:
+    get:
+      summary: Get revision events by id. [Experimental]
+      description: Retrieve all the revision events using a revision id. Supported for clusters v2.21+.
+      operationId: get_revision_events
+      tags:
+      - Events
+      parameters:
+      - $ref: '#/components/parameters/RevisionId'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      - $ref: '#/components/parameters/EventsSort'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - events
+                properties:
+                  next:
+                    type: integer
+                    example: 1
+                  events:
+                    $ref: '#/components/schemas/Events'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/workloads/inferences/revisions/{revisionId}/history:
+    get:
+      summary: Get the revision history. [Experimental]
+      description: Retrieve revision history details, including events, using a revision id. Supported for clusters v2.21+.
+      operationId: get_revision_history
+      tags:
+      - Events
+      parameters:
+      - $ref: '#/components/parameters/RevisionId'
+      - $ref: '#/components/parameters/Offset'
+      - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - records
+                properties:
+                  next:
+                    type: integer
+                    example: 1
+                  records:
+                    $ref: '#/components/schemas/HistoryRecords1'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  schemas:
+    InvolvedObject:
+      type: object
+      required:
+      - uid
+      - kind
+      - name
+      - namespace
+      properties:
+        uid:
+          type: string
+          format: uuid
+        kind:
+          type: string
+          example: Pod
+        name:
+          type: string
+          example: test-0-1
+        namespace:
+          type: string
+          example: runai-test
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    HistoryRecord1:
+      type: object
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/HistoryRecordMeta'
+        spec:
+          type: object
+          properties:
+            event:
+              $ref: '#/components/schemas/Event2'
+            phaseUpdate:
+              $ref: '#/components/schemas/PhaseUpdate'
+    HistoryRecordType:
+      type: string
+      enum:
+      - Event
+      - PhaseUpdate
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    Phase:
+      type: string
+      enum:
+      - Creating
+      - Initializing
+      - Resuming
+      - Pending
+      - Deleting
+      - Running
+      - Updating
+      - Stopped
+      - Stopping
+      - Degraded
+      - Failed
+      - Completed
+      - Terminating
+      - Unknown
+    PhaseUpdate:
+      type: object
+      nullable: true
+      example: null
+      required:
+      - phase
+      - phaseMessage
+      properties:
+        phase:
+          $ref: '#/components/schemas/Phase'
+        phaseMessage:
+          type: string
+          example: Not enough resources in the requested nodepool
+    Events:
+      type: array
+      items:
+        $ref: '#/components/schemas/Event2'
+      x-schema-name: Events
+    Event2:
+      type: object
+      nullable: true
+      required:
+      - createdAt
+      - type
+      - clusterId
+      - message
+      properties:
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          example: Normal
+        clusterId:
+          $ref: '#/components/schemas/ClusterId'
+        message:
+          type: string
+          example: Started container z
+        reason:
+          type: string
+          example: Started
+        source:
+          type: string
+          example: kubelet
+        involvedObject:
+          $ref: '#/components/schemas/InvolvedObject'
+    HistoryRecords1:
+      type: array
+      items:
+        $ref: '#/components/schemas/HistoryRecord1'
+      x-schema-name: HistoryRecords
+    HistoryRecordMeta:
+      type: object
+      required:
+      - creationTimestamp
+      - type
+      properties:
+        creationTimestamp:
+          type: string
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        type:
+          $ref: '#/components/schemas/HistoryRecordType'
+  responses:
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+  parameters:
+    RevisionId:
+      name: revisionId
+      in: path
+      required: true
+      description: The  Universally Unique Identifier (UUID) of the revision.
+      schema:
+        type: string
+        format: uuid
+    EventsSort:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: desc
+    WorkloadId:
+      name: workloadId
+      in: path
+      required: true
+      description: The  Universally Unique Identifier (UUID) of the workload.
+      schema:
+        type: string
+        format: uuid
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications

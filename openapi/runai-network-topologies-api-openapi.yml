@@ -1,0 +1,471 @@
+openapi: 3.0.3
+info:
+  version: latest
+  description: '# Introduction
+
+
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
+
+
+    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
+
+    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
+
+
+    After you have created a new service account, you will need to assign it access rules.
+
+    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
+
+    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
+
+
+    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
+
+    '
+  title: NVIDIA Run:ai Access Keys Network Topologies API
+  x-logo:
+    url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
+    altText: NVIDIA Run:ai
+    href: https://run.ai
+  license:
+    name: NVIDIA Run:ai
+    url: https://www.nvidia.com/en-us/agreements/enterprise-software/nvidia-software-license-agreement/
+servers:
+- url: https://app.run.ai
+security:
+- bearerAuth: []
+tags:
+- name: Network Topologies
+  description: The Network Topologies API enables administrators to reflect the hierarchical network topology connectivity of nodes in a data center, such as racks, blocks, and other organizational units, to improve pod scheduling decisions for communication-intensive AI/ML workloads. To support topology-aware scheduling, this API allows administrators to define a multi-level network topology element using ordered Kubernetes node labels that represent the network connectivity of nodes in the data center. Nodes are labeled with the same key-value pairs labels that represent their location in the data center network. These labels are used by the NVIDIA Run:ai Scheduler to prefer scheduling pods on nodes that are "closer" to each other, minimizing communication overhead and optimizing workload performance.
+paths:
+  /api/v1/network-topologies:
+    get:
+      summary: Get network topologies.
+      description: Retrieve a list of network topologies with details.
+      operationId: get_network_topologies
+      tags:
+      - Network Topologies
+      parameters:
+      - $ref: '#/components/parameters/NetworkTopologiesFilterBy'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  networkTopologies:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/NetworkTopology'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    post:
+      summary: Create network topologies
+      description: Creates a network topology object based on the provided specification.
+      operationId: create_network_topology
+      tags:
+      - Network Topologies
+      requestBody:
+        description: The network topology to create.
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NetworkTopologyCreateRequest'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkTopology'
+        '400':
+          $ref: '#/components/responses/400BadRequest'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/network-topologies/count:
+    get:
+      summary: Count the amount of network topologies in a tenant.
+      description: Retrieve the count of network topologies in a tenant group by selected attributes
+      operationId: get_network_topologies_count
+      tags:
+      - Network Topologies
+      parameters:
+      - $ref: '#/components/parameters/NetworkTopologiesFilterBy'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CountResponse'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+  /api/v1/network-topologies/{networkTopologyId}:
+    get:
+      summary: Get network topology by id.
+      description: Retrieve network topology details by Universally Unique Identifier (UUID).
+      operationId: get_network_topology_by_id
+      tags:
+      - Network Topologies
+      parameters:
+      - $ref: '#/components/parameters/NetworkTopologyId'
+      responses:
+        '200':
+          description: Executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NetworkTopology'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+    delete:
+      summary: Delete network topology by ID.
+      description: Delete an existing network topology by its ID.
+      operationId: delete_network_topology
+      tags:
+      - Network Topologies
+      parameters:
+      - $ref: '#/components/parameters/NetworkTopologyId'
+      responses:
+        '204':
+          $ref: '#/components/responses/204NoContent'
+        '401':
+          $ref: '#/components/responses/401Unauthorized'
+        '403':
+          $ref: '#/components/responses/403Forbidden'
+        '404':
+          $ref: '#/components/responses/404NotFound'
+        '500':
+          $ref: '#/components/responses/500InternalServerError'
+        '503':
+          $ref: '#/components/responses/503ServiceUnavailable'
+components:
+  schemas:
+    NetworkTopologyUpdateFields:
+      type: object
+      required:
+      - levels
+      properties:
+        levels:
+          $ref: '#/components/schemas/NetworkTopologyLevels'
+      x-schema-name: NetworkTopologyUpdateFields
+    NetworkTopologyLevels:
+      type: array
+      items:
+        type: string
+        pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*\/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
+        minLength: 1
+        maxLength: 63
+      description: Ordered array of network topology levels
+      example:
+      - cloud.provider.com/topology-block
+      - cloud.provider.com/topology-rack
+      - kubernetes.io/hostname
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    CountResponse:
+      type: object
+      required:
+      - count
+      properties:
+        count:
+          type: integer
+          format: int64
+          example: 1
+    NetworkTopologyId:
+      type: string
+      format: uuid
+      description: The unique identifier for the network topology
+      example: 123e4567-e89b-12d3-a456-426614174000
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    NetworkTopologiesSource:
+      type: string
+      description: Identifier of the the source of the topology. Useful for tracking where the topology data originated (i.e. Run:ai, Cluster).
+      example: Run.ai
+      minLength: 1
+      maxLength: 63
+      pattern: ^[a-zA-Z0-9][a-zA-Z0-9_.-]*[a-zA-Z0-9]$
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    NetworkTopologyName:
+      type: string
+      description: Name of the network topology
+      maxLength: 63
+      minLength: 1
+      pattern: ^[a-z]([a-z0-9-]*[a-z0-9])?$
+      example: default-topology
+    NetworkTopology:
+      allOf:
+      - $ref: '#/components/schemas/NetworkTopologyCreateRequest'
+      - type: object
+        required:
+        - id
+        - tenantId
+        - createdAt
+        - status
+        properties:
+          id:
+            $ref: '#/components/schemas/NetworkTopologyId'
+          tenantId:
+            $ref: '#/components/schemas/TenantId'
+          createdAt:
+            type: string
+            format: date-time
+            description: The timestamp for when the network topology was created
+          createdBy:
+            type: string
+            description: Identifier of the user who created the network topology
+            example: user@lab.com
+          phase:
+            type: string
+            description: 'Phase of the network topology in the cluster. Enum: Creating, Ready'
+            example: Ready
+          source:
+            $ref: '#/components/schemas/NetworkTopologiesSource'
+          nodePools:
+            type: array
+            items:
+              type: string
+            nullable: true
+            readOnly: true
+            description: List of node-pools associated with this network topology
+            example:
+            - a100
+      x-schema-name: NetworkTopology
+    NetworkTopologyCreateRequest:
+      allOf:
+      - $ref: '#/components/schemas/NetworkTopologyUpdateFields'
+      - type: object
+        required:
+        - name
+        - clusterId
+        properties:
+          name:
+            $ref: '#/components/schemas/NetworkTopologyName'
+          clusterId:
+            $ref: '#/components/schemas/ClusterId'
+      x-schema-name: NetworkTopologyCreateRequest
+  responses:
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    204NoContent:
+      description: No Content.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+  parameters:
+    NetworkTopologiesFilterBy:
+      name: filterBy
+      in: query
+      required: false
+      description: 'Filter results by a parameter. Use the format field-name operator value. Supported operators:  == Equals  != Not equals  <= Less than or equal  >= Greater than or equal  =@ Contains !@ Does not contain  =^ Starts with  =$ Ends with Date values must be in ISO 8601 timestamp format. Only the following operators support dates: ==, !=, <=, >=.'
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(name|clusterId|source|phase)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - clusterId==123e4567-e89b-12d3-a456-426614174000
+        - source=@Run.ai
+      explode: false
+    NetworkTopologyId:
+      name: networkTopologyId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The unique identifier for the network topology
+      example: 123e4567-e89b-12d3-a456-426614174000
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: Bearer authentication
+x-tagGroups:
+- name: Organizations
+  tags:
+  - Clusters
+  - Departments
+  - Reports
+  - NodePools
+  - Nodes
+  - Projects
+  - Tenant
+  - Logo
+  - Researcher Command Line Interface
+  - Researcher Command Line Interface Deprecated
+  - Administrator Command Line Interface
+  - Network Topologies
+- name: Authentication and Authorization
+  tags:
+  - Access Keys
+  - Access rules
+  - Permissions
+  - Applications
+  - Service Accounts
+  - Roles
+  - Tokens
+  - Users
+  - User Applications
+  - Idps
+  - Me
+  - Settings
+  - Org unit
+- name: Audit
+  tags:
+  - AuditLogs
+- name: Datavolumes
+  tags:
+  - Datavolumes
+- name: Workloads
+  tags:
+  - Events
+  - Pods
+  - Workloads
+  - Workloads V2
+  - NVIDIA NIM
+  - Workspaces
+  - Trainings
+  - Inferences
+  - Revisions
+  - Distributed
+  - Workloads batch
+  - Workload properties
+  - Workload templates
+  - Distributed Inferences
+- name: Workload assets
+  tags:
+  - Compute
+  - Credentials
+  - Datasources
+  - Environment
+  - Storage Classes
+  - Storage Class Configuration
+  - Git
+  - HostPath
+  - NFS
+  - PVC
+  - Registry
+  - S3
+  - ConfigMap
+  - Secret
+  - Template
+- name: Policies
+  tags:
+  - Policy
+- name: Notifications
+  tags:
+  - Notification State
+  - Notification Types
+  - NotificationChannels
+  - Subscriptions
+- name: AI Applications
+  tags:
+  - AI Applications
