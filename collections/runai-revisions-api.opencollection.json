@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Revisions API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Revisions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get inference workload revisions by id. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/inferences/:workloadId/revisions",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Return only deleted resources when `true`."
+              }
+            ]
+          },
+          "docs": "Retrieve the details of inference workload revisions by workload id. Supported for clusters v2.21+."
+        },
+        {
+          "info": {
+            "name": "Get inference workload revisions count. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/inferences/:workloadId/revisions/count",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              },
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Return only deleted resources when `true`."
+              }
+            ]
+          },
+          "docs": "Retrieve the number of an inference workload revisions from a cluster. Supported for clusters v2.21+."
+        },
+        {
+          "info": {
+            "name": "Get revision data. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/inferences/revisions/:revisionId",
+            "params": [
+              {
+                "name": "revisionId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the revision."
+              }
+            ]
+          },
+          "docs": "Retrieve revision details using a revision id. Supported for clusters v2.21+."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

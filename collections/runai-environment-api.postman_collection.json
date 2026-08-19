@@ -1,0 +1,2150 @@
+{
+  "item": [
+    {
+      "id": "f4d0b026-1cb5-4f6a-9465-6e972ddab3a4",
+      "name": "Environment",
+      "description": {
+        "content": "An environment resource designates the container image, the image pull policy, working directory, security parameters, and others. \nIt exposes all the necessary tools (open source, 3rd party, or custom tools) along \nwith their connection interfaces including external node port and the container ports.\nYou can also specify a standard, distributed, or inference workload architecture for the environment.\nAn environment is a mandatory building block for the creation of a workload.\nFor more information, see [Environments](https://run-ai-docs.nvidia.com/saas/workloads-in-nvidia-run-ai/assets/environments).\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "57e039b5-eb7c-410c-b4e2-c2fef4f4585e",
+          "name": "List environment assets.",
+          "request": {
+            "name": "List environment assets.",
+            "description": {
+              "content": "Use to retrieve a list of environment assets.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "asset",
+                "environment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "Filter results by name."
+                },
+                {
+                  "disabled": false,
+                  "key": "scope",
+                  "value": "<string>",
+                  "description": "Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project."
+                },
+                {
+                  "disabled": false,
+                  "key": "projectId",
+                  "value": "<integer>",
+                  "description": "Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets."
+                },
+                {
+                  "disabled": false,
+                  "key": "departmentId",
+                  "value": "<string>",
+                  "description": "Filter results by department id. If scope filter is department, only assets from the specific department will be included in the response. Otherwise, the response will include department, cluster, tenant and system assets."
+                },
+                {
+                  "disabled": false,
+                  "key": "clusterId",
+                  "value": "<uuid>",
+                  "description": "Filter results by Universally Unique Identifier (UUID) of the cluster. If scope filter is cluster, only assets from the specific cluster will be included in the response. Otherwise, the response will include cluster, tenant and system assets."
+                },
+                {
+                  "disabled": false,
+                  "key": "usageInfo",
+                  "value": "<boolean>",
+                  "description": "Whether the query should include asset usage information as part of the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToProject",
+                  "value": "<integer>",
+                  "description": "Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToWorkloadType",
+                  "value": "<string>",
+                  "description": "Include workload creation compliance information of an asset, for a given workload type, as part of the response. To check compliance, you need to provide both project id and workload type."
+                },
+                {
+                  "disabled": false,
+                  "key": "distributedFramework",
+                  "value": "<string>",
+                  "description": "Filter results to workload of type distributed and distributedFramework."
+                },
+                {
+                  "disabled": false,
+                  "key": "isDistributed",
+                  "value": "<boolean>",
+                  "description": "Filter results to workload of type distributed."
+                },
+                {
+                  "disabled": false,
+                  "key": "isTraining",
+                  "value": "<boolean>",
+                  "description": "Filter results to workload of type training."
+                },
+                {
+                  "disabled": false,
+                  "key": "isWorkspace",
+                  "value": "<boolean>",
+                  "description": "Filter results to workload of type workspace."
+                },
+                {
+                  "disabled": false,
+                  "key": "isInference",
+                  "value": "<boolean>",
+                  "description": "Filter results to workload of type inference."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToReplicaType",
+                  "value": "<string>",
+                  "description": "Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well."
+                },
+                {
+                  "disabled": false,
+                  "key": "statusInfo",
+                  "value": "<boolean>",
+                  "description": "Whether the query should include asset status information as part of the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeDescendants",
+                  "value": "<boolean>",
+                  "description": "Indicates whether to include assets from all descendant scopes under the specified scope. When set to true, and a specific scope identifier (for example, clusterId) is provided, the query also returns assets from all nested scopes within it (for example, departments and projects).  Mutually exclusive with scope."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c062fd98-9d94-4058-8bb2-63f0651d0101",
+              "name": "Request completed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "departmentId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "distributedFramework",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isDistributed",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isTraining",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isWorkspace",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isInference",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "includeDescendants",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entries\": [\n    {\n      \"meta\": {\n        \"createdAt\": \"1977-01-17T20:28:56.239Z\",\n        \"createdBy\": \"string\",\n        \"id\": \"c24aa8d4-3197-ccb1-9fec-19062b05220b\",\n        \"kind\": \"compute\",\n        \"name\": \"my-asset\",\n        \"scope\": \"department\",\n        \"updatedAt\": \"2022-07-18T19:21:39.382Z\",\n        \"updatedBy\": \"string\",\n        \"description\": \"description of my asset.\",\n        \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n        \"departmentId\": null,\n        \"projectId\": 1621,\n        \"autoDelete\": false,\n        \"workloadSupportedTypes\": {\n          \"inference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workspace\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"training\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"distributed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"distFramework\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"private\": false,\n        \"tenantId\": 4976,\n        \"deletedAt\": \"2002-04-30T18:26:07.032Z\",\n        \"deletedBy\": \"string\",\n        \"projectName\": \"string\",\n        \"updateCount\": 12345\n      },\n      \"spec\": {\n        \"args\": \"-x my-script.py\",\n        \"command\": \"python\",\n        \"environmentVariables\": null,\n        \"runAsGid\": 30,\n        \"runAsUid\": 500,\n        \"supplementalGroups\": \"2,3,5,8\",\n        \"allowPrivilegeEscalation\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"capabilities\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"createHomeDir\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"hostIpc\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"hostNetwork\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"image\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"imagePullPolicy\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"probes\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"readOnlyRootFilesystem\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"runAsNonRoot\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"seccompProfileType\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"stdin\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"tty\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"uidGidSource\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"workingDir\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"connections\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"overrideUidGidInWorkspace\": false\n      },\n      \"usedBy\": {\n        \"workspaces\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"trainings\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"distributed\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"inferences\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"templates\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"assets\": {\n          \"environment\": {},\n          \"environments\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"compute\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"computes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"datasources\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      },\n      \"usageTimes\": {\n        \"lastUsedByWorkload\": null\n      },\n      \"compliance\": {\n        \"imposed\": false,\n        \"compliance\": true,\n        \"reason\": [\n          {\n            \"details\": \"Chom\",\n            \"field\": \"_$-GTZ\",\n            \"rule\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"details\": \"YSWHs?\",\n            \"field\": \"|P\",\n            \"rule\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"status\": {\n        \"status\": \"Failed\",\n        \"issues\": [\n          {\n            \"scopeId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scopeType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"issue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"scopeId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scopeType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"issue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"message\": \"string\",\n        \"url\": \"string\"\n      }\n    },\n    {\n      \"meta\": {\n        \"createdAt\": \"2005-04-01T15:16:01.047Z\",\n        \"createdBy\": \"string\",\n        \"id\": \"1b2c695a-fa3e-0166-3777-d8e52c3db248\",\n        \"kind\": \"accessKey\",\n        \"name\": \"my-asset\",\n        \"scope\": \"project\",\n        \"updatedAt\": \"1961-05-20T03:40:14.225Z\",\n        \"updatedBy\": \"string\",\n        \"description\": \"description of my asset.\",\n        \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n        \"departmentId\": null,\n        \"projectId\": null,\n        \"autoDelete\": false,\n        \"workloadSupportedTypes\": {\n          \"inference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workspace\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"training\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"distributed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"distFramework\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"private\": false,\n        \"tenantId\": 9830,\n        \"deletedAt\": \"1994-08-16T11:28:52.870Z\",\n        \"deletedBy\": \"string\",\n        \"projectName\": \"string\",\n        \"updateCount\": 12345\n      },\n      \"spec\": {\n        \"args\": \"-x my-script.py\",\n        \"command\": \"python\",\n        \"environmentVariables\": null,\n        \"runAsGid\": 30,\n        \"runAsUid\": 500,\n        \"supplementalGroups\": \"2,3,5,8\",\n        \"allowPrivilegeEscalation\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"capabilities\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"createHomeDir\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"hostIpc\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"hostNetwork\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"image\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"imagePullPolicy\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"probes\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"readOnlyRootFilesystem\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"runAsNonRoot\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"seccompProfileType\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"stdin\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"tty\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"uidGidSource\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"workingDir\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"connections\": [\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        ],\n        \"overrideUidGidInWorkspace\": false\n      },\n      \"usedBy\": {\n        \"workspaces\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"trainings\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"distributed\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"inferences\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"templates\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"assets\": {\n          \"environment\": {},\n          \"environments\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"compute\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"computes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"datasources\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      },\n      \"usageTimes\": {\n        \"lastUsedByWorkload\": null\n      },\n      \"compliance\": {\n        \"imposed\": false,\n        \"compliance\": false,\n        \"reason\": [\n          {\n            \"details\": \"s@GU\",\n            \"field\": \"d9\",\n            \"rule\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"details\": \"^Kejvn7bV\",\n            \"field\": \"G%\",\n            \"rule\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"status\": {\n        \"status\": \"Deleting\",\n        \"issues\": [\n          {\n            \"scopeId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scopeType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"issue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"scopeId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scopeType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"issue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"message\": \"string\",\n        \"url\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e3bffdcd-5ee5-45b6-931e-29a7228bc294",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "departmentId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "distributedFramework",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isDistributed",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isTraining",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isWorkspace",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isInference",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "includeDescendants",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1094570-d5c8-4c04-82db-8f0cb5c997cf",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "departmentId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "distributedFramework",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isDistributed",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isTraining",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isWorkspace",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isInference",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "includeDescendants",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f7d2505-1e81-48af-bc3c-ee6b03459afc",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "departmentId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "distributedFramework",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "isDistributed",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isTraining",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isWorkspace",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "isInference",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "includeDescendants",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "51e4f4e0-abb2-4dee-b13a-acad4fb08146",
+          "name": "Create an environment asset.",
+          "request": {
+            "name": "Create an environment asset.",
+            "description": {
+              "content": "Use to create an environment asset.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "asset",
+                "environment"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meta\": {\n    \"name\": \"<string>\",\n    \"scope\": \"<string>\",\n    \"description\": \"<string,null>\",\n    \"clusterId\": \"<string,null-uuid>\",\n    \"departmentId\": \"<string,null>\",\n    \"projectId\": \"<integer,null-int32>\",\n    \"autoDelete\": false,\n    \"workloadSupportedTypes\": {\n      \"inference\": \"<boolean,null>\",\n      \"workspace\": \"<boolean,null>\",\n      \"training\": \"<boolean,null>\",\n      \"distributed\": \"<boolean,null>\",\n      \"distFramework\": \"<string,null>\"\n    },\n    \"private\": false\n  },\n  \"spec\": {\n    \"args\": \"<string,null>\",\n    \"command\": \"<string,null>\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": \"<integer,null-int64>\",\n    \"runAsUid\": \"<integer,null-int64>\",\n    \"supplementalGroups\": \"<string,null>\",\n    \"allowPrivilegeEscalation\": \"<boolean,null>\",\n    \"capabilities\": \"<array,null>\",\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": \"<boolean,null>\",\n    \"hostNetwork\": \"<boolean,null>\",\n    \"image\": \"<string,null>\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": \"<boolean,null>\",\n    \"runAsNonRoot\": \"<boolean,null>\",\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"<string,null>\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "9a1794c8-8895-47a2-a88f-b10017bace81",
+              "name": "Request accepted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"createdAt\": \"1956-02-21T18:14:40.294Z\",\n    \"createdBy\": \"string\",\n    \"id\": \"e1177883-5256-4589-a709-c62c890fdf06\",\n    \"kind\": \"compute\",\n    \"name\": \"my-asset\",\n    \"scope\": \"<string>\",\n    \"updatedAt\": \"2023-11-18T01:01:37.697Z\",\n    \"updatedBy\": \"string\",\n    \"description\": \"description of my asset.\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"departmentId\": \"<string,null>\",\n    \"projectId\": \"<integer,null-int32>\",\n    \"autoDelete\": false,\n    \"workloadSupportedTypes\": {\n      \"inference\": \"<boolean,null>\",\n      \"workspace\": \"<boolean,null>\",\n      \"training\": \"<boolean,null>\",\n      \"distributed\": \"<boolean,null>\",\n      \"distFramework\": \"<string,null>\"\n    },\n    \"private\": false,\n    \"tenantId\": null,\n    \"deletedAt\": \"1961-07-03T10:48:48.869Z\",\n    \"deletedBy\": \"string\",\n    \"projectName\": null,\n    \"updateCount\": 12345\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  },\n  \"usedBy\": {\n    \"workspaces\": [\n      {\n        \"id\": \"8ae1ef85-423e-9fec-4803-1ead1018941c\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"c9d3aa5e-f0e7-a13c-cfae-648167b9a0d7\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"trainings\": [\n      {\n        \"id\": \"8dc37833-c164-30f5-d956-ad71dec65bb1\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"13f2e1b4-fd3c-b986-1675-26540da95965\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"distributed\": [\n      {\n        \"id\": \"c42ae994-efc1-d205-9e07-6daee3863fd3\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"7b7d3a9f-7031-7884-e9a2-c326ff09600b\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"inferences\": [\n      {\n        \"id\": \"6857d97b-a546-8d78-6ca0-cc3f9e2d1a98\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"567fe185-16b0-0f20-6b1a-eeae45c1d986\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"templates\": [\n      {\n        \"id\": \"986de375-a881-085c-bf46-71d3deaf2f8a\",\n        \"name\": \"my-asset\"\n      },\n      {\n        \"id\": \"1e9e171c-f3fc-38cd-b991-d1ced846a0c2\",\n        \"name\": \"my-asset\"\n      }\n    ],\n    \"assets\": {\n      \"environment\": {\n        \"id\": \"4d1a076e-8116-c487-3c32-ac0c05c1d88e\",\n        \"name\": \"my-asset\",\n        \"toolTypes\": null\n      },\n      \"environments\": [\n        {\n          \"id\": \"e4797252-dd00-73c7-f191-910476caca60\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"639a30f3-4c5c-d04b-eff7-04c1af7d5402\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"compute\": {\n        \"id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"computes\": [\n        {\n          \"id\": \"8cded897-c059-04ac-ec9b-17851e905aa7\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"a8b794db-26b4-3e77-67a0-64edfc6557d7\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"datasources\": [\n        {\n          \"id\": \"ebb8b6c5-5a89-2d95-a29a-3f8afdfc1436\",\n          \"name\": \"my-asset\",\n          \"kind\": \"compute\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"id\": \"d147f5a8-5c66-1796-9b66-b0d891e99f9f\",\n          \"name\": \"my-asset\",\n          \"kind\": \"compute\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  },\n  \"usageTimes\": {\n    \"lastUsedByWorkload\": \"1990-03-03T05:33:33.095Z\"\n  },\n  \"compliance\": {\n    \"imposed\": false,\n    \"compliance\": true,\n    \"reason\": [\n      {\n        \"details\": \")j\",\n        \"field\": \"|Q8z/`KHmd\",\n        \"rule\": \"canEdit\"\n      },\n      {\n        \"details\": \"\",\n        \"field\": \"+UE\",\n        \"rule\": \"locked\"\n      }\n    ]\n  },\n  \"status\": {\n    \"status\": \"Deletion failed\",\n    \"issues\": [\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"system\",\n        \"issue\": \"NotCreated\"\n      },\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"system\",\n        \"issue\": \"ReplicationError\"\n      }\n    ],\n    \"message\": \"string\",\n    \"url\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1a60c0b2-50aa-40d4-aa4b-c8021fd9160e",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Required parameter is missing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "05671aa8-1092-47d9-a786-4a2fa912e16d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5a081ccf-9c51-44d3-afa9-35ac2c68bc1c",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "43336961-35f8-46b3-866b-7d8d96fe2359",
+              "name": "The specified resource already exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 409,\n  \"message\": \"Resource with this name already exists\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1adcc941-5078-4c92-a999-ac640bc3d08c",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5407d493-0951-451d-9fa8-ac1055a248f7",
+          "name": "Get an environment asset.",
+          "request": {
+            "name": "Get an environment asset.",
+            "description": {
+              "content": "Use to retrieve the details of environment asset by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "asset",
+                "environment",
+                ":AssetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "usageInfo",
+                  "value": "<boolean>",
+                  "description": "Whether the query should include asset usage information as part of the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToProject",
+                  "value": "<integer>",
+                  "description": "Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToWorkloadType",
+                  "value": "<string>",
+                  "description": "Include workload creation compliance information of an asset, for a given workload type, as part of the response. To check compliance, you need to provide both project id and workload type."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToReplicaType",
+                  "value": "<string>",
+                  "description": "Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well."
+                },
+                {
+                  "disabled": false,
+                  "key": "statusInfo",
+                  "value": "<boolean>",
+                  "description": "Whether the query should include asset status information as part of the response."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "AssetId",
+                  "description": "(Required) Unique identifier of the asset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "baef14e6-2a0f-45dd-9456-4ec293b5cd1a",
+              "name": "Request completed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"createdAt\": \"1956-02-21T18:14:40.294Z\",\n    \"createdBy\": \"string\",\n    \"id\": \"e1177883-5256-4589-a709-c62c890fdf06\",\n    \"kind\": \"compute\",\n    \"name\": \"my-asset\",\n    \"scope\": \"<string>\",\n    \"updatedAt\": \"2023-11-18T01:01:37.697Z\",\n    \"updatedBy\": \"string\",\n    \"description\": \"description of my asset.\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"departmentId\": \"<string,null>\",\n    \"projectId\": \"<integer,null-int32>\",\n    \"autoDelete\": false,\n    \"workloadSupportedTypes\": {\n      \"inference\": \"<boolean,null>\",\n      \"workspace\": \"<boolean,null>\",\n      \"training\": \"<boolean,null>\",\n      \"distributed\": \"<boolean,null>\",\n      \"distFramework\": \"<string,null>\"\n    },\n    \"private\": false,\n    \"tenantId\": null,\n    \"deletedAt\": \"1961-07-03T10:48:48.869Z\",\n    \"deletedBy\": \"string\",\n    \"projectName\": null,\n    \"updateCount\": 12345\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  },\n  \"usedBy\": {\n    \"workspaces\": [\n      {\n        \"id\": \"8ae1ef85-423e-9fec-4803-1ead1018941c\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"c9d3aa5e-f0e7-a13c-cfae-648167b9a0d7\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"trainings\": [\n      {\n        \"id\": \"8dc37833-c164-30f5-d956-ad71dec65bb1\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"13f2e1b4-fd3c-b986-1675-26540da95965\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"distributed\": [\n      {\n        \"id\": \"c42ae994-efc1-d205-9e07-6daee3863fd3\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"7b7d3a9f-7031-7884-e9a2-c326ff09600b\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"inferences\": [\n      {\n        \"id\": \"6857d97b-a546-8d78-6ca0-cc3f9e2d1a98\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"567fe185-16b0-0f20-6b1a-eeae45c1d986\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"templates\": [\n      {\n        \"id\": \"986de375-a881-085c-bf46-71d3deaf2f8a\",\n        \"name\": \"my-asset\"\n      },\n      {\n        \"id\": \"1e9e171c-f3fc-38cd-b991-d1ced846a0c2\",\n        \"name\": \"my-asset\"\n      }\n    ],\n    \"assets\": {\n      \"environment\": {\n        \"id\": \"4d1a076e-8116-c487-3c32-ac0c05c1d88e\",\n        \"name\": \"my-asset\",\n        \"toolTypes\": null\n      },\n      \"environments\": [\n        {\n          \"id\": \"e4797252-dd00-73c7-f191-910476caca60\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"639a30f3-4c5c-d04b-eff7-04c1af7d5402\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"compute\": {\n        \"id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"computes\": [\n        {\n          \"id\": \"8cded897-c059-04ac-ec9b-17851e905aa7\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"a8b794db-26b4-3e77-67a0-64edfc6557d7\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"datasources\": [\n        {\n          \"id\": \"ebb8b6c5-5a89-2d95-a29a-3f8afdfc1436\",\n          \"name\": \"my-asset\",\n          \"kind\": \"compute\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"id\": \"d147f5a8-5c66-1796-9b66-b0d891e99f9f\",\n          \"name\": \"my-asset\",\n          \"kind\": \"compute\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  },\n  \"usageTimes\": {\n    \"lastUsedByWorkload\": \"1990-03-03T05:33:33.095Z\"\n  },\n  \"compliance\": {\n    \"imposed\": false,\n    \"compliance\": true,\n    \"reason\": [\n      {\n        \"details\": \")j\",\n        \"field\": \"|Q8z/`KHmd\",\n        \"rule\": \"canEdit\"\n      },\n      {\n        \"details\": \"\",\n        \"field\": \"+UE\",\n        \"rule\": \"locked\"\n      }\n    ]\n  },\n  \"status\": {\n    \"status\": \"Deletion failed\",\n    \"issues\": [\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"system\",\n        \"issue\": \"NotCreated\"\n      },\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"system\",\n        \"issue\": \"ReplicationError\"\n      }\n    ],\n    \"message\": \"string\",\n    \"url\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "edd3189d-65af-4319-81e1-7eef82866d55",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "787e8750-153a-4d53-be59-b874c6477e88",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "32fcb0c0-9821-458f-b744-7bc83e266277",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4bc3610d-3819-4157-b121-e8fa67693732",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "478e1007-02c1-46e9-9798-2222557b37d4",
+          "name": "Update an environment asset.",
+          "request": {
+            "name": "Update an environment asset.",
+            "description": {
+              "content": "Use to update the details of environment asset by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "asset",
+                "environment",
+                ":AssetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "AssetId",
+                  "description": "(Required) Unique identifier of the asset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meta\": {\n    \"name\": \"<string>\",\n    \"description\": \"<string,null>\"\n  },\n  \"spec\": {\n    \"args\": \"<string,null>\",\n    \"command\": \"<string,null>\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": \"<integer,null-int64>\",\n    \"runAsUid\": \"<integer,null-int64>\",\n    \"supplementalGroups\": \"<string,null>\",\n    \"allowPrivilegeEscalation\": \"<boolean,null>\",\n    \"capabilities\": \"<array,null>\",\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": \"<boolean,null>\",\n    \"hostNetwork\": \"<boolean,null>\",\n    \"image\": \"<string,null>\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": \"<boolean,null>\",\n    \"runAsNonRoot\": \"<boolean,null>\",\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"<string,null>\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "4bbf06b8-deb8-4532-8d80-6a654ff5c0a6",
+              "name": "Request accepted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\"\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"createdAt\": \"1956-02-21T18:14:40.294Z\",\n    \"createdBy\": \"string\",\n    \"id\": \"e1177883-5256-4589-a709-c62c890fdf06\",\n    \"kind\": \"compute\",\n    \"name\": \"my-asset\",\n    \"scope\": \"<string>\",\n    \"updatedAt\": \"2023-11-18T01:01:37.697Z\",\n    \"updatedBy\": \"string\",\n    \"description\": \"description of my asset.\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"departmentId\": \"<string,null>\",\n    \"projectId\": \"<integer,null-int32>\",\n    \"autoDelete\": false,\n    \"workloadSupportedTypes\": {\n      \"inference\": \"<boolean,null>\",\n      \"workspace\": \"<boolean,null>\",\n      \"training\": \"<boolean,null>\",\n      \"distributed\": \"<boolean,null>\",\n      \"distFramework\": \"<string,null>\"\n    },\n    \"private\": false,\n    \"tenantId\": null,\n    \"deletedAt\": \"1961-07-03T10:48:48.869Z\",\n    \"deletedBy\": \"string\",\n    \"projectName\": null,\n    \"updateCount\": 12345\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  },\n  \"usedBy\": {\n    \"workspaces\": [\n      {\n        \"id\": \"8ae1ef85-423e-9fec-4803-1ead1018941c\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"c9d3aa5e-f0e7-a13c-cfae-648167b9a0d7\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"trainings\": [\n      {\n        \"id\": \"8dc37833-c164-30f5-d956-ad71dec65bb1\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"13f2e1b4-fd3c-b986-1675-26540da95965\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"distributed\": [\n      {\n        \"id\": \"c42ae994-efc1-d205-9e07-6daee3863fd3\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"7b7d3a9f-7031-7884-e9a2-c326ff09600b\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"inferences\": [\n      {\n        \"id\": \"6857d97b-a546-8d78-6ca0-cc3f9e2d1a98\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"567fe185-16b0-0f20-6b1a-eeae45c1d986\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"templates\": [\n      {\n        \"id\": \"986de375-a881-085c-bf46-71d3deaf2f8a\",\n        \"name\": \"my-asset\"\n      },\n      {\n        \"id\": \"1e9e171c-f3fc-38cd-b991-d1ced846a0c2\",\n        \"name\": \"my-asset\"\n      }\n    ],\n    \"assets\": {\n      \"environment\": {\n        \"id\": \"4d1a076e-8116-c487-3c32-ac0c05c1d88e\",\n        \"name\": \"my-asset\",\n        \"toolTypes\": null\n      },\n      \"environments\": [\n        {\n          \"id\": \"e4797252-dd00-73c7-f191-910476caca60\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"639a30f3-4c5c-d04b-eff7-04c1af7d5402\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"compute\": {\n        \"id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"computes\": [\n        {\n          \"id\": \"8cded897-c059-04ac-ec9b-17851e905aa7\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"a8b794db-26b4-3e77-67a0-64edfc6557d7\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"datasources\": [\n        {\n          \"id\": \"ebb8b6c5-5a89-2d95-a29a-3f8afdfc1436\",\n          \"name\": \"my-asset\",\n          \"kind\": \"compute\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"id\": \"d147f5a8-5c66-1796-9b66-b0d891e99f9f\",\n          \"name\": \"my-asset\",\n          \"kind\": \"compute\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  },\n  \"usageTimes\": {\n    \"lastUsedByWorkload\": \"1990-03-03T05:33:33.095Z\"\n  },\n  \"compliance\": {\n    \"imposed\": false,\n    \"compliance\": true,\n    \"reason\": [\n      {\n        \"details\": \")j\",\n        \"field\": \"|Q8z/`KHmd\",\n        \"rule\": \"canEdit\"\n      },\n      {\n        \"details\": \"\",\n        \"field\": \"+UE\",\n        \"rule\": \"locked\"\n      }\n    ]\n  },\n  \"status\": {\n    \"status\": \"Deletion failed\",\n    \"issues\": [\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"system\",\n        \"issue\": \"NotCreated\"\n      },\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"system\",\n        \"issue\": \"ReplicationError\"\n      }\n    ],\n    \"message\": \"string\",\n    \"url\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9090bb6-881a-40a0-9c9e-68df12adae4c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\"\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "68de2542-7b10-4c34-98fa-71d814b51153",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\"\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "043dbd43-9cf1-4820-8755-a890e5e6ee20",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\"\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c6ed3fa-000d-4977-b0b6-20f2dce3950e",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\"\n  },\n  \"spec\": {\n    \"args\": \"-x my-script.py\",\n    \"command\": \"python\",\n    \"environmentVariables\": \"<array,null>\",\n    \"runAsGid\": 30,\n    \"runAsUid\": 500,\n    \"supplementalGroups\": \"2,3,5,8\",\n    \"allowPrivilegeEscalation\": false,\n    \"capabilities\": [\n      \"CHOWN\",\n      \"KILL\"\n    ],\n    \"createHomeDir\": \"<boolean,null>\",\n    \"hostIpc\": false,\n    \"hostNetwork\": false,\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"readOnlyRootFilesystem\": false,\n    \"runAsNonRoot\": true,\n    \"seccompProfileType\": \"<string,null>\",\n    \"stdin\": \"<boolean,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"uidGidSource\": \"<string,null>\",\n    \"workingDir\": \"/home/myfolder\",\n    \"connections\": [\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      {\n        \"name\": \"<string>\",\n        \"isExternal\": false,\n        \"internalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"externalToolInfo\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    ],\n    \"overrideUidGidInWorkspace\": false\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5aefc13b-b0e4-4306-a24b-54cb9674922e",
+          "name": "Delete an environment asset.",
+          "request": {
+            "name": "Delete an environment asset.",
+            "description": {
+              "content": "Use to delete an environment asset by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "asset",
+                "environment",
+                ":AssetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "AssetId",
+                  "description": "(Required) Unique identifier of the asset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b31e93aa-2639-4f7e-a487-c1af4c318c09",
+              "name": "Accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 202,\n  \"message\": \"Request has been accepted.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa2b922b-b393-46d6-89db-115ec3b8457c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e05c94f-84e0-49d3-8222-809bbd31fca2",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "64fa6a1d-5291-4b89-8025-9097cda16e16",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1e2969ba-aba5-458e-8ce1-2f96c224d2b6",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "environment",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.run.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "98b7fbd4-d60b-44eb-b6f0-9a34624399a2",
+    "name": "NVIDIA Run:ai Access Keys Environment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.\n\nNVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.\nTo create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.\n\nAfter you have created a new service account, you will need to assign it access rules.\nTo assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).\nMake sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.\n\nTo get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).\n",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -115,22 +115,6 @@ components:
             code: 409
             message: Resource with this name already exists
   schemas:
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
     Priority:
       type: object
       required:
@@ -150,6 +134,22 @@ components:
           type: boolean
           description: The field determines if the current priority value is default
           example: false
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
   securitySchemes:
     bearerAuth:
       type: http

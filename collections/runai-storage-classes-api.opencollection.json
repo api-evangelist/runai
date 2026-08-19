@@ -1,0 +1,111 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Storage Classes API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Storage Classes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all storageClasses from a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:uuid/storage-classes",
+            "params": [
+              {
+                "name": "uuid",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the cluster"
+              },
+              {
+                "name": "includeNone",
+                "value": "",
+                "type": "query",
+                "description": "Include runai-none storage class to be able to create PVCs without a storage class"
+              }
+            ]
+          },
+          "docs": "this API is used by cluster versions < 2.20"
+        },
+        {
+          "info": {
+            "name": "get a Storage Class/Classes for a given cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/storage-classes",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "The id of the cluster"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "filter by name"
+              },
+              {
+                "name": "includeNone",
+                "value": "",
+                "type": "query",
+                "description": "Include runai-none storage class, which is used for static provisioning of PVC. In static provisioning storage is omitted."
+              }
+            ]
+          },
+          "docs": "get a Storage Class/Classes for a given cluster"
+        },
+        {
+          "info": {
+            "name": "get a Storage Class/Classes for a given cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v2/storage-classes",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "The id of the cluster"
+              },
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "filter by name"
+              },
+              {
+                "name": "includeNone",
+                "value": "",
+                "type": "query",
+                "description": "Include runai-none storage class, which is used for static provisioning of PVC. In static provisioning storage is omitted."
+              }
+            ]
+          },
+          "docs": "get a Storage Class/Classes for a given cluster"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

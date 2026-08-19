@@ -1,0 +1,458 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Departments API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Departments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get departments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/departments",
+            "params": [
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by a parameters."
+              },
+              {
+                "name": "verbosity",
+                "value": "verbose",
+                "type": "query",
+                "description": "Departments verbosity. If it is set to \"verbose\", status will be returned. If it is not defined or set to \"brief\" only unit specific data will be returned."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              }
+            ]
+          },
+          "docs": "list departments"
+        },
+        {
+          "info": {
+            "name": "Create department",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/org-unit/departments",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create Department"
+        },
+        {
+          "info": {
+            "name": "Get department",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/departments/:departmentId",
+            "params": [
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the department."
+              }
+            ]
+          },
+          "docs": "Get department by Id"
+        },
+        {
+          "info": {
+            "name": "Update department",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/org-unit/departments/:departmentId",
+            "params": [
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the department."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update department by Id"
+        },
+        {
+          "info": {
+            "name": "Delete department",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/org-unit/departments/:departmentId",
+            "params": [
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the department."
+              }
+            ]
+          },
+          "docs": "Delete department by Id"
+        },
+        {
+          "info": {
+            "name": "Update department resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/org-unit/departments/:departmentId/resources",
+            "params": [
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the department."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update department resources by Id"
+        },
+        {
+          "info": {
+            "name": "Patch department resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v1/org-unit/departments/:departmentId/resources",
+            "params": [
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the department."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partial updates to specific items in the list. Should be used for update one or more attributes of an item without modifying the entire resource."
+        },
+        {
+          "info": {
+            "name": "Get department metrics data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/departments/:departmentId/metrics",
+            "params": [
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the department."
+              },
+              {
+                "name": "metricType",
+                "value": "",
+                "type": "query",
+                "description": "Specify which data to request."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the nodepool."
+              }
+            ]
+          },
+          "docs": "Retrieves department data metrics from the metrics database. Use in reporting and analysis tools."
+        },
+        {
+          "info": {
+            "name": "Get departments telemetry",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/departments/telemetry",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the nodepool."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "groupBy",
+                "value": "",
+                "type": "query",
+                "description": "department fields to group the data by"
+              },
+              {
+                "name": "telemetryType",
+                "value": "",
+                "type": "query",
+                "description": "specifies what data to request"
+              }
+            ]
+          },
+          "docs": "Get departments telemetry"
+        },
+        {
+          "info": {
+            "name": "Count departments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/departments/count",
+            "params": [
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              }
+            ]
+          },
+          "docs": "count departments"
+        },
+        {
+          "info": {
+            "name": "Get metrics for all departments.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterUuid/departments/metrics",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start of time range to fetch data from in UTC format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End of time range to fetch data from in UTC format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by unique nodepool name."
+              }
+            ]
+          },
+          "docs": "Get metrics for all departments in the cluster. Use a time range to return historical data (optional). \nIf you use a `start` date, an `end` date is required.\n"
+        },
+        {
+          "info": {
+            "name": "Get metrics for a specific department.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterUuid/departments/:departmentId/metrics",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "path",
+                "description": "The id of the department."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start of time range to fetch data from in UTC format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End of time range to fetch data from in UTC format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by unique nodepool name."
+              }
+            ]
+          },
+          "docs": "Get metrics for a specific department in the cluster. \nUse a time range to return historical data (optional). If you use a `start` date, an `end` date is required.\n"
+        },
+        {
+          "info": {
+            "name": "List all departments.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/departments",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "9f55255e-11ed-47c7-acef-fc4054768dbc",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "excludePermissions",
+                "value": "true",
+                "type": "query",
+                "description": "Backward compatibility of the `departmentAdmins` field. If `true`, the `departmentAdmins` field in the returned departments is not set. If `false`, the `departmentAdmins` is set in the returned departments."
+              },
+              {
+                "name": "memoryUnitMb",
+                "value": "true",
+                "type": "query",
+                "description": "Memory returned in MB. When set to `false` (default) memory will be returned in MiB."
+              }
+            ]
+          },
+          "docs": "List all the departments managed by the tenant on a specific cluster."
+        },
+        {
+          "info": {
+            "name": "Set the department admins.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/departments/:department-id/access-control",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "9f55255e-11ed-47c7-acef-fc4054768dbc",
+                "type": "path",
+                "description": "The unique uuid identifying the cluster."
+              },
+              {
+                "name": "department-id",
+                "value": "2",
+                "type": "path",
+                "description": "The unique id identifying the department."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Deprecated. Instead, use the accessrules API to add the department-admin permissions to a specific subject."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

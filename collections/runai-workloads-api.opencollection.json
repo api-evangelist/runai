@@ -1,0 +1,221 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Workloads API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workloads",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List workloads.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads",
+            "params": [
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Return only deleted resources when `true`."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by a parameter."
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of active workloads with details."
+        },
+        {
+          "info": {
+            "name": "Get a workload.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Retrieve workload data using a `workloadId`."
+        },
+        {
+          "info": {
+            "name": "Count workloads.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/count",
+            "params": [
+              {
+                "name": "deleted",
+                "value": "",
+                "type": "query",
+                "description": "Return only deleted resources when `true`."
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "Retrieve the number of workloads."
+        },
+        {
+          "info": {
+            "name": "Get the workloads telemetry.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/telemetry",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the nodepool."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "groupBy",
+                "value": "",
+                "type": "query",
+                "description": "Group workloads by field."
+              },
+              {
+                "name": "telemetryType",
+                "value": "",
+                "type": "query",
+                "description": "Specifies the telemetry type."
+              },
+              {
+                "name": "filterByPhases",
+                "value": "",
+                "type": "query",
+                "description": "Filter workloads by specific phases. If not specified, all phases are included."
+              }
+            ]
+          },
+          "docs": "Retrieves workload data by telemetry type. Optionally filter by specific workload phases.\n\nTelemetry Types:\n- WORKLOADS_COUNT: Count of workloads\n- GPU_ALLOCATION: GPU allocation metrics\n- PENDING_TIME_DISTRIBUTION: Distribution of workloads by current pending time (time since entering Pending phase).\n\n\n\n\n\n\n  For this type, results are automatically grouped by 4 time buckets and any additional groupBy parameters.\n"
+        },
+        {
+          "info": {
+            "name": "Get workload metrics data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/:workloadId/metrics",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              },
+              {
+                "name": "metricType",
+                "value": "",
+                "type": "query",
+                "description": "Specify which data to request."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              }
+            ]
+          },
+          "docs": "Retrieves workloads data metrics from the metrics database. Use in reporting and analysis tools."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

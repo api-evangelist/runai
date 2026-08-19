@@ -1,0 +1,153 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Idps API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Idps",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get external idps list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/idps"
+          },
+          "docs": "Get external idps list"
+        },
+        {
+          "info": {
+            "name": "Configure external idp",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/idps",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Configure external idp"
+        },
+        {
+          "info": {
+            "name": "Get external idp by alias",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/idps/:idp",
+            "params": [
+              {
+                "name": "idp",
+                "value": "",
+                "type": "path",
+                "description": "The alias of the idp"
+              }
+            ]
+          },
+          "docs": "Get external idp by alias"
+        },
+        {
+          "info": {
+            "name": "Update external idp by alias",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/idps/:idp",
+            "params": [
+              {
+                "name": "idp",
+                "value": "",
+                "type": "path",
+                "description": "The alias of the idp"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update external idp by alias"
+        },
+        {
+          "info": {
+            "name": "Delete external idp by alias",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/idps/:idp",
+            "params": [
+              {
+                "name": "idp",
+                "value": "",
+                "type": "path",
+                "description": "The alias of the idp"
+              }
+            ]
+          },
+          "docs": "Delete external idp by alias"
+        },
+        {
+          "info": {
+            "name": "Get idp mappers",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/idps/:idp/mappers",
+            "params": [
+              {
+                "name": "idp",
+                "value": "",
+                "type": "path",
+                "description": "The alias of the idp"
+              }
+            ]
+          },
+          "docs": "Get idp mappers"
+        },
+        {
+          "info": {
+            "name": "Update idp mappers",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/idps/:idp/mappers",
+            "params": [
+              {
+                "name": "idp",
+                "value": "",
+                "type": "path",
+                "description": "The alias of the idp"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update idp mappers"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

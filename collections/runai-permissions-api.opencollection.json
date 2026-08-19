@@ -1,0 +1,50 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Permissions API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Permissions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a summary of user permissions.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/authorization/permissions"
+          },
+          "docs": "Retrieve a summary of user permissions."
+        },
+        {
+          "info": {
+            "name": "Calculate permitted scopes.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/authorization/permitted-scopes",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to calculate user permitted scopes for an action on a resource."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

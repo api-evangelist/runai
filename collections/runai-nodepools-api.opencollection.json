@@ -1,0 +1,359 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Node Pools API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "NodePools",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the node pool metrics data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/clusters/:clusterUuid/nodepools/:nodepoolName/metrics",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "path",
+                "description": "The unique nodepool name."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              },
+              {
+                "name": "metricType",
+                "value": "",
+                "type": "query",
+                "description": "specifies what data to request"
+              }
+            ]
+          },
+          "docs": "Retrieve the node pool metrics data by Universally Unique Identifier (UUID)."
+        },
+        {
+          "info": {
+            "name": "Get nodepools",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/node-pools",
+            "params": [
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by a parameters."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              }
+            ]
+          },
+          "docs": "Get nodepools"
+        },
+        {
+          "info": {
+            "name": "Create nodepool",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/node-pools",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create nodepool"
+        },
+        {
+          "info": {
+            "name": "Count nodepools",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/node-pools/count",
+            "params": [
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              }
+            ]
+          },
+          "docs": "Count nodepools"
+        },
+        {
+          "info": {
+            "name": "Get nodepool",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/node-pools/:nodepoolId",
+            "params": [
+              {
+                "name": "nodepoolId",
+                "value": "",
+                "type": "path",
+                "description": "The unique id identifying the Node Pool."
+              }
+            ]
+          },
+          "docs": "Get nodepool"
+        },
+        {
+          "info": {
+            "name": "Update nodepool",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/node-pools/:nodepoolId",
+            "params": [
+              {
+                "name": "nodepoolId",
+                "value": "",
+                "type": "path",
+                "description": "The unique id identifying the Node Pool."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update nodepool"
+        },
+        {
+          "info": {
+            "name": "Patch nodepool fields",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v1/node-pools/:nodepoolId",
+            "params": [
+              {
+                "name": "nodepoolId",
+                "value": "",
+                "type": "path",
+                "description": "The unique id identifying the Node Pool."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update only specific fields of a nodepool"
+        },
+        {
+          "info": {
+            "name": "Delete nodepool",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/node-pools/:nodepoolId",
+            "params": [
+              {
+                "name": "nodepoolId",
+                "value": "",
+                "type": "path",
+                "description": "The unique id identifying the Node Pool."
+              }
+            ]
+          },
+          "docs": "Delete nodepool"
+        },
+        {
+          "info": {
+            "name": "Get the cluster's Node Pools.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/node-pools",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the cluster"
+              }
+            ]
+          },
+          "docs": "Retrieve all the node pools with details from the cluster by Universally Unique Identifier (UUID). Deprecated, please use /api/v1/node-pools instead."
+        },
+        {
+          "info": {
+            "name": "Create a Node Pool.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/node-pools",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the cluster"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to create a node pool in a cluster by Universally Unique Identifier (UUID). Deprecated, please use /api/v1/node-pools instead."
+        },
+        {
+          "info": {
+            "name": "Update labels of a Node Pool.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/node-pools/:id/labels",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the cluster"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique id identifying the Node Pool."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to update the labels of a node pool. Deprecated, please use PATCH /api/v1/node-pools/{id} instead."
+        },
+        {
+          "info": {
+            "name": "Update a Node Pool.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/node-pools/:id",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the cluster"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique id identifying the Node Pool."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to update the details of a node pool by Universally Unique Identifier (UUID). Deprecated, please use PATCH /api/v1/node-pools/{id} instead."
+        },
+        {
+          "info": {
+            "name": "Delete a Node Pool by id.§",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/node-pools/:id",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the cluster"
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique id identifying the Node Pool."
+              }
+            ]
+          },
+          "docs": "Use to delete a node pool by Universally Unique Identifier (UUID). Deprecated, please use /api/v1/node-pools/{id} instead."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

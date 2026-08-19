@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Workspaces API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workspaces",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workloads/workspaces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new workspace in a specific project in the cluster."
+        },
+        {
+          "info": {
+            "name": "Get workspace data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/workspaces/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Retrieve workspace details using a workload id."
+        },
+        {
+          "info": {
+            "name": "Delete a workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/workloads/workspaces/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Delete a workspace using the workspace id."
+        },
+        {
+          "info": {
+            "name": "Suspend a workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workloads/workspaces/:workloadId/suspend",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Suspend a workspace using the workspace id."
+        },
+        {
+          "info": {
+            "name": "Resume a workspace.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workloads/workspaces/:workloadId/resume",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Resume the workspace operation using the workspace id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -303,116 +303,6 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  parameters:
-    DatavolumesFilter:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(name|projectId|clusterId|departmentId|projectName|createdAt|createdBy|phase)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-        example:
-        - name!=some-datavolume-name
-      explode: false
-    DatavolumeId:
-      name: datavolumeId
-      in: path
-      required: true
-      description: The id of the datavolume to retrieve
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-      schema:
-        type: string
-        format: uuid
-    Search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test project
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
-    DatavolumesRequestType:
-      name: requestType
-      in: query
-      required: true
-      description: Which datavolumes would be returned in the response. Originated - datavolumes that are originated in the permitted scopes of the caller. UsableInProject - datavolumes that can be used in a specific project; if you use this value, you must also provide the project ID in the "usableInProjectId" query param.
-      schema:
-        $ref: '#/components/schemas/DatavolumeRequestType'
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    DatavolumesUsableInProjectId:
-      name: usableInProjectId
-      in: query
-      required: false
-      description: Only when using "UsableInProject" requestType; Filter results for only datavolumes that are shared with - or originated in - the project.
-      schema:
-        type: string
-        example: '5'
-    DataVolumeName:
-      name: dataName
-      in: query
-      required: true
-      description: the name of the datavolume
-      schema:
-        type: string
-        minLength: 1
-    ClusterIdRequired:
-      name: clusterId
-      in: query
-      description: The id of the cluster
-      required: true
-      schema:
-        type: string
-        format: uuid
-        example: d73a738f-fab3-430a-8fa3-5241493d7128
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
-    DatavolumesSortBy:
-      name: sortBy
-      in: query
-      required: false
-      description: Sort results by a parameters.
-      schema:
-        type: string
-        enum:
-        - name
-        - projectId
-        - clusterId
-        - departmentId
-        - projectName
-        - createdAt
-        - createdBy
-        - phase
   schemas:
     HttpResponse:
       required:
@@ -425,13 +315,33 @@ components:
           maximum: 599
         message:
           type: string
-    DatavolumeRequestType:
+    ScopeType2:
       type: string
-      description: Which datavolumes to return in the GET datavolumes response. Originated - datavolumes that are originated in the permitted scopes of the caller. UsableInProject - datavolumes that can be used in a specific project; if you use this value, you must also provide the project ID in the "usableInProjectId" query param.
-      example: Originated
       enum:
-      - Originated
-      - UsableInProject
+      - cluster
+      - department
+      - project
+    DatavolumePatchFields:
+      type: object
+      properties:
+        description:
+          type: string
+          maxLength: 127
+          example: Results of experiment X
+    Datavolume:
+      allOf:
+      - $ref: '#/components/schemas/DatavolumeInnerFields'
+      - type: object
+        required:
+        - status
+        properties:
+          sharedScopes:
+            description: Will be returned only if the user has the required permissions to view those scopes
+            type: array
+            items:
+              $ref: '#/components/schemas/SharedScope'
+          status:
+            $ref: '#/components/schemas/DatavolumeStatus'
     DatavolumeNoSharedScopes:
       allOf:
       - $ref: '#/components/schemas/DatavolumeInnerFields'
@@ -441,6 +351,37 @@ components:
         properties:
           status:
             $ref: '#/components/schemas/DatavolumeStatus'
+    DatavolumesNoSharedScopes:
+      type: array
+      items:
+        $ref: '#/components/schemas/DatavolumeNoSharedScopes'
+      x-schema-name: DatavolumesNoSharedScopes
+    BaseFields:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: 71f69d83-ba66-4822-adf5-55ce55efd210
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          example: user@run.ai
+        updatedBy:
+          type: string
+          example: user@run.ai
+    Conditions1:
+      type: array
+      items:
+        $ref: '#/components/schemas/Condition2'
+      x-schema-name: Conditions
     SharedScopesPatchRequest:
       type: object
       properties:
@@ -454,52 +395,27 @@ components:
           items:
             $ref: '#/components/schemas/SharedScopeBase'
           maxLength: 50
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    EnrichmentDataFields1:
+    DatavolumeStatus:
       type: object
       required:
-      - projectName
+      - phase
       properties:
-        projectName:
+        phase:
+          $ref: '#/components/schemas/DatavolumePhase'
+        phaseMessage:
           type: string
-          example: project-a
-        departmentId:
+          description: Message explaining the phase of the Datavolume in the cluster
+          example: Failed to copy pvc to project 'project-a'
+        conditions:
+          $ref: '#/components/schemas/Conditions1'
+        datavolumePvcName:
           type: string
-          example: department-a
-        clusterId:
-          $ref: '#/components/schemas/ClusterId'
-    DatavolumePatchFields:
-      type: object
-      properties:
-        description:
+          description: The name of the copied PVC that is created in the cluster in the project namespace
+          example: datavolume-pvc-1
+        datavolumePvName:
           type: string
-          maxLength: 127
-          example: Results of experiment X
-    Conditions1:
-      type: array
-      items:
-        $ref: '#/components/schemas/Condition2'
-      x-schema-name: Conditions
-    DatavolumesNoSharedScopes:
-      type: array
-      items:
-        $ref: '#/components/schemas/DatavolumeNoSharedScopes'
-      x-schema-name: DatavolumesNoSharedScopes
+          description: The name of the PV that is created in the cluster - copied from the one that was attached to the original pvc
+          example: datavolume-pv-1
     Condition2:
       type: object
       required:
@@ -524,27 +440,11 @@ components:
           example: ErrorCreatingPvc
         lastTransitionTime:
           description: A timestamp of when the condition was created or the last time time the condition transitioned from one status to another.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           format: date-time
           example: '2022-01-01T03:49:52.531Z'
-    SharedScope:
-      allOf:
-      - $ref: '#/components/schemas/SharedScopeBase'
-      - type: object
-        required:
-        - scopeName
-        properties:
-          scopeName:
-            type: string
-            description: The name of the scope
-            example: project-a
-          createdAt:
-            type: string
-            format: date-time
-          createdBy:
-            type: string
-            example: user@run.ai
     ClusterId:
       description: The id of the cluster.
       type: string
@@ -588,41 +488,18 @@ components:
           example: false
         useOriginalVolume:
           description: If true, the original storage volume will be used together with the data volume. Default true as long as "shouldDeleteOriginalVolume" is false.
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           default: true
           example: true
-          nullable: true
-    DatavolumePhase:
+    DatavolumeRequestType:
       type: string
-      description: Phase of the Datavolume in the cluster
-      example: Ready
+      description: Which datavolumes to return in the GET datavolumes response. Originated - datavolumes that are originated in the permitted scopes of the caller. UsableInProject - datavolumes that can be used in a specific project; if you use this value, you must also provide the project ID in the "usableInProjectId" query param.
+      example: Originated
       enum:
-      - Ready
-      - NotReady
-      - Creating
-      - Deleting
-      - Unknown
-    DatavolumeStatus:
-      type: object
-      required:
-      - phase
-      properties:
-        phase:
-          $ref: '#/components/schemas/DatavolumePhase'
-        phaseMessage:
-          type: string
-          description: Message explaining the phase of the Datavolume in the cluster
-          example: Failed to copy pvc to project 'project-a'
-        conditions:
-          $ref: '#/components/schemas/Conditions1'
-        datavolumePvcName:
-          type: string
-          description: The name of the copied PVC that is created in the cluster in the project namespace
-          example: datavolume-pvc-1
-        datavolumePvName:
-          type: string
-          description: The name of the PV that is created in the cluster - copied from the one that was attached to the original pvc
-          example: datavolume-pv-1
+      - Originated
+      - UsableInProject
     SharedScopeBase:
       type: object
       required:
@@ -634,53 +511,86 @@ components:
         scopeId:
           type: string
           example: a418ed33-9399-48c0-a890-122cadd13bfd
-    BaseFields:
+    SharedScope:
+      allOf:
+      - $ref: '#/components/schemas/SharedScopeBase'
+      - type: object
+        required:
+        - scopeName
+        properties:
+          scopeName:
+            type: string
+            description: The name of the scope
+            example: project-a
+          createdAt:
+            type: string
+            format: date-time
+          createdBy:
+            type: string
+            example: user@run.ai
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    EnrichmentDataFields1:
       type: object
       required:
-      - id
+      - projectName
       properties:
-        id:
+        projectName:
           type: string
-          format: uuid
-          example: 71f69d83-ba66-4822-adf5-55ce55efd210
-        createdAt:
+          example: project-a
+        departmentId:
           type: string
-          format: date-time
-        updatedAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-          example: user@run.ai
-        updatedBy:
-          type: string
-          example: user@run.ai
-    ScopeType2:
-      type: string
-      enum:
-      - cluster
-      - department
-      - project
+          example: department-a
+        clusterId:
+          $ref: '#/components/schemas/ClusterId'
     DatavolumeInnerFields:
       allOf:
       - $ref: '#/components/schemas/BaseFields'
       - $ref: '#/components/schemas/DatavolumeCreationFields'
       - $ref: '#/components/schemas/EnrichmentDataFields1'
-    Datavolume:
-      allOf:
-      - $ref: '#/components/schemas/DatavolumeInnerFields'
-      - type: object
-        required:
-        - status
-        properties:
-          sharedScopes:
-            description: Will be returned only if the user has the required permissions to view those scopes
-            type: array
-            items:
-              $ref: '#/components/schemas/SharedScope'
-          status:
-            $ref: '#/components/schemas/DatavolumeStatus'
+    DatavolumePhase:
+      type: string
+      description: Phase of the Datavolume in the cluster
+      example: Ready
+      enum:
+      - Ready
+      - NotReady
+      - Creating
+      - Deleting
+      - Unknown
   responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
     202Accepted:
       description: Accepted.
       content:
@@ -708,26 +618,8 @@ components:
           example:
             code: 500
             message: Something went wrong.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
     204NoContent:
       description: No Content.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
     409Conflict:
       description: The specified resource already exists
       content:
@@ -737,15 +629,6 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
     400BadRequest:
       description: Bad request.
       content:
@@ -755,6 +638,125 @@ components:
           example:
             code: 400
             message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  parameters:
+    DataVolumeName:
+      name: dataName
+      in: query
+      required: true
+      description: the name of the datavolume
+      schema:
+        type: string
+        minLength: 1
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    DatavolumeId:
+      name: datavolumeId
+      in: path
+      required: true
+      description: The id of the datavolume to retrieve
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+      schema:
+        type: string
+        format: uuid
+    DatavolumesUsableInProjectId:
+      name: usableInProjectId
+      in: query
+      required: false
+      description: Only when using "UsableInProject" requestType; Filter results for only datavolumes that are shared with - or originated in - the project.
+      schema:
+        type: string
+        example: '5'
+    Search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test project
+    ClusterIdRequired:
+      name: clusterId
+      in: query
+      description: The id of the cluster
+      required: true
+      schema:
+        type: string
+        format: uuid
+        example: d73a738f-fab3-430a-8fa3-5241493d7128
+    DatavolumesRequestType:
+      name: requestType
+      in: query
+      required: true
+      description: Which datavolumes would be returned in the response. Originated - datavolumes that are originated in the permitted scopes of the caller. UsableInProject - datavolumes that can be used in a specific project; if you use this value, you must also provide the project ID in the "usableInProjectId" query param.
+      schema:
+        $ref: '#/components/schemas/DatavolumeRequestType'
+    DatavolumesSortBy:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results by a parameters.
+      schema:
+        type: string
+        enum:
+        - name
+        - projectId
+        - clusterId
+        - departmentId
+        - projectName
+        - createdAt
+        - createdBy
+        - phase
+    DatavolumesFilter:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(name|projectId|clusterId|departmentId|projectName|createdAt|createdBy|phase)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - name!=some-datavolume-name
+      explode: false
   securitySchemes:
     bearerAuth:
       type: http

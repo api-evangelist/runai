@@ -1,0 +1,181 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Reports API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Reports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List reports",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/reports",
+            "params": [
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by a parameters."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "List reports"
+        },
+        {
+          "info": {
+            "name": "Create a new report request.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/org-unit/reports",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new report request."
+        },
+        {
+          "info": {
+            "name": "Count reports",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/reports/count",
+            "params": [
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "Count reports"
+        },
+        {
+          "info": {
+            "name": "Reports availability",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/reports/availability"
+          },
+          "docs": "Reports availability"
+        },
+        {
+          "info": {
+            "name": "Get report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/reports/:reportId",
+            "params": [
+              {
+                "name": "reportId",
+                "value": "575c19e8-c7c3-45b0-8290-2f47397a8383",
+                "type": "path",
+                "description": "The report id"
+              }
+            ]
+          },
+          "docs": "Get report"
+        },
+        {
+          "info": {
+            "name": "Delete report",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/org-unit/reports/:reportId",
+            "params": [
+              {
+                "name": "reportId",
+                "value": "575c19e8-c7c3-45b0-8290-2f47397a8383",
+                "type": "path",
+                "description": "The report id"
+              }
+            ]
+          },
+          "docs": "Delete report"
+        },
+        {
+          "info": {
+            "name": "Download report",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/reports/:reportId/file",
+            "params": [
+              {
+                "name": "reportId",
+                "value": "575c19e8-c7c3-45b0-8290-2f47397a8383",
+                "type": "path",
+                "description": "The report id"
+              }
+            ]
+          },
+          "docs": "Download report"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

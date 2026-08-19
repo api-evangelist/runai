@@ -1,0 +1,160 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Events API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Events",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the workload events.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/:workloadId/events",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              }
+            ]
+          },
+          "docs": "Retrieve all the workload events using a workload id."
+        },
+        {
+          "info": {
+            "name": "Get the workload history.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/:workloadId/history",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              }
+            ]
+          },
+          "docs": "Retrieve workload history details, including events, using a workload id."
+        },
+        {
+          "info": {
+            "name": "Get revision events by id. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/inferences/revisions/:revisionId/events",
+            "params": [
+              {
+                "name": "revisionId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the revision."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              }
+            ]
+          },
+          "docs": "Retrieve all the revision events using a revision id. Supported for clusters v2.21+."
+        },
+        {
+          "info": {
+            "name": "Get the revision history. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/inferences/revisions/:revisionId/history",
+            "params": [
+              {
+                "name": "revisionId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the revision."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              }
+            ]
+          },
+          "docs": "Retrieve revision history details, including events, using a revision id. Supported for clusters v2.21+."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

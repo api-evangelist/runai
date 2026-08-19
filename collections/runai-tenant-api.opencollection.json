@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Tenant API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Tenant",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all tenant settings.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/setting"
+          },
+          "docs": "Retrieve all tenant settings."
+        },
+        {
+          "info": {
+            "name": "Update a tenant setting.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/v1/k8s/setting",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to update tenant settings."
+        },
+        {
+          "info": {
+            "name": "Get a tenant setting by key.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/setting/:settingKey",
+            "params": [
+              {
+                "name": "settingKey",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve a specific tenant setting by key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

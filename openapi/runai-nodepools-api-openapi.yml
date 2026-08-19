@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -22,7 +22,7 @@ info:
     To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
 
     '
-  title: NVIDIA Run:ai Access Keys NodePools API
+  title: NVIDIA Run:ai Access Keys Node Pools API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -480,6 +480,276 @@ paths:
           $ref: '#/components/responses/serviceUnavailable'
 components:
   schemas:
+    PlacementStrategy1:
+      properties:
+        cpu:
+          type: string
+          enum:
+          - spread
+          - binpack
+          description: scheduling strategy for cpu
+          example: spread
+        gpu:
+          type: string
+          enum:
+          - spread
+          - binpack
+          description: scheduling strategy for gpu
+          example: binpack
+    HttpResponse:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+    MeasurementResponse:
+      type: object
+      required:
+      - type
+      - values
+      properties:
+        type:
+          type: string
+          description: specifies what data returned
+          example: ALLOCATED_GPU
+        labels:
+          type:
+          - object
+          - 'null'
+          description: labels of the metric measurement
+          example: '{''gpu'': ''3''}'
+          additionalProperties:
+            type: string
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            required:
+            - value
+            - timestamp
+            properties:
+              value:
+                type: string
+                example: '85'
+              timestamp:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2023-06-06 12:09:18.211'
+    MetricsResponse:
+      type: object
+      required:
+      - measurements
+      properties:
+        measurements:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeasurementResponse'
+    NodepoolPhase:
+      type: string
+      enum:
+      - Creating
+      - Updating
+      - Deleting
+      - Empty
+      - Unschedulable
+      - Ready
+      - Deleted
+      description: Phase of Node Pool
+    Error1:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    NodepoolCreateResponseFields:
+      type: object
+      required:
+      - name
+      - labelKey
+      - labelValue
+      - clusterId
+      properties:
+        name:
+          type: string
+          example: v100
+          minLength: 1
+        labelKey:
+          type: string
+          description: Label key for associated nodes to the Node Pool (with value as in labelValue)
+          example: node-type
+          minLength: 1
+        labelValue:
+          type: string
+          description: Label value for associated nodes to the Node Pool (with key as in labelKey)
+          example: type-x
+          minLength: 1
+        clusterId:
+          type: string
+          format: uuid
+          example: d73a738f-fab3-430a-8fa3-5241493d7128
+        overProvisioningRatio:
+          type:
+          - integer
+          - 'null'
+          example: 1
+          minimum: 1
+          maximum: 5
+          default: 1
+          deprecated: true
+        placementStrategy:
+          deprecated: true
+          description: scheduling strategy per resource
+          properties:
+            cpu:
+              $ref: '#/components/schemas/PlacementStrategy'
+            gpu:
+              $ref: '#/components/schemas/PlacementStrategy'
+        gpuNetworkAccelerationLabelKey:
+          description: Label key by which to determine GPUNetworkAccelerationDetection nodes
+          type: string
+        gpuNetworkAccelerationDetection:
+          $ref: '#/components/schemas/NodepoolGPUNetworkAccelerationDetection'
+        networkTopologyName:
+          $ref: '#/components/schemas/NetworkTopologyNameOptional'
+        networkTopologyId:
+          $ref: '#/components/schemas/NetworkTopologyIdOptional'
+        gpuResourceOptimization:
+          $ref: '#/components/schemas/GPUResourceOptimization'
+        schedulingConfiguration:
+          $ref: '#/components/schemas/SchedulingConfiguration'
+    Nodepool:
+      allOf:
+      - $ref: '#/components/schemas/NodepoolCreateResponseFields'
+      - $ref: '#/components/schemas/NodepoolSyncFields'
+      - $ref: '#/components/schemas/NodepoolCalculatedFields'
+    NodepoolSyncFields:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          example: v100
+        phase:
+          $ref: '#/components/schemas/NodepoolPhase'
+        phaseMessage:
+          type: string
+          description: Message for status of Node Pool
+          example: all nodes are down
+        status:
+          allOf:
+          - $ref: '#/components/schemas/NodepoolSyncUpdateFields'
+          - type: object
+            properties:
+              conditions:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NodepoolConditionDetails'
+              gpuNetworkAccelerationDetected:
+                description: Signals to all relevant parties about GPUNetworkAcceleration being detected in some nodepool's nodes
+                type: boolean
+              nodes:
+                type: array
+                items:
+                  type: string
+                  example: node1
+    GPUResourceOptimization:
+      type:
+      - object
+      - 'null'
+      properties:
+        swapEnabled:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if swap is enabled on the node pool
+          example: true
+          default: false
+        cpuSwapMemorySize:
+          type:
+          - string
+          - 'null'
+          description: Size of the swap cpu memory. Only allowed when swapEnabled is true
+          example: 10000M
+          default: 100G
+          pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+        reservedGpuMemoryForSwapOperations:
+          type:
+          - string
+          - 'null'
+          description: Reserved GPU memory for swap operations. Only allowed when swapEnabled is true
+          example: 10G
+          default: 2G
+          pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+        nodeLevelSchedulerEnabled:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates if node level scheduler is enabled on the node pool. Replaces the deprecated 'overProvisioningRatio' field
+          example: true
+          default: false
+    NodepoolCalculatedFields:
+      type: object
+      required:
+      - id
+      - tenantId
+      - clusterName
+      - createdBy
+      - createdAt
+      - updatedBy
+      - updatedAt
+      - isDefault
+      properties:
+        id:
+          type: string
+          description: The NodePool id
+          readOnly: true
+          example: 5
+        tenantId:
+          description: The id of the tenant.
+          type: integer
+          example: 1
+          format: int32
+        clusterName:
+          type: string
+          example: prod-cluster
+        createdBy:
+          type: string
+          example: user@lab.com
+        createdAt:
+          type: string
+          format: date-time
+        updatedBy:
+          type: string
+          example: user@lab.com
+        updatedAt:
+          type: string
+          format: date-time
+        deletedBy:
+          type: string
+          example: user@lab.com
+        deletedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        isDefault:
+          type: boolean
+          description: Is the Node Pool is the cluster default
+          example: false
     NodepoolSortFilterFields:
       type: string
       enum:
@@ -494,42 +764,83 @@ components:
       - gpuNetworkAccelerationLabelKey
       - swapEnabled
       - nodeLevelSchedulerEnabled
-    HttpResponse:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-    SchedulingConfiguration:
+    PlacementStrategy:
+      type:
+      - string
+      - 'null'
+      enum:
+      - spread
+      - binpack
+      example: spread
+    NodepoolSyncUpdateFields:
       type: object
-      nullable: true
       properties:
+        labelKey:
+          type:
+          - string
+          - 'null'
+          description: Label key for associated nodes to the Node Pool (with value as in labelValue)
+          example: node-type
+          minLength: 1
+        labelValue:
+          type:
+          - string
+          - 'null'
+          description: Label value for associated nodes to the Node Pool (with key as in labelKey)
+          example: type-x
+          minLength: 1
+        overProvisioningRatio:
+          type:
+          - integer
+          - 'null'
+          example: 1
+          minimum: 1
+          maximum: 5
+          default: 1
+          deprecated: true
         placementStrategy:
-          description: Scheduling strategy per resource
+          description: scheduling strategy per resource
+          deprecated: true
           properties:
             cpu:
               $ref: '#/components/schemas/PlacementStrategy'
             gpu:
               $ref: '#/components/schemas/PlacementStrategy'
-        minGuaranteedRuntime:
-          description: Minimum duration (e.g., 5d8h40m) that a preemptible workload is guaranteed to run once scheduled and bound to a node. During this period, it is considered non-preemptible even if a higher-priority workload becomes eligible. Defaults to 0 (immediate preemption allowed).
+        gpuNetworkAccelerationLabelKey:
+          description: Label key by which to determine GPUNetworkAccelerationDetection nodes
           type: string
-          example: 5d8h40m
-          nullable: true
-          pattern: ^(0|[+]?((\d+(\.\d+)?)(ns|us|µs|μs|ms|s|m|h|d|w))+$)
-    NetworkTopologyNameOptional:
-      type: string
-      nullable: true
-      description: Name of the network topology
-      maxLength: 63
-      minLength: 1
-      pattern: ^[a-z]([a-z0-9-]*[a-z0-9])?$
-      example: default-topology
+        gpuNetworkAccelerationDetection:
+          $ref: '#/components/schemas/NodepoolGPUNetworkAccelerationDetection'
+        gpuResourceOptimization:
+          $ref: '#/components/schemas/GPUResourceOptimization'
+        schedulingConfiguration:
+          $ref: '#/components/schemas/SchedulingConfiguration'
+    UpdateNodePoolRequest:
+      properties:
+        labelKey:
+          type: string
+          description: key of node label for pool
+          example: node-type
+        labelValue:
+          type: string
+          description: value of node label for pool
+          example: type-x
+        overProvisioningRatio:
+          type: integer
+          example: 1
+          default: 1
+        placementStrategy:
+          $ref: '#/components/schemas/PlacementStrategy1'
+    NodePoolLabelsRequest:
+      properties:
+        labelKey:
+          type: string
+          description: key of node label for pool
+          example: node-type
+        labelValue:
+          type: string
+          description: value of node label for pool
+          example: type-x
     MetricsType:
       type: string
       description: specifies what data to request
@@ -546,6 +857,159 @@ components:
       - UNALLOCATED_GPU
       - AVG_WORKLOAD_WAIT_TIME
       - WORKLOADS_COUNT
+    NodepoolConditionDetails:
+      type: object
+      required:
+      - type
+      - reason
+      properties:
+        type:
+          type: string
+          description: Type of Nodepool condition.
+        reason:
+          type: string
+          description: (brief) reason for the condition's last transition.
+          example: TopologyMismatch
+        message:
+          type: string
+          description: Human readable message indicating details about last transition.
+          example: Network Topology labels mismatch
+        status:
+          type: string
+          description: The status of the condition, can be True or False
+          enum:
+          - 'True'
+          - 'False'
+        nodes:
+          type: array
+          description: Names of the nodes related to the nodepool condition
+          items:
+            type: string
+          example:
+          - node1
+          - node2
+      x-schema-name: NodepoolConditionDetails
+    NetworkTopologyIdOptional:
+      type:
+      - string
+      - 'null'
+      format: uuid
+      description: The unique identifier for the network topology
+      example: 123e4567-e89b-12d3-a456-426614174000
+    NodepoolCreateFields:
+      type: object
+      required:
+      - name
+      - labelKey
+      - labelValue
+      - clusterId
+      properties:
+        name:
+          type: string
+          example: v100
+          minLength: 1
+        labelKey:
+          type: string
+          description: Label key for associated nodes to the Node Pool (with value as in labelValue)
+          example: node-type
+          minLength: 1
+        labelValue:
+          type: string
+          description: Label value for associated nodes to the Node Pool (with key as in labelKey)
+          example: type-x
+          minLength: 1
+        clusterId:
+          type: string
+          format: uuid
+          example: d73a738f-fab3-430a-8fa3-5241493d7128
+        overProvisioningRatio:
+          type:
+          - integer
+          - 'null'
+          example: 1
+          minimum: 1
+          maximum: 5
+          default: 1
+          deprecated: true
+        placementStrategy:
+          deprecated: true
+          description: scheduling strategy per resource
+          properties:
+            cpu:
+              $ref: '#/components/schemas/PlacementStrategy'
+            gpu:
+              $ref: '#/components/schemas/PlacementStrategy'
+        gpuNetworkAccelerationLabelKey:
+          description: Label key by which to determine GPUNetworkAccelerationDetection nodes
+          type:
+          - string
+          - 'null'
+        gpuNetworkAccelerationDetection:
+          $ref: '#/components/schemas/NodepoolGPUNetworkAccelerationDetection'
+        gpuResourceOptimization:
+          $ref: '#/components/schemas/GPUResourceOptimization'
+        schedulingConfiguration:
+          $ref: '#/components/schemas/SchedulingConfiguration'
+        networkTopologyId:
+          $ref: '#/components/schemas/NetworkTopologyIdOptional'
+    NodePoolCreateRequest:
+      properties:
+        name:
+          type: string
+          description: Node Pool Name
+          example: node-pool-a
+        overProvisioningRatio:
+          type: integer
+          example: 1
+          default: 1
+        labelKey:
+          type: string
+          description: Label key for associated nodes to the Node Pool (with value as in labelValue)
+          example: node-type
+        labelValue:
+          type: string
+          description: Label value for associated nodes to the Node Pool (with key as in labelKey)
+          example: type-x
+        placementStrategy:
+          $ref: '#/components/schemas/PlacementStrategy1'
+    SchedulingConfiguration:
+      type:
+      - object
+      - 'null'
+      properties:
+        placementStrategy:
+          description: Scheduling strategy per resource
+          properties:
+            cpu:
+              $ref: '#/components/schemas/PlacementStrategy'
+            gpu:
+              $ref: '#/components/schemas/PlacementStrategy'
+        minGuaranteedRuntime:
+          description: Minimum duration (e.g., 5d8h40m) that a preemptible workload is guaranteed to run once scheduled and bound to a node. During this period, it is considered non-preemptible even if a higher-priority workload becomes eligible. Defaults to 0 (immediate preemption allowed).
+          type:
+          - string
+          - 'null'
+          example: 5d8h40m
+          pattern: ^(0|[+]?((\d+(\.\d+)?)(ns|us|µs|μs|ms|s|m|h|d|w))+$)
+    NodepoolGPUNetworkAccelerationDetection:
+      type:
+      - string
+      - 'null'
+      enum:
+      - Use
+      - DontUse
+      - Auto
+      default: Auto
+      description: GPUNetworkAccelerationDetection is a strategy to use for GPU Network Acceleration detection
+    NetworkTopologyNameOptional:
+      type:
+      - string
+      - 'null'
+      description: Name of the network topology
+      maxLength: 63
+      minLength: 1
+      pattern: ^[a-z]([a-z0-9-]*[a-z0-9])?$
+      example: default-topology
     NodePool1:
       allOf:
       - $ref: '#/components/schemas/NodePoolCreateRequest'
@@ -609,13 +1073,6 @@ components:
             type: boolean
             description: Is the Node Pool the default Node Pool for all nodes not assigned to any other Node Pool
             example: false
-    PlacementStrategy:
-      type: string
-      enum:
-      - spread
-      - binpack
-      example: spread
-      nullable: true
     Error:
       required:
       - code
@@ -632,111 +1089,31 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-    Error1:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
-    UpdateNodePoolRequest:
-      properties:
-        labelKey:
-          type: string
-          description: key of node label for pool
-          example: node-type
-        labelValue:
-          type: string
-          description: value of node label for pool
-          example: type-x
-        overProvisioningRatio:
-          type: integer
-          example: 1
-          default: 1
-        placementStrategy:
-          $ref: '#/components/schemas/PlacementStrategy1'
-    MetricsResponse:
-      type: object
-      required:
-      - measurements
-      properties:
-        measurements:
-          type: array
-          items:
-            $ref: '#/components/schemas/MeasurementResponse'
-    NodepoolCalculatedFields:
-      type: object
-      required:
-      - id
-      - tenantId
-      - clusterName
-      - createdBy
-      - createdAt
-      - updatedBy
-      - updatedAt
-      - isDefault
-      properties:
-        id:
-          type: string
-          description: The NodePool id
-          readOnly: true
-          example: 5
-        tenantId:
-          description: The id of the tenant.
-          type: integer
-          example: 1
-          format: int32
-        clusterName:
-          type: string
-          example: prod-cluster
-        createdBy:
-          type: string
-          example: user@lab.com
-        createdAt:
-          type: string
-          format: date-time
-        updatedBy:
-          type: string
-          example: user@lab.com
-        updatedAt:
-          type: string
-          format: date-time
-        deletedBy:
-          type: string
-          example: user@lab.com
-        deletedAt:
-          type: string
-          nullable: true
-          format: date-time
-        isDefault:
-          type: boolean
-          description: Is the Node Pool is the cluster default
-          example: false
     NodepoolUpdateFields:
       type: object
       properties:
         labelKey:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Label key for associated nodes to the Node Pool (with value as in labelValue)
           example: node-type
           minLength: 1
-          nullable: true
         labelValue:
-          type: string
+          type:
+          - string
+          - 'null'
           description: Label value for associated nodes to the Node Pool (with key as in labelKey)
           example: type-x
           minLength: 1
-          nullable: true
         overProvisioningRatio:
-          type: integer
+          type:
+          - integer
+          - 'null'
           example: 1
           minimum: 1
           maximum: 5
           default: 1
-          nullable: true
           deprecated: true
         placementStrategy:
           deprecated: true
@@ -748,8 +1125,9 @@ components:
               $ref: '#/components/schemas/PlacementStrategy'
         gpuNetworkAccelerationLabelKey:
           description: Label key by which to determine GPUNetworkAccelerationDetection nodes
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         gpuNetworkAccelerationDetection:
           $ref: '#/components/schemas/NodepoolGPUNetworkAccelerationDetection'
         gpuResourceOptimization:
@@ -758,360 +1136,148 @@ components:
           $ref: '#/components/schemas/SchedulingConfiguration'
         networkTopologyId:
           $ref: '#/components/schemas/NetworkTopologyIdOptional'
-    NodepoolConditionDetails:
-      type: object
-      required:
-      - type
-      - reason
-      properties:
-        type:
+  parameters:
+    NodepoolsFilterBy:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
+      schema:
+        type: array
+        items:
           type: string
-          description: Type of Nodepool condition.
-        reason:
-          type: string
-          description: (brief) reason for the condition's last transition.
-          example: TopologyMismatch
-        message:
-          type: string
-          description: Human readable message indicating details about last transition.
-          example: Network Topology labels mismatch
-        status:
-          type: string
-          description: The status of the condition, can be True or False
-          enum:
-          - 'True'
-          - 'False'
-        nodes:
-          type: array
-          description: Names of the nodes related to the nodepool condition
-          items:
-            type: string
-          example:
-          - node1
-          - node2
-      x-schema-name: NodepoolConditionDetails
-    NetworkTopologyIdOptional:
-      type: string
-      format: uuid
-      nullable: true
-      description: The unique identifier for the network topology
-      example: 123e4567-e89b-12d3-a456-426614174000
-    PlacementStrategy1:
-      properties:
-        cpu:
-          type: string
-          enum:
-          - spread
-          - binpack
-          description: scheduling strategy for cpu
-          example: spread
-        gpu:
-          type: string
-          enum:
-          - spread
-          - binpack
-          description: scheduling strategy for gpu
-          example: binpack
-    NodepoolGPUNetworkAccelerationDetection:
-      type: string
-      enum:
-      - Use
-      - DontUse
-      - Auto
-      nullable: true
-      default: Auto
-      description: GPUNetworkAccelerationDetection is a strategy to use for GPU Network Acceleration detection
-    NodePoolLabelsRequest:
-      properties:
-        labelKey:
-          type: string
-          description: key of node label for pool
-          example: node-type
-        labelValue:
-          type: string
-          description: value of node label for pool
-          example: type-x
-    NodepoolSyncUpdateFields:
-      type: object
-      properties:
-        labelKey:
-          type: string
-          description: Label key for associated nodes to the Node Pool (with value as in labelValue)
-          example: node-type
-          minLength: 1
-          nullable: true
-        labelValue:
-          type: string
-          description: Label value for associated nodes to the Node Pool (with key as in labelKey)
-          example: type-x
-          minLength: 1
-          nullable: true
-        overProvisioningRatio:
-          type: integer
-          example: 1
-          minimum: 1
-          maximum: 5
-          default: 1
-          nullable: true
-          deprecated: true
-        placementStrategy:
-          description: scheduling strategy per resource
-          deprecated: true
-          properties:
-            cpu:
-              $ref: '#/components/schemas/PlacementStrategy'
-            gpu:
-              $ref: '#/components/schemas/PlacementStrategy'
-        gpuNetworkAccelerationLabelKey:
-          description: Label key by which to determine GPUNetworkAccelerationDetection nodes
-          type: string
-        gpuNetworkAccelerationDetection:
-          $ref: '#/components/schemas/NodepoolGPUNetworkAccelerationDetection'
-        gpuResourceOptimization:
-          $ref: '#/components/schemas/GPUResourceOptimization'
-        schedulingConfiguration:
-          $ref: '#/components/schemas/SchedulingConfiguration'
-    NodepoolCreateResponseFields:
-      type: object
-      required:
-      - name
-      - labelKey
-      - labelValue
-      - clusterId
-      properties:
-        name:
-          type: string
-          example: v100
-          minLength: 1
-        labelKey:
-          type: string
-          description: Label key for associated nodes to the Node Pool (with value as in labelValue)
-          example: node-type
-          minLength: 1
-        labelValue:
-          type: string
-          description: Label value for associated nodes to the Node Pool (with key as in labelKey)
-          example: type-x
-          minLength: 1
-        clusterId:
-          type: string
-          format: uuid
-          example: d73a738f-fab3-430a-8fa3-5241493d7128
-        overProvisioningRatio:
-          type: integer
-          example: 1
-          minimum: 1
-          maximum: 5
-          default: 1
-          nullable: true
-          deprecated: true
-        placementStrategy:
-          deprecated: true
-          description: scheduling strategy per resource
-          properties:
-            cpu:
-              $ref: '#/components/schemas/PlacementStrategy'
-            gpu:
-              $ref: '#/components/schemas/PlacementStrategy'
-        gpuNetworkAccelerationLabelKey:
-          description: Label key by which to determine GPUNetworkAccelerationDetection nodes
-          type: string
-        gpuNetworkAccelerationDetection:
-          $ref: '#/components/schemas/NodepoolGPUNetworkAccelerationDetection'
-        networkTopologyName:
-          $ref: '#/components/schemas/NetworkTopologyNameOptional'
-        networkTopologyId:
-          $ref: '#/components/schemas/NetworkTopologyIdOptional'
-        gpuResourceOptimization:
-          $ref: '#/components/schemas/GPUResourceOptimization'
-        schedulingConfiguration:
-          $ref: '#/components/schemas/SchedulingConfiguration'
-    NodePoolCreateRequest:
-      properties:
-        name:
-          type: string
-          description: Node Pool Name
-          example: node-pool-a
-        overProvisioningRatio:
-          type: integer
-          example: 1
-          default: 1
-        labelKey:
-          type: string
-          description: Label key for associated nodes to the Node Pool (with value as in labelValue)
-          example: node-type
-        labelValue:
-          type: string
-          description: Label value for associated nodes to the Node Pool (with key as in labelKey)
-          example: type-x
-        placementStrategy:
-          $ref: '#/components/schemas/PlacementStrategy1'
-    NodepoolCreateFields:
-      type: object
-      required:
-      - name
-      - labelKey
-      - labelValue
-      - clusterId
-      properties:
-        name:
-          type: string
-          example: v100
-          minLength: 1
-        labelKey:
-          type: string
-          description: Label key for associated nodes to the Node Pool (with value as in labelValue)
-          example: node-type
-          minLength: 1
-        labelValue:
-          type: string
-          description: Label value for associated nodes to the Node Pool (with key as in labelKey)
-          example: type-x
-          minLength: 1
-        clusterId:
-          type: string
-          format: uuid
-          example: d73a738f-fab3-430a-8fa3-5241493d7128
-        overProvisioningRatio:
-          type: integer
-          example: 1
-          minimum: 1
-          maximum: 5
-          default: 1
-          nullable: true
-          deprecated: true
-        placementStrategy:
-          deprecated: true
-          description: scheduling strategy per resource
-          properties:
-            cpu:
-              $ref: '#/components/schemas/PlacementStrategy'
-            gpu:
-              $ref: '#/components/schemas/PlacementStrategy'
-        gpuNetworkAccelerationLabelKey:
-          description: Label key by which to determine GPUNetworkAccelerationDetection nodes
-          type: string
-          nullable: true
-        gpuNetworkAccelerationDetection:
-          $ref: '#/components/schemas/NodepoolGPUNetworkAccelerationDetection'
-        gpuResourceOptimization:
-          $ref: '#/components/schemas/GPUResourceOptimization'
-        schedulingConfiguration:
-          $ref: '#/components/schemas/SchedulingConfiguration'
-        networkTopologyId:
-          $ref: '#/components/schemas/NetworkTopologyIdOptional'
-    NodepoolPhase:
-      type: string
-      enum:
-      - Creating
-      - Updating
-      - Deleting
-      - Empty
-      - Unschedulable
-      - Ready
-      - Deleted
-      description: Phase of Node Pool
-    NodepoolSyncFields:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          example: v100
-        phase:
-          $ref: '#/components/schemas/NodepoolPhase'
-        phaseMessage:
-          type: string
-          description: Message for status of Node Pool
-          example: all nodes are down
-        status:
-          allOf:
-          - $ref: '#/components/schemas/NodepoolSyncUpdateFields'
-          - type: object
-            properties:
-              conditions:
-                type: array
-                items:
-                  $ref: '#/components/schemas/NodepoolConditionDetails'
-              gpuNetworkAccelerationDetected:
-                description: Signals to all relevant parties about GPUNetworkAcceleration being detected in some nodepool's nodes
-                type: boolean
-              nodes:
-                type: array
-                items:
-                  type: string
-                  example: node1
-    MeasurementResponse:
-      type: object
-      required:
-      - type
-      - values
-      properties:
-        type:
-          type: string
-          description: specifies what data returned
-          example: ALLOCATED_GPU
-        labels:
-          type: object
-          nullable: true
-          description: labels of the metric measurement
-          example: '{''gpu'': ''3''}'
-          additionalProperties:
-            type: string
-        values:
-          type: array
-          nullable: true
-          items:
-            type: object
-            required:
-            - value
-            - timestamp
-            properties:
-              value:
-                type: string
-                example: '85'
-              timestamp:
-                type: string
-                format: date-time
-                nullable: true
-                example: '2023-06-06 12:09:18.211'
-    Nodepool:
-      allOf:
-      - $ref: '#/components/schemas/NodepoolCreateResponseFields'
-      - $ref: '#/components/schemas/NodepoolSyncFields'
-      - $ref: '#/components/schemas/NodepoolCalculatedFields'
-    GPUResourceOptimization:
-      type: object
-      nullable: true
-      properties:
-        swapEnabled:
-          type: boolean
-          description: Indicates if swap is enabled on the node pool
-          example: true
-          default: false
-          nullable: true
-        cpuSwapMemorySize:
-          type: string
-          description: Size of the swap cpu memory. Only allowed when swapEnabled is true
-          example: 10000M
-          default: 100G
-          nullable: true
-          pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-        reservedGpuMemoryForSwapOperations:
-          type: string
-          description: Reserved GPU memory for swap operations. Only allowed when swapEnabled is true
-          example: 10G
-          default: 2G
-          nullable: true
-          pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-        nodeLevelSchedulerEnabled:
-          type: boolean
-          description: Indicates if node level scheduler is enabled on the node pool. Replaces the deprecated 'overProvisioningRatio' field
-          example: true
-          default: false
-          nullable: true
+          pattern: ^(name|clusterId|phase|createdAt|updatedAt|gpuNetworkAccelerationDetection|networkTopologyName|gpuNetworkAccelerationDetected|gpuNetworkAccelerationLabelKey|swapEnabled|nodeLevelSchedulerEnabled)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - name!=some-name
+      explode: false
+    NumberOfSamples:
+      name: numberOfSamples
+      in: query
+      description: The number of samples to take in the specified time range.
+      required: false
+      schema:
+        type: integer
+        example: 20
+        maximum: 1000
+        minimum: 0
+        default: 20
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
+    NodepoolId:
+      name: nodepoolId
+      in: path
+      required: true
+      description: The unique id identifying the Node Pool.
+      schema:
+        type: string
+        example: 17
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    NodepoolPath:
+      in: path
+      name: nodepoolName
+      required: true
+      description: The unique nodepool name.
+      schema:
+        type: string
+        example: default
+    EndRequired:
+      name: end
+      in: query
+      description: End date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-07T12:09:18.211Z'
+    NodepoolsSortBy:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results by a parameters.
+      schema:
+        $ref: '#/components/schemas/NodepoolSortFilterFields'
+    ClusterUuid:
+      name: clusterUuid
+      in: path
+      required: true
+      description: The Universally Unique Identifier (UUID) of the cluster.
+      schema:
+        type: string
+        format: uuid
+        minLength: 1
+        example: 9f55255e-11ed-47c7-acef-fc4054768dbc
+    StartRequired:
+      name: start
+      in: query
+      description: Start date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-06T12:09:18.211Z'
+    MetricsType:
+      name: metricType
+      in: query
+      required: true
+      description: specifies what data to request
+      explode: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/MetricsType'
   responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    serviceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error1'
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
     202Accepted:
       description: Accepted.
       content:
@@ -1130,12 +1296,6 @@ components:
           example:
             code: 404
             message: Resource id not found.
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     500InternalServerError:
       description: unexpected error
       content:
@@ -1145,59 +1305,20 @@ components:
           example:
             code: 500
             message: Something went wrong.
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error1'
+    204NoContent:
+      description: No Content.
     Conflict:
       description: conflict error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    serviceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error1'
     BadRequest:
       description: Bad request.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    204NoContent:
-      description: No Content.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
     400BadRequest:
       description: Bad request.
       content:
@@ -1207,123 +1328,27 @@ components:
           example:
             code: 400
             message: Required parameter is missing
-  parameters:
-    StartRequired:
-      name: start
-      in: query
-      description: Start date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-06T12:09:18.211Z'
-    EndRequired:
-      name: end
-      in: query
-      description: End date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-07T12:09:18.211Z'
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
-    MetricsType:
-      name: metricType
-      in: query
-      required: true
-      description: specifies what data to request
-      explode: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/MetricsType'
-    NodepoolId:
-      name: nodepoolId
-      in: path
-      required: true
-      description: The unique id identifying the Node Pool.
-      schema:
-        type: string
-        example: 17
-    NodepoolsFilterBy:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(name|clusterId|phase|createdAt|updatedAt|gpuNetworkAccelerationDetection|networkTopologyName|gpuNetworkAccelerationDetected|gpuNetworkAccelerationLabelKey|swapEnabled|nodeLevelSchedulerEnabled)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-        example:
-        - name!=some-name
-      explode: false
-    NodepoolsSortBy:
-      name: sortBy
-      in: query
-      required: false
-      description: Sort results by a parameters.
-      schema:
-        $ref: '#/components/schemas/NodepoolSortFilterFields'
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    NumberOfSamples:
-      name: numberOfSamples
-      in: query
-      description: The number of samples to take in the specified time range.
-      required: false
-      schema:
-        type: integer
-        example: 20
-        maximum: 1000
-        minimum: 0
-        default: 20
-    ClusterUuid:
-      name: clusterUuid
-      in: path
-      required: true
-      description: The Universally Unique Identifier (UUID) of the cluster.
-      schema:
-        type: string
-        format: uuid
-        minLength: 1
-        example: 9f55255e-11ed-47c7-acef-fc4054768dbc
-    NodepoolPath:
-      in: path
-      name: nodepoolName
-      required: true
-      description: The unique nodepool name.
-      schema:
-        type: string
-        example: default
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error1'
   securitySchemes:
     bearerAuth:
       type: http

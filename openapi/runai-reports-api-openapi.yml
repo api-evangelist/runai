@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -213,99 +213,55 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  parameters:
-    ReportsSortBy:
-      name: sortBy
-      in: query
-      required: false
-      description: Sort results by a parameters.
-      schema:
-        $ref: '#/components/schemas/ReportFilterAndSortFields'
-    Search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test project
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    ReportId:
-      name: reportId
-      in: path
-      required: true
-      description: The report id
-      example: 575c19e8-c7c3-45b0-8290-2f47397a8383
-      schema:
-        type: string
-        format: uuid
-    ReportsFilterBy:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(name|createdAt|createdBy|status)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-        example:
-        - name!=some-name
-      explode: false
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    204NoContent:
+      description: No Content.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
   schemas:
-    ReportStatus:
-      type: string
-      enum:
-      - Pending
-      - Processing
-      - Ready
-      - Failed
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
     CountResponse:
       type: object
       required:
@@ -315,10 +271,23 @@ components:
           type: integer
           format: int64
           example: 1
+    Reports:
+      type: array
+      items:
+        $ref: '#/components/schemas/Report'
     Report:
       allOf:
       - $ref: '#/components/schemas/ReportRequestFields'
       - $ref: '#/components/schemas/ReportCalculatedFields'
+    ReportGroupByOptions:
+      type:
+      - string
+      - 'null'
+      enum:
+      - Nodepool
+      - Project
+      - Department
+      - Cluster
     ReportFilterAndSortFields:
       type: string
       enum:
@@ -326,6 +295,45 @@ components:
       - createdAt
       - createdBy
       - status
+    ReportStatus:
+      type: string
+      enum:
+      - Pending
+      - Processing
+      - Ready
+      - Failed
+    ReportCalculatedFields:
+      type: object
+      required:
+      - id
+      - tenantId
+      - createdAt
+      - createdBy
+      - status
+      - statusUpdatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          example: user@run.ai
+        tenantId:
+          type: integer
+          format: int32
+          description: ID of the tenant where the project is located.
+          example: 2
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        statusUpdatedAt:
+          type: string
+          format: date-time
+        statusMessage:
+          type: string
+          example: Report in queue
     ReportRequestFields:
       type: object
       required:
@@ -360,98 +368,91 @@ components:
             pattern: ^(projectName|departmentName|clusterId)(==).+$
           example:
           - projectName==some-name
-    Reports:
-      type: array
-      items:
-        $ref: '#/components/schemas/Report'
-    ReportGroupByOptions:
-      type: string
-      nullable: true
-      enum:
-      - Nodepool
-      - Project
-      - Department
-      - Cluster
-    ReportCalculatedFields:
-      type: object
+    Error:
       required:
-      - id
-      - tenantId
-      - createdAt
-      - createdBy
-      - status
-      - statusUpdatedAt
+      - code
+      - message
       properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-          example: user@run.ai
-        tenantId:
+        code:
           type: integer
-          format: int32
-          description: ID of the tenant where the project is located.
-          example: 2
-        status:
-          $ref: '#/components/schemas/ReportStatus'
-        statusUpdatedAt:
+          minimum: 100
+          maximum: 599
+        message:
           type: string
-          format: date-time
-        statusMessage:
+        details:
           type: string
-          example: Report in queue
-  responses:
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    204NoContent:
-      description: No Content.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    ReportsSortBy:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results by a parameters.
+      schema:
+        $ref: '#/components/schemas/ReportFilterAndSortFields'
+    Search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test project
+    ReportId:
+      name: reportId
+      in: path
+      required: true
+      description: The report id
+      example: 575c19e8-c7c3-45b0-8290-2f47397a8383
+      schema:
+        type: string
+        format: uuid
+    ReportsFilterBy:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(name|createdAt|createdBy|status)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - name!=some-name
+      explode: false
   securitySchemes:
     bearerAuth:
       type: http

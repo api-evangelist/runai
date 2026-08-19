@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -505,315 +505,34 @@ paths:
                 $ref: '#/components/schemas/Error'
           description: Forbidden
 components:
-  parameters:
-    DepartmentId:
-      name: departmentId
-      in: path
-      required: true
-      description: The id of the department.
-      schema:
-        type: string
-        example: '1'
-        pattern: .*
-    DepartmentsVerbosity:
-      name: verbosity
-      in: query
-      required: false
-      description: Departments verbosity. If it is set to "verbose", status will be returned. If it is not defined or set to "brief" only unit specific data will be returned.
-      example: verbose
-      schema:
-        $ref: '#/components/schemas/Verbosity'
-    DepartmentsFilterBy:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(name|clusterId|totalGpuQuota|gpuAllocated|createdAt|avgGpuAllocation24h|avgGpuUtilization24h|avgGpuMemoryUtilization24h|avgGpuAllocation7d|avgGpuUtilization7d|avgGpuMemoryUtilization7d|avgGpuAllocation30d|avgGpuUtilization30d|avgGpuMemoryUtilization30d)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-        example:
-        - name!=some-name
-      explode: false
-    StartRequired:
-      name: start
-      in: query
-      description: Start date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-06T12:09:18.211Z'
-    FilterByDepartment:
-      name: departmentId
-      in: query
-      description: Filter using the department id.
-      required: false
-      schema:
-        type: string
-        example: '1'
-    NumberOfSamples:
-      name: numberOfSamples
-      in: query
-      description: The number of samples to take in the specified time range.
-      required: false
-      schema:
-        type: integer
-        example: 20
-        maximum: 1000
-        minimum: 0
-        default: 20
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
-    TelemetryType1:
-      name: telemetryType
-      in: query
-      required: true
-      description: specifies what data to request
-      schema:
-        $ref: '#/components/schemas/OrgUnitTelemetryType'
-    FilterByNodepoolName:
-      name: nodepoolName
-      in: query
-      description: Filter using the nodepool.
-      required: false
-      schema:
-        type: string
-        example: default
-    EndRequired:
-      name: end
-      in: query
-      description: End date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-07T12:09:18.211Z'
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    NodepoolName:
-      in: query
-      name: nodepoolName
-      schema:
-        type: string
-        example: default
-      required: false
-      description: Filter by unique nodepool name.
-    Start:
-      name: start
-      in: query
-      description: Start of time range to fetch data from in UTC format.
-      required: false
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-06 12:09:18.211'
-    TelemetryGroupByDepartment:
-      name: groupBy
-      in: query
-      description: department fields to group the data by
-      explode: false
-      required: false
-      schema:
-        type: array
-        maxItems: 2
-        items:
-          type: string
-          enum:
-          - CLUSTER_ID
-    DepartmentsSortBy:
-      name: sortBy
-      in: query
-      required: false
-      description: Sort results by a parameters.
-      schema:
-        $ref: '#/components/schemas/DepartmentFilterSortFields'
-    End:
-      name: end
-      in: query
-      description: End of time range to fetch data from in UTC format.
-      required: false
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-07 12:09:18.211'
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
-    FilterByCluster:
-      name: clusterId
-      in: query
-      description: Filter using the Universally Unique Identifier (UUID) of the cluster.
-      required: false
-      schema:
-        type: string
-        format: uuid
-        example: d73a738f-fab3-430a-8fa3-5241493d7128
-    OrgUnitMetricTypes:
-      name: metricType
-      in: query
-      required: true
-      description: Specify which data to request.
-      explode: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/OrgUnitMetricType'
-    ClusterUuid:
-      name: clusterUuid
-      in: path
-      required: true
-      description: The Universally Unique Identifier (UUID) of the cluster.
-      schema:
-        type: string
-        format: uuid
-        minLength: 1
-        example: 9f55255e-11ed-47c7-acef-fc4054768dbc
   schemas:
-    NodePoolsQuotaStatuses:
-      type: array
-      items:
-        $ref: '#/components/schemas/NodePoolQuotaStatus'
-      description: The current quota status for each node pool. Supported only for cluster versions 2.15+ or higher.
-    Resource:
-      properties:
-        deserved:
-          type: number
-          format: double
-          description: The project resource allocation that it is deserved to get in case the cluster has those resources
-          nullable: true
-          example: 1000
-        limit:
-          type: number
-          format: double
-          description: Maximum amount of resources the project can get
-          nullable: true
-          example: 0
-        overQuotaWeight:
-          type: number
-          format: double
-          description: The priority the project gets for over quota resources
-          nullable: true
-          example: 2
-    Verbosity:
-      type: string
-      enum:
-      - meta
-      - brief
-      - verbose
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    units:
-      type: string
-      enum:
-      - Mib
-      - MB
-      - GB
-    ProjectName1:
-      type: string
-      example: project-a
-    DepartmentForList:
-      allOf:
-      - $ref: '#/components/schemas/DataDepartmentFields'
-      - type: object
-        required:
-        - id
-        - createdAt
-        - updatedAt
-        - totalResources
-        properties:
-          id:
-            type: string
-            example: 50
-          createdAt:
-            type: string
-            format: date-time
-          updatedAt:
-            type: string
-            format: date-time
-          createdBy:
-            type: string
-          updatedBy:
-            type: string
-          children:
-            type: array
-            nullable: true
-            items:
-              $ref: '#/components/schemas/DepartmentProjectChild'
-          status:
-            type: object
-            nullable: true
-            properties:
-              quotaStatus:
-                $ref: '#/components/schemas/QuotaStatus'
-          totalResources:
-            $ref: '#/components/schemas/TotalResources'
-            nullable: true
-          resources:
-            type: array
-            items:
-              $ref: '#/components/schemas/Resources'
-            description: Resources assigned to this Organization per Node Pool
-    DataUpdatableDepartmentFields:
+    DepartmentProjectChild:
       type: object
-      description: Updatable fields
+      description: Department or project child
       required:
-      - resources
+      - id
+      - name
       properties:
-        description:
+        id:
           type: string
-          description: department's description
-        schedulingRules:
-          $ref: '#/components/schemas/SchedulingRules'
-        defaultNodePools:
-          description: default order of node pools for workloads. will be enforced if no list is defined in workload policy
+          format: uuid
+          example: 9f55253e-11ed-47c7-acef-fc4054768dbc
+        name:
+          type: string
+          example: organization1
+        children:
           type: array
-          nullable: true
           items:
-            type: string
-        nodeTypes:
-          description: default node types configuration for workloads. will be enforced if no node type is configured in workload policy
-          nullable: true
-          $ref: '#/components/schemas/NodeTypesPerWorkload'
+            $ref: '#/components/schemas/DepartmentProjectChild'
+    MetricsResponse:
+      type: object
+      required:
+      - measurements
+      properties:
+        measurements:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeasurementResponse'
     TelemetryResponse:
       type: object
       required:
@@ -858,184 +577,18 @@ components:
                     name:
                       type: string
                       example: department-A
-    ClusterId:
-      description: The id of the cluster.
-      type: string
-      format: uuid
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    ResourcesDataOvertime:
-      allOf:
-      - $ref: '#/components/schemas/ResourcesData'
-      - type: object
-        required:
-        - timestamp
-        properties:
-          timestamp:
-            type: string
-            format: date-time
-            example: '2023-06-06T12:09:18.211Z'
-    Project2:
-      allOf:
-      - properties:
-          name:
-            type: string
-            description: Project name.
-            example: team-a
-          nodePoolsResources:
-            type: array
-            items:
-              $ref: '#/components/schemas/NodePoolAssignedResources'
-            description: Resources assigned to this Project per Node Pool.
-          namespace:
-            type: string
-            description: The name of an existing namespace to use for the project in the cluster. Supported only for cluster versions 2.12 or higher.
-            example: ns-proj1
-          id:
-            type: integer
-            format: int32
-            description: Project id.
-            readOnly: true
-            example: 5
-          departmentId:
-            type: integer
-            format: int32
-            description: ID of the department that owns the project.
-            example: 2
-          tenantId:
-            type: integer
-            format: int32
-            description: ID of the tenant where the project is located.
-            example: 2
-          clusterUuid:
-            type: string
-            format: uuid
-            description: ID of the cluster where the project is located.
-            example: 71f69d83-ba66-4822-adf5-55ce55efd210
-          departmentName:
-            type: string
-            description: Name of the department where the project is located.
-            example: department-a
-          interactiveNodeAffinity:
-            type: string
-            example: none
-          trainNodeAffinity:
-            type: string
-            example: none
-          createdAt:
-            type: string
-            description: Creation date of the project.
-            format: date-time
-            example: '2021-12-14T16:04:15.099Z'
-          status:
-            $ref: '#/components/schemas/ProjectStatus1'
-          phase:
-            type: string
-            description: project's phase
-            example: Ready
-      - $ref: '#/components/schemas/ProjectCommonFields'
-    NodePoolAssignedResourcesCreate:
+    NodePoolResources:
       required:
-      - nodePool
+      - id
       properties:
-        nodePool:
-          allOf:
-          - $ref: '#/components/schemas/NodePoolResources'
-          description: The node pool which the assigned resources refer to.
-        gpu:
-          allOf:
-          - $ref: '#/components/schemas/Resource1'
-          description: Number of GPUs assigned in the node pool.
-        cpu:
-          allOf:
-          - $ref: '#/components/schemas/Resource1'
-          description: Number of CPU Millicores assigned in the node pool. Supported only if the 'CPU Resources Quota' feature flag is enabled.
-        memory:
-          allOf:
-          - $ref: '#/components/schemas/Resource1'
-          description: Amount of CPU Memory Mib assigned in the node pool. Supported only if the 'CPU Resources Quota' feature flag is enabled.
-    AggregatedResources:
-      type: object
-      description: Sum of all resources assigned to the projects under this department per Node Pool
-      required:
-      - nodePool
-      properties:
-        nodePool:
-          type: object
-          description: the node pool which the resources refer to
-          required:
-          - id
-          - name
-          properties:
-            id:
-              type: string
-              description: node pool id
-              example: 22
-            name:
-              type: string
-              description: node pool name
-              example: default
-        gpu:
-          $ref: '#/components/schemas/DeservedResource'
-        cpu:
-          $ref: '#/components/schemas/DeservedResource'
-        memory:
-          allOf:
-          - $ref: '#/components/schemas/DeservedResource'
-          - type: object
-            required:
-            - units
-            properties:
-              units:
-                $ref: '#/components/schemas/units'
-    MeasurementResponse:
-      type: object
-      required:
-      - type
-      - values
-      properties:
-        type:
+        id:
+          type: number
+          description: Node pool id.
+          example: 3
+        name:
           type: string
-          description: specifies what data returned
-          example: ALLOCATED_GPU
-        labels:
-          type: object
-          nullable: true
-          description: labels of the metric measurement
-          example: '{''gpu'': ''3''}'
-          additionalProperties:
-            type: string
-        values:
-          type: array
-          nullable: true
-          items:
-            type: object
-            required:
-            - value
-            - timestamp
-            properties:
-              value:
-                type: string
-                example: '85'
-              timestamp:
-                type: string
-                format: date-time
-                nullable: true
-                example: '2023-06-06 12:09:18.211'
-    departments:
-      type: object
-      required:
-      - data
-      properties:
-        data:
-          type: array
-          items:
-            allOf:
-            - $ref: '#/components/schemas/Department1'
-            - properties:
-                timeRange:
-                  example: null
-        timeRange:
-          $ref: '#/components/schemas/TimeRange'
+          description: Node pool name.
+          example: default
     OvertimeRangeData:
       type: object
       description: Average data for the specified time range, or for the lifetime of the project/department if it exists for less than the time range.
@@ -1051,682 +604,16 @@ components:
           example: 95
           description: The average gpu utilization percentage of the project/department.
         averageGpuMemoryUtilization:
-          type: number
+          type:
+          - number
+          - 'null'
           format: double
           example: 95
           description: The average gpu memory utilization percentage of the project/department. Only available for cluster versions >= 2.22.
-          nullable: true
         updatedAt:
           type: string
           format: date-time
           example: '2021-08-01T00:00:00Z'
-    Department1:
-      type: object
-      required:
-      - metadata
-      - current
-      properties:
-        metadata:
-          type: object
-          required:
-          - departmentId
-          - departmentName
-          - clusterId
-          - clusterName
-          properties:
-            departmentId:
-              $ref: '#/components/schemas/DepartmentId'
-            departmentName:
-              $ref: '#/components/schemas/DepartmentName'
-            clusterId:
-              $ref: '#/components/schemas/ClusterId'
-            clusterName:
-              $ref: '#/components/schemas/ClusterName'
-        current:
-          type: object
-          description: Current reported metrics data. resources holds data that is summed up to the department level and projectResources explains the division of it to projects
-          required:
-          - resources
-          - projectResources
-          properties:
-            resources:
-              type: array
-              items:
-                allOf:
-                - $ref: '#/components/schemas/ResourcesData'
-                - type: object
-                  required:
-                  - nodepoolName
-                  properties:
-                    nodepoolName:
-                      $ref: '#/components/schemas/NodepoolName'
-            projectResources:
-              type: array
-              items:
-                allOf:
-                - $ref: '#/components/schemas/ResourcesData'
-                - type: object
-                  required:
-                  - projectName
-                  - nodepoolName
-                  properties:
-                    projectName:
-                      $ref: '#/components/schemas/ProjectName1'
-                    nodepoolName:
-                      $ref: '#/components/schemas/NodepoolName'
-        timeRange:
-          $ref: '#/components/schemas/TimeRange'
-    CountResponse:
-      type: object
-      required:
-      - count
-      properties:
-        count:
-          type: integer
-          format: int64
-          example: 1
-    ClusterName:
-      type: string
-      example: cluster-a
-    AssignedResources:
-      properties:
-        id:
-          type: number
-        gpu:
-          allOf:
-          - $ref: '#/components/schemas/Resource1'
-          description: GPU number assigned
-        cpu:
-          allOf:
-          - $ref: '#/components/schemas/Resource1'
-          description: CPU Millicores assigned. Supported only if 'CPU Resources Quota' feature flag is enabled.
-        memory:
-          allOf:
-          - $ref: '#/components/schemas/Resource1'
-          description: CPU Memory Mib assigned. Supported only if 'CPU Resources Quota' feature flag is enabled.
-    ResourceData:
-      type: object
-      description: quota equals to the given resources and allocated equal to the real count of used resources
-      required:
-      - quota
-      - allocated
-      properties:
-        quota:
-          type: number
-          example: 3
-        allocated:
-          type: number
-          example: 2.5
-        utilization:
-          type: number
-          example: 0.765
-    NodePoolAssignedResources:
-      required:
-      - id
-      allOf:
-      - properties:
-          id:
-            description: The id of the assigned resources. Required in PUT when updating the assigned resources.
-            type: number
-      - $ref: '#/components/schemas/NodePoolAssignedResourcesCreate'
-    SchedulingRules:
-      type: object
-      nullable: true
-      properties:
-        interactiveJobTimeLimitSeconds:
-          type: integer
-          description: interactive job time limit in seconds
-          nullable: true
-          example: 100
-          minimum: 1
-        interactiveJobMaxIdleDurationSeconds:
-          type: integer
-          description: interactive job max idle duration in seconds
-          nullable: true
-          example: 100
-          minimum: 1
-        interactiveJobPreemptIdleDurationSeconds:
-          type: integer
-          description: interactive job preempt idle duration in seconds
-          nullable: true
-          example: 100
-          minimum: 1
-        trainingJobMaxIdleDurationSeconds:
-          type: integer
-          description: training job max idle duration in seconds
-          nullable: true
-          example: 100
-          minimum: 1
-        trainingJobTimeLimitSeconds:
-          type: integer
-          description: training job time limit in seconds
-          nullable: true
-          example: 100
-          minimum: 1
-    Resource1:
-      properties:
-        deserved:
-          type: number
-          description: The amount of resources guaranteed to be allocated in case the cluster has those resources.
-          example: 0
-        maxAllowed:
-          type: number
-          description: Maximum amount of resources that can be allocated. If equal to deserved, no over-quota will be allowed. Use "-1" for unlimited over quota.
-          example: 1000
-        overQuotaWeight:
-          type: number
-          description: The priority for over quota resources.
-          example: 2
-    NodepoolName:
-      type: string
-      example: nodepoola
-    DepartmentCreationRequest:
-      allOf:
-      - $ref: '#/components/schemas/DataDepartmentFields'
-      - properties:
-          resources:
-            type: array
-            items:
-              $ref: '#/components/schemas/ResourcesNullable'
-            description: Resources assigned to this Organization per Node Pool
-    OrgUnitMetricType:
-      type: string
-      description: Specify which metric data to request.
-      enum:
-      - GPU_QUOTA
-      - CPU_QUOTA_MILLICORES
-      - CPU_MEMORY_QUOTA_MB
-      - GPU_ALLOCATION
-      - CPU_ALLOCATION_MILLICORES
-      - CPU_MEMORY_ALLOCATION_MB
-      - GPU_MEMORY_UTILIZATION
-    ProjectStatus1:
-      properties:
-        namespace:
-          type: string
-          description: The namespace of the project
-          example: runai-team-a
-        message:
-          type: string
-          description: Detailed phase message
-          example: NamespaceHandlerFailed
-        quotaStatuses:
-          $ref: '#/components/schemas/NodePoolsQuotaStatuses'
-    NodeTypesPerWorkload:
-      properties:
-        training:
-          type: array
-          description: ids of the node types for training workloads
-          items:
-            type: string
-        workspace:
-          type: array
-          description: ids of the node types for workspace workloads
-          items:
-            type: string
-        names:
-          nullable: true
-          type: object
-          additionalProperties:
-            type: string
-          description: mapping of ids to names
-    OvertimeData:
-      type: object
-      properties:
-        range24hData:
-          type: object
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/OvertimeRangeData'
-        range7dData:
-          type: object
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/OvertimeRangeData'
-        range30dData:
-          type: object
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/OvertimeRangeData'
-    QuotaStatusResourceList:
-      properties:
-        gpu:
-          type: number
-          description: The number of GPUs (allocated/requested/...).
-          example: 0
-        cpu:
-          type: number
-          description: CPU in Millicores (allocated/requested/...).
-          example: 1000
-        memory:
-          type: number
-          description: Memory in Mib (allocated/requested/...).
-          example: 1000
-    JobsNodeAffinity:
-      properties:
-        train:
-          allOf:
-          - $ref: '#/components/schemas/NodeAffinity'
-          description: Node affinity configuration for training jobs.
-        interactive:
-          allOf:
-          - $ref: '#/components/schemas/NodeAffinity'
-          description: Node affinity configuration for interactive jobs.
-    DepartmentAccessControl:
-      properties:
-        departmentId:
-          type: integer
-          format: int32
-          description: The unique id identifying the department.
-          example: 2
-        departmentAdmins:
-          type: array
-          items:
-            type: string
-          description: Id's of users with department admin role that are assigned to managed the department
-    DepartmentProjectChild:
-      type: object
-      description: Department or project child
-      required:
-      - id
-      - name
-      properties:
-        id:
-          type: string
-          format: uuid
-          example: 9f55253e-11ed-47c7-acef-fc4054768dbc
-        name:
-          type: string
-          example: organization1
-        children:
-          type: array
-          items:
-            $ref: '#/components/schemas/DepartmentProjectChild'
-    NodePoolResources:
-      required:
-      - id
-      properties:
-        id:
-          type: number
-          description: Node pool id.
-          example: 3
-        name:
-          type: string
-          description: Node pool name.
-          example: default
-    ResourcesNullable:
-      properties:
-        nodePool:
-          required:
-          - id
-          properties:
-            id:
-              type: string
-              description: node pool id
-              example: 22
-            name:
-              type: string
-              description: node pool name
-              example: default
-          description: the node pool which the resources refer to
-          type: object
-          nullable: true
-        gpu:
-          allOf:
-          - $ref: '#/components/schemas/NonNullResource'
-          - description: GPU number to the project in the node pool. Default will be set to 0.
-        cpu:
-          type: object
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/Resource'
-          - description: CPU in Millicores to the project in the node pool
-        memory:
-          type: object
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/Resource'
-          - type: object
-            description: Memory to the project in the node pool
-            required:
-            - units
-            properties:
-              units:
-                $ref: '#/components/schemas/units'
-        priority:
-          type: string
-          nullable: true
-          example: Normal
-    NodeTypeForProject:
-      properties:
-        id:
-          type: number
-        name:
-          type: string
-    TotalResources:
-      type: object
-      properties:
-        gpuQuota:
-          type: number
-          format: double
-          description: Total gpu quota of the org unit
-          nullable: true
-        cpuQuota:
-          type: number
-          format: double
-          description: Total cpu quota of the org unit in Millicores
-          nullable: true
-        memoryQuota:
-          type: number
-          format: double
-          description: Total memory quota of the org unit in MB
-          nullable: true
-    QuotaStatusResource:
-      type: object
-      properties:
-        gpu:
-          type: number
-          format: double
-          description: The number of GPUs (allocated/requested/...).
-          example: 0
-        cpu:
-          type: number
-          format: double
-          description: CPU in Millicores (allocated/requested/...).
-          example: 1000
-        memory:
-          type: number
-          format: double
-          description: Memory in MB (allocated/requested/...).
-          example: 1000
-    OrgUnitTelemetryType:
-      type: string
-      description: Select a telemetry type.
-      enum:
-      - GPU_QUOTA
-      - CPU_QUOTA
-      - MEMORY_QUOTA
-      - GPU_ALLOCATION
-      - CPU_ALLOCATION
-      - MEMORY_ALLOCATION
-      - GPU_ALLOCATION_NON_PREEMPTIBLE
-      - CPU_ALLOCATION_NON_PREEMPTIBLE
-      - MEMORY_ALLOCATION_NON_PREEMPTIBLE
-    QuotaStatus:
-      type: object
-      description: Sum of all quota statuses of all the node pools
-      properties:
-        allocated:
-          $ref: '#/components/schemas/QuotaStatusResource'
-        allocatedNonPreemptible:
-          $ref: '#/components/schemas/QuotaStatusResource'
-        requested:
-          $ref: '#/components/schemas/QuotaStatusResource'
-    NodePoolQuotaStatus:
-      properties:
-        nodePoolName:
-          type: string
-          description: The node pool name which the current quota status refers to.
-        allocated:
-          $ref: '#/components/schemas/QuotaStatusResourceList'
-        allocatedNonPreemptible:
-          $ref: '#/components/schemas/QuotaStatusResourceList'
-        requested:
-          $ref: '#/components/schemas/QuotaStatusResourceList'
-    Department:
-      allOf:
-      - $ref: '#/components/schemas/DataDepartmentFields'
-      - type: object
-        required:
-        - id
-        - name
-        - description
-        - createdAt
-        - updatedAt
-        - totalResources
-        properties:
-          id:
-            type: string
-            example: 50
-          createdAt:
-            type: string
-            format: date-time
-          updatedAt:
-            type: string
-            format: date-time
-          createdBy:
-            type: string
-          updatedBy:
-            type: string
-          children:
-            type: array
-            nullable: true
-            items:
-              $ref: '#/components/schemas/DepartmentProjectChild'
-          projectsAggregatedResources:
-            type: array
-            nullable: true
-            items:
-              $ref: '#/components/schemas/AggregatedResources'
-          status:
-            type: object
-            properties:
-              nodePoolQuotaStatuses:
-                type: array
-                items:
-                  $ref: '#/components/schemas/QuotaStatusNodePool'
-              quotaStatus:
-                $ref: '#/components/schemas/QuotaStatus'
-          totalResources:
-            $ref: '#/components/schemas/TotalResources'
-          resources:
-            type: array
-            items:
-              $ref: '#/components/schemas/Resources'
-            description: Resources assigned to this Organization per Node Pool
-    NonNullResource:
-      properties:
-        deserved:
-          type: number
-          format: double
-          description: The project resource allocation that it is deserved to get in case the cluster has those resources
-          example: 1000
-          default: 0
-        limit:
-          type: number
-          format: double
-          description: Maximum amount of resources the project can get
-          nullable: true
-          example: 0
-        overQuotaWeight:
-          type: number
-          format: double
-          description: The priority the project gets for over quota resources
-          nullable: true
-          example: 2
-    TimeRange:
-      type: object
-      description: Overtime metrics data. Returned only if both start and end query parameters are set.
-      required:
-      - resources
-      properties:
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResourcesDataOvertime'
-    QuotaStatusNodePool:
-      allOf:
-      - $ref: '#/components/schemas/QuotaStatus'
-      - type: object
-        required:
-        - nodePoolName
-        - nodePoolId
-        properties:
-          nodePoolName:
-            type: string
-            description: The node pool name which the current quota status refers to
-          nodePoolId:
-            type: string
-            description: The node pool id which the current quota status refers to
-    DeservedResource:
-      properties:
-        deserved:
-          type: number
-          format: double
-          description: The project resource allocation that it is deserved to get in case the cluster has those resources
-          nullable: true
-          example: 1000
-    MetricsResponse:
-      type: object
-      required:
-      - measurements
-      properties:
-        measurements:
-          type: array
-          items:
-            $ref: '#/components/schemas/MeasurementResponse'
-    DepartmentCommonFields:
-      properties:
-        name:
-          type: string
-          description: The name of the department.
-          example: default
-        deservedGpus:
-          type: number
-          description: Deprecated. Instead, use `deserved` for the relevant resource type under `NodePoolResources`. Deserved GPUs for the department.
-          example: 2
-          deprecated: true
-        allowOverQuota:
-          type: boolean
-          description: Deprecated. Instead, use `maxAllowed` for the relevant resource type under `NodePoolResources`. Is over quota allowed for the department.
-          example: false
-          deprecated: true
-        maxAllowedGpus:
-          type: number
-          description: Deprecated. Instead, use `maxAllowed` for the relevant resource type under `NodePoolResources`. Max allowed GPUs for the department.
-          example: 2
-          deprecated: true
-        resources:
-          allOf:
-          - $ref: '#/components/schemas/AssignedResources'
-          deprecated: true
-          description: Deprecated. Instead, use 'nodePoolsResources'. Total resources assigned to the Department. Can only be used in PUT/POST when there is a single Node Pool in the system. The resources returned in GET are the sum of all Node Pool Resources.
-    NodeAffinity:
-      properties:
-        affinityType:
-          type: string
-          enum:
-          - no_limit
-          - only_selected
-          description: The type of affinity of the jobs on the nodes.
-        selectedTypes:
-          type: array
-          items:
-            $ref: '#/components/schemas/NodeTypeForProject'
-    Department2:
-      allOf:
-      - properties:
-          nodePoolsResources:
-            type: array
-            items:
-              $ref: '#/components/schemas/NodePoolAssignedResources'
-            description: Resources assigned to the Department per node pool.
-          tenantId:
-            type: integer
-            description: The tenant id this cluster belongs to.
-            example: 42
-          clusterUuid:
-            type: string
-            description: The cluster UUID this department belongs to.
-            example: UUID
-          createdAt:
-            type: string
-            description: The creation date of the department.
-            format: date-time
-            example: '2021-12-14T16:04:15.099Z'
-          id:
-            type: integer
-            format: int32
-            description: The unique id identifying the department.
-            example: 2
-          projects:
-            type: array
-            items:
-              $ref: '#/components/schemas/Project2'
-            description: Projects under this department.
-            example:
-            - id: 16
-              name: team-a
-              deserved_gpus: 3
-          projectsDeservedGpus:
-            type: string
-            description: Deprecated. Instead, use 'nodePoolsResources' field. Total deserved GPUs of the projects under this department - as string.
-            example: '3.00'
-            deprecated: true
-          departmentAdmins:
-            type: array
-            items:
-              type: string
-            description: Id's of users with department admin role that are assigned to managed the department
-      - $ref: '#/components/schemas/DepartmentCommonFields'
-    DepartmentId:
-      description: The id of the department
-      type: integer
-      format: int32
-      minimum: 1
-      example: 8
-    DataDepartmentFields:
-      allOf:
-      - $ref: '#/components/schemas/DataUpdatableDepartmentFields'
-      - type: object
-        required:
-        - name
-        - clusterId
-        properties:
-          name:
-            type: string
-            example: organization1
-          clusterId:
-            $ref: '#/components/schemas/ClusterId'
-          overtimeData:
-            $ref: '#/components/schemas/OvertimeData'
-    DepartmentFilterSortFields:
-      type: string
-      enum:
-      - name
-      - clusterId
-      - totalGpuQuota
-      - gpuAllocated
-      - createdAt
-      - avgGpuAllocation24h
-      - avgGpuUtilization24h
-      - avgGpuMemoryUtilization24h
-      - avgGpuAllocation7d
-      - avgGpuUtilization7d
-      - avgGpuMemoryUtilization7d
-      - avgGpuAllocation30d
-      - avgGpuUtilization30d
-      - avgGpuMemoryUtilization30d
-    DepartmentName:
-      type: string
-      example: default
-    ResourcePermissions:
-      properties:
-        users:
-          type: array
-          items:
-            type: string
-          description: Names of users that have permissions to the project.
-        groups:
-          type: array
-          items:
-            type: string
-          description: Names of groups that have permissions to the project.
-        applications:
-          type: array
-          items:
-            type: string
-          description: Names of applications that have permissions to the project.
     ResourcesData:
       type: object
       required:
@@ -1747,123 +634,17 @@ components:
         memory:
           description: Memory resources in megabytes. 1 = 10^6  (1000*1000)
           $ref: '#/components/schemas/ResourceData'
-    ResourcesUpdateRequest:
-      type: array
-      items:
-        $ref: '#/components/schemas/ResourcesNullable'
-      description: Resources assigned to this Project per Node Pool
-    department:
-      type: object
-      required:
-      - metadata
-      - current
-      properties:
-        metadata:
-          type: object
-          required:
-          - departmentId
-          - departmentName
-          - clusterId
-          - clusterName
-          properties:
-            departmentId:
-              $ref: '#/components/schemas/DepartmentId'
-            departmentName:
-              $ref: '#/components/schemas/DepartmentName'
-            clusterId:
-              $ref: '#/components/schemas/ClusterId'
-            clusterName:
-              $ref: '#/components/schemas/ClusterName'
-        current:
-          type: object
-          description: Current reported metrics data. resources holds data that is summed up to the department level and projectResources explains the division of it to projects
-          required:
-          - resources
-          - projectResources
-          properties:
-            resources:
-              type: array
-              items:
-                allOf:
-                - $ref: '#/components/schemas/ResourcesData'
-                - type: object
-                  required:
-                  - nodepoolName
-                  properties:
-                    nodepoolName:
-                      $ref: '#/components/schemas/NodepoolName'
-            projectResources:
-              type: array
-              items:
-                allOf:
-                - $ref: '#/components/schemas/ResourcesData'
-                - type: object
-                  required:
-                  - projectName
-                  - nodepoolName
-                  properties:
-                    projectName:
-                      $ref: '#/components/schemas/ProjectName1'
-                    nodepoolName:
-                      $ref: '#/components/schemas/NodepoolName'
-        timeRange:
-          $ref: '#/components/schemas/TimeRange'
-    Resources:
-      required:
-      - gpu
-      properties:
-        nodePool:
-          required:
-          - id
-          properties:
-            id:
-              type: string
-              description: node pool id
-              example: 22
-            name:
-              type: string
-              description: node pool name
-              example: default
-          description: the node pool which the resources refer to
-          type: object
-          nullable: true
-        gpu:
-          required:
-          - deserved
-          allOf:
-          - $ref: '#/components/schemas/NonNullResource'
-          - description: GPU number to the project in the node pool. Default will be set to 0.
-        cpu:
-          type: object
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/Resource'
-          - description: CPU in Millicores to the project in the node pool
-        memory:
-          type: object
-          nullable: true
-          allOf:
-          - $ref: '#/components/schemas/Resource'
-          - type: object
-            description: Memory to the project in the node pool
-            required:
-            - units
-            properties:
-              units:
-                $ref: '#/components/schemas/units'
-        priority:
-          type: string
-          nullable: true
-          example: Normal
-    DepartmentUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/DataUpdatableDepartmentFields'
-      - properties:
-          resources:
-            type: array
-            items:
-              $ref: '#/components/schemas/ResourcesNullable'
-            description: Resources assigned to this Organization per Node Pool
+    OrgUnitMetricType:
+      type: string
+      description: Specify which metric data to request.
+      enum:
+      - GPU_QUOTA
+      - CPU_QUOTA_MILLICORES
+      - CPU_MEMORY_QUOTA_MB
+      - GPU_ALLOCATION
+      - CPU_ALLOCATION_MILLICORES
+      - CPU_MEMORY_ALLOCATION_MB
+      - GPU_MEMORY_UTILIZATION
     ProjectCommonFields:
       properties:
         deservedGpus:
@@ -1924,61 +705,1071 @@ components:
           - $ref: '#/components/schemas/AssignedResources'
           deprecated: true
           description: Deprecated. Instead, use `nodePoolsResources`. Total resources assigned to the Project. Can only be used in PUT/POST when there is a single Node Pool in the system. The resources returned in `GET` are the sum of all Node Pool Resources.
+    ClusterName:
+      type: string
+      example: cluster-a
+    units:
+      type: string
+      enum:
+      - Mib
+      - MB
+      - GB
+    DataDepartmentFields:
+      allOf:
+      - $ref: '#/components/schemas/DataUpdatableDepartmentFields'
+      - type: object
+        required:
+        - name
+        - clusterId
+        properties:
+          name:
+            type: string
+            example: organization1
+          clusterId:
+            $ref: '#/components/schemas/ClusterId'
+          overtimeData:
+            $ref: '#/components/schemas/OvertimeData'
+    ProjectStatus1:
+      properties:
+        namespace:
+          type: string
+          description: The namespace of the project
+          example: runai-team-a
+        message:
+          type: string
+          description: Detailed phase message
+          example: NamespaceHandlerFailed
+        quotaStatuses:
+          $ref: '#/components/schemas/NodePoolsQuotaStatuses'
+    ResourcePermissions:
+      properties:
+        users:
+          type: array
+          items:
+            type: string
+          description: Names of users that have permissions to the project.
+        groups:
+          type: array
+          items:
+            type: string
+          description: Names of groups that have permissions to the project.
+        applications:
+          type: array
+          items:
+            type: string
+          description: Names of applications that have permissions to the project.
+    NodeAffinity:
+      properties:
+        affinityType:
+          type: string
+          enum:
+          - no_limit
+          - only_selected
+          description: The type of affinity of the jobs on the nodes.
+        selectedTypes:
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeTypeForProject'
+    MeasurementResponse:
+      type: object
+      required:
+      - type
+      - values
+      properties:
+        type:
+          type: string
+          description: specifies what data returned
+          example: ALLOCATED_GPU
+        labels:
+          type:
+          - object
+          - 'null'
+          description: labels of the metric measurement
+          example: '{''gpu'': ''3''}'
+          additionalProperties:
+            type: string
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            required:
+            - value
+            - timestamp
+            properties:
+              value:
+                type: string
+                example: '85'
+              timestamp:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2023-06-06 12:09:18.211'
+    NodepoolName:
+      type: string
+      example: nodepoola
+    DepartmentAccessControl:
+      properties:
+        departmentId:
+          type: integer
+          format: int32
+          description: The unique id identifying the department.
+          example: 2
+        departmentAdmins:
+          type: array
+          items:
+            type: string
+          description: Id's of users with department admin role that are assigned to managed the department
+    NodePoolAssignedResources:
+      required:
+      - id
+      allOf:
+      - properties:
+          id:
+            description: The id of the assigned resources. Required in PUT when updating the assigned resources.
+            type: number
+      - $ref: '#/components/schemas/NodePoolAssignedResourcesCreate'
+    DepartmentCommonFields:
+      properties:
+        name:
+          type: string
+          description: The name of the department.
+          example: default
+        deservedGpus:
+          type: number
+          description: Deprecated. Instead, use `deserved` for the relevant resource type under `NodePoolResources`. Deserved GPUs for the department.
+          example: 2
+          deprecated: true
+        allowOverQuota:
+          type: boolean
+          description: Deprecated. Instead, use `maxAllowed` for the relevant resource type under `NodePoolResources`. Is over quota allowed for the department.
+          example: false
+          deprecated: true
+        maxAllowedGpus:
+          type: number
+          description: Deprecated. Instead, use `maxAllowed` for the relevant resource type under `NodePoolResources`. Max allowed GPUs for the department.
+          example: 2
+          deprecated: true
+        resources:
+          allOf:
+          - $ref: '#/components/schemas/AssignedResources'
+          deprecated: true
+          description: Deprecated. Instead, use 'nodePoolsResources'. Total resources assigned to the Department. Can only be used in PUT/POST when there is a single Node Pool in the system. The resources returned in GET are the sum of all Node Pool Resources.
+    DepartmentUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/DataUpdatableDepartmentFields'
+      - properties:
+          resources:
+            type: array
+            items:
+              $ref: '#/components/schemas/ResourcesNullable'
+            description: Resources assigned to this Organization per Node Pool
+    ResourceData:
+      type: object
+      description: quota equals to the given resources and allocated equal to the real count of used resources
+      required:
+      - quota
+      - allocated
+      properties:
+        quota:
+          type: number
+          example: 3
+        allocated:
+          type: number
+          example: 2.5
+        utilization:
+          type: number
+          example: 0.765
+    DepartmentForList:
+      allOf:
+      - $ref: '#/components/schemas/DataDepartmentFields'
+      - type: object
+        required:
+        - id
+        - createdAt
+        - updatedAt
+        - totalResources
+        properties:
+          id:
+            type: string
+            example: 50
+          createdAt:
+            type: string
+            format: date-time
+          updatedAt:
+            type: string
+            format: date-time
+          createdBy:
+            type: string
+          updatedBy:
+            type: string
+          children:
+            type:
+            - array
+            - 'null'
+            items:
+              $ref: '#/components/schemas/DepartmentProjectChild'
+          status:
+            type:
+            - object
+            - 'null'
+            properties:
+              quotaStatus:
+                $ref: '#/components/schemas/QuotaStatus'
+          totalResources:
+            $ref: '#/components/schemas/TotalResources'
+          resources:
+            type: array
+            items:
+              $ref: '#/components/schemas/Resources'
+            description: Resources assigned to this Organization per Node Pool
+    ResourcesNullable:
+      properties:
+        nodePool:
+          required:
+          - id
+          properties:
+            id:
+              type: string
+              description: node pool id
+              example: 22
+            name:
+              type: string
+              description: node pool name
+              example: default
+          description: the node pool which the resources refer to
+          type:
+          - object
+          - 'null'
+        gpu:
+          allOf:
+          - $ref: '#/components/schemas/NonNullResource'
+          - description: GPU number to the project in the node pool. Default will be set to 0.
+        cpu:
+          type:
+          - object
+          - 'null'
+          allOf:
+          - $ref: '#/components/schemas/Resource'
+          - description: CPU in Millicores to the project in the node pool
+        memory:
+          type:
+          - object
+          - 'null'
+          allOf:
+          - $ref: '#/components/schemas/Resource'
+          - type: object
+            description: Memory to the project in the node pool
+            required:
+            - units
+            properties:
+              units:
+                $ref: '#/components/schemas/units'
+        priority:
+          type:
+          - string
+          - 'null'
+          example: Normal
+    Project2:
+      allOf:
+      - properties:
+          name:
+            type: string
+            description: Project name.
+            example: team-a
+          nodePoolsResources:
+            type: array
+            items:
+              $ref: '#/components/schemas/NodePoolAssignedResources'
+            description: Resources assigned to this Project per Node Pool.
+          namespace:
+            type: string
+            description: The name of an existing namespace to use for the project in the cluster. Supported only for cluster versions 2.12 or higher.
+            example: ns-proj1
+          id:
+            type: integer
+            format: int32
+            description: Project id.
+            readOnly: true
+            example: 5
+          departmentId:
+            type: integer
+            format: int32
+            description: ID of the department that owns the project.
+            example: 2
+          tenantId:
+            type: integer
+            format: int32
+            description: ID of the tenant where the project is located.
+            example: 2
+          clusterUuid:
+            type: string
+            format: uuid
+            description: ID of the cluster where the project is located.
+            example: 71f69d83-ba66-4822-adf5-55ce55efd210
+          departmentName:
+            type: string
+            description: Name of the department where the project is located.
+            example: department-a
+          interactiveNodeAffinity:
+            type: string
+            example: none
+          trainNodeAffinity:
+            type: string
+            example: none
+          createdAt:
+            type: string
+            description: Creation date of the project.
+            format: date-time
+            example: '2021-12-14T16:04:15.099Z'
+          status:
+            $ref: '#/components/schemas/ProjectStatus1'
+          phase:
+            type: string
+            description: project's phase
+            example: Ready
+      - $ref: '#/components/schemas/ProjectCommonFields'
+    NodePoolQuotaStatus:
+      properties:
+        nodePoolName:
+          type: string
+          description: The node pool name which the current quota status refers to.
+        allocated:
+          $ref: '#/components/schemas/QuotaStatusResourceList'
+        allocatedNonPreemptible:
+          $ref: '#/components/schemas/QuotaStatusResourceList'
+        requested:
+          $ref: '#/components/schemas/QuotaStatusResourceList'
+    ResourcesDataOvertime:
+      allOf:
+      - $ref: '#/components/schemas/ResourcesData'
+      - type: object
+        required:
+        - timestamp
+        properties:
+          timestamp:
+            type: string
+            format: date-time
+            example: '2023-06-06T12:09:18.211Z'
+    NodePoolAssignedResourcesCreate:
+      required:
+      - nodePool
+      properties:
+        nodePool:
+          allOf:
+          - $ref: '#/components/schemas/NodePoolResources'
+          description: The node pool which the assigned resources refer to.
+        gpu:
+          allOf:
+          - $ref: '#/components/schemas/Resource1'
+          description: Number of GPUs assigned in the node pool.
+        cpu:
+          allOf:
+          - $ref: '#/components/schemas/Resource1'
+          description: Number of CPU Millicores assigned in the node pool. Supported only if the 'CPU Resources Quota' feature flag is enabled.
+        memory:
+          allOf:
+          - $ref: '#/components/schemas/Resource1'
+          description: Amount of CPU Memory Mib assigned in the node pool. Supported only if the 'CPU Resources Quota' feature flag is enabled.
+    TimeRange:
+      type: object
+      description: Overtime metrics data. Returned only if both start and end query parameters are set.
+      required:
+      - resources
+      properties:
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourcesDataOvertime'
+    QuotaStatusNodePool:
+      allOf:
+      - $ref: '#/components/schemas/QuotaStatus'
+      - type: object
+        required:
+        - nodePoolName
+        - nodePoolId
+        properties:
+          nodePoolName:
+            type: string
+            description: The node pool name which the current quota status refers to
+          nodePoolId:
+            type: string
+            description: The node pool id which the current quota status refers to
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    NodeTypesPerWorkload:
+      properties:
+        training:
+          type: array
+          description: ids of the node types for training workloads
+          items:
+            type: string
+        workspace:
+          type: array
+          description: ids of the node types for workspace workloads
+          items:
+            type: string
+        names:
+          type:
+          - object
+          - 'null'
+          additionalProperties:
+            type: string
+          description: mapping of ids to names
+    DepartmentName:
+      type: string
+      example: default
+    NonNullResource:
+      properties:
+        deserved:
+          type: number
+          format: double
+          description: The project resource allocation that it is deserved to get in case the cluster has those resources
+          example: 1000
+          default: 0
+        limit:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Maximum amount of resources the project can get
+          example: 0
+        overQuotaWeight:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: The priority the project gets for over quota resources
+          example: 2
+    CountResponse:
+      type: object
+      required:
+      - count
+      properties:
+        count:
+          type: integer
+          format: int64
+          example: 1
+    SchedulingRules:
+      type:
+      - object
+      - 'null'
+      properties:
+        interactiveJobTimeLimitSeconds:
+          type:
+          - integer
+          - 'null'
+          description: interactive job time limit in seconds
+          example: 100
+          minimum: 1
+        interactiveJobMaxIdleDurationSeconds:
+          type:
+          - integer
+          - 'null'
+          description: interactive job max idle duration in seconds
+          example: 100
+          minimum: 1
+        interactiveJobPreemptIdleDurationSeconds:
+          type:
+          - integer
+          - 'null'
+          description: interactive job preempt idle duration in seconds
+          example: 100
+          minimum: 1
+        trainingJobMaxIdleDurationSeconds:
+          type:
+          - integer
+          - 'null'
+          description: training job max idle duration in seconds
+          example: 100
+          minimum: 1
+        trainingJobTimeLimitSeconds:
+          type:
+          - integer
+          - 'null'
+          description: training job time limit in seconds
+          example: 100
+          minimum: 1
+    QuotaStatus:
+      type: object
+      description: Sum of all quota statuses of all the node pools
+      properties:
+        allocated:
+          $ref: '#/components/schemas/QuotaStatusResource'
+        allocatedNonPreemptible:
+          $ref: '#/components/schemas/QuotaStatusResource'
+        requested:
+          $ref: '#/components/schemas/QuotaStatusResource'
+    QuotaStatusResourceList:
+      properties:
+        gpu:
+          type: number
+          description: The number of GPUs (allocated/requested/...).
+          example: 0
+        cpu:
+          type: number
+          description: CPU in Millicores (allocated/requested/...).
+          example: 1000
+        memory:
+          type: number
+          description: Memory in Mib (allocated/requested/...).
+          example: 1000
+    DepartmentId:
+      description: The id of the department
+      type: integer
+      format: int32
+      minimum: 1
+      example: 8
+    Resources:
+      required:
+      - gpu
+      properties:
+        nodePool:
+          required:
+          - id
+          properties:
+            id:
+              type: string
+              description: node pool id
+              example: 22
+            name:
+              type: string
+              description: node pool name
+              example: default
+          description: the node pool which the resources refer to
+          type:
+          - object
+          - 'null'
+        gpu:
+          required:
+          - deserved
+          allOf:
+          - $ref: '#/components/schemas/NonNullResource'
+          - description: GPU number to the project in the node pool. Default will be set to 0.
+        cpu:
+          type:
+          - object
+          - 'null'
+          allOf:
+          - $ref: '#/components/schemas/Resource'
+          - description: CPU in Millicores to the project in the node pool
+        memory:
+          type:
+          - object
+          - 'null'
+          allOf:
+          - $ref: '#/components/schemas/Resource'
+          - type: object
+            description: Memory to the project in the node pool
+            required:
+            - units
+            properties:
+              units:
+                $ref: '#/components/schemas/units'
+        priority:
+          type:
+          - string
+          - 'null'
+          example: Normal
+    DepartmentFilterSortFields:
+      type: string
+      enum:
+      - name
+      - clusterId
+      - totalGpuQuota
+      - gpuAllocated
+      - createdAt
+      - avgGpuAllocation24h
+      - avgGpuUtilization24h
+      - avgGpuMemoryUtilization24h
+      - avgGpuAllocation7d
+      - avgGpuUtilization7d
+      - avgGpuMemoryUtilization7d
+      - avgGpuAllocation30d
+      - avgGpuUtilization30d
+      - avgGpuMemoryUtilization30d
+    NodePoolsQuotaStatuses:
+      type: array
+      items:
+        $ref: '#/components/schemas/NodePoolQuotaStatus'
+      description: The current quota status for each node pool. Supported only for cluster versions 2.15+ or higher.
+    Resource1:
+      properties:
+        deserved:
+          type: number
+          description: The amount of resources guaranteed to be allocated in case the cluster has those resources.
+          example: 0
+        maxAllowed:
+          type: number
+          description: Maximum amount of resources that can be allocated. If equal to deserved, no over-quota will be allowed. Use "-1" for unlimited over quota.
+          example: 1000
+        overQuotaWeight:
+          type: number
+          description: The priority for over quota resources.
+          example: 2
+    ResourcesUpdateRequest:
+      type: array
+      items:
+        $ref: '#/components/schemas/ResourcesNullable'
+      description: Resources assigned to this Project per Node Pool
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    AssignedResources:
+      properties:
+        id:
+          type: number
+        gpu:
+          allOf:
+          - $ref: '#/components/schemas/Resource1'
+          description: GPU number assigned
+        cpu:
+          allOf:
+          - $ref: '#/components/schemas/Resource1'
+          description: CPU Millicores assigned. Supported only if 'CPU Resources Quota' feature flag is enabled.
+        memory:
+          allOf:
+          - $ref: '#/components/schemas/Resource1'
+          description: CPU Memory Mib assigned. Supported only if 'CPU Resources Quota' feature flag is enabled.
+    OrgUnitTelemetryType:
+      type: string
+      description: Select a telemetry type.
+      enum:
+      - GPU_QUOTA
+      - CPU_QUOTA
+      - MEMORY_QUOTA
+      - GPU_ALLOCATION
+      - CPU_ALLOCATION
+      - MEMORY_ALLOCATION
+      - GPU_ALLOCATION_NON_PREEMPTIBLE
+      - CPU_ALLOCATION_NON_PREEMPTIBLE
+      - MEMORY_ALLOCATION_NON_PREEMPTIBLE
+    OvertimeData:
+      type: object
+      properties:
+        range24hData:
+          type:
+          - object
+          - 'null'
+          allOf:
+          - $ref: '#/components/schemas/OvertimeRangeData'
+        range7dData:
+          type:
+          - object
+          - 'null'
+          allOf:
+          - $ref: '#/components/schemas/OvertimeRangeData'
+        range30dData:
+          type:
+          - object
+          - 'null'
+          allOf:
+          - $ref: '#/components/schemas/OvertimeRangeData'
+    JobsNodeAffinity:
+      properties:
+        train:
+          allOf:
+          - $ref: '#/components/schemas/NodeAffinity'
+          description: Node affinity configuration for training jobs.
+        interactive:
+          allOf:
+          - $ref: '#/components/schemas/NodeAffinity'
+          description: Node affinity configuration for interactive jobs.
+    ProjectName1:
+      type: string
+      example: project-a
+    DepartmentCreationRequest:
+      allOf:
+      - $ref: '#/components/schemas/DataDepartmentFields'
+      - properties:
+          resources:
+            type: array
+            items:
+              $ref: '#/components/schemas/ResourcesNullable'
+            description: Resources assigned to this Organization per Node Pool
+    QuotaStatusResource:
+      type: object
+      properties:
+        gpu:
+          type: number
+          format: double
+          description: The number of GPUs (allocated/requested/...).
+          example: 0
+        cpu:
+          type: number
+          format: double
+          description: CPU in Millicores (allocated/requested/...).
+          example: 1000
+        memory:
+          type: number
+          format: double
+          description: Memory in MB (allocated/requested/...).
+          example: 1000
+    Department2:
+      allOf:
+      - properties:
+          nodePoolsResources:
+            type: array
+            items:
+              $ref: '#/components/schemas/NodePoolAssignedResources'
+            description: Resources assigned to the Department per node pool.
+          tenantId:
+            type: integer
+            description: The tenant id this cluster belongs to.
+            example: 42
+          clusterUuid:
+            type: string
+            description: The cluster UUID this department belongs to.
+            example: UUID
+          createdAt:
+            type: string
+            description: The creation date of the department.
+            format: date-time
+            example: '2021-12-14T16:04:15.099Z'
+          id:
+            type: integer
+            format: int32
+            description: The unique id identifying the department.
+            example: 2
+          projects:
+            type: array
+            items:
+              $ref: '#/components/schemas/Project2'
+            description: Projects under this department.
+            example:
+            - id: 16
+              name: team-a
+              deserved_gpus: 3
+          projectsDeservedGpus:
+            type: string
+            description: Deprecated. Instead, use 'nodePoolsResources' field. Total deserved GPUs of the projects under this department - as string.
+            example: '3.00'
+            deprecated: true
+          departmentAdmins:
+            type: array
+            items:
+              type: string
+            description: Id's of users with department admin role that are assigned to managed the department
+      - $ref: '#/components/schemas/DepartmentCommonFields'
+    departments:
+      type: object
+      required:
+      - data
+      properties:
+        data:
+          type: array
+          items:
+            allOf:
+            - $ref: '#/components/schemas/Department1'
+            - properties:
+                timeRange:
+                  example: null
+        timeRange:
+          $ref: '#/components/schemas/TimeRange'
+    NodeTypeForProject:
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+    Verbosity:
+      type: string
+      enum:
+      - meta
+      - brief
+      - verbose
+    Resource:
+      properties:
+        deserved:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: The project resource allocation that it is deserved to get in case the cluster has those resources
+          example: 1000
+        limit:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Maximum amount of resources the project can get
+          example: 0
+        overQuotaWeight:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: The priority the project gets for over quota resources
+          example: 2
+    AggregatedResources:
+      type: object
+      description: Sum of all resources assigned to the projects under this department per Node Pool
+      required:
+      - nodePool
+      properties:
+        nodePool:
+          type: object
+          description: the node pool which the resources refer to
+          required:
+          - id
+          - name
+          properties:
+            id:
+              type: string
+              description: node pool id
+              example: 22
+            name:
+              type: string
+              description: node pool name
+              example: default
+        gpu:
+          $ref: '#/components/schemas/DeservedResource'
+        cpu:
+          $ref: '#/components/schemas/DeservedResource'
+        memory:
+          allOf:
+          - $ref: '#/components/schemas/DeservedResource'
+          - type: object
+            required:
+            - units
+            properties:
+              units:
+                $ref: '#/components/schemas/units'
+    Department:
+      allOf:
+      - $ref: '#/components/schemas/DataDepartmentFields'
+      - type: object
+        required:
+        - id
+        - name
+        - description
+        - createdAt
+        - updatedAt
+        - totalResources
+        properties:
+          id:
+            type: string
+            example: 50
+          createdAt:
+            type: string
+            format: date-time
+          updatedAt:
+            type: string
+            format: date-time
+          createdBy:
+            type: string
+          updatedBy:
+            type: string
+          children:
+            type:
+            - array
+            - 'null'
+            items:
+              $ref: '#/components/schemas/DepartmentProjectChild'
+          projectsAggregatedResources:
+            type:
+            - array
+            - 'null'
+            items:
+              $ref: '#/components/schemas/AggregatedResources'
+          status:
+            type: object
+            properties:
+              nodePoolQuotaStatuses:
+                type: array
+                items:
+                  $ref: '#/components/schemas/QuotaStatusNodePool'
+              quotaStatus:
+                $ref: '#/components/schemas/QuotaStatus'
+          totalResources:
+            $ref: '#/components/schemas/TotalResources'
+          resources:
+            type: array
+            items:
+              $ref: '#/components/schemas/Resources'
+            description: Resources assigned to this Organization per Node Pool
+    department:
+      type: object
+      required:
+      - metadata
+      - current
+      properties:
+        metadata:
+          type: object
+          required:
+          - departmentId
+          - departmentName
+          - clusterId
+          - clusterName
+          properties:
+            departmentId:
+              $ref: '#/components/schemas/DepartmentId'
+            departmentName:
+              $ref: '#/components/schemas/DepartmentName'
+            clusterId:
+              $ref: '#/components/schemas/ClusterId'
+            clusterName:
+              $ref: '#/components/schemas/ClusterName'
+        current:
+          type: object
+          description: Current reported metrics data. resources holds data that is summed up to the department level and projectResources explains the division of it to projects
+          required:
+          - resources
+          - projectResources
+          properties:
+            resources:
+              type: array
+              items:
+                allOf:
+                - $ref: '#/components/schemas/ResourcesData'
+                - type: object
+                  required:
+                  - nodepoolName
+                  properties:
+                    nodepoolName:
+                      $ref: '#/components/schemas/NodepoolName'
+            projectResources:
+              type: array
+              items:
+                allOf:
+                - $ref: '#/components/schemas/ResourcesData'
+                - type: object
+                  required:
+                  - projectName
+                  - nodepoolName
+                  properties:
+                    projectName:
+                      $ref: '#/components/schemas/ProjectName1'
+                    nodepoolName:
+                      $ref: '#/components/schemas/NodepoolName'
+        timeRange:
+          $ref: '#/components/schemas/TimeRange'
+    Department1:
+      type: object
+      required:
+      - metadata
+      - current
+      properties:
+        metadata:
+          type: object
+          required:
+          - departmentId
+          - departmentName
+          - clusterId
+          - clusterName
+          properties:
+            departmentId:
+              $ref: '#/components/schemas/DepartmentId'
+            departmentName:
+              $ref: '#/components/schemas/DepartmentName'
+            clusterId:
+              $ref: '#/components/schemas/ClusterId'
+            clusterName:
+              $ref: '#/components/schemas/ClusterName'
+        current:
+          type: object
+          description: Current reported metrics data. resources holds data that is summed up to the department level and projectResources explains the division of it to projects
+          required:
+          - resources
+          - projectResources
+          properties:
+            resources:
+              type: array
+              items:
+                allOf:
+                - $ref: '#/components/schemas/ResourcesData'
+                - type: object
+                  required:
+                  - nodepoolName
+                  properties:
+                    nodepoolName:
+                      $ref: '#/components/schemas/NodepoolName'
+            projectResources:
+              type: array
+              items:
+                allOf:
+                - $ref: '#/components/schemas/ResourcesData'
+                - type: object
+                  required:
+                  - projectName
+                  - nodepoolName
+                  properties:
+                    projectName:
+                      $ref: '#/components/schemas/ProjectName1'
+                    nodepoolName:
+                      $ref: '#/components/schemas/NodepoolName'
+        timeRange:
+          $ref: '#/components/schemas/TimeRange'
+    TotalResources:
+      type: object
+      properties:
+        gpuQuota:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Total gpu quota of the org unit
+        cpuQuota:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Total cpu quota of the org unit in Millicores
+        memoryQuota:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: Total memory quota of the org unit in MB
+    DataUpdatableDepartmentFields:
+      type: object
+      description: Updatable fields
+      required:
+      - resources
+      properties:
+        description:
+          type: string
+          description: department's description
+        schedulingRules:
+          $ref: '#/components/schemas/SchedulingRules'
+        defaultNodePools:
+          description: default order of node pools for workloads. will be enforced if no list is defined in workload policy
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        nodeTypes:
+          description: default node types configuration for workloads. will be enforced if no node type is configured in workload policy
+          $ref: '#/components/schemas/NodeTypesPerWorkload'
+    DeservedResource:
+      properties:
+        deserved:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: The project resource allocation that it is deserved to get in case the cluster has those resources
+          example: 1000
   responses:
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
     403Forbidden:
       description: Forbidden
       content:
@@ -1988,6 +1779,249 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+  parameters:
+    NumberOfSamples:
+      name: numberOfSamples
+      in: query
+      description: The number of samples to take in the specified time range.
+      required: false
+      schema:
+        type: integer
+        example: 20
+        maximum: 1000
+        minimum: 0
+        default: 20
+    End:
+      name: end
+      in: query
+      description: End of time range to fetch data from in UTC format.
+      required: false
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-07 12:09:18.211'
+    EndRequired:
+      name: end
+      in: query
+      description: End date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-07T12:09:18.211Z'
+    NodepoolName:
+      in: query
+      name: nodepoolName
+      schema:
+        type: string
+        example: default
+      required: false
+      description: Filter by unique nodepool name.
+    DepartmentsFilterBy:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(name|clusterId|totalGpuQuota|gpuAllocated|createdAt|avgGpuAllocation24h|avgGpuUtilization24h|avgGpuMemoryUtilization24h|avgGpuAllocation7d|avgGpuUtilization7d|avgGpuMemoryUtilization7d|avgGpuAllocation30d|avgGpuUtilization30d|avgGpuMemoryUtilization30d)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - name!=some-name
+      explode: false
+    DepartmentsSortBy:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results by a parameters.
+      schema:
+        $ref: '#/components/schemas/DepartmentFilterSortFields'
+    TelemetryType1:
+      name: telemetryType
+      in: query
+      required: true
+      description: specifies what data to request
+      schema:
+        $ref: '#/components/schemas/OrgUnitTelemetryType'
+    FilterByCluster:
+      name: clusterId
+      in: query
+      description: Filter using the Universally Unique Identifier (UUID) of the cluster.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: d73a738f-fab3-430a-8fa3-5241493d7128
+    StartRequired:
+      name: start
+      in: query
+      description: Start date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-06T12:09:18.211Z'
+    DepartmentsVerbosity:
+      name: verbosity
+      in: query
+      required: false
+      description: Departments verbosity. If it is set to "verbose", status will be returned. If it is not defined or set to "brief" only unit specific data will be returned.
+      example: verbose
+      schema:
+        $ref: '#/components/schemas/Verbosity'
+    OrgUnitMetricTypes:
+      name: metricType
+      in: query
+      required: true
+      description: Specify which data to request.
+      explode: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/OrgUnitMetricType'
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    FilterByNodepoolName:
+      name: nodepoolName
+      in: query
+      description: Filter using the nodepool.
+      required: false
+      schema:
+        type: string
+        example: default
+    ClusterUuid:
+      name: clusterUuid
+      in: path
+      required: true
+      description: The Universally Unique Identifier (UUID) of the cluster.
+      schema:
+        type: string
+        format: uuid
+        minLength: 1
+        example: 9f55255e-11ed-47c7-acef-fc4054768dbc
+    TelemetryGroupByDepartment:
+      name: groupBy
+      in: query
+      description: department fields to group the data by
+      explode: false
+      required: false
+      schema:
+        type: array
+        maxItems: 2
+        items:
+          type: string
+          enum:
+          - CLUSTER_ID
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    DepartmentId:
+      name: departmentId
+      in: path
+      required: true
+      description: The id of the department.
+      schema:
+        type: string
+        example: '1'
+        pattern: .*
+    Start:
+      name: start
+      in: query
+      description: Start of time range to fetch data from in UTC format.
+      required: false
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-06 12:09:18.211'
+    FilterByDepartment:
+      name: departmentId
+      in: query
+      description: Filter using the department id.
+      required: false
+      schema:
+        type: string
+        example: '1'
   securitySchemes:
     bearerAuth:
       type: http

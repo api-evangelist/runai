@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -175,7 +175,86 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    204NoContent:
+      description: No Content.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
   schemas:
+    CountResponse:
+      type: object
+      required:
+      - count
+      properties:
+        count:
+          type: integer
+          format: int64
+          example: 1
+    NetworkTopologyCreateRequest:
+      allOf:
+      - $ref: '#/components/schemas/NetworkTopologyUpdateFields'
+      - type: object
+        required:
+        - name
+        - clusterId
+        properties:
+          name:
+            $ref: '#/components/schemas/NetworkTopologyName'
+          clusterId:
+            $ref: '#/components/schemas/ClusterId'
+      x-schema-name: NetworkTopologyCreateRequest
     NetworkTopologyUpdateFields:
       type: object
       required:
@@ -184,6 +263,13 @@ components:
         levels:
           $ref: '#/components/schemas/NetworkTopologyLevels'
       x-schema-name: NetworkTopologyUpdateFields
+    NetworkTopologyName:
+      type: string
+      description: Name of the network topology
+      maxLength: 63
+      minLength: 1
+      pattern: ^[a-z]([a-z0-9-]*[a-z0-9])?$
+      example: default-topology
     NetworkTopologyLevels:
       type: array
       items:
@@ -196,60 +282,6 @@ components:
       - cloud.provider.com/topology-block
       - cloud.provider.com/topology-rack
       - kubernetes.io/hostname
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    CountResponse:
-      type: object
-      required:
-      - count
-      properties:
-        count:
-          type: integer
-          format: int64
-          example: 1
-    NetworkTopologyId:
-      type: string
-      format: uuid
-      description: The unique identifier for the network topology
-      example: 123e4567-e89b-12d3-a456-426614174000
-    TenantId:
-      description: The id of the tenant.
-      type: integer
-      format: int32
-      example: 1001
-    NetworkTopologiesSource:
-      type: string
-      description: Identifier of the the source of the topology. Useful for tracking where the topology data originated (i.e. Run:ai, Cluster).
-      example: Run.ai
-      minLength: 1
-      maxLength: 63
-      pattern: ^[a-zA-Z0-9][a-zA-Z0-9_.-]*[a-zA-Z0-9]$
-    ClusterId:
-      description: The id of the cluster.
-      type: string
-      format: uuid
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    NetworkTopologyName:
-      type: string
-      description: Name of the network topology
-      maxLength: 63
-      minLength: 1
-      pattern: ^[a-z]([a-z0-9-]*[a-z0-9])?$
-      example: default-topology
     NetworkTopology:
       allOf:
       - $ref: '#/components/schemas/NetworkTopologyCreateRequest'
@@ -279,86 +311,64 @@ components:
           source:
             $ref: '#/components/schemas/NetworkTopologiesSource'
           nodePools:
-            type: array
+            type:
+            - array
+            - 'null'
             items:
               type: string
-            nullable: true
             readOnly: true
             description: List of node-pools associated with this network topology
             example:
             - a100
       x-schema-name: NetworkTopology
-    NetworkTopologyCreateRequest:
-      allOf:
-      - $ref: '#/components/schemas/NetworkTopologyUpdateFields'
-      - type: object
-        required:
-        - name
-        - clusterId
-        properties:
-          name:
-            $ref: '#/components/schemas/NetworkTopologyName'
-          clusterId:
-            $ref: '#/components/schemas/ClusterId'
-      x-schema-name: NetworkTopologyCreateRequest
-  responses:
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    204NoContent:
-      description: No Content.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    NetworkTopologiesSource:
+      type: string
+      description: Identifier of the the source of the topology. Useful for tracking where the topology data originated (i.e. Run:ai, Cluster).
+      example: Run.ai
+      minLength: 1
+      maxLength: 63
+      pattern: ^[a-zA-Z0-9][a-zA-Z0-9_.-]*[a-zA-Z0-9]$
+    NetworkTopologyId:
+      type: string
+      format: uuid
+      description: The unique identifier for the network topology
+      example: 123e4567-e89b-12d3-a456-426614174000
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
   parameters:
+    NetworkTopologyId:
+      name: networkTopologyId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The unique identifier for the network topology
+      example: 123e4567-e89b-12d3-a456-426614174000
     NetworkTopologiesFilterBy:
       name: filterBy
       in: query
@@ -373,15 +383,6 @@ components:
         - clusterId==123e4567-e89b-12d3-a456-426614174000
         - source=@Run.ai
       explode: false
-    NetworkTopologyId:
-      name: networkTopologyId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The unique identifier for the network topology
-      example: 123e4567-e89b-12d3-a456-426614174000
   securitySchemes:
     bearerAuth:
       type: http

@@ -1,0 +1,2070 @@
+{
+  "item": [
+    {
+      "id": "e5c7bfb3-2647-41d6-8fa3-62d7f82727d1",
+      "name": "Git",
+      "description": {
+        "content": "Use Git as a data source location for data sets that are relevant to the workload being submitted.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "251f5d2f-593e-4894-8307-ae151972981e",
+          "name": "List Git assets.",
+          "request": {
+            "name": "List Git assets.",
+            "description": {
+              "content": "Retrieve a list of Git datasource assets.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "asset",
+                "datasource",
+                "git"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "Filter results by name."
+                },
+                {
+                  "disabled": false,
+                  "key": "scope",
+                  "value": "<string>",
+                  "description": "Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project."
+                },
+                {
+                  "disabled": false,
+                  "key": "projectId",
+                  "value": "<integer>",
+                  "description": "Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets."
+                },
+                {
+                  "disabled": false,
+                  "key": "departmentId",
+                  "value": "<string>",
+                  "description": "Filter results by department id. If scope filter is department, only assets from the specific department will be included in the response. Otherwise, the response will include department, cluster, tenant and system assets."
+                },
+                {
+                  "disabled": false,
+                  "key": "clusterId",
+                  "value": "<uuid>",
+                  "description": "Filter results by Universally Unique Identifier (UUID) of the cluster. If scope filter is cluster, only assets from the specific cluster will be included in the response. Otherwise, the response will include cluster, tenant and system assets."
+                },
+                {
+                  "disabled": false,
+                  "key": "usageInfo",
+                  "value": "<boolean>",
+                  "description": "Whether the query should include asset usage information as part of the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToProject",
+                  "value": "<integer>",
+                  "description": "Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToWorkloadType",
+                  "value": "<string>",
+                  "description": "Include workload creation compliance information of an asset, for a given workload type, as part of the response. To check compliance, you need to provide both project id and workload type."
+                },
+                {
+                  "disabled": false,
+                  "key": "statusInfo",
+                  "value": "<boolean>",
+                  "description": "Whether the query should include asset status information as part of the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "assetIds",
+                  "value": "<string>",
+                  "description": "Filter results by the ids of the assets. Provided value should be a comma separated string of UUIDs."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToReplicaType",
+                  "value": "<string>",
+                  "description": "Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b9eeed5d-b373-42ac-a3cb-6f472fbb53c5",
+              "name": "Request completed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "departmentId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "assetIds",
+                      "value": "dbf4767e-2fa1-43b0-97a2-7c0cecda180b,550e8400-e29b-41d4-a716-44665544000a"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"entries\": [\n    {\n      \"meta\": {\n        \"createdAt\": \"1958-09-15T15:19:14.950Z\",\n        \"createdBy\": \"string\",\n        \"id\": \"a26345ad-cad0-2a4f-6699-4fa221b883c4\",\n        \"kind\": \"config-map\",\n        \"name\": \"my-asset\",\n        \"scope\": \"department\",\n        \"updatedAt\": \"1998-03-01T06:23:05.660Z\",\n        \"updatedBy\": \"string\",\n        \"description\": \"description of my asset.\",\n        \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n        \"departmentId\": null,\n        \"projectId\": null,\n        \"autoDelete\": false,\n        \"workloadSupportedTypes\": {\n          \"inference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workspace\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"training\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"distributed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"distFramework\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"private\": false,\n        \"tenantId\": 4205,\n        \"deletedAt\": \"2026-06-24T07:46:41.131Z\",\n        \"deletedBy\": \"string\",\n        \"projectName\": \"string\",\n        \"updateCount\": 12345\n      },\n      \"spec\": {\n        \"repository\": \"https://github.com/my-git/my-repo\",\n        \"branch\": \"main\",\n        \"revision\": \"string\",\n        \"path\": \"/container/my-repository\",\n        \"passwordAssetId\": null,\n        \"credentialId\": null\n      },\n      \"usedBy\": {\n        \"workspaces\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"trainings\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"distributed\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"inferences\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"templates\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"assets\": {\n          \"environment\": null,\n          \"environments\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"compute\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"computes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"datasources\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      },\n      \"usageTimes\": {\n        \"lastUsedByWorkload\": \"1950-06-16T23:45:56.346Z\"\n      },\n      \"compliance\": {\n        \"imposed\": true,\n        \"compliance\": false,\n        \"reason\": [\n          {\n            \"details\": \"Llyn\",\n            \"field\": \"71#\",\n            \"rule\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"details\": \"i\",\n            \"field\": \"\",\n            \"rule\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"status\": {\n        \"status\": \"Deleting\",\n        \"issues\": [\n          {\n            \"scopeId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scopeType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"issue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"scopeId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scopeType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"issue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"message\": \"string\",\n        \"url\": \"string\"\n      }\n    },\n    {\n      \"meta\": {\n        \"createdAt\": \"1950-06-06T00:13:05.191Z\",\n        \"createdBy\": \"string\",\n        \"id\": \"c4e774fa-bdc4-0f26-7885-276dc6e570d0\",\n        \"kind\": \"pvc\",\n        \"name\": \"my-asset\",\n        \"scope\": \"project\",\n        \"updatedAt\": \"1984-03-15T13:37:32.562Z\",\n        \"updatedBy\": \"string\",\n        \"description\": \"description of my asset.\",\n        \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n        \"departmentId\": \"string\",\n        \"projectId\": 3446,\n        \"autoDelete\": false,\n        \"workloadSupportedTypes\": {\n          \"inference\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"workspace\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"training\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"distributed\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"distFramework\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"private\": false,\n        \"tenantId\": null,\n        \"deletedAt\": \"1987-12-12T16:31:15.836Z\",\n        \"deletedBy\": \"string\",\n        \"projectName\": \"string\",\n        \"updateCount\": 12345\n      },\n      \"spec\": {\n        \"repository\": \"https://github.com/my-git/my-repo\",\n        \"branch\": \"main\",\n        \"revision\": null,\n        \"path\": \"/container/my-repository\",\n        \"passwordAssetId\": \"75737d14-42aa-0f82-3fab-f7df7fd7ae59\",\n        \"credentialId\": \"52847dbc-2e3a-29a5-c123-f8b0d80f2c4a\"\n      },\n      \"usedBy\": {\n        \"workspaces\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"trainings\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"distributed\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"inferences\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"status\": \"string\"\n          }\n        ],\n        \"templates\": [\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"assets\": {\n          \"environment\": null,\n          \"environments\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"compute\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"computes\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ],\n          \"datasources\": [\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          ]\n        }\n      },\n      \"usageTimes\": {\n        \"lastUsedByWorkload\": \"2007-06-04T22:16:35.714Z\"\n      },\n      \"compliance\": {\n        \"imposed\": true,\n        \"compliance\": true,\n        \"reason\": [\n          {\n            \"details\": \"1b(2~]b}\",\n            \"field\": \"oIw-'$-R}\",\n            \"rule\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"details\": \"Bsefg\",\n            \"field\": \"@G:Rl<\\\\J_\",\n            \"rule\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      },\n      \"status\": {\n        \"status\": \"Deletion failed\",\n        \"issues\": [\n          {\n            \"scopeId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scopeType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"issue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"scopeId\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"scopeType\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"issue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ],\n        \"message\": \"string\",\n        \"url\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40049a60-4a1a-48a4-a617-26b565080597",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "departmentId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "assetIds",
+                      "value": "dbf4767e-2fa1-43b0-97a2-7c0cecda180b,550e8400-e29b-41d4-a716-44665544000a"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0e5cd24d-a133-4d25-91f3-df60d8d8697f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "departmentId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "assetIds",
+                      "value": "dbf4767e-2fa1-43b0-97a2-7c0cecda180b,550e8400-e29b-41d4-a716-44665544000a"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "663f313e-2434-4363-9d62-9ce54cef13fa",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "scope",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "departmentId",
+                      "value": "1"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "assetIds",
+                      "value": "dbf4767e-2fa1-43b0-97a2-7c0cecda180b,550e8400-e29b-41d4-a716-44665544000a"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8bbb6409-1bd2-4314-bcbc-02425dd356ec",
+          "name": "Create a Git asset.",
+          "request": {
+            "name": "Create a Git asset.",
+            "description": {
+              "content": "Use to create a a Git datasource asset.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "asset",
+                "datasource",
+                "git"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meta\": {\n    \"name\": \"<string>\",\n    \"scope\": \"<string>\",\n    \"description\": \"<string,null>\",\n    \"clusterId\": \"<string,null-uuid>\",\n    \"departmentId\": \"<string,null>\",\n    \"projectId\": \"<integer,null-int32>\",\n    \"autoDelete\": false,\n    \"workloadSupportedTypes\": {\n      \"inference\": \"<boolean,null>\",\n      \"workspace\": \"<boolean,null>\",\n      \"training\": \"<boolean,null>\",\n      \"distributed\": \"<boolean,null>\",\n      \"distFramework\": \"<string,null>\"\n    },\n    \"private\": false\n  },\n  \"spec\": {\n    \"repository\": \"<string,null>\",\n    \"branch\": \"<string,null>\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"<string,null>\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "293ddc39-9d43-432e-a37b-cff54a5e5bdc",
+              "name": "Request accepted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"createdAt\": \"2018-10-12T14:56:06.679Z\",\n    \"createdBy\": \"string\",\n    \"id\": \"3cc0bfa0-d772-d06c-0859-9e941a401355\",\n    \"kind\": \"workload-template\",\n    \"name\": \"my-asset\",\n    \"scope\": \"<string>\",\n    \"updatedAt\": \"1958-04-12T08:25:39.166Z\",\n    \"updatedBy\": \"string\",\n    \"description\": \"description of my asset.\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"departmentId\": \"<string,null>\",\n    \"projectId\": \"<integer,null-int32>\",\n    \"autoDelete\": false,\n    \"workloadSupportedTypes\": {\n      \"inference\": \"<boolean,null>\",\n      \"workspace\": \"<boolean,null>\",\n      \"training\": \"<boolean,null>\",\n      \"distributed\": \"<boolean,null>\",\n      \"distFramework\": \"<string,null>\"\n    },\n    \"private\": false,\n    \"tenantId\": null,\n    \"deletedAt\": \"1952-08-13T23:20:00.191Z\",\n    \"deletedBy\": \"string\",\n    \"projectName\": \"string\",\n    \"updateCount\": 12345\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  },\n  \"usedBy\": {\n    \"workspaces\": [\n      {\n        \"id\": \"0ba4d972-7c76-9cf6-c007-81daed28339d\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"379c0118-1255-d652-d012-41274957d98f\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"stri\"\n      }\n    ],\n    \"trainings\": [\n      {\n        \"id\": \"1dce0ed1-5117-9a4b-357a-adc70876a9ee\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"48c4ceae-9141-b574-1b2b-1fc796a60209\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"distributed\": [\n      {\n        \"id\": \"392d828c-760e-b063-4971-9245b34bce53\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"a4491a37-f45e-c42c-221b-fbe5aed6fb68\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"inferences\": [\n      {\n        \"id\": \"06210fc7-ebff-00ee-42c7-9e1299175726\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"f58b9e05-8ad6-dcfe-daa9-65fb496103c3\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"templates\": [\n      {\n        \"id\": \"e2be3c31-9268-abe3-8118-b49d64a5100b\",\n        \"name\": \"my-asset\"\n      },\n      {\n        \"id\": \"2b8e72fb-5a5c-09c3-56e8-535a7d402e7a\",\n        \"name\": \"my-asset\"\n      }\n    ],\n    \"assets\": {\n      \"environment\": {\n        \"id\": \"a0c1cab2-f693-79a5-5bab-ac05c971c628\",\n        \"name\": \"my-asset\",\n        \"toolTypes\": null\n      },\n      \"environments\": [\n        {\n          \"id\": \"1c196cc8-9b2b-9921-41ee-fe79b3bfca4f\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"1606be95-a7c5-afb1-63e9-c7a1ce89497b\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"compute\": {\n        \"id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"computes\": [\n        {\n          \"id\": \"133a73b2-2fda-80b9-2a3b-0f9356b07476\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"01356478-e359-6bd5-cb75-5c77fe2dd1ed\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"datasources\": [\n        {\n          \"id\": \"399d33fe-5120-5a9e-54df-9b5e53c00304\",\n          \"name\": \"my-asset\",\n          \"kind\": \"environment\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"id\": \"7ef74cb6-5bd1-45c9-c632-c535ea6e5f0e\",\n          \"name\": \"my-asset\",\n          \"kind\": \"secret-volume\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  },\n  \"usageTimes\": {\n    \"lastUsedByWorkload\": null\n  },\n  \"compliance\": {\n    \"imposed\": true,\n    \"compliance\": true,\n    \"reason\": [\n      {\n        \"details\": \"\",\n        \"field\": \"}+pvt?$D\",\n        \"rule\": \"options\"\n      },\n      {\n        \"details\": \"l+~F\",\n        \"field\": \"n\",\n        \"rule\": \"max\"\n      }\n    ]\n  },\n  \"status\": {\n    \"status\": \"Deletion failed\",\n    \"issues\": [\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"system\",\n        \"issue\": \"LostPhase\"\n      },\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"department\",\n        \"issue\": \"LostPhase\"\n      }\n    ],\n    \"message\": \"string\",\n    \"url\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "38e884aa-654e-488d-b662-c76eb31c6c5b",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Required parameter is missing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ccc89715-fc64-49a6-9e66-f9edd7c34b59",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be10ae83-159d-421a-a8c8-9bd14d9a8e02",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7d0124e9-dc96-43dd-bb95-db39bdfb08fe",
+              "name": "The specified resource already exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 409,\n  \"message\": \"Resource with this name already exists\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c583241c-6c76-4303-b45b-a2ef49986df8",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\",\n    \"scope\": \"tenant\",\n    \"workloadSupportedTypes\": {\n      \"workspace\": false,\n      \"training\": false,\n      \"inference\": false,\n      \"distributed\": true,\n      \"distFramework\": \"TF\"\n    }\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "def3577d-27de-435e-8b7a-78a3cb0e1775",
+          "name": "Get a Git asset.",
+          "request": {
+            "name": "Get a Git asset.",
+            "description": {
+              "content": "Use to retrieve the details of a Git datasource asset by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "asset",
+                "datasource",
+                "git",
+                ":AssetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "usageInfo",
+                  "value": "<boolean>",
+                  "description": "Whether the query should include asset usage information as part of the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToProject",
+                  "value": "<integer>",
+                  "description": "Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToWorkloadType",
+                  "value": "<string>",
+                  "description": "Include workload creation compliance information of an asset, for a given workload type, as part of the response. To check compliance, you need to provide both project id and workload type."
+                },
+                {
+                  "disabled": false,
+                  "key": "statusInfo",
+                  "value": "<boolean>",
+                  "description": "Whether the query should include asset status information as part of the response."
+                },
+                {
+                  "disabled": false,
+                  "key": "complyToReplicaType",
+                  "value": "<string>",
+                  "description": "Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "AssetId",
+                  "description": "(Required) Unique identifier of the asset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "143d6f6f-36bc-4a46-aa40-2d9338e5b0d3",
+              "name": "Request completed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"createdAt\": \"2018-10-12T14:56:06.679Z\",\n    \"createdBy\": \"string\",\n    \"id\": \"3cc0bfa0-d772-d06c-0859-9e941a401355\",\n    \"kind\": \"workload-template\",\n    \"name\": \"my-asset\",\n    \"scope\": \"<string>\",\n    \"updatedAt\": \"1958-04-12T08:25:39.166Z\",\n    \"updatedBy\": \"string\",\n    \"description\": \"description of my asset.\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"departmentId\": \"<string,null>\",\n    \"projectId\": \"<integer,null-int32>\",\n    \"autoDelete\": false,\n    \"workloadSupportedTypes\": {\n      \"inference\": \"<boolean,null>\",\n      \"workspace\": \"<boolean,null>\",\n      \"training\": \"<boolean,null>\",\n      \"distributed\": \"<boolean,null>\",\n      \"distFramework\": \"<string,null>\"\n    },\n    \"private\": false,\n    \"tenantId\": null,\n    \"deletedAt\": \"1952-08-13T23:20:00.191Z\",\n    \"deletedBy\": \"string\",\n    \"projectName\": \"string\",\n    \"updateCount\": 12345\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  },\n  \"usedBy\": {\n    \"workspaces\": [\n      {\n        \"id\": \"0ba4d972-7c76-9cf6-c007-81daed28339d\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"379c0118-1255-d652-d012-41274957d98f\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"stri\"\n      }\n    ],\n    \"trainings\": [\n      {\n        \"id\": \"1dce0ed1-5117-9a4b-357a-adc70876a9ee\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"48c4ceae-9141-b574-1b2b-1fc796a60209\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"distributed\": [\n      {\n        \"id\": \"392d828c-760e-b063-4971-9245b34bce53\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"a4491a37-f45e-c42c-221b-fbe5aed6fb68\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"inferences\": [\n      {\n        \"id\": \"06210fc7-ebff-00ee-42c7-9e1299175726\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"f58b9e05-8ad6-dcfe-daa9-65fb496103c3\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"templates\": [\n      {\n        \"id\": \"e2be3c31-9268-abe3-8118-b49d64a5100b\",\n        \"name\": \"my-asset\"\n      },\n      {\n        \"id\": \"2b8e72fb-5a5c-09c3-56e8-535a7d402e7a\",\n        \"name\": \"my-asset\"\n      }\n    ],\n    \"assets\": {\n      \"environment\": {\n        \"id\": \"a0c1cab2-f693-79a5-5bab-ac05c971c628\",\n        \"name\": \"my-asset\",\n        \"toolTypes\": null\n      },\n      \"environments\": [\n        {\n          \"id\": \"1c196cc8-9b2b-9921-41ee-fe79b3bfca4f\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"1606be95-a7c5-afb1-63e9-c7a1ce89497b\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"compute\": {\n        \"id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"computes\": [\n        {\n          \"id\": \"133a73b2-2fda-80b9-2a3b-0f9356b07476\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"01356478-e359-6bd5-cb75-5c77fe2dd1ed\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"datasources\": [\n        {\n          \"id\": \"399d33fe-5120-5a9e-54df-9b5e53c00304\",\n          \"name\": \"my-asset\",\n          \"kind\": \"environment\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"id\": \"7ef74cb6-5bd1-45c9-c632-c535ea6e5f0e\",\n          \"name\": \"my-asset\",\n          \"kind\": \"secret-volume\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  },\n  \"usageTimes\": {\n    \"lastUsedByWorkload\": null\n  },\n  \"compliance\": {\n    \"imposed\": true,\n    \"compliance\": true,\n    \"reason\": [\n      {\n        \"details\": \"\",\n        \"field\": \"}+pvt?$D\",\n        \"rule\": \"options\"\n      },\n      {\n        \"details\": \"l+~F\",\n        \"field\": \"n\",\n        \"rule\": \"max\"\n      }\n    ]\n  },\n  \"status\": {\n    \"status\": \"Deletion failed\",\n    \"issues\": [\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"system\",\n        \"issue\": \"LostPhase\"\n      },\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"department\",\n        \"issue\": \"LostPhase\"\n      }\n    ],\n    \"message\": \"string\",\n    \"url\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "277cc0a6-0d89-4033-b70d-db4cd9828c9e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bcb9ae02-dc02-48f1-b9ce-33ec841bcf5e",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4af198bf-6203-4ce6-b484-acbad59a801b",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6cc849e7-9ce5-4f3a-8594-77168aa96913",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "usageInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToProject",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "complyToWorkloadType",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "statusInfo",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "key": "complyToReplicaType",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8ef5f7c6-495c-4893-bacf-06e3ca2f50f9",
+          "name": "Update a Git asset.",
+          "request": {
+            "name": "Update a Git asset.",
+            "description": {
+              "content": "Use to update the details of Git datasource asset by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "asset",
+                "datasource",
+                "git",
+                ":AssetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "AssetId",
+                  "description": "(Required) Unique identifier of the asset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"meta\": {\n    \"name\": \"<string>\",\n    \"description\": \"<string,null>\"\n  },\n  \"spec\": {\n    \"repository\": \"<string,null>\",\n    \"branch\": \"<string,null>\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"<string,null>\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "7b8646bd-31ae-4feb-98e9-48b2daeeb2d1",
+              "name": "Request accepted successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\"\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"meta\": {\n    \"createdAt\": \"2018-10-12T14:56:06.679Z\",\n    \"createdBy\": \"string\",\n    \"id\": \"3cc0bfa0-d772-d06c-0859-9e941a401355\",\n    \"kind\": \"workload-template\",\n    \"name\": \"my-asset\",\n    \"scope\": \"<string>\",\n    \"updatedAt\": \"1958-04-12T08:25:39.166Z\",\n    \"updatedBy\": \"string\",\n    \"description\": \"description of my asset.\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"departmentId\": \"<string,null>\",\n    \"projectId\": \"<integer,null-int32>\",\n    \"autoDelete\": false,\n    \"workloadSupportedTypes\": {\n      \"inference\": \"<boolean,null>\",\n      \"workspace\": \"<boolean,null>\",\n      \"training\": \"<boolean,null>\",\n      \"distributed\": \"<boolean,null>\",\n      \"distFramework\": \"<string,null>\"\n    },\n    \"private\": false,\n    \"tenantId\": null,\n    \"deletedAt\": \"1952-08-13T23:20:00.191Z\",\n    \"deletedBy\": \"string\",\n    \"projectName\": \"string\",\n    \"updateCount\": 12345\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  },\n  \"usedBy\": {\n    \"workspaces\": [\n      {\n        \"id\": \"0ba4d972-7c76-9cf6-c007-81daed28339d\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"379c0118-1255-d652-d012-41274957d98f\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"stri\"\n      }\n    ],\n    \"trainings\": [\n      {\n        \"id\": \"1dce0ed1-5117-9a4b-357a-adc70876a9ee\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"48c4ceae-9141-b574-1b2b-1fc796a60209\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"distributed\": [\n      {\n        \"id\": \"392d828c-760e-b063-4971-9245b34bce53\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"a4491a37-f45e-c42c-221b-fbe5aed6fb68\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"inferences\": [\n      {\n        \"id\": \"06210fc7-ebff-00ee-42c7-9e1299175726\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      },\n      {\n        \"id\": \"f58b9e05-8ad6-dcfe-daa9-65fb496103c3\",\n        \"name\": \"my-workload-name\",\n        \"status\": \"string\"\n      }\n    ],\n    \"templates\": [\n      {\n        \"id\": \"e2be3c31-9268-abe3-8118-b49d64a5100b\",\n        \"name\": \"my-asset\"\n      },\n      {\n        \"id\": \"2b8e72fb-5a5c-09c3-56e8-535a7d402e7a\",\n        \"name\": \"my-asset\"\n      }\n    ],\n    \"assets\": {\n      \"environment\": {\n        \"id\": \"a0c1cab2-f693-79a5-5bab-ac05c971c628\",\n        \"name\": \"my-asset\",\n        \"toolTypes\": null\n      },\n      \"environments\": [\n        {\n          \"id\": \"1c196cc8-9b2b-9921-41ee-fe79b3bfca4f\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"1606be95-a7c5-afb1-63e9-c7a1ce89497b\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"compute\": {\n        \"id\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"name\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      },\n      \"computes\": [\n        {\n          \"id\": \"133a73b2-2fda-80b9-2a3b-0f9356b07476\",\n          \"name\": \"my-asset\"\n        },\n        {\n          \"id\": \"01356478-e359-6bd5-cb75-5c77fe2dd1ed\",\n          \"name\": \"my-asset\"\n        }\n      ],\n      \"datasources\": [\n        {\n          \"id\": \"399d33fe-5120-5a9e-54df-9b5e53c00304\",\n          \"name\": \"my-asset\",\n          \"kind\": \"environment\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        {\n          \"id\": \"7ef74cb6-5bd1-45c9-c632-c535ea6e5f0e\",\n          \"name\": \"my-asset\",\n          \"kind\": \"secret-volume\",\n          \"overrides\": {\n            \"containerPath\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        }\n      ]\n    }\n  },\n  \"usageTimes\": {\n    \"lastUsedByWorkload\": null\n  },\n  \"compliance\": {\n    \"imposed\": true,\n    \"compliance\": true,\n    \"reason\": [\n      {\n        \"details\": \"\",\n        \"field\": \"}+pvt?$D\",\n        \"rule\": \"options\"\n      },\n      {\n        \"details\": \"l+~F\",\n        \"field\": \"n\",\n        \"rule\": \"max\"\n      }\n    ]\n  },\n  \"status\": {\n    \"status\": \"Deletion failed\",\n    \"issues\": [\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"system\",\n        \"issue\": \"LostPhase\"\n      },\n      {\n        \"scopeId\": \"string\",\n        \"scopeType\": \"department\",\n        \"issue\": \"LostPhase\"\n      }\n    ],\n    \"message\": \"string\",\n    \"url\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "79e617d5-335d-4358-a2e9-8660fb010976",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\"\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3bed87dc-d24d-40e9-9674-5e7f2a1d5bea",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\"\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "19612bde-ff05-44c1-8d6a-8e36eeb22167",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\"\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2928b63e-3abf-411c-8307-8b77f8e5ee42",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"meta\": {\n    \"name\": \"my-asset\"\n  },\n  \"spec\": {\n    \"repository\": \"https://github.com/my-git/my-repo\",\n    \"branch\": \"main\",\n    \"revision\": \"<string,null>\",\n    \"path\": \"/container/my-repository\",\n    \"passwordAssetId\": \"<string,null-uuid>\",\n    \"credentialId\": \"<string,null-uuid>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "237c61fa-64fc-4bf4-a416-bfef26acdb40",
+          "name": "Delete a Git asset.",
+          "request": {
+            "name": "Delete a Git asset.",
+            "description": {
+              "content": "Use to delete a Git datasource asset by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "asset",
+                "datasource",
+                "git",
+                ":AssetId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "AssetId",
+                  "description": "(Required) Unique identifier of the asset."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5457d356-a519-4785-9417-d7cd8ae1ee8c",
+              "name": "Accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 202,\n  \"message\": \"Request has been accepted.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef87b1e0-b6e9-4796-a8eb-4910f8dae455",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "73aeffb7-4c9c-4e84-a4b2-1f97722a2023",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ebdd83a-eadb-4230-a9e9-d58a7cc1282d",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1c5d9b03-b8d9-4f61-81e5-9501bad74cef",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "asset",
+                    "datasource",
+                    "git",
+                    ":AssetId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "AssetId",
+                      "description": "(Required) Unique identifier of the asset."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.run.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "21b2d7a3-15d3-46bf-b133-ad7a0ff1d386",
+    "name": "NVIDIA Run:ai Access Keys Git API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.\n\nNVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.\nTo create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.\n\nAfter you have created a new service account, you will need to assign it access rules.\nTo assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).\nMake sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.\n\nTo get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).\n",
+      "type": "text/plain"
+    }
+  }
+}

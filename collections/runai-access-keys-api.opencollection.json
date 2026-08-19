@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Access Keys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of access keys.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/access-keys"
+          },
+          "docs": "Retrieve a list of the user's access keys."
+        },
+        {
+          "info": {
+            "name": "Create an access key.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/access-keys",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Used to create an access key."
+        },
+        {
+          "info": {
+            "name": "Get access key by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/access-keys/:accessKeyId",
+            "params": [
+              {
+                "name": "accessKeyId",
+                "value": "",
+                "type": "path",
+                "description": "The access key ID"
+              }
+            ]
+          },
+          "docs": "Retrieve the details of an access key by id."
+        },
+        {
+          "info": {
+            "name": "Delete an access key by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/access-keys/:accessKeyId",
+            "params": [
+              {
+                "name": "accessKeyId",
+                "value": "",
+                "type": "path",
+                "description": "The access key ID"
+              }
+            ]
+          },
+          "docs": "Use to delete an access key by id."
+        },
+        {
+          "info": {
+            "name": "Regenerate an access key secret.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/access-keys/:accessKeyId/secret",
+            "params": [
+              {
+                "name": "accessKeyId",
+                "value": "",
+                "type": "path",
+                "description": "The access key ID"
+              }
+            ]
+          },
+          "docs": "Use to regenerate the access key secret by id."
+        },
+        {
+          "info": {
+            "name": "Get a list of all access keys.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/administration/access-keys",
+            "params": [
+              {
+                "name": "clientId",
+                "value": "3434c-12323ab-4ce2ea6-b44fc-db344d",
+                "type": "query",
+                "description": "Filter results by clientId"
+              },
+              {
+                "name": "createdBy",
+                "value": "test@run.ai",
+                "type": "query",
+                "description": "Filter results by creatdBy"
+              }
+            ]
+          },
+          "docs": "Retrieve a list of all access keys."
+        },
+        {
+          "info": {
+            "name": "Delete an access key by id for administrations.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/administration/access-keys/:accessKeyId",
+            "params": [
+              {
+                "name": "accessKeyId",
+                "value": "",
+                "type": "path",
+                "description": "The access key ID"
+              }
+            ]
+          },
+          "docs": "Use to delete an access key by id for administrations."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

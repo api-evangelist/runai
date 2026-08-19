@@ -1,0 +1,1884 @@
+{
+  "item": [
+    {
+      "id": "6e4357b5-5700-41e8-a066-9459f815652f",
+      "name": "Trainings",
+      "description": {
+        "content": "Trainings are dedicated workloads that are specifically used for training models. \nThey are by design preemptible workloads because they are used in unattended sessions where the  \nscientists and researchers do not need to be present. These workloads are allowed to utilize \nresources over the project's quota.      \n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "e68e8d1a-a7f4-44a0-a66b-2fd0f2f9a5b3",
+          "name": "Create a training.",
+          "request": {
+            "name": "Create a training.",
+            "description": {
+              "content": "Create a training workload using container related fields.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "trainings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"<uuid>\",\n  \"useGivenNameAsPrefix\": false,\n  \"templateId\": \"<string,null-uuid>\",\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"args\": \"<string,null>\",\n    \"autoDeletionTimeAfterCompletionSeconds\": \"<integer,null-int64>\",\n    \"backoffLimit\": \"<integer,null-int64>\",\n    \"category\": \"<string,null>\",\n    \"command\": \"<string,null>\",\n    \"completions\": \"<integer,null-int32>\",\n    \"compute\": {\n      \"cpuCoreLimit\": \"<number,null-double>\",\n      \"cpuCoreRequest\": \"<number,null-double>\",\n      \"cpuMemoryLimit\": \"<string,null>\",\n      \"cpuMemoryRequest\": \"<string,null>\",\n      \"extendedResources\": \"<array,null>\",\n      \"gpuDevicesRequest\": \"<integer,null-int32>\",\n      \"gpuMemoryLimit\": \"<string,null>\",\n      \"gpuMemoryRequest\": \"<string,null>\",\n      \"gpuPortionLimit\": \"<number,null-double>\",\n      \"gpuPortionRequest\": \"<number,null-double>\",\n      \"gpuRequestType\": \"<string,null>\",\n      \"largeShmRequest\": \"<boolean,null>\"\n    },\n    \"createHomeDir\": \"<boolean,null>\",\n    \"environmentVariables\": \"<array,null>\",\n    \"exposedUrls\": \"<array,null>\",\n    \"image\": \"<string,null>\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"nodeAffinityRequired\": {\n      \"nodeSelectorTerms\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    },\n    \"nodePools\": \"<array,null>\",\n    \"nodeType\": \"<string,null>\",\n    \"parallelism\": \"<integer,null-int32>\",\n    \"podAffinity\": {\n      \"type\": \"<string,null>\",\n      \"key\": \"<string,null>\"\n    },\n    \"ports\": \"<array,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"relatedUrls\": \"<array,null>\",\n    \"restartPolicy\": \"<string,null>\",\n    \"security\": {\n      \"allowPrivilegeEscalation\": \"<boolean,null>\",\n      \"capabilities\": \"<array,null>\",\n      \"hostIpc\": \"<boolean,null>\",\n      \"hostNetwork\": \"<boolean,null>\",\n      \"readOnlyRootFilesystem\": \"<boolean,null>\",\n      \"runAsGid\": \"<integer,null-int64>\",\n      \"runAsNonRoot\": \"<boolean,null>\",\n      \"runAsUid\": \"<integer,null-int64>\",\n      \"seccompProfileType\": \"<string,null>\",\n      \"supplementalGroups\": \"<string,null>\",\n      \"uidGidSource\": \"<string,null>\"\n    },\n    \"stdin\": \"<boolean,null>\",\n    \"storage\": {\n      \"configMapVolume\": \"<array,null>\",\n      \"dataVolume\": \"<array,null>\",\n      \"emptyDirVolume\": \"<array,null>\",\n      \"git\": \"<array,null>\",\n      \"hostPath\": \"<array,null>\",\n      \"nfs\": \"<array,null>\",\n      \"pvc\": \"<array,null>\",\n      \"s3\": \"<array,null>\",\n      \"secretVolume\": \"<array,null>\"\n    },\n    \"terminateAfterPreemption\": \"<boolean,null>\",\n    \"terminationGracePeriodSeconds\": \"<integer,null-int64>\",\n    \"tolerations\": \"<array,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"workingDir\": \"<string,null>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fbd5af12-231e-48fa-9aef-421b1a91746b",
+              "name": "Request completed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"my-workload-name\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"useGivenNameAsPrefix\": true,\n  \"templateId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"args\": \"-x my-script.py\",\n    \"autoDeletionTimeAfterCompletionSeconds\": 15,\n    \"backoffLimit\": 3,\n    \"category\": \"<string,null>\",\n    \"command\": \"python\",\n    \"completions\": 1,\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"extendedResources\": \"<array,null>\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\",\n      \"largeShmRequest\": false\n    },\n    \"createHomeDir\": \"<boolean,null>\",\n    \"environmentVariables\": \"<array,null>\",\n    \"exposedUrls\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"nodeAffinityRequired\": {\n      \"nodeSelectorTerms\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    },\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"nodeType\": \"my-node-type\",\n    \"parallelism\": 1,\n    \"podAffinity\": {\n      \"type\": \"<string,null>\",\n      \"key\": \"<string,null>\"\n    },\n    \"ports\": \"<array,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"relatedUrls\": \"<array,null>\",\n    \"restartPolicy\": \"<string,null>\",\n    \"security\": {\n      \"allowPrivilegeEscalation\": false,\n      \"capabilities\": [\n        \"CHOWN\",\n        \"KILL\"\n      ],\n      \"hostIpc\": false,\n      \"hostNetwork\": false,\n      \"readOnlyRootFilesystem\": false,\n      \"runAsGid\": 30,\n      \"runAsNonRoot\": true,\n      \"runAsUid\": 500,\n      \"seccompProfileType\": \"<string,null>\",\n      \"supplementalGroups\": \"2,3,5,8\",\n      \"uidGidSource\": \"<string,null>\"\n    },\n    \"stdin\": \"<boolean,null>\",\n    \"storage\": {\n      \"configMapVolume\": \"<array,null>\",\n      \"dataVolume\": \"<array,null>\",\n      \"emptyDirVolume\": \"<array,null>\",\n      \"git\": \"<array,null>\",\n      \"hostPath\": \"<array,null>\",\n      \"nfs\": \"<array,null>\",\n      \"pvc\": \"<array,null>\",\n      \"s3\": \"<array,null>\",\n      \"secretVolume\": \"<array,null>\"\n    },\n    \"terminateAfterPreemption\": false,\n    \"terminationGracePeriodSeconds\": 20,\n    \"tolerations\": \"<array,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"workingDir\": \"/home/myfolder\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"my-workload-name\",\n  \"requestedName\": \"string\",\n  \"workloadId\": \"18f3cbb9-6643-33d4-a24a-ec870e64ed97\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"createdBy\": \"test@lab.com\",\n  \"createdAt\": \"2022-01-01T03:49:52.531Z\",\n  \"desiredPhase\": \"Running\",\n  \"departmentId\": \"I3Q\",\n  \"deletedAt\": \"2022-01-01T03:49:52.531Z\",\n  \"actualPhase\": \"Creating\",\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"args\": \"-x my-script.py\",\n    \"autoDeletionTimeAfterCompletionSeconds\": 15,\n    \"backoffLimit\": 3,\n    \"category\": \"<string,null>\",\n    \"command\": \"python\",\n    \"completions\": 1,\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"extendedResources\": \"<array,null>\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\",\n      \"largeShmRequest\": false\n    },\n    \"createHomeDir\": \"<boolean,null>\",\n    \"environmentVariables\": \"<array,null>\",\n    \"exposedUrls\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"nodeAffinityRequired\": {\n      \"nodeSelectorTerms\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    },\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"nodeType\": \"my-node-type\",\n    \"parallelism\": 1,\n    \"podAffinity\": {\n      \"type\": \"<string,null>\",\n      \"key\": \"<string,null>\"\n    },\n    \"ports\": \"<array,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"relatedUrls\": \"<array,null>\",\n    \"restartPolicy\": \"<string,null>\",\n    \"security\": {\n      \"allowPrivilegeEscalation\": false,\n      \"capabilities\": [\n        \"CHOWN\",\n        \"KILL\"\n      ],\n      \"hostIpc\": false,\n      \"hostNetwork\": false,\n      \"readOnlyRootFilesystem\": false,\n      \"runAsGid\": 30,\n      \"runAsNonRoot\": true,\n      \"runAsUid\": 500,\n      \"seccompProfileType\": \"<string,null>\",\n      \"supplementalGroups\": \"2,3,5,8\",\n      \"uidGidSource\": \"<string,null>\"\n    },\n    \"stdin\": \"<boolean,null>\",\n    \"storage\": {\n      \"configMapVolume\": \"<array,null>\",\n      \"dataVolume\": \"<array,null>\",\n      \"emptyDirVolume\": \"<array,null>\",\n      \"git\": \"<array,null>\",\n      \"hostPath\": \"<array,null>\",\n      \"nfs\": \"<array,null>\",\n      \"pvc\": \"<array,null>\",\n      \"s3\": \"<array,null>\",\n      \"secretVolume\": \"<array,null>\"\n    },\n    \"terminateAfterPreemption\": false,\n    \"terminationGracePeriodSeconds\": 20,\n    \"tolerations\": \"<array,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"workingDir\": \"/home/myfolder\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "18c22bef-b54b-498b-b09a-6e17c4246bd6",
+              "name": "Bad submission request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"my-workload-name\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"useGivenNameAsPrefix\": true,\n  \"templateId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"args\": \"-x my-script.py\",\n    \"autoDeletionTimeAfterCompletionSeconds\": 15,\n    \"backoffLimit\": 3,\n    \"category\": \"<string,null>\",\n    \"command\": \"python\",\n    \"completions\": 1,\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"extendedResources\": \"<array,null>\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\",\n      \"largeShmRequest\": false\n    },\n    \"createHomeDir\": \"<boolean,null>\",\n    \"environmentVariables\": \"<array,null>\",\n    \"exposedUrls\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"nodeAffinityRequired\": {\n      \"nodeSelectorTerms\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    },\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"nodeType\": \"my-node-type\",\n    \"parallelism\": 1,\n    \"podAffinity\": {\n      \"type\": \"<string,null>\",\n      \"key\": \"<string,null>\"\n    },\n    \"ports\": \"<array,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"relatedUrls\": \"<array,null>\",\n    \"restartPolicy\": \"<string,null>\",\n    \"security\": {\n      \"allowPrivilegeEscalation\": false,\n      \"capabilities\": [\n        \"CHOWN\",\n        \"KILL\"\n      ],\n      \"hostIpc\": false,\n      \"hostNetwork\": false,\n      \"readOnlyRootFilesystem\": false,\n      \"runAsGid\": 30,\n      \"runAsNonRoot\": true,\n      \"runAsUid\": 500,\n      \"seccompProfileType\": \"<string,null>\",\n      \"supplementalGroups\": \"2,3,5,8\",\n      \"uidGidSource\": \"<string,null>\"\n    },\n    \"stdin\": \"<boolean,null>\",\n    \"storage\": {\n      \"configMapVolume\": \"<array,null>\",\n      \"dataVolume\": \"<array,null>\",\n      \"emptyDirVolume\": \"<array,null>\",\n      \"git\": \"<array,null>\",\n      \"hostPath\": \"<array,null>\",\n      \"nfs\": \"<array,null>\",\n      \"pvc\": \"<array,null>\",\n      \"s3\": \"<array,null>\",\n      \"secretVolume\": \"<array,null>\"\n    },\n    \"terminateAfterPreemption\": false,\n    \"terminationGracePeriodSeconds\": 20,\n    \"tolerations\": \"<array,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"workingDir\": \"/home/myfolder\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"The workload request does not comply with the policy set by the administrator\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7b93e6cd-13a5-4689-b464-c72488deeddd",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"my-workload-name\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"useGivenNameAsPrefix\": true,\n  \"templateId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"args\": \"-x my-script.py\",\n    \"autoDeletionTimeAfterCompletionSeconds\": 15,\n    \"backoffLimit\": 3,\n    \"category\": \"<string,null>\",\n    \"command\": \"python\",\n    \"completions\": 1,\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"extendedResources\": \"<array,null>\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\",\n      \"largeShmRequest\": false\n    },\n    \"createHomeDir\": \"<boolean,null>\",\n    \"environmentVariables\": \"<array,null>\",\n    \"exposedUrls\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"nodeAffinityRequired\": {\n      \"nodeSelectorTerms\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    },\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"nodeType\": \"my-node-type\",\n    \"parallelism\": 1,\n    \"podAffinity\": {\n      \"type\": \"<string,null>\",\n      \"key\": \"<string,null>\"\n    },\n    \"ports\": \"<array,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"relatedUrls\": \"<array,null>\",\n    \"restartPolicy\": \"<string,null>\",\n    \"security\": {\n      \"allowPrivilegeEscalation\": false,\n      \"capabilities\": [\n        \"CHOWN\",\n        \"KILL\"\n      ],\n      \"hostIpc\": false,\n      \"hostNetwork\": false,\n      \"readOnlyRootFilesystem\": false,\n      \"runAsGid\": 30,\n      \"runAsNonRoot\": true,\n      \"runAsUid\": 500,\n      \"seccompProfileType\": \"<string,null>\",\n      \"supplementalGroups\": \"2,3,5,8\",\n      \"uidGidSource\": \"<string,null>\"\n    },\n    \"stdin\": \"<boolean,null>\",\n    \"storage\": {\n      \"configMapVolume\": \"<array,null>\",\n      \"dataVolume\": \"<array,null>\",\n      \"emptyDirVolume\": \"<array,null>\",\n      \"git\": \"<array,null>\",\n      \"hostPath\": \"<array,null>\",\n      \"nfs\": \"<array,null>\",\n      \"pvc\": \"<array,null>\",\n      \"s3\": \"<array,null>\",\n      \"secretVolume\": \"<array,null>\"\n    },\n    \"terminateAfterPreemption\": false,\n    \"terminationGracePeriodSeconds\": 20,\n    \"tolerations\": \"<array,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"workingDir\": \"/home/myfolder\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "77227af0-aa8e-425d-98cf-87b23285d613",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"my-workload-name\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"useGivenNameAsPrefix\": true,\n  \"templateId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"args\": \"-x my-script.py\",\n    \"autoDeletionTimeAfterCompletionSeconds\": 15,\n    \"backoffLimit\": 3,\n    \"category\": \"<string,null>\",\n    \"command\": \"python\",\n    \"completions\": 1,\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"extendedResources\": \"<array,null>\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\",\n      \"largeShmRequest\": false\n    },\n    \"createHomeDir\": \"<boolean,null>\",\n    \"environmentVariables\": \"<array,null>\",\n    \"exposedUrls\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"nodeAffinityRequired\": {\n      \"nodeSelectorTerms\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    },\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"nodeType\": \"my-node-type\",\n    \"parallelism\": 1,\n    \"podAffinity\": {\n      \"type\": \"<string,null>\",\n      \"key\": \"<string,null>\"\n    },\n    \"ports\": \"<array,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"relatedUrls\": \"<array,null>\",\n    \"restartPolicy\": \"<string,null>\",\n    \"security\": {\n      \"allowPrivilegeEscalation\": false,\n      \"capabilities\": [\n        \"CHOWN\",\n        \"KILL\"\n      ],\n      \"hostIpc\": false,\n      \"hostNetwork\": false,\n      \"readOnlyRootFilesystem\": false,\n      \"runAsGid\": 30,\n      \"runAsNonRoot\": true,\n      \"runAsUid\": 500,\n      \"seccompProfileType\": \"<string,null>\",\n      \"supplementalGroups\": \"2,3,5,8\",\n      \"uidGidSource\": \"<string,null>\"\n    },\n    \"stdin\": \"<boolean,null>\",\n    \"storage\": {\n      \"configMapVolume\": \"<array,null>\",\n      \"dataVolume\": \"<array,null>\",\n      \"emptyDirVolume\": \"<array,null>\",\n      \"git\": \"<array,null>\",\n      \"hostPath\": \"<array,null>\",\n      \"nfs\": \"<array,null>\",\n      \"pvc\": \"<array,null>\",\n      \"s3\": \"<array,null>\",\n      \"secretVolume\": \"<array,null>\"\n    },\n    \"terminateAfterPreemption\": false,\n    \"terminationGracePeriodSeconds\": 20,\n    \"tolerations\": \"<array,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"workingDir\": \"/home/myfolder\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "15a37263-75c9-4f92-b36b-d51c48225c0a",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"my-workload-name\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"useGivenNameAsPrefix\": true,\n  \"templateId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"args\": \"-x my-script.py\",\n    \"autoDeletionTimeAfterCompletionSeconds\": 15,\n    \"backoffLimit\": 3,\n    \"category\": \"<string,null>\",\n    \"command\": \"python\",\n    \"completions\": 1,\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"extendedResources\": \"<array,null>\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\",\n      \"largeShmRequest\": false\n    },\n    \"createHomeDir\": \"<boolean,null>\",\n    \"environmentVariables\": \"<array,null>\",\n    \"exposedUrls\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"nodeAffinityRequired\": {\n      \"nodeSelectorTerms\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    },\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"nodeType\": \"my-node-type\",\n    \"parallelism\": 1,\n    \"podAffinity\": {\n      \"type\": \"<string,null>\",\n      \"key\": \"<string,null>\"\n    },\n    \"ports\": \"<array,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"relatedUrls\": \"<array,null>\",\n    \"restartPolicy\": \"<string,null>\",\n    \"security\": {\n      \"allowPrivilegeEscalation\": false,\n      \"capabilities\": [\n        \"CHOWN\",\n        \"KILL\"\n      ],\n      \"hostIpc\": false,\n      \"hostNetwork\": false,\n      \"readOnlyRootFilesystem\": false,\n      \"runAsGid\": 30,\n      \"runAsNonRoot\": true,\n      \"runAsUid\": 500,\n      \"seccompProfileType\": \"<string,null>\",\n      \"supplementalGroups\": \"2,3,5,8\",\n      \"uidGidSource\": \"<string,null>\"\n    },\n    \"stdin\": \"<boolean,null>\",\n    \"storage\": {\n      \"configMapVolume\": \"<array,null>\",\n      \"dataVolume\": \"<array,null>\",\n      \"emptyDirVolume\": \"<array,null>\",\n      \"git\": \"<array,null>\",\n      \"hostPath\": \"<array,null>\",\n      \"nfs\": \"<array,null>\",\n      \"pvc\": \"<array,null>\",\n      \"s3\": \"<array,null>\",\n      \"secretVolume\": \"<array,null>\"\n    },\n    \"terminateAfterPreemption\": false,\n    \"terminationGracePeriodSeconds\": 20,\n    \"tolerations\": \"<array,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"workingDir\": \"/home/myfolder\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2f33d005-bc5c-44ed-8da9-733e81a0b4e4",
+          "name": "Delete a training.",
+          "request": {
+            "name": "Delete a training.",
+            "description": {
+              "content": "Delete a training using a workload id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "trainings",
+                ":workloadId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workloadId",
+                  "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "aa9904bd-e657-4021-961d-9debe70e0313",
+              "name": "Accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 202,\n  \"message\": \"Request has been accepted.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3808b57f-e466-4abd-be98-9a1b76a37b04",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b93dd0ad-0db8-4867-87a0-7292745ca2d9",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e82b4da5-7e89-4221-8b80-933eb19e221d",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22945934-ec2e-422b-8f89-8b16b661b699",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "90fcd0ca-e077-41d3-a895-6d4224db4e99",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "402f07b3-029b-4559-9715-28e2f131cbfa",
+          "name": "Get training data.",
+          "request": {
+            "name": "Get training data.",
+            "description": {
+              "content": "Retrieve training details using a workload id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "trainings",
+                ":workloadId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workloadId",
+                  "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a2309c48-f56f-42af-a558-60a23932298b",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"my-workload-name\",\n  \"requestedName\": \"string\",\n  \"workloadId\": \"18f3cbb9-6643-33d4-a24a-ec870e64ed97\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"createdBy\": \"test@lab.com\",\n  \"createdAt\": \"2022-01-01T03:49:52.531Z\",\n  \"desiredPhase\": \"Running\",\n  \"departmentId\": \"I3Q\",\n  \"deletedAt\": \"2022-01-01T03:49:52.531Z\",\n  \"actualPhase\": \"Creating\",\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"args\": \"-x my-script.py\",\n    \"autoDeletionTimeAfterCompletionSeconds\": 15,\n    \"backoffLimit\": 3,\n    \"category\": \"<string,null>\",\n    \"command\": \"python\",\n    \"completions\": 1,\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"extendedResources\": \"<array,null>\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\",\n      \"largeShmRequest\": false\n    },\n    \"createHomeDir\": \"<boolean,null>\",\n    \"environmentVariables\": \"<array,null>\",\n    \"exposedUrls\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"nodeAffinityRequired\": {\n      \"nodeSelectorTerms\": [\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      ]\n    },\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"nodeType\": \"my-node-type\",\n    \"parallelism\": 1,\n    \"podAffinity\": {\n      \"type\": \"<string,null>\",\n      \"key\": \"<string,null>\"\n    },\n    \"ports\": \"<array,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"periodSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"timeoutSeconds\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"successThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"failureThreshold\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        },\n        \"handler\": {\n          \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n        }\n      }\n    },\n    \"relatedUrls\": \"<array,null>\",\n    \"restartPolicy\": \"<string,null>\",\n    \"security\": {\n      \"allowPrivilegeEscalation\": false,\n      \"capabilities\": [\n        \"CHOWN\",\n        \"KILL\"\n      ],\n      \"hostIpc\": false,\n      \"hostNetwork\": false,\n      \"readOnlyRootFilesystem\": false,\n      \"runAsGid\": 30,\n      \"runAsNonRoot\": true,\n      \"runAsUid\": 500,\n      \"seccompProfileType\": \"<string,null>\",\n      \"supplementalGroups\": \"2,3,5,8\",\n      \"uidGidSource\": \"<string,null>\"\n    },\n    \"stdin\": \"<boolean,null>\",\n    \"storage\": {\n      \"configMapVolume\": \"<array,null>\",\n      \"dataVolume\": \"<array,null>\",\n      \"emptyDirVolume\": \"<array,null>\",\n      \"git\": \"<array,null>\",\n      \"hostPath\": \"<array,null>\",\n      \"nfs\": \"<array,null>\",\n      \"pvc\": \"<array,null>\",\n      \"s3\": \"<array,null>\",\n      \"secretVolume\": \"<array,null>\"\n    },\n    \"terminateAfterPreemption\": false,\n    \"terminationGracePeriodSeconds\": 20,\n    \"tolerations\": \"<array,null>\",\n    \"tty\": \"<boolean,null>\",\n    \"workingDir\": \"/home/myfolder\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "518c729e-0ba0-4d7d-8a6b-1ca34081c944",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e62dabca-7668-4e80-bcfd-2543204120f7",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95a5b178-7e73-41ae-8fb3-bc0b87be2434",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "71e00b93-3925-41e2-b9c9-3be1a0209e93",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "af98a3da-fb64-42ba-8d4a-dfcde32e5982",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9769a800-fba2-4606-8d9a-45561bb82c57",
+          "name": "Suspend a training.",
+          "request": {
+            "name": "Suspend a training.",
+            "description": {
+              "content": "Suspend a training from running using a workload id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "trainings",
+                ":workloadId",
+                "suspend"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workloadId",
+                  "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "853f0dca-1f6f-4f3b-90f9-5321914f7b7a",
+              "name": "Accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "suspend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 202,\n  \"message\": \"Request has been accepted.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d104896d-002d-494f-9997-c1b6aa7ea5ba",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "suspend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1287e526-f1f0-47e4-9b42-18dcbf1e76f8",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "suspend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ce549e6-7218-4fd5-a320-e38c9e4903f6",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "suspend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9294dcec-c17d-4fd4-9b4f-ac1c1ce8a71d",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "suspend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "27064df7-0fd3-4b5c-9a88-95cb7a0ad10e",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "suspend"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a2651879-a935-4087-9ede-824a05dd0a5b",
+          "name": "Resume a training.",
+          "request": {
+            "name": "Resume a training.",
+            "description": {
+              "content": "Resume a training that was suspended using a workload id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "trainings",
+                ":workloadId",
+                "resume"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workloadId",
+                  "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6b2ee4e6-65c1-421f-9717-841354eb10e1",
+              "name": "Accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 202,\n  \"message\": \"Request has been accepted.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a3619ed9-c07d-405d-b1db-1b971d6c0b5e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57550bb0-c680-4b5e-b6b9-506b61269689",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "10fab5e7-1b7d-4fd0-bf25-1a7363a0ffc0",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b479d09b-5eed-44e6-af71-02b73be2b6e6",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a6478340-0b31-4f3b-af27-7d9d4f5ca16b",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "trainings",
+                    ":workloadId",
+                    "resume"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.run.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "62a9698b-9803-4e6c-aaea-df488c276f9e",
+    "name": "NVIDIA Run:ai Access Keys Trainings API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.\n\nNVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.\nTo create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.\n\nAfter you have created a new service account, you will need to assign it access rules.\nTo assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).\nMake sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.\n\nTo get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).\n",
+      "type": "text/plain"
+    }
+  }
+}

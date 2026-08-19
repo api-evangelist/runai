@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -225,26 +225,92 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    MatchExpression:
+    PodComputedFields:
       type: object
-      description: A selector that contains values, a key, and an operator that relates the key and values.
-      properties:
-        key:
-          description: The label key that the selector applies to (mandatory).
-          type: string
-          pattern: .*
-        operator:
-          $ref: '#/components/schemas/MatchExpressionOperator'
-        values:
-          description: An array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. If the operator is Gt or Lt, the values array must have a single element, which will be interpreted as an integer.
-          type: array
-          items:
-            type: string
-            pattern: .*
       required:
-      - key
-      - operator
-      nullable: true
+      - tenantId
+      - k8sPhaseUpdatedAt
+      - updatedAt
+      properties:
+        tenantId:
+          $ref: '#/components/schemas/TenantId'
+        k8sPhaseUpdatedAt:
+          type: string
+          format: date-time
+          example: '2022-06-08T11:28:24.131Z'
+        updatedAt:
+          type: string
+          format: date-time
+          example: '2022-06-08T11:28:24.131Z'
+        deletedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2022-08-12T19:28:24.131Z'
+    WorkloadsExtendedResource:
+      description: Quantity of an extended resource.
+      type:
+      - object
+      - 'null'
+      properties:
+        resource:
+          description: The name of the extended resource (mandatory)
+          type:
+          - string
+          - 'null'
+          example: hardware-vendor.example/foo
+          minLength: 1
+        quantity:
+          description: The requested quantity for the given resource.
+          type:
+          - string
+          - 'null'
+          example: 2
+          minLength: 1
+        exclude:
+          description: Whether to exclude this extended resource from the workload. This is necessary in case the extended resource is inherited from the policy defaults and it is desired not to include it in this workload.
+          type:
+          - boolean
+          - 'null'
+          example: false
+    MeasurementResponse:
+      type: object
+      required:
+      - type
+      - values
+      properties:
+        type:
+          type: string
+          description: specifies what data returned
+          example: ALLOCATED_GPU
+        labels:
+          type:
+          - object
+          - 'null'
+          description: labels of the metric measurement
+          example: '{''gpu'': ''3''}'
+          additionalProperties:
+            type: string
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            required:
+            - value
+            - timestamp
+            properties:
+              value:
+                type: string
+                example: '85'
+              timestamp:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2023-06-06 12:09:18.211'
     PodToleration:
       type: object
       properties:
@@ -266,278 +332,25 @@ components:
           example: NoExecute
         tolerationSeconds:
           description: TolerationSeconds represents the period of time the toleration (which must be of effect NoExecute, otherwise this field is ignored) tolerates the taint.
-          type: integer
-          nullable: true
+          type:
+          - integer
+          - 'null'
           example: '10'
-    MatchExpressionOperator:
-      description: Represents a key's relationship to a set of values (mandatory).
-      type: string
-      enum:
-      - In
-      - NotIn
-      - Exists
-      - DoesNotExist
-      - Gt
-      - Lt
-    Pod1:
-      allOf:
-      - $ref: '#/components/schemas/PodSyncFields'
-      - $ref: '#/components/schemas/PodComputedFields'
-      - $ref: '#/components/schemas/PodVerbosityFields'
-    GpuRequestType:
-      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
-      type: string
-      minLength: 1
-      enum:
-      - portion
-      - memory
-      nullable: true
-    Container1:
-      type: object
-      required:
-      - name
-      - image
-      properties:
-        name:
-          type: string
-          example: alpine
-        image:
-          type: string
-          example: alpine:latest
-        startedAt:
-          type: string
-          nullable: true
-          format: date-time
-          example: '2022-01-01T03:49:52.531Z'
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    HistogramSeries:
-      type: object
-      required:
-      - type
-      - values
-      properties:
-        type:
-          type: string
-          description: specifies what data returned
-          example: NIM_TIME_TO_FIRST_TOKEN_SECONDS
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistogramValue'
-    PodRequestResources:
-      type: object
-      nullable: true
-      properties:
-        gpuRequestType:
-          $ref: '#/components/schemas/GpuRequestType'
-        gpu:
-          $ref: '#/components/schemas/RequestResourceCores'
-        gpuMemory:
-          $ref: '#/components/schemas/RequestResourceQuantity'
-        cpu:
-          $ref: '#/components/schemas/RequestResourceCores'
-        cpuMemory:
-          $ref: '#/components/schemas/RequestResourceQuantity'
-        extendedResources:
-          $ref: '#/components/schemas/WorkloadsExtendedResources'
-    PodPreferredNodeSelectorTerm:
-      type: object
-      description: An empty preferred scheduling term matches all objects with implicit weight 0 (i.e. it's a no-op). A null preferred scheduling term matches no objects (i.e. is also a no-op).
-      properties:
-        weight:
-          description: Weight associated with matching the corresponding nodeSelectorTerm, in the range 1-100.
-          type: number
-        preference:
-          $ref: '#/components/schemas/NodeSelectorTerm'
-    HistogramValue:
-      type: object
-      required:
-      - timestamp
-      - data
-      properties:
-        timestamp:
-          type: string
-          format: date-time
-          nullable: true
-        data:
-          type: object
-          additionalProperties:
-            type: string
-    TenantId:
-      description: The id of the tenant.
-      type: integer
-      format: int32
-      example: 1001
     PodVerbosity:
       type: string
       enum:
       - brief
       - full
       default: brief
-    ClusterId:
-      description: The id of the cluster.
-      type: string
-      format: uuid
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    PodTolerations:
-      type: array
-      items:
-        $ref: '#/components/schemas/PodToleration'
-      x-schema-name: Tolerations
-    NodeSelectorTerm:
-      type: object
-      description: A null or empty node selector term matches no objects. The requirements of them are ANDed.
-      properties:
-        matchExpressions:
-          description: A list of node selector requirements by node's labels.
-          type: array
-          items:
-            $ref: '#/components/schemas/MatchExpression'
-      nullable: true
-    PodSyncFields:
-      type: object
-      required:
-      - name
-      - priorityClassName
-      - id
-      - workloadId
-      - clusterId
-      - createdAt
-      - containers
-      - k8sPhase
-      properties:
-        name:
-          type: string
-          example: pod-of-a-very-important-job
-        priorityClassName:
-          type: string
-          example: high-priority
-        id:
-          type: string
-          format: uuid
-        workloadId:
-          type: string
-          format: uuid
-        revisionId:
-          type: string
-          format: uuid
-          nullable: true
-        clusterId:
-          $ref: '#/components/schemas/ClusterId'
-        projectId:
-          type: string
-          example: '1'
-        nodeName:
-          type: string
-          nullable: true
-          example: gpu-node-1
-        createdAt:
-          type: string
-          format: date-time
-          example: '2022-01-01T03:49:52.531Z'
-        completedAt:
-          type: string
-          nullable: true
-          format: date-time
-          example: '2022-01-01T03:49:52.531Z'
-        containers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Container1'
-        currentNodePool:
-          type: string
-          nullable: true
-          example: default
-        requestedNodePools:
-          type: array
-          items:
-            type: string
-            example: default
-        requestedResources:
-          $ref: '#/components/schemas/PodRequestResources'
-        allocatedResources:
-          $ref: '#/components/schemas/AllocatedResources'
-        tolerations:
-          $ref: '#/components/schemas/PodTolerations'
-        k8sPhase:
-          type: string
-          example: Pending
-        ip:
-          type: string
-          nullable: true
-          example: 10.244.1.1
-        nodeAffinity:
-          $ref: '#/components/schemas/PodNodeAffinity'
-    RequestResourceCores:
+    PodVerbosityFields:
       type: object
       properties:
-        limit:
-          type: number
-          nullable: true
-          format: double
-          example: 1.5
-        request:
-          type: number
-          nullable: true
-          format: double
-          example: 1
-      nullable: true
-    WorkloadsExtendedResources:
-      description: Set of extended resources with their quantity
-      type: array
-      items:
-        $ref: '#/components/schemas/WorkloadsExtendedResource'
-      nullable: true
-    PodMetricType:
-      type: string
-      description: Specify which data to request.
-      enum:
-      - GPU_UTILIZATION_PER_GPU
-      - GPU_UTILIZATION
-      - GPU_MEMORY_USAGE_BYTES_PER_GPU
-      - GPU_MEMORY_USAGE_BYTES
-      - CPU_USAGE_CORES
-      - CPU_MEMORY_USAGE_BYTES
-      - GPU_GRAPHICS_ENGINE_ACTIVITY_PER_GPU
-      - GPU_SM_ACTIVITY_PER_GPU
-      - GPU_SM_OCCUPANCY_PER_GPU
-      - GPU_TENSOR_ACTIVITY_PER_GPU
-      - GPU_FP64_ENGINE_ACTIVITY_PER_GPU
-      - GPU_FP32_ENGINE_ACTIVITY_PER_GPU
-      - GPU_FP16_ENGINE_ACTIVITY_PER_GPU
-      - GPU_MEMORY_BANDWIDTH_UTILIZATION_PER_GPU
-      - GPU_NVLINK_TRANSMITTED_BANDWIDTH_PER_GPU
-      - GPU_NVLINK_RECEIVED_BANDWIDTH_PER_GPU
-      - GPU_PCIE_TRANSMITTED_BANDWIDTH_PER_GPU
-      - GPU_PCIE_RECEIVED_BANDWIDTH_PER_GPU
-      - GPU_SWAP_MEMORY_BYTES_PER_GPU
-      - NIM_NUM_REQUESTS_RUNNING
-      - NIM_NUM_REQUESTS_WAITING
-      - NIM_NUM_REQUEST_MAX
-      - NIM_REQUEST_SUCCESS_TOTAL
-      - NIM_REQUEST_FAILURE_TOTAL
-      - NIM_GPU_CACHE_USAGE_PERC
-      - NIM_TIME_TO_FIRST_TOKEN_SECONDS
-      - NIM_E2E_REQUEST_LATENCY_SECONDS
-      - NIM_TIME_TO_FIRST_TOKEN_SECONDS_PERCENTILES
-      - NIM_E2E_REQUEST_LATENCY_SECONDS_PERCENTILES
-      - NVLINK_BANDWIDTH_TOTAL
-      - NVLINK_BANDWIDTH_TOTAL_PER_GPU
+        projectName:
+          type: string
+          example: my-project
+        workloadName:
+          type: string
+          example: my-workload
     MetricsCompositeResponse:
       type: object
       required:
@@ -548,8 +361,9 @@ components:
           items:
             $ref: '#/components/schemas/MeasurementResponse'
         histogram:
-          type: array
-          nullable: true
+          type:
+          - array
+          - 'null'
           items:
             $ref: '#/components/schemas/HistogramSeries'
       example:
@@ -601,12 +415,36 @@ components:
               p50: '0.0823'
               p90: '0.2134'
               p99: '0.3156'
+    Pods1:
+      type: array
+      items:
+        $ref: '#/components/schemas/Pod1'
+      x-schema-name: Pods
+    PodTolerations:
+      type: array
+      items:
+        $ref: '#/components/schemas/PodToleration'
+      x-schema-name: Tolerations
+    WorkloadsExtendedResources:
+      description: Set of extended resources with their quantity
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/WorkloadsExtendedResource'
+    Pod1:
+      allOf:
+      - $ref: '#/components/schemas/PodSyncFields'
+      - $ref: '#/components/schemas/PodComputedFields'
+      - $ref: '#/components/schemas/PodVerbosityFields'
     PodNodeAffinity:
       type: object
       description: group of node affinity scheduling rules.
       properties:
         required:
-          type: object
+          type:
+          - object
+          - 'null'
           description: If the affinity requirements specified by this field are not met at scheduling time, the pod will not be scheduled onto the node. If the affinity requirements specified by this field cease to be met at some point during pod execution (e.g. due to an update), the system may or may not try to eventually evict the pod from its node.
           properties:
             nodeSelectorTerms:
@@ -614,9 +452,10 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/NodeSelectorTerm'
-          nullable: true
         preferred:
-          type: object
+          type:
+          - object
+          - 'null'
           description: The scheduler will prefer to schedule pods to nodes that satisfy the affinity expressions specified by this field, but it may choose a node that violates one or more of the expressions. The node that is most preferred is the one with the greatest sum of weights, i.e. for each node that meets all of the scheduling requirements (resource request, requiredDuringScheduling affinity expressions, etc.), compute a sum by iterating through the elements of this field and adding "weight" to the sum if the node matches the corresponding matchExpressions; the node(s) with the highest sum are the most preferred.
           properties:
             nodeSelectorTerms:
@@ -624,108 +463,98 @@ components:
               type: array
               items:
                 $ref: '#/components/schemas/PodPreferredNodeSelectorTerm'
-          nullable: true
-    RequestResourceQuantity:
+    NodeSelectorTerm:
+      type:
+      - object
+      - 'null'
+      description: A null or empty node selector term matches no objects. The requirements of them are ANDed.
+      properties:
+        matchExpressions:
+          description: A list of node selector requirements by node's labels.
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchExpression'
+    MatchExpression:
+      type:
+      - object
+      - 'null'
+      description: A selector that contains values, a key, and an operator that relates the key and values.
+      properties:
+        key:
+          description: The label key that the selector applies to (mandatory).
+          type: string
+          pattern: .*
+        operator:
+          $ref: '#/components/schemas/MatchExpressionOperator'
+        values:
+          description: An array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. If the operator is Gt or Lt, the values array must have a single element, which will be interpreted as an integer.
+          type: array
+          items:
+            type: string
+            pattern: .*
+      required:
+      - key
+      - operator
+    PodRequestResources:
+      type:
+      - object
+      - 'null'
+      properties:
+        gpuRequestType:
+          $ref: '#/components/schemas/GpuRequestType'
+        gpu:
+          $ref: '#/components/schemas/RequestResourceCores'
+        gpuMemory:
+          $ref: '#/components/schemas/RequestResourceQuantity'
+        cpu:
+          $ref: '#/components/schemas/RequestResourceCores'
+        cpuMemory:
+          $ref: '#/components/schemas/RequestResourceQuantity'
+        extendedResources:
+          $ref: '#/components/schemas/WorkloadsExtendedResources'
+    HistogramValue:
       type: object
+      required:
+      - timestamp
+      - data
+      properties:
+        timestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        data:
+          type: object
+          additionalProperties:
+            type: string
+    RequestResourceQuantity:
+      type:
+      - object
+      - 'null'
       properties:
         limit:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
           example: 2G
         request:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
           example: 200M
-      nullable: true
-    WorkloadsExtendedResource:
-      description: Quantity of an extended resource.
-      type: object
-      properties:
-        resource:
-          description: The name of the extended resource (mandatory)
-          type: string
-          example: hardware-vendor.example/foo
-          minLength: 1
-          nullable: true
-        quantity:
-          description: The requested quantity for the given resource.
-          type: string
-          example: 2
-          minLength: 1
-          nullable: true
-        exclude:
-          description: Whether to exclude this extended resource from the workload. This is necessary in case the extended resource is inherited from the policy defaults and it is desired not to include it in this workload.
-          type: boolean
-          example: false
-          nullable: true
-      nullable: true
-    PodVerbosityFields:
-      type: object
-      properties:
-        projectName:
-          type: string
-          example: my-project
-        workloadName:
-          type: string
-          example: my-workload
-    PodComputedFields:
-      type: object
-      required:
-      - tenantId
-      - k8sPhaseUpdatedAt
-      - updatedAt
-      properties:
-        tenantId:
-          $ref: '#/components/schemas/TenantId'
-        k8sPhaseUpdatedAt:
-          type: string
-          format: date-time
-          example: '2022-06-08T11:28:24.131Z'
-        updatedAt:
-          type: string
-          format: date-time
-          example: '2022-06-08T11:28:24.131Z'
-        deletedAt:
-          type: string
-          format: date-time
-          example: '2022-08-12T19:28:24.131Z'
-          nullable: true
-    Pods1:
-      type: array
-      items:
-        $ref: '#/components/schemas/Pod1'
-      x-schema-name: Pods
-    AllocatedResources:
-      type: object
-      nullable: true
-      properties:
-        gpu:
-          type: number
-          nullable: true
-          format: double
-          example: 1.5
-          description: Required if and only if gpuRequestType is portion. States the number of GPUs allocated for the created workload. The default is no allocated GPUs.
-        gpuMemory:
-          type: string
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          nullable: true
-          example: 200Mi
-        cpu:
-          type: number
-          nullable: true
-          format: double
-          description: States the amount of CPU cores used by the workload running.
-          example: 0.5
-        cpuMemory:
-          type: string
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          nullable: true
-          example: 0B
-        extendedResources:
-          $ref: '#/components/schemas/WorkloadsExtendedResources'
-    MeasurementResponse:
+    MatchExpressionOperator:
+      description: Represents a key's relationship to a set of values (mandatory).
+      type: string
+      enum:
+      - In
+      - NotIn
+      - Exists
+      - DoesNotExist
+      - Gt
+      - Lt
+    HistogramSeries:
       type: object
       required:
       - type
@@ -734,137 +563,293 @@ components:
         type:
           type: string
           description: specifies what data returned
-          example: ALLOCATED_GPU
-        labels:
-          type: object
-          nullable: true
-          description: labels of the metric measurement
-          example: '{''gpu'': ''3''}'
-          additionalProperties:
-            type: string
+          example: NIM_TIME_TO_FIRST_TOKEN_SECONDS
         values:
           type: array
-          nullable: true
           items:
-            type: object
-            required:
-            - value
-            - timestamp
-            properties:
-              value:
-                type: string
-                example: '85'
-              timestamp:
-                type: string
-                format: date-time
-                nullable: true
-                example: '2023-06-06 12:09:18.211'
-  parameters:
-    PodId:
-      name: podId
-      in: path
-      description: The requested pod id.
-      schema:
-        type: string
-        format: uuid
-      required: true
-    StartRequired:
-      name: start
-      in: query
-      description: Start date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-06T12:09:18.211Z'
-    Completed:
-      name: completed
-      in: query
-      description: Return only completed resources when 'true', return only non-completed resources when 'false'. By default, or when empty, returns all resources.
-      schema:
-        type: string
-        default: all
-    EndRequired:
-      name: end
-      in: query
-      description: End date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-07T12:09:18.211Z'
-    PodsFilter:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results using a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contains, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`.
-      schema:
-        type: array
-        items:
+            $ref: '#/components/schemas/HistogramValue'
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    PodSyncFields:
+      type: object
+      required:
+      - name
+      - priorityClassName
+      - id
+      - workloadId
+      - clusterId
+      - createdAt
+      - containers
+      - k8sPhase
+      properties:
+        name:
           type: string
-          pattern: ^(clusterId|workloadId|revisionId|nodeName|currentNodepool|createdAt|completedAt|deletedAt)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-        example:
-        - nodeName!=some-node-name
-      explode: false
-    Search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test project
-    RevisionId:
-      name: revisionId
-      in: path
-      required: true
-      description: The  Universally Unique Identifier (UUID) of the revision.
-      schema:
-        type: string
-        format: uuid
-    PodsQueryVerbosity:
-      name: verbosity
-      in: query
-      required: false
-      description: 'response verbosity level. if full, the response includes workloadName and projectName fields.
-
-        '
-      example: full
-      schema:
-        $ref: '#/components/schemas/PodVerbosity'
-    Deleted:
-      name: deleted
-      in: query
-      description: Return only deleted resources when `true`.
-      schema:
-        type: boolean
-    PodsSort:
-      name: sortBy
-      in: query
-      required: false
-      description: Sort results using a parameter.
-      schema:
-        type: string
-        enum:
-        - clusterId
-        - workloadId
-        - revisionId
-        - nodeName
-        - currentNodepool
-        - createdAt
-        - completedAt
-        - deletedAt
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
+          example: pod-of-a-very-important-job
+        priorityClassName:
+          type: string
+          example: high-priority
+        id:
+          type: string
+          format: uuid
+        workloadId:
+          type: string
+          format: uuid
+        revisionId:
+          type:
+          - string
+          - 'null'
+          format: uuid
+        clusterId:
+          $ref: '#/components/schemas/ClusterId'
+        projectId:
+          type: string
+          example: '1'
+        nodeName:
+          type:
+          - string
+          - 'null'
+          example: gpu-node-1
+        createdAt:
+          type: string
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        completedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        containers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Container1'
+        currentNodePool:
+          type:
+          - string
+          - 'null'
+          example: default
+        requestedNodePools:
+          type: array
+          items:
+            type: string
+            example: default
+        requestedResources:
+          $ref: '#/components/schemas/PodRequestResources'
+        allocatedResources:
+          $ref: '#/components/schemas/AllocatedResources'
+        tolerations:
+          $ref: '#/components/schemas/PodTolerations'
+        k8sPhase:
+          type: string
+          example: Pending
+        ip:
+          type:
+          - string
+          - 'null'
+          example: 10.244.1.1
+        nodeAffinity:
+          $ref: '#/components/schemas/PodNodeAffinity'
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    PodPreferredNodeSelectorTerm:
+      type: object
+      description: An empty preferred scheduling term matches all objects with implicit weight 0 (i.e. it's a no-op). A null preferred scheduling term matches no objects (i.e. is also a no-op).
+      properties:
+        weight:
+          description: Weight associated with matching the corresponding nodeSelectorTerm, in the range 1-100.
+          type: number
+        preference:
+          $ref: '#/components/schemas/NodeSelectorTerm'
+    PodMetricType:
+      type: string
+      description: Specify which data to request.
+      enum:
+      - GPU_UTILIZATION_PER_GPU
+      - GPU_UTILIZATION
+      - GPU_MEMORY_USAGE_BYTES_PER_GPU
+      - GPU_MEMORY_USAGE_BYTES
+      - CPU_USAGE_CORES
+      - CPU_MEMORY_USAGE_BYTES
+      - GPU_GRAPHICS_ENGINE_ACTIVITY_PER_GPU
+      - GPU_SM_ACTIVITY_PER_GPU
+      - GPU_SM_OCCUPANCY_PER_GPU
+      - GPU_TENSOR_ACTIVITY_PER_GPU
+      - GPU_FP64_ENGINE_ACTIVITY_PER_GPU
+      - GPU_FP32_ENGINE_ACTIVITY_PER_GPU
+      - GPU_FP16_ENGINE_ACTIVITY_PER_GPU
+      - GPU_MEMORY_BANDWIDTH_UTILIZATION_PER_GPU
+      - GPU_NVLINK_TRANSMITTED_BANDWIDTH_PER_GPU
+      - GPU_NVLINK_RECEIVED_BANDWIDTH_PER_GPU
+      - GPU_PCIE_TRANSMITTED_BANDWIDTH_PER_GPU
+      - GPU_PCIE_RECEIVED_BANDWIDTH_PER_GPU
+      - GPU_SWAP_MEMORY_BYTES_PER_GPU
+      - NIM_NUM_REQUESTS_RUNNING
+      - NIM_NUM_REQUESTS_WAITING
+      - NIM_NUM_REQUEST_MAX
+      - NIM_REQUEST_SUCCESS_TOTAL
+      - NIM_REQUEST_FAILURE_TOTAL
+      - NIM_GPU_CACHE_USAGE_PERC
+      - NIM_TIME_TO_FIRST_TOKEN_SECONDS
+      - NIM_E2E_REQUEST_LATENCY_SECONDS
+      - NIM_TIME_TO_FIRST_TOKEN_SECONDS_PERCENTILES
+      - NIM_E2E_REQUEST_LATENCY_SECONDS_PERCENTILES
+      - NVLINK_BANDWIDTH_TOTAL
+      - NVLINK_BANDWIDTH_TOTAL_PER_GPU
+    GpuRequestType:
+      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      enum:
+      - portion
+      - memory
+    RequestResourceCores:
+      type:
+      - object
+      - 'null'
+      properties:
+        limit:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: 1.5
+        request:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: 1
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    Container1:
+      type: object
+      required:
+      - name
+      - image
+      properties:
+        name:
+          type: string
+          example: alpine
+        image:
+          type: string
+          example: alpine:latest
+        startedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+    AllocatedResources:
+      type:
+      - object
+      - 'null'
+      properties:
+        gpu:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: 1.5
+          description: Required if and only if gpuRequestType is portion. States the number of GPUs allocated for the created workload. The default is no allocated GPUs.
+        gpuMemory:
+          type:
+          - string
+          - 'null'
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 200Mi
+        cpu:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: States the amount of CPU cores used by the workload running.
+          example: 0.5
+        cpuMemory:
+          type:
+          - string
+          - 'null'
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 0B
+        extendedResources:
+          $ref: '#/components/schemas/WorkloadsExtendedResources'
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  parameters:
     PodMetricTypes:
       name: metricType
       in: query
@@ -875,14 +860,6 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/PodMetricType'
-    WorkloadId:
-      name: workloadId
-      in: path
-      required: true
-      description: The  Universally Unique Identifier (UUID) of the workload.
-      schema:
-        type: string
-        format: uuid
     NumberOfSamples:
       name: numberOfSamples
       in: query
@@ -905,6 +882,17 @@ components:
         default: 50
         minimum: 1
         maximum: 500
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
     Offset:
       name: offset
       in: query
@@ -914,61 +902,108 @@ components:
         type: integer
         format: int32
         example: 100
-  responses:
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
+    PodsFilter:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results using a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contains, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(clusterId|workloadId|revisionId|nodeName|currentNodepool|createdAt|completedAt|deletedAt)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - nodeName!=some-node-name
+      explode: false
+    EndRequired:
+      name: end
+      in: query
+      description: End date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-07T12:09:18.211Z'
+    Completed:
+      name: completed
+      in: query
+      description: Return only completed resources when 'true', return only non-completed resources when 'false'. By default, or when empty, returns all resources.
+      schema:
+        type: string
+        default: all
+    WorkloadId:
+      name: workloadId
+      in: path
+      required: true
+      description: The  Universally Unique Identifier (UUID) of the workload.
+      schema:
+        type: string
+        format: uuid
+    PodsQueryVerbosity:
+      name: verbosity
+      in: query
+      required: false
+      description: 'response verbosity level. if full, the response includes workloadName and projectName fields.
+
+        '
+      example: full
+      schema:
+        $ref: '#/components/schemas/PodVerbosity'
+    Search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test project
+    PodsSort:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results using a parameter.
+      schema:
+        type: string
+        enum:
+        - clusterId
+        - workloadId
+        - revisionId
+        - nodeName
+        - currentNodepool
+        - createdAt
+        - completedAt
+        - deletedAt
+    PodId:
+      name: podId
+      in: path
+      description: The requested pod id.
+      schema:
+        type: string
+        format: uuid
+      required: true
+    Deleted:
+      name: deleted
+      in: query
+      description: Return only deleted resources when `true`.
+      schema:
+        type: boolean
+    StartRequired:
+      name: start
+      in: query
+      description: Start date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-06T12:09:18.211Z'
+    RevisionId:
+      name: revisionId
+      in: path
+      required: true
+      description: The  Universally Unique Identifier (UUID) of the revision.
+      schema:
+        type: string
+        format: uuid
   securitySchemes:
     bearerAuth:
       type: http

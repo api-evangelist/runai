@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -289,6 +289,36 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
+    UserPostResponse:
+      type: object
+      required:
+      - id
+      - username
+      - tempPassword
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        tempPassword:
+          type: string
+      example:
+        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
+        username: test@run.ai
+        tempPassword: asdasidjn9d
+    Users1:
+      type: array
+      items:
+        $ref: '#/components/schemas/User2'
+    UsersFilterSortFields:
+      type: string
+      enum:
+      - username
+      - createdBy
+      - lastLogin
+      - creationTime
+      - lastUpdated
+      - type
     UserChangePasswordRequest:
       type: object
       required:
@@ -302,55 +332,6 @@ components:
       example:
         currentPassword: Abcd!234
         newPassword: Zxcv!567
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    UserCreationRequest1:
-      type: object
-      required:
-      - email
-      properties:
-        email:
-          type: string
-          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
-          description: The email of the user. Must be a valid email address.
-        resetPassword:
-          type: boolean
-          nullable: true
-        notify:
-          type: boolean
-          description: When true, send an email to the user. The email includes a link to reset the password.
-          nullable: true
-      example:
-        email: test@run.ai
-        resetPassword: false
-        notify: true
-    UsersFilterSortFields:
-      type: string
-      enum:
-      - username
-      - createdBy
-      - lastLogin
-      - creationTime
-      - lastUpdated
-      - type
-    Users1:
-      type: array
-      items:
-        $ref: '#/components/schemas/User2'
     User2:
       type: object
       required:
@@ -369,25 +350,30 @@ components:
         createdBy:
           type: string
         createdAt:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
-          nullable: true
         updatedAt:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
-          nullable: true
         lastLogin:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
-          nullable: true
         isLocal:
-          type: boolean
-          nullable: true
+          type:
+          - boolean
+          - 'null'
         groups:
-          type: array
+          type:
+          - array
+          - 'null'
           items:
             type: string
-          nullable: true
       example:
         id: 3434c-12323ab-4ce2ea6-b44fc-db344d
         username: test@run.ai
@@ -399,91 +385,63 @@ components:
         groups:
         - groupA
         - groupB
-    UserPostResponse:
+    UserCreationRequest1:
       type: object
       required:
-      - id
-      - username
-      - tempPassword
+      - email
       properties:
-        id:
+        email:
           type: string
-        username:
+          pattern: ^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$
+          description: The email of the user. Must be a valid email address.
+        resetPassword:
+          type:
+          - boolean
+          - 'null'
+        notify:
+          type:
+          - boolean
+          - 'null'
+          description: When true, send an email to the user. The email includes a link to reset the password.
+      example:
+        email: test@run.ai
+        resetPassword: false
+        notify: true
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
           type: string
-        tempPassword:
+        details:
           type: string
       example:
-        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
-        username: test@run.ai
-        tempPassword: asdasidjn9d
-  parameters:
-    usersSortBy:
-      name: sortBy
-      in: query
-      required: false
-      description: Sort results by a parameters.
-      schema:
-        $ref: '#/components/schemas/UsersFilterSortFields'
-    search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test@run
-    usersFilterBy:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are <= Less than or equal, >= Greater than or equal, =@ contains. Dates are in ISO 8601 timestamp format and available for operators <=, >= and ==.
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(username|createdBy|lastLogin|creationTime|lastUpdated|isLocal)(==|<=|>=|=@).+$
-        example:
-        - username=@test,lastLogin>=2024-09-24T00:00:00.00Z,isLocal==false
-      explode: false
-    userId:
-      name: userId
-      in: path
-      required: true
-      description: The id of the user
-      schema:
-        type: string
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 500
-        minimum: 1
-        maximum: 500
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
+        code: 400
+        message: Bad request - Resource should have a name
   responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
     404NotFound:
       description: The specified resource was not found
       content:
@@ -502,24 +460,6 @@ components:
           example:
             code: 500
             message: Something went wrong.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
     409Conflict:
       description: The specified resource already exists
       content:
@@ -529,15 +469,6 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
     400BadRequest:
       description: Bad request.
       content:
@@ -547,6 +478,82 @@ components:
           example:
             code: 400
             message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  parameters:
+    userId:
+      name: userId
+      in: path
+      required: true
+      description: The id of the user
+      schema:
+        type: string
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    usersSortBy:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results by a parameters.
+      schema:
+        $ref: '#/components/schemas/UsersFilterSortFields'
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 500
+        minimum: 1
+        maximum: 500
+    usersFilterBy:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are <= Less than or equal, >= Greater than or equal, =@ contains. Dates are in ISO 8601 timestamp format and available for operators <=, >= and ==.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(username|createdBy|lastLogin|creationTime|lastUpdated|isLocal)(==|<=|>=|=@).+$
+        example:
+        - username=@test,lastLogin>=2024-09-24T00:00:00.00Z,isLocal==false
+      explode: false
+    search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test@run
   securitySchemes:
     bearerAuth:
       type: http

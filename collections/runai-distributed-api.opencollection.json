@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Distributed API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Distributed",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a distributed training.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workloads/distributed",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to create a distributed training."
+        },
+        {
+          "info": {
+            "name": "Get distributed training's data. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/distributed/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Retrieve the details of a distributed training by workload id."
+        },
+        {
+          "info": {
+            "name": "Delete a distributed training by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/workloads/distributed/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Use to delete a distributed training by workload id."
+        },
+        {
+          "info": {
+            "name": "Suspend a distributed training.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workloads/distributed/:workloadId/suspend",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Suspend a distributed training from running using a workload id."
+        },
+        {
+          "info": {
+            "name": "Resume a distributed training.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workloads/distributed/:workloadId/resume",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Resume a distributed training that was suspended using a workload id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

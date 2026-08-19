@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -142,74 +142,6 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  schemas:
-    Settings:
-      type: object
-      additionalProperties: true
-    SettingsGetResponse:
-      type: object
-      properties:
-        autoRedirectSSO:
-          $ref: '#/components/schemas/AutoRedirectSsoSetting'
-        browserSessionTimeout:
-          $ref: '#/components/schemas/BrowserSessionTimeoutSetting'
-        logoutRedirectUri:
-          $ref: '#/components/schemas/LogoutRedirectUriSetting'
-    AutoRedirectSsoSetting:
-      type: object
-      properties:
-        enabled:
-          type: boolean
-          nullable: true
-        idpAlias:
-          type: string
-          pattern: ^[a-z0-9_-]*$
-          nullable: true
-      example:
-        enabled: false
-        idpAlias: oidc
-    LogoutRedirectUriSetting:
-      type: object
-      description: Settings for configuring the logout redirect URI that determines where users are redirected after logging out.
-      properties:
-        uri:
-          type: string
-          description: The URI where users will be redirected after logging out of the application
-          nullable: true
-          pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
-          example: https://example.com/logout
-    settingsKeyEnum:
-      type: string
-      enum:
-      - autoRedirectSSO
-      - browserSessionTimeout
-      - logoutRedirectUri
-    BrowserSessionTimeoutSetting:
-      type: object
-      description: Settings for user session timeout configuration that manages automatic logout after periods of inactivity.
-      properties:
-        idleTimeout:
-          type: number
-          description: Duration in minutes that a user can remain inactive before their browser session automatically expires and requires re-authentication
-          default: 60
-          minimum: 1
-          nullable: true
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
   responses:
     401Unauthorized:
       description: Unauthorized
@@ -220,15 +152,6 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
     500InternalServerError:
       description: unexpected error
       content:
@@ -256,6 +179,15 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -265,6 +197,78 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
+  schemas:
+    AutoRedirectSsoSetting:
+      type: object
+      properties:
+        enabled:
+          type:
+          - boolean
+          - 'null'
+        idpAlias:
+          type:
+          - string
+          - 'null'
+          pattern: ^[a-z0-9_-]*$
+      example:
+        enabled: false
+        idpAlias: oidc
+    SettingsGetResponse:
+      type: object
+      properties:
+        autoRedirectSSO:
+          $ref: '#/components/schemas/AutoRedirectSsoSetting'
+        browserSessionTimeout:
+          $ref: '#/components/schemas/BrowserSessionTimeoutSetting'
+        logoutRedirectUri:
+          $ref: '#/components/schemas/LogoutRedirectUriSetting'
+    BrowserSessionTimeoutSetting:
+      type: object
+      description: Settings for user session timeout configuration that manages automatic logout after periods of inactivity.
+      properties:
+        idleTimeout:
+          type:
+          - number
+          - 'null'
+          description: Duration in minutes that a user can remain inactive before their browser session automatically expires and requires re-authentication
+          default: 60
+          minimum: 1
+    Settings:
+      type: object
+      additionalProperties: true
+    settingsKeyEnum:
+      type: string
+      enum:
+      - autoRedirectSSO
+      - browserSessionTimeout
+      - logoutRedirectUri
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    LogoutRedirectUriSetting:
+      type: object
+      description: Settings for configuring the logout redirect URI that determines where users are redirected after logging out.
+      properties:
+        uri:
+          type:
+          - string
+          - 'null'
+          description: The URI where users will be redirected after logging out of the application
+          pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
+          example: https://example.com/logout
   parameters:
     settingsKey:
       name: key

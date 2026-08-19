@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -227,42 +227,44 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    TokenRequest:
-      type: object
-      properties:
-        grantType:
-          $ref: '#/components/schemas/TokenRequestGrantTypeEnum'
-        appID:
-          deprecated: true
-          type: string
-        appSecret:
-          deprecated: true
-          type: string
-        code:
-          type: string
-        redirectUri:
-          type: string
-        refreshToken:
-          type: string
-        username:
-          type: string
-        password:
-          type: string
-        clientID:
-          type: string
-        clientSecret:
-          type: string
-        externalToken:
-          type: string
-    AppTokenResponse:
+    OAuth2TokenResponse:
       type: object
       required:
       - access_token
-      - id_token
+      - token_type
       properties:
         access_token:
           type: string
+          description: The access token issued by the authorization server
+        token_type:
+          type: string
+          description: The type of the token issued (typically "Bearer")
+          example: Bearer
+        expires_in:
+          type: integer
+          description: The lifetime in seconds of the access token
+          example: 3600
+        refresh_token:
+          type: string
+          description: The refresh token, which can be used to obtain new access tokens
         id_token:
+          type: string
+          description: ID Token value associated with the authenticated session (OpenID Connect)
+        scope:
+          type: string
+          description: The scope of the access token
+    AppTokenRequest:
+      type: object
+      required:
+      - id
+      - name
+      - secret
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        secret:
           type: string
     OAuth2Error:
       type: object
@@ -290,53 +292,33 @@ components:
         error_uri:
           type: string
           description: URI identifying a human-readable web page with information about the error
-    AppTokenRequest:
+    TokenRequest:
       type: object
-      required:
-      - id
-      - name
-      - secret
       properties:
-        id:
+        grantType:
+          $ref: '#/components/schemas/TokenRequestGrantTypeEnum'
+        appID:
+          deprecated: true
           type: string
-        name:
+        appSecret:
+          deprecated: true
           type: string
-        secret:
+        code:
           type: string
-    TokenRequestGrantTypeEnum:
-      enum:
-      - app_token
-      - client_credentials
-      - refresh_token
-      - exchange_token
-      - password
-      - external_token_exchange
-    OAuth2TokenResponse:
-      type: object
-      required:
-      - access_token
-      - token_type
-      properties:
-        access_token:
+        redirectUri:
           type: string
-          description: The access token issued by the authorization server
-        token_type:
+        refreshToken:
           type: string
-          description: The type of the token issued (typically "Bearer")
-          example: Bearer
-        expires_in:
-          type: integer
-          description: The lifetime in seconds of the access token
-          example: 3600
-        refresh_token:
+        username:
           type: string
-          description: The refresh token, which can be used to obtain new access tokens
-        id_token:
+        password:
           type: string
-          description: ID Token value associated with the authenticated session (OpenID Connect)
-        scope:
+        clientID:
           type: string
-          description: The scope of the access token
+        clientSecret:
+          type: string
+        externalToken:
+          type: string
     TokenResponse:
       type: object
       properties:
@@ -349,6 +331,14 @@ components:
         expiresIn:
           type: integer
           description: Token lifetime in seconds
+    TokenRequestGrantTypeEnum:
+      enum:
+      - app_token
+      - client_credentials
+      - refresh_token
+      - exchange_token
+      - password
+      - external_token_exchange
     Error:
       required:
       - code
@@ -365,6 +355,16 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
+    AppTokenResponse:
+      type: object
+      required:
+      - access_token
+      - id_token
+      properties:
+        access_token:
+          type: string
+        id_token:
+          type: string
   responses:
     500InternalServerError:
       description: unexpected error

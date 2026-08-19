@@ -1,0 +1,303 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Clusters API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clusters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of clusters.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/clusters",
+            "params": [
+              {
+                "name": "verbosity",
+                "value": "full",
+                "type": "query",
+                "description": "response verbosity level.\n"
+              },
+              {
+                "name": "includeRequestedForDelete",
+                "value": "true",
+                "type": "query",
+                "description": "When true, includes clusters that are marked for deletion"
+              }
+            ]
+          },
+          "docs": "Retrieve a list of clusters with details."
+        },
+        {
+          "info": {
+            "name": "Create a cluster.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/clusters",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to create a Kubernetes cluster."
+        },
+        {
+          "info": {
+            "name": "Get cluster by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/clusters/:clusterUuid",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "verbosity",
+                "value": "full",
+                "type": "query",
+                "description": "response verbosity level.\n"
+              }
+            ]
+          },
+          "docs": "Retrieve cluster details by Universally Unique Identifier (UUID)."
+        },
+        {
+          "info": {
+            "name": "Update a cluster by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/clusters/:clusterUuid",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to update the details of a Kubernetes cluster by Universally Unique Identifier (UUID)."
+        },
+        {
+          "info": {
+            "name": "Delete a cluster by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/clusters/:clusterUuid",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "force",
+                "value": "true",
+                "type": "query",
+                "description": "if true will force cluster instant deletion otherwise will start cluster graceful deletion process.\n"
+              }
+            ]
+          },
+          "docs": "Use to delete a cluster by Universally Unique Identifier (UUID). \nWill return 202 for success if this api was called on a cluster that its version is >=2.20, \nand force query param is false or not provided.\nWill return 204 for success if force query param is true, or if cluster is in a version < 2.20\n"
+        },
+        {
+          "info": {
+            "name": "Get the cluster metrics data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/clusters/:clusterUuid/metrics",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              },
+              {
+                "name": "metricType",
+                "value": "",
+                "type": "query",
+                "description": "specifies what data to request"
+              },
+              {
+                "name": "groupBy",
+                "value": "Category",
+                "type": "query",
+                "description": "Labels to group the returned metrics data by. Grouping availability depends on the selected metric type. Supported values: \"category\" (workload category) or \"node pool\".\n"
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the nodepool."
+              }
+            ]
+          },
+          "docs": "Retrieve the metrics data for a Kubernetes cluster by Universally Unique Identifier (UUID)."
+        },
+        {
+          "info": {
+            "name": "Retrieve the installation instructions of a cluster by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/clusters/:clusterUuid/cluster-install-info",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "query",
+                "description": "The cluster version to install"
+              },
+              {
+                "name": "remoteClusterUrl",
+                "value": "",
+                "type": "query",
+                "description": "The remote URL of the runai cluster"
+              }
+            ]
+          },
+          "docs": "Use to retrieve installation instruction for a cluster by Universally Unique Identifier (UUID). \nSupports clusters version 2.15 or above.\n"
+        },
+        {
+          "info": {
+            "name": "Get cluster installation file by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:cluster_uuid/installfile",
+            "params": [
+              {
+                "name": "cluster_uuid",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the cluster."
+              },
+              {
+                "name": "cloud",
+                "value": "",
+                "type": "query",
+                "description": "Cloud type identifier."
+              },
+              {
+                "name": "clusterip",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of IP addresses that provide access to the cluster."
+              },
+              {
+                "name": "format",
+                "value": "",
+                "type": "query",
+                "description": "Format of the output file."
+              }
+            ]
+          },
+          "docs": "Retrieve the installation values file of a cluster by Retrieve the installation values file of a given cluster by ID. \nSupports clusters 2.13 and lower.\n"
+        },
+        {
+          "info": {
+            "name": "Get cluster metrics.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterUuid/metrics",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start of time range to fetch data from in UTC format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End of time range to fetch data from in UTC format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by unique nodepool name."
+              }
+            ]
+          },
+          "docs": "Get current cluster metrics. If time range query parameters supplied, then historical data will be returned as well. Deprecated - please use api/v1/clusters/{clusterUuid}/metrics"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

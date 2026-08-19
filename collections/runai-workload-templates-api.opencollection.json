@@ -1,0 +1,742 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Workload templates API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workload templates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List templates. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by parameter."
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              },
+              {
+                "name": "complyToProject",
+                "value": "",
+                "type": "query",
+                "description": "Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type."
+              },
+              {
+                "name": "complyToWorkloadType",
+                "value": "",
+                "type": "query",
+                "description": "Include workload creation compliance information of an asset, for a given workload type, as part of the response. To check compliance, you need to provide both project id and workload type."
+              },
+              {
+                "name": "complyToReplicaType",
+                "value": "",
+                "type": "query",
+                "description": "Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well."
+              }
+            ]
+          },
+          "docs": "Retrieve all available templates."
+        },
+        {
+          "info": {
+            "name": "Template name availability",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/name-availability",
+            "params": [
+              {
+                "name": "templateName",
+                "value": "",
+                "type": "query",
+                "description": "The name of the template."
+              },
+              {
+                "name": "scopeType",
+                "value": "",
+                "type": "query",
+                "description": "The resource scope type to filter by."
+              },
+              {
+                "name": "scopeId",
+                "value": "",
+                "type": "query",
+                "description": "filter by scope id"
+              }
+            ]
+          },
+          "docs": "Check if a given template name creates naming conflicts under the given scope. Returns conflict (409) in case the name is not available, or 204 (no content) if it is ok."
+        },
+        {
+          "info": {
+            "name": "Get a template, any type. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ]
+          },
+          "docs": "Retrieve the details of a template using its id."
+        },
+        {
+          "info": {
+            "name": "Count templates. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/count",
+            "params": [
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "Get the total number of templates."
+        },
+        {
+          "info": {
+            "name": "List all workspace templates. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/workspaces",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by parameter."
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              },
+              {
+                "name": "complyToProject",
+                "value": "",
+                "type": "query",
+                "description": "Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type."
+              }
+            ]
+          },
+          "docs": "List all workspace templates."
+        },
+        {
+          "info": {
+            "name": "Create a new workspace template. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workload-templates/workspaces",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new workspace template."
+        },
+        {
+          "info": {
+            "name": "Retrieve a specific workspace template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/workspaces/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific workspace template by ID."
+        },
+        {
+          "info": {
+            "name": "Update a workspace template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/workload-templates/workspaces/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a workspace template by ID."
+        },
+        {
+          "info": {
+            "name": "Patch a workspace template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v1/workload-templates/workspaces/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch a workspace template by ID."
+        },
+        {
+          "info": {
+            "name": "Delete a workspace template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/workload-templates/workspaces/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ]
+          },
+          "docs": "Delete a workspace template by ID."
+        },
+        {
+          "info": {
+            "name": "List all training templates. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/trainings",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by parameter."
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              },
+              {
+                "name": "complyToProject",
+                "value": "",
+                "type": "query",
+                "description": "Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type."
+              }
+            ]
+          },
+          "docs": "List all training templates."
+        },
+        {
+          "info": {
+            "name": "Create a new training template. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workload-templates/trainings",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new training template."
+        },
+        {
+          "info": {
+            "name": "Retrieve a specific training template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/trainings/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ]
+          },
+          "docs": "Retrieve a specific training template by ID."
+        },
+        {
+          "info": {
+            "name": "Update a training template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/workload-templates/trainings/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a training template by ID."
+        },
+        {
+          "info": {
+            "name": "Patch a training template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v1/workload-templates/trainings/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch a training template by ID."
+        },
+        {
+          "info": {
+            "name": "Delete a training template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/workload-templates/trainings/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ]
+          },
+          "docs": "Delete a training template by ID."
+        },
+        {
+          "info": {
+            "name": "List all distributed training templates. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/distributed",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by parameter."
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              },
+              {
+                "name": "complyToProject",
+                "value": "",
+                "type": "query",
+                "description": "Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type."
+              },
+              {
+                "name": "complyToReplicaType",
+                "value": "",
+                "type": "query",
+                "description": "Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well."
+              }
+            ]
+          },
+          "docs": "List all distributed training templates."
+        },
+        {
+          "info": {
+            "name": "Create a new distributed training template. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workload-templates/distributed",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new distributed training template."
+        },
+        {
+          "info": {
+            "name": "Get a specific distributed training template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/distributed/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ]
+          },
+          "docs": "Get a specific distributed training template by ID."
+        },
+        {
+          "info": {
+            "name": "Update a distributed training template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/workload-templates/distributed/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a distributed training template by ID."
+        },
+        {
+          "info": {
+            "name": "Patch a distributed training template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v1/workload-templates/distributed/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch a distributed training template by ID."
+        },
+        {
+          "info": {
+            "name": "Delete a distributed training template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/workload-templates/distributed/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ]
+          },
+          "docs": "Delete a distributed training template by ID."
+        },
+        {
+          "info": {
+            "name": "List all inference templates. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/inferences",
+            "params": [
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by parameter."
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              },
+              {
+                "name": "complyToProject",
+                "value": "",
+                "type": "query",
+                "description": "Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type."
+              }
+            ]
+          },
+          "docs": "List all inference templates."
+        },
+        {
+          "info": {
+            "name": "Create a new inference template. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workload-templates/inferences",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new inference template."
+        },
+        {
+          "info": {
+            "name": "Get a specific inference template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-templates/inferences/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ]
+          },
+          "docs": "Get a specific inference template by ID."
+        },
+        {
+          "info": {
+            "name": "Delete an inference template by ID. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/workload-templates/inferences/:templateId",
+            "params": [
+              {
+                "name": "templateId",
+                "value": "550e8400-e29b-41d4-a716-446655440000",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the template."
+              }
+            ]
+          },
+          "docs": "Delete an inference template by ID."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

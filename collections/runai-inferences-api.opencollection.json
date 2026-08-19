@@ -1,0 +1,192 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Inferences API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Inferences",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create an inference.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workloads/inferences",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create an inference using container related fields."
+        },
+        {
+          "info": {
+            "name": "Get inference data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/inferences/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Retrieve inference details using a workload id."
+        },
+        {
+          "info": {
+            "name": "Update inference spec. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v1/workloads/inferences/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the specification of an existing inference workload."
+        },
+        {
+          "info": {
+            "name": "Delete an inference.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/workloads/inferences/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Delete an inference using a workload id."
+        },
+        {
+          "info": {
+            "name": "Get inference metrics data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/inferences/:workloadId/metrics",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              },
+              {
+                "name": "metricType",
+                "value": "",
+                "type": "query",
+                "description": "Specify which data to request."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              }
+            ]
+          },
+          "docs": "Retrieve inference metrics data by id. Supported from control-plane version 2.18 or later."
+        },
+        {
+          "info": {
+            "name": "Get inference pod's metrics data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/inferences/:workloadId/pods/:podId/metrics",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              },
+              {
+                "name": "podId",
+                "value": "",
+                "type": "path",
+                "description": "The requested pod id."
+              },
+              {
+                "name": "metricType",
+                "value": "",
+                "type": "query",
+                "description": "Specifies metrics data to request. Inference metrics are only available for inference workloads."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              }
+            ]
+          },
+          "docs": "Retrieve inference metrics pod's data by workload and pod id. Supported from control-plane version 2.18 or later."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

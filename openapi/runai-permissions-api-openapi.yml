@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -77,8 +77,9 @@ paths:
                 resourceType:
                   $ref: '#/components/schemas/ResourceType'
                 action:
-                  nullable: true
-                  type: string
+                  type:
+                  - string
+                  - 'null'
                   enum:
                   - create
                   - read
@@ -127,6 +128,30 @@ components:
             code: 503
             message: Please try again in few minutes.
   schemas:
+    Permissions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Permission'
+      x-schema-name: Permissions
+    Permission:
+      type: object
+      required:
+      - resourceType
+      - actions
+      - groupId
+      - displayName
+      properties:
+        resourceType:
+          $ref: '#/components/schemas/ResourceType'
+        displayName:
+          type: string
+          example: Projects
+        groupId:
+          $ref: '#/components/schemas/ResourceTypeGroupId'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
     PermittedScopes:
       type: object
       properties:
@@ -156,25 +181,22 @@ components:
           type: array
           items:
             type: string
-    Permission:
-      type: object
+    Error:
       required:
-      - resourceType
-      - actions
-      - groupId
-      - displayName
+      - code
+      - message
       properties:
-        resourceType:
-          $ref: '#/components/schemas/ResourceType'
-        displayName:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
           type: string
-          example: Projects
-        groupId:
-          $ref: '#/components/schemas/ResourceTypeGroupId'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
     PermittedScopesActions:
       type: object
       required:
@@ -191,20 +213,14 @@ components:
           $ref: '#/components/schemas/PermittedScopes'
         delete:
           $ref: '#/components/schemas/PermittedScopes'
-    Permissions:
-      type: array
-      items:
-        $ref: '#/components/schemas/Permission'
-      x-schema-name: Permissions
-    ResourceTypeGroupId:
+    Action:
       type: string
       enum:
-      - organization
-      - physical-resource
-      - iam
-      - dashboard
-      - workload
-      - workload-asset
+      - create
+      - read
+      - update
+      - delete
+      - sync
     ResourceType:
       type: string
       description: "Resource type enum for authorization. \n\nNote: The 'apps' resource type is DEPRECATED. Please use 'service-account' instead for managing service accounts.\n"
@@ -252,30 +268,15 @@ components:
       - network-topologies
       - registries
       - scrapeable-metrics
-    Action:
+    ResourceTypeGroupId:
       type: string
       enum:
-      - create
-      - read
-      - update
-      - delete
-      - sync
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
+      - organization
+      - physical-resource
+      - iam
+      - dashboard
+      - workload
+      - workload-asset
   securitySchemes:
     bearerAuth:
       type: http

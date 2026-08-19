@@ -1,0 +1,97 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Workloads V2 API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workloads V2",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a workload. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v2/workloads",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Submit a workload with metadata and a Kubernetes manifest."
+        },
+        {
+          "info": {
+            "name": "Get a specific workload. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v2/workloads/:WorkloadV2Id",
+            "params": [
+              {
+                "name": "WorkloadV2Id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve details of a specific workload by ID"
+        },
+        {
+          "info": {
+            "name": "Update workload spec. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v2/workloads/:WorkloadV2Id",
+            "params": [
+              {
+                "name": "WorkloadV2Id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the specification of an existing workload."
+        },
+        {
+          "info": {
+            "name": "Delete a workload. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v2/workloads/:WorkloadV2Id",
+            "params": [
+              {
+                "name": "WorkloadV2Id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Delete a specific workload by ID"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

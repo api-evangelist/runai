@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -132,64 +132,222 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    GpuRequestType:
-      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
+    WorkloadsExtendedResource:
+      description: Quantity of an extended resource.
+      type:
+      - object
+      - 'null'
+      properties:
+        resource:
+          description: The name of the extended resource (mandatory)
+          type:
+          - string
+          - 'null'
+          example: hardware-vendor.example/foo
+          minLength: 1
+        quantity:
+          description: The requested quantity for the given resource.
+          type:
+          - string
+          - 'null'
+          example: 2
+          minLength: 1
+        exclude:
+          description: Whether to exclude this extended resource from the workload. This is necessary in case the extended resource is inherited from the policy defaults and it is desired not to include it in this workload.
+          type:
+          - boolean
+          - 'null'
+          example: false
+    WorkloadRequestResources:
+      type:
+      - object
+      - 'null'
+      properties:
+        gpuRequestType:
+          $ref: '#/components/schemas/GpuRequestType'
+        gpu:
+          $ref: '#/components/schemas/RequestResourceCores'
+        gpuMemory:
+          $ref: '#/components/schemas/RequestResourceQuantity'
+        cpu:
+          $ref: '#/components/schemas/RequestResourceCores'
+        cpuMemory:
+          $ref: '#/components/schemas/RequestResourceQuantity'
+        extendedResources:
+          $ref: '#/components/schemas/WorkloadsExtendedResources'
+    WorkloadAllocatedResources:
+      type:
+      - object
+      - 'null'
+      properties:
+        gpu:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: 1.5
+          description: Required if and only if gpuRequestType is portion. States the number of GPUs allocated for the created workload. The default is no allocated GPUs.
+        gpuMemory:
+          type:
+          - string
+          - 'null'
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 200Mi
+        cpu:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: States the amount of CPU cores used by the workload running.
+          example: 0.5
+        cpuMemory:
+          type:
+          - string
+          - 'null'
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 0B
+        extendedResources:
+          $ref: '#/components/schemas/WorkloadsExtendedResources'
+    ProjectId:
+      description: The id of the project.
       type: string
-      minLength: 1
-      enum:
-      - portion
-      - memory
-      nullable: true
+      example: 1
+      pattern: .*
+    WorkloadsExtendedResources:
+      description: Set of extended resources with their quantity
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/WorkloadsExtendedResource'
+    RequestResourceQuantity:
+      type:
+      - object
+      - 'null'
+      properties:
+        limit:
+          type:
+          - string
+          - 'null'
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 2G
+        request:
+          type:
+          - string
+          - 'null'
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 200M
+    RequestedPods:
+      type: object
+      properties:
+        number:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 1
+        min:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 2
+        max:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 5
+        parallelism:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          description: specifies how many Pods can run in parallel
+          example: 3
+        completions:
+          type:
+          - integer
+          - 'null'
+          description: specifies how many Pods should terminate successfully before the Workload is completed
+          format: int32
+          example: 5
     DepartmentId2:
       description: The id of the department.
       type: string
       minLength: 1
       example: 2
       pattern: .*
-    Error:
+    Phase:
+      type: string
+      enum:
+      - Creating
+      - Initializing
+      - Resuming
+      - Pending
+      - Deleting
+      - Running
+      - Updating
+      - Stopped
+      - Stopping
+      - Degraded
+      - Failed
+      - Completed
+      - Terminating
+      - Unknown
+    Conditions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Condition1'
+      x-schema-name: Conditions
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    Condition1:
+      type: object
       required:
-      - code
-      - message
+      - type
+      - status
       properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
+        type:
+          description: The type of the condition, such as Failed or Available. See Types of domain status conditions.
+          type: string
+          example: Ready
+        status:
+          type: string
+          description: The status of the condition, such as True, False or Unknown.
+          example: 'False'
         message:
           type: string
-        details:
+          description: An optional, human-readable message providing more details about the condition.
+          example: 'Resource validation failed: ...'
+        reason:
           type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    WorkloadAllocatedResources:
-      type: object
-      nullable: true
-      properties:
-        gpu:
-          type: number
-          nullable: true
-          format: double
-          example: 1.5
-          description: Required if and only if gpuRequestType is portion. States the number of GPUs allocated for the created workload. The default is no allocated GPUs.
-        gpuMemory:
-          type: string
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          nullable: true
-          example: 200Mi
-        cpu:
-          type: number
-          nullable: true
-          format: double
-          description: States the amount of CPU cores used by the workload running.
-          example: 0.5
-        cpuMemory:
-          type: string
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          nullable: true
-          example: 0B
-        extendedResources:
-          $ref: '#/components/schemas/WorkloadsExtendedResources'
+          description: The reason for the Failed condition. Not applicable to other types of condition.
+          example: ErrorConfig
+        lastTransitionTime:
+          description: A timestamp of when the condition was created or the last time the condition transitioned from one status to another.
+          type:
+          - string
+          - 'null'
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+    GpuRequestType:
+      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      enum:
+      - portion
+      - memory
     Revision:
       type: object
       required:
@@ -229,10 +387,11 @@ components:
           format: date-time
           example: '2022-01-01T03:49:52.531Z'
         deletedAt:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
           example: '2022-08-12T19:28:24.131Z'
-          nullable: true
         revisionRequestedResources:
           $ref: '#/components/schemas/WorkloadRequestResources'
         podsRequestedResources:
@@ -297,174 +456,58 @@ components:
         additionalFields:
           type: object
           additionalProperties: true
-    TenantId:
-      description: The id of the tenant.
-      type: integer
-      format: int32
-      example: 1001
-    Conditions:
-      type: array
-      items:
-        $ref: '#/components/schemas/Condition1'
-      x-schema-name: Conditions
-    ClusterId:
-      description: The id of the cluster.
-      type: string
-      format: uuid
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    Phase:
-      type: string
-      enum:
-      - Creating
-      - Initializing
-      - Resuming
-      - Pending
-      - Deleting
-      - Running
-      - Updating
-      - Stopped
-      - Stopping
-      - Degraded
-      - Failed
-      - Completed
-      - Terminating
-      - Unknown
     RequestResourceCores:
-      type: object
+      type:
+      - object
+      - 'null'
       properties:
         limit:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           format: double
           example: 1.5
         request:
-          type: number
-          nullable: true
+          type:
+          - number
+          - 'null'
           format: double
           example: 1
-      nullable: true
-    WorkloadsExtendedResources:
-      description: Set of extended resources with their quantity
-      type: array
-      items:
-        $ref: '#/components/schemas/WorkloadsExtendedResource'
-      nullable: true
-    Condition1:
-      type: object
+    Error:
       required:
-      - type
-      - status
+      - code
+      - message
       properties:
-        type:
-          description: The type of the condition, such as Failed or Available. See Types of domain status conditions.
-          type: string
-          example: Ready
-        status:
-          type: string
-          description: The status of the condition, such as True, False or Unknown.
-          example: 'False'
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
         message:
           type: string
-          description: An optional, human-readable message providing more details about the condition.
-          example: 'Resource validation failed: ...'
-        reason:
+        details:
           type: string
-          description: The reason for the Failed condition. Not applicable to other types of condition.
-          example: ErrorConfig
-        lastTransitionTime:
-          description: A timestamp of when the condition was created or the last time the condition transitioned from one status to another.
-          type: string
-          nullable: true
-          format: date-time
-          example: '2022-01-01T03:49:52.531Z'
-    WorkloadsExtendedResource:
-      description: Quantity of an extended resource.
-      type: object
-      properties:
-        resource:
-          description: The name of the extended resource (mandatory)
-          type: string
-          example: hardware-vendor.example/foo
-          minLength: 1
-          nullable: true
-        quantity:
-          description: The requested quantity for the given resource.
-          type: string
-          example: 2
-          minLength: 1
-          nullable: true
-        exclude:
-          description: Whether to exclude this extended resource from the workload. This is necessary in case the extended resource is inherited from the policy defaults and it is desired not to include it in this workload.
-          type: boolean
-          example: false
-          nullable: true
-      nullable: true
-    WorkloadRequestResources:
-      type: object
-      nullable: true
-      properties:
-        gpuRequestType:
-          $ref: '#/components/schemas/GpuRequestType'
-        gpu:
-          $ref: '#/components/schemas/RequestResourceCores'
-        gpuMemory:
-          $ref: '#/components/schemas/RequestResourceQuantity'
-        cpu:
-          $ref: '#/components/schemas/RequestResourceCores'
-        cpuMemory:
-          $ref: '#/components/schemas/RequestResourceQuantity'
-        extendedResources:
-          $ref: '#/components/schemas/WorkloadsExtendedResources'
-    ProjectId:
-      description: The id of the project.
-      type: string
-      example: 1
-      pattern: .*
-    RequestResourceQuantity:
-      type: object
-      properties:
-        limit:
-          type: string
-          nullable: true
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          example: 2G
-        request:
-          type: string
-          nullable: true
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          example: 200M
-      nullable: true
-    RequestedPods:
-      type: object
-      properties:
-        number:
-          type: integer
-          format: int32
-          example: 1
-          nullable: true
-        min:
-          type: integer
-          format: int32
-          example: 2
-          nullable: true
-        max:
-          type: integer
-          format: int32
-          example: 5
-          nullable: true
-        parallelism:
-          type: integer
-          format: int32
-          description: specifies how many Pods can run in parallel
-          example: 3
-          nullable: true
-        completions:
-          type: integer
-          description: specifies how many Pods should terminate successfully before the Workload is completed
-          format: int32
-          example: 5
-          nullable: true
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
   responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
     404NotFound:
       description: The specified resource was not found
       content:
@@ -483,15 +526,6 @@ components:
           example:
             code: 500
             message: Something went wrong.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -501,21 +535,12 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
   parameters:
-    RevisionId:
-      name: revisionId
+    WorkloadId:
+      name: workloadId
       in: path
       required: true
-      description: The  Universally Unique Identifier (UUID) of the revision.
+      description: The  Universally Unique Identifier (UUID) of the workload.
       schema:
         type: string
         format: uuid
@@ -525,11 +550,11 @@ components:
       description: Return only deleted resources when `true`.
       schema:
         type: boolean
-    WorkloadId:
-      name: workloadId
+    RevisionId:
+      name: revisionId
       in: path
       required: true
-      description: The  Universally Unique Identifier (UUID) of the workload.
+      description: The  Universally Unique Identifier (UUID) of the revision.
       schema:
         type: string
         format: uuid

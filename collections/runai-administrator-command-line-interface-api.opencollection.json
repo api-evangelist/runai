@@ -1,0 +1,112 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Administrator Command Line Interface API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Administrator Command Line Interface",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Administrator Command Line Interface release.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/admin-cli/:os",
+            "params": [
+              {
+                "name": "os",
+                "value": "",
+                "type": "path",
+                "description": "The operating system"
+              }
+            ]
+          },
+          "docs": "Retrieve the Administrator Command Line Interface version."
+        },
+        {
+          "info": {
+            "name": "Get Administrator Command Line Interface release details.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/admin-cli/:os/checksum",
+            "params": [
+              {
+                "name": "os",
+                "value": "",
+                "type": "path",
+                "description": "The operating system"
+              }
+            ]
+          },
+          "docs": "Retrieve the details of the Administrator Command Line Interface release."
+        },
+        {
+          "info": {
+            "name": "Get Administrator Command Line Interface release by version.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/admin-cli/:version/:os",
+            "params": [
+              {
+                "name": "os",
+                "value": "",
+                "type": "path",
+                "description": "The operating system"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "run:ai version (semantic version)"
+              }
+            ]
+          },
+          "docs": "Retrieve the Administrator Command Line Interface release by version."
+        },
+        {
+          "info": {
+            "name": "Get Administrator Command Line Interface release checksums.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/admin-cli/:version/:os/checksum",
+            "params": [
+              {
+                "name": "os",
+                "value": "",
+                "type": "path",
+                "description": "The operating system"
+              },
+              {
+                "name": "version",
+                "value": "",
+                "type": "path",
+                "description": "run:ai version (semantic version)"
+              }
+            ]
+          },
+          "docs": "Retrieve the checksums of the Administrator Command Line Interface release."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

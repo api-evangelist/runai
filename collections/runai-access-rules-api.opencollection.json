@@ -1,0 +1,241 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Access rules API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Access rules",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List the access rules.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/authorization/access-rules",
+            "params": [
+              {
+                "name": "subjectType",
+                "value": "",
+                "type": "query",
+                "description": "The type of resource we want to filter by."
+              },
+              {
+                "name": "subjectIdFilter",
+                "value": "",
+                "type": "query",
+                "description": "Part of the subject id that we want to filter by."
+              },
+              {
+                "name": "subjectIds",
+                "value": "",
+                "type": "query",
+                "description": "The ids of the subjects to filter the response for."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "lastUpdated",
+                "value": "",
+                "type": "query",
+                "description": "Filter by last update time."
+              },
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "True to include deleted objects in the result."
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "scopeType",
+                "value": "",
+                "type": "query",
+                "description": "The type of resource we want to filter by."
+              },
+              {
+                "name": "scopeId",
+                "value": "",
+                "type": "query",
+                "description": "The scope resource id that we want to filter by."
+              },
+              {
+                "name": "roleId",
+                "value": "",
+                "type": "query",
+                "description": "The role id we want to filter by."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by a parameter."
+              },
+              {
+                "name": "filterBy",
+                "value": "name!=some-access-rule-name,createdAt>=2023-01-01T00:00:00Z",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of access rules."
+        },
+        {
+          "info": {
+            "name": "Create an access rule.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/authorization/access-rules",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to bind a predefined role to a subject (user, group or application) in a scope."
+        },
+        {
+          "info": {
+            "name": "Get an access rule.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/authorization/access-rules/:accessRuleId",
+            "params": [
+              {
+                "name": "accessRuleId",
+                "value": "32",
+                "type": "path",
+                "description": "The id of the access rule to retrieve"
+              }
+            ]
+          },
+          "docs": "Use to retrieve the details of an access rule by id."
+        },
+        {
+          "info": {
+            "name": "Delete an access rule.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/authorization/access-rules/:accessRuleId",
+            "params": [
+              {
+                "name": "accessRuleId",
+                "value": "32",
+                "type": "path",
+                "description": "The id of the access rule to retrieve"
+              }
+            ]
+          },
+          "docs": "Use to delete the subject permissions assigned by access rule id."
+        },
+        {
+          "info": {
+            "name": "Count access rules.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/authorization/access-rules/count",
+            "params": [
+              {
+                "name": "includeDeleted",
+                "value": "",
+                "type": "query",
+                "description": "True to include deleted objects in the result."
+              },
+              {
+                "name": "filterBy",
+                "value": "name!=some-access-rule-name,createdAt>=2023-01-01T00:00:00Z",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "Use to retrieve the number of access rules."
+        },
+        {
+          "info": {
+            "name": "Delete Multiple Access Rules",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/authorization/access-rules/batch",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Delete Multiple Access Rules"
+        },
+        {
+          "info": {
+            "name": "Create Multiple Access Rules",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/authorization/access-rules/batch-create",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a batch of access rules in a single operation. Requires a list of access rule objects, each specifying the subject, role, and scope. Returns the result of the operation, including which rules were successfully created and any that failed, along with error messages if applicable."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

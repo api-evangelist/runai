@@ -1,0 +1,1554 @@
+{
+  "item": [
+    {
+      "id": "2fa5550e-407c-4a1a-a210-2c2f558804c8",
+      "name": "Distributed Inferences",
+      "description": {
+        "content": "Distributed inference enables running inference workloads across multiple pods, typically to scale model serving beyond a single container or node. This approach is useful when a single instance cannot meet resource requirements.NVIDIA Run:ai supports this model using Leader Worker Set (LWS). \nEach pod plays a specific role, either as a leader or worker, and together they form a coordinated service. NVIDIA Run:ai manages the orchestration and configuration of these pods to ensure efficient and scalable inference execution\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "865f837c-68cc-4fcc-b68e-ef51226ac97d",
+          "name": "Create a distributed inference. [Experimental]",
+          "request": {
+            "name": "Create a distributed inference. [Experimental]",
+            "description": {
+              "content": "Create a distributed inference using container related fields.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "distributed-inferences"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"<string>\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"<uuid>\",\n  \"useGivenNameAsPrefix\": false,\n  \"templateId\": \"<string,null-uuid>\",\n  \"spec\": \"<object,null>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2987224b-19f5-412f-b5eb-c8604facee90",
+              "name": "Request completed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"my-workload-name\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"useGivenNameAsPrefix\": true,\n  \"templateId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"spec\": {\n    \"category\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"restartPolicy\": \"RecreateGroupOnPodRestart\",\n    \"servingPort\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"startupPolicy\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"workers\": 4,\n    \"replicas\": 2,\n    \"leader\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    },\n    \"worker\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"my-workload-name\",\n  \"requestedName\": \"string\",\n  \"workloadId\": \"31dd4534-d8f4-62df-aca1-33aabec12729\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"createdBy\": \"test@lab.com\",\n  \"createdAt\": \"2022-01-01T03:49:52.531Z\",\n  \"desiredPhase\": \"Deleted\",\n  \"departmentId\": \" \",\n  \"deletedAt\": \"2022-01-01T03:49:52.531Z\",\n  \"actualPhase\": \"Failed\",\n  \"spec\": {\n    \"category\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"restartPolicy\": \"RecreateGroupOnPodRestart\",\n    \"servingPort\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"startupPolicy\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"workers\": 4,\n    \"replicas\": 2,\n    \"leader\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    },\n    \"worker\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d92640e9-fad5-4fa4-b82f-34e2ceec10f8",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"my-workload-name\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"useGivenNameAsPrefix\": true,\n  \"templateId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"spec\": {\n    \"category\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"restartPolicy\": \"RecreateGroupOnPodRestart\",\n    \"servingPort\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"startupPolicy\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"workers\": 4,\n    \"replicas\": 2,\n    \"leader\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    },\n    \"worker\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Required parameter is missing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f13b8afc-6d97-42e8-adbd-344f93eec2a7",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"my-workload-name\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"useGivenNameAsPrefix\": true,\n  \"templateId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"spec\": {\n    \"category\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"restartPolicy\": \"RecreateGroupOnPodRestart\",\n    \"servingPort\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"startupPolicy\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"workers\": 4,\n    \"replicas\": 2,\n    \"leader\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    },\n    \"worker\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a534efdf-3b92-4be7-8161-cd8b8c6f66cf",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"my-workload-name\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"useGivenNameAsPrefix\": true,\n  \"templateId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"spec\": {\n    \"category\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"restartPolicy\": \"RecreateGroupOnPodRestart\",\n    \"servingPort\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"startupPolicy\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"workers\": 4,\n    \"replicas\": 2,\n    \"leader\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    },\n    \"worker\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f11748ad-9356-4c76-8e11-be9b45b1f5ec",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"my-workload-name\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"useGivenNameAsPrefix\": true,\n  \"templateId\": \"550e8400-e29b-41d4-a716-446655440000\",\n  \"spec\": {\n    \"category\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"restartPolicy\": \"RecreateGroupOnPodRestart\",\n    \"servingPort\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"startupPolicy\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"workers\": 4,\n    \"replicas\": 2,\n    \"leader\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    },\n    \"worker\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cd5aad18-3691-4ee7-8c27-ab05123ad57d",
+          "name": "Delete a distributed inference.",
+          "request": {
+            "name": "Delete a distributed inference.",
+            "description": {
+              "content": "Delete a distributed inference using a workload id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "distributed-inferences",
+                ":workloadId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workloadId",
+                  "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1fe582d2-237f-4354-b8a1-1969cdfd7ecf",
+              "name": "Accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 202,\n  \"message\": \"Request has been accepted.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00a31c62-1723-4a5d-ac2c-2d2bcab4fdd5",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "12f86b64-0bab-4f67-b2a1-84fdacd18228",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "66600718-fcc2-4685-9291-976c9be5cd7e",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a8e7fec4-796f-4f93-87fe-e8d90250ced0",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f21516d0-1d93-449c-9d35-c06a0bdc7b42",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3a3ab5aa-9c2c-4ce6-9346-573fc187586f",
+          "name": "Get a distributed inference data.",
+          "request": {
+            "name": "Get a distributed inference data.",
+            "description": {
+              "content": "Retrieve a distributed inference details using a workload id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "distributed-inferences",
+                ":workloadId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workloadId",
+                  "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "97ca53fc-c47a-4c9b-9897-9c345e567829",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"my-workload-name\",\n  \"requestedName\": \"string\",\n  \"workloadId\": \"31dd4534-d8f4-62df-aca1-33aabec12729\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"createdBy\": \"test@lab.com\",\n  \"createdAt\": \"2022-01-01T03:49:52.531Z\",\n  \"desiredPhase\": \"Deleted\",\n  \"departmentId\": \" \",\n  \"deletedAt\": \"2022-01-01T03:49:52.531Z\",\n  \"actualPhase\": \"Failed\",\n  \"spec\": {\n    \"category\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"restartPolicy\": \"RecreateGroupOnPodRestart\",\n    \"servingPort\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"startupPolicy\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"workers\": 4,\n    \"replicas\": 2,\n    \"leader\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    },\n    \"worker\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9459ba5d-0e0e-4c9f-9aac-50366868b85a",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7c71b9dd-d9fe-4fee-b0b9-ab54f231083b",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f039489-7c61-4265-83af-4762023c4533",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "29382da6-672c-49da-8e76-07c55c8c4286",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6815701d-eb9c-40d7-95f8-6f3e7bd7d922",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b82f945e-c524-4138-9024-65fb01502d88",
+          "name": "Update distributed inference spec.",
+          "request": {
+            "name": "Update distributed inference spec.",
+            "description": {
+              "content": "Update the specification of an existing distributed inference workload.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "distributed-inferences",
+                ":workloadId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workloadId",
+                  "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"spec\": {\n    \"replicas\": \"<integer,null-int32>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0fb39ccd-964f-412c-bf38-163b959389ad",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"replicas\": 2\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"my-workload-name\",\n  \"requestedName\": \"string\",\n  \"workloadId\": \"31dd4534-d8f4-62df-aca1-33aabec12729\",\n  \"projectId\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"createdBy\": \"test@lab.com\",\n  \"createdAt\": \"2022-01-01T03:49:52.531Z\",\n  \"desiredPhase\": \"Deleted\",\n  \"departmentId\": \" \",\n  \"deletedAt\": \"2022-01-01T03:49:52.531Z\",\n  \"actualPhase\": \"Failed\",\n  \"spec\": {\n    \"category\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"restartPolicy\": \"RecreateGroupOnPodRestart\",\n    \"servingPort\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"startupPolicy\": {\n      \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n    },\n    \"workers\": 4,\n    \"replicas\": 2,\n    \"leader\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    },\n    \"worker\": {\n      \"annotations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"args\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"command\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"compute\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"createHomeDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"environmentVariables\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"image\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullPolicy\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"imagePullSecrets\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"labels\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeAffinityRequired\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"nodeType\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"podAffinity\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"probes\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"security\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"storage\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"tolerations\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      },\n      \"workingDir\": {\n        \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c91ec1ae-bf5a-4887-a3ed-4d5acee11842",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"replicas\": 2\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7aed3c5f-41bc-4f65-996f-bd29aec85649",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"replicas\": 2\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ca5a69e-93a5-49aa-9c16-654733b3fbf6",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"replicas\": 2\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7d3042de-e3d1-4ab3-8d93-301eed5f235a",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"replicas\": 2\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b8dd1a55-c1d9-4994-af82-febf5d099ff7",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "distributed-inferences",
+                    ":workloadId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"replicas\": 2\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.run.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0a73eefe-0bd9-43b4-aa43-a894e97c3fac",
+    "name": "NVIDIA Run:ai Access Keys Distributed Inferences API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.\n\nNVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.\nTo create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.\n\nAfter you have created a new service account, you will need to assign it access rules.\nTo assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).\nMake sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.\n\nTo get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).\n",
+      "type": "text/plain"
+    }
+  }
+}

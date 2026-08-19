@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -261,15 +261,6 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
     500InternalServerError:
       description: unexpected error
       content:
@@ -306,6 +297,15 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
     409Conflict:
       description: The specified resource already exists
       content:
@@ -316,39 +316,14 @@ components:
             code: 409
             message: Resource with this name already exists
   schemas:
-    UserAppAdministration:
-      type: object
-      required:
-      - name
-      - id
-      - clientId
-      - createdBy
-      - createdAt
-      - lastLogin
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-        clientId:
-          type: string
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-          nullable: true
-        lastLogin:
-          type: string
-          format: date-time
-          nullable: true
-      example:
-        name: my-user-app
-        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
-        clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
-        createdBy: test@run.ai
-        createdAt: '2020-01-01T00:00:00Z'
-        lastLogin: '2020-01-01T00:00:00Z'
+    UserApps:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserApp'
+    UserAppsAdministration:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserAppAdministration'
     UserAppCreationRequest:
       type: object
       required:
@@ -376,23 +351,21 @@ components:
         id:
           type: string
         createdAt:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
-          nullable: true
         lastLogin:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
-          nullable: true
       example:
         name: my-user-app
         id: 3434c-12323ab-4ce2ea6-b44fc-db344d
         clientId: 3434c-12323ab-4ce2ea6
         createdAt: '2019-01-01T00:00:00Z'
         lastLogin: '2020-01-01T00:00:00Z'
-    UserApps:
-      type: array
-      items:
-        $ref: '#/components/schemas/UserApp'
     UserAppPostResponse:
       type: object
       required:
@@ -412,8 +385,9 @@ components:
           type: string
         createdAt:
           format: date-time
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
       example:
         id: 0eeaf222-e503-4f35-9d9c-c419816272e3
         clientId: 5e7b3b7b4b7b4b7b
@@ -436,10 +410,41 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-    UserAppsAdministration:
-      type: array
-      items:
-        $ref: '#/components/schemas/UserAppAdministration'
+    UserAppAdministration:
+      type: object
+      required:
+      - name
+      - id
+      - clientId
+      - createdBy
+      - createdAt
+      - lastLogin
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        clientId:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        lastLogin:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      example:
+        name: my-user-app
+        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+        clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
+        createdBy: test@run.ai
+        createdAt: '2020-01-01T00:00:00Z'
+        lastLogin: '2020-01-01T00:00:00Z'
   parameters:
     appId:
       name: appId

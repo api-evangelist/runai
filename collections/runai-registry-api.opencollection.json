@@ -1,0 +1,175 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Registry API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Registry",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get registries.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/asset/registries",
+            "params": [
+              {
+                "name": "name",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by name."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of registries assets."
+        },
+        {
+          "info": {
+            "name": "Create a registry asset.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/asset/registries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to create a registry asset containing a registry base url and credentials."
+        },
+        {
+          "info": {
+            "name": "Get a registry.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/asset/registries/:AssetId",
+            "params": [
+              {
+                "name": "AssetId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the asset."
+              }
+            ]
+          },
+          "docs": "Retrieve a registry asset by id."
+        },
+        {
+          "info": {
+            "name": "Update a registry asset.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/asset/registries/:AssetId",
+            "params": [
+              {
+                "name": "AssetId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the asset."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to update a registry asset containing registry base url and credentials by id."
+        },
+        {
+          "info": {
+            "name": "Delete a registry asset.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/asset/registries/:AssetId",
+            "params": [
+              {
+                "name": "AssetId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the asset."
+              }
+            ]
+          },
+          "docs": "Use to delete a registry asset containing registry base url and credentials by id."
+        },
+        {
+          "info": {
+            "name": "Get the repositories in the registry.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/asset/registries/:AssetId/repositories",
+            "params": [
+              {
+                "name": "AssetId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the asset."
+              },
+              {
+                "name": "searchName",
+                "value": "",
+                "type": "query",
+                "description": "Filter results that contains searchName."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of repositories from a registry asset."
+        },
+        {
+          "info": {
+            "name": "Get the repositories tags in the registry.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/asset/registries/:AssetId/repositories/tags",
+            "params": [
+              {
+                "name": "AssetId",
+                "value": "",
+                "type": "path",
+                "description": "Unique identifier of the asset."
+              },
+              {
+                "name": "repository",
+                "value": "",
+                "type": "query",
+                "description": "The repository name that its tags are requested."
+              },
+              {
+                "name": "searchName",
+                "value": "",
+                "type": "query",
+                "description": "Filter results that contains searchName."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of repository tags from a repository asset."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

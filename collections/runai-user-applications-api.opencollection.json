@@ -1,0 +1,151 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys User Applications API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "User Applications",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get a list of users applications.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/user-applications"
+          },
+          "docs": "Retrieve a list of the users applications."
+        },
+        {
+          "info": {
+            "name": "Create a user application.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/user-applications",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Used to create a user application."
+        },
+        {
+          "info": {
+            "name": "Get user application by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/user-applications/:appId",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "The application id to retrieve"
+              }
+            ]
+          },
+          "docs": "Retrieve the details of a user's application by app id."
+        },
+        {
+          "info": {
+            "name": "Delete a user application byid.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/user-applications/:appId",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "The application id to retrieve"
+              }
+            ]
+          },
+          "docs": "Use to user a user application by id."
+        },
+        {
+          "info": {
+            "name": "Regenerate a user application secret.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/user-applications/:appId/secret",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "The application id to retrieve"
+              }
+            ]
+          },
+          "docs": "Use to regenerate the user application secret by id."
+        },
+        {
+          "info": {
+            "name": "Get a list of all users applications.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/administration/user-applications",
+            "params": [
+              {
+                "name": "clientId",
+                "value": "3434c-12323ab-4ce2ea6-b44fc-db344d",
+                "type": "query",
+                "description": "Filter results by clientId"
+              },
+              {
+                "name": "createdBy",
+                "value": "test@run.ai",
+                "type": "query",
+                "description": "Filter results by creatdBy"
+              }
+            ]
+          },
+          "docs": "Retrieve a list of all users applications."
+        },
+        {
+          "info": {
+            "name": "Delete a user application by id for adminstrations.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/administration/user-applications/:appId",
+            "params": [
+              {
+                "name": "appId",
+                "value": "",
+                "type": "path",
+                "description": "The application id to retrieve"
+              }
+            ]
+          },
+          "docs": "Use to delete a user application by id for adminstrations."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

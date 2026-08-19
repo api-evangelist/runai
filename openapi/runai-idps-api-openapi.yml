@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -445,98 +445,10 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    Idp1:
-      type: object
-      required:
-      - alias
-      - type
-      - redirectUri
-      properties:
-        alias:
-          type: string
-          pattern: ^[a-z0-9_-]+$
-        type:
-          type: string
-          enum:
-          - saml
-          - oidc
-          - openshift-v4
-        redirectUri:
-          type: string
-        samlData:
-          $ref: '#/components/schemas/SamlData'
-        oidcData:
-          $ref: '#/components/schemas/OidcData'
-        ocpData:
-          $ref: '#/components/schemas/OcpData'
-        mappers:
-          $ref: '#/components/schemas/Mappers'
-    SamlCreationDataMetadataXmlTypeEnum:
-      type: string
-      enum:
-      - url
-      - file
-    Idps:
-      type: array
-      items:
-        $ref: '#/components/schemas/Idp1'
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    OidcCreationData:
-      type: object
-      nullable: true
-      required:
-      - clientId
-      - clientSecret
-      - discoverDocumentUrl
-      properties:
-        clientId:
-          type: string
-          minLength: 1
-        clientSecret:
-          type: string
-          minLength: 1
-        discoverDocumentUrl:
-          type: string
-          pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
-        scopes:
-          type: array
-          items:
-            type: string
-            pattern: ^([a-zA-Z0-9-._:]+)(\s[a-zA-Z0-9-._:]+)*$
-        mandatoryClaim:
-          $ref: '#/components/schemas/MandatoryClaim'
-    OcpData:
-      type: object
-      nullable: true
-      properties:
-        idpBaseUrl:
-          type: string
-        clientId:
-          type: string
-        clientSecret:
-          type: string
-        scopes:
-          type: array
-          items:
-            type: string
     OcpCreationData:
-      type: object
-      nullable: true
+      type:
+      - object
+      - 'null'
       required:
       - idpBaseUrl
       - clientSecret
@@ -564,42 +476,10 @@ components:
           type: string
       example:
         alias: oidc
-    SamlCreationData:
-      type: object
-      nullable: true
-      properties:
-        metadataXmlUrl:
-          type: string
-          pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
-        metadataXmlFile:
-          type: string
-        fileName:
-          type: string
-        metadataXmlType:
-          allOf:
-          - $ref: '#/components/schemas/SamlCreationDataMetadataXmlTypeEnum'
-        entityId:
-          type: string
-    MandatoryClaim:
-      type: object
-      nullable: true
-      required:
-      - claim
-      - values
-      properties:
-        claim:
-          type: string
-          pattern: .*[a-zA-Z].*
-        values:
-          type: array
-          minItems: 1
-          items:
-            type: string
-            minLength: 1
-            pattern: ^(?!.*\s).*?[a-zA-Z].*$
-    OidcData:
-      type: object
-      nullable: true
+    OidcCreationData:
+      type:
+      - object
+      - 'null'
       required:
       - clientId
       - clientSecret
@@ -607,8 +487,13 @@ components:
       properties:
         clientId:
           type: string
+          minLength: 1
         clientSecret:
           type: string
+          minLength: 1
+        discoverDocumentUrl:
+          type: string
+          pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
         scopes:
           type: array
           items:
@@ -631,9 +516,62 @@ components:
           type: string
         email:
           type: string
-    SamlData:
+    Idp1:
       type: object
-      nullable: true
+      required:
+      - alias
+      - type
+      - redirectUri
+      properties:
+        alias:
+          type: string
+          pattern: ^[a-z0-9_-]+$
+        type:
+          type: string
+          enum:
+          - saml
+          - oidc
+          - openshift-v4
+        redirectUri:
+          type: string
+        samlData:
+          $ref: '#/components/schemas/SamlData'
+        oidcData:
+          $ref: '#/components/schemas/OidcData'
+        ocpData:
+          $ref: '#/components/schemas/OcpData'
+        mappers:
+          $ref: '#/components/schemas/Mappers'
+    IdpCreationRequestTypeEnum:
+      type: string
+      enum:
+      - oidc
+      - saml
+      - openshift-v4
+    OidcData:
+      type:
+      - object
+      - 'null'
+      required:
+      - clientId
+      - clientSecret
+      - discoverDocumentUrl
+      properties:
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+            pattern: ^([a-zA-Z0-9-._:]+)(\s[a-zA-Z0-9-._:]+)*$
+        mandatoryClaim:
+          $ref: '#/components/schemas/MandatoryClaim'
+    SamlData:
+      type:
+      - object
+      - 'null'
       properties:
         signingCertificate:
           type: string
@@ -644,6 +582,47 @@ components:
         serviceProviderMetadataUrl:
           type: string
           description: Service Provider (SP) metadata url
+    OcpData:
+      type:
+      - object
+      - 'null'
+      properties:
+        idpBaseUrl:
+          type: string
+        clientId:
+          type: string
+        clientSecret:
+          type: string
+        scopes:
+          type: array
+          items:
+            type: string
+    Idps:
+      type: array
+      items:
+        $ref: '#/components/schemas/Idp1'
+    SamlCreationData:
+      type:
+      - object
+      - 'null'
+      properties:
+        metadataXmlUrl:
+          type: string
+          pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
+        metadataXmlFile:
+          type: string
+        fileName:
+          type: string
+        metadataXmlType:
+          allOf:
+          - $ref: '#/components/schemas/SamlCreationDataMetadataXmlTypeEnum'
+        entityId:
+          type: string
+    SamlCreationDataMetadataXmlTypeEnum:
+      type: string
+      enum:
+      - url
+      - file
     IdpCreationRequest:
       type: object
       required:
@@ -663,21 +642,59 @@ components:
           $ref: '#/components/schemas/OcpCreationData'
         mappers:
           $ref: '#/components/schemas/Mappers'
-    IdpCreationRequestTypeEnum:
-      type: string
-      enum:
-      - oidc
-      - saml
-      - openshift-v4
-  parameters:
-    idp:
-      name: idp
-      in: path
-      required: true
-      description: The alias of the idp
-      schema:
-        type: string
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    MandatoryClaim:
+      type:
+      - object
+      - 'null'
+      required:
+      - claim
+      - values
+      properties:
+        claim:
+          type: string
+          pattern: .*[a-zA-Z].*
+        values:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            minLength: 1
+            pattern: ^(?!.*\s).*?[a-zA-Z].*$
   responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
     404NotFound:
       description: The specified resource was not found
       content:
@@ -696,24 +713,6 @@ components:
           example:
             code: 500
             message: Something went wrong.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
     409Conflict:
       description: The specified resource already exists
       content:
@@ -723,15 +722,6 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
     400BadRequest:
       description: Bad request.
       content:
@@ -741,6 +731,23 @@ components:
           example:
             code: 400
             message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  parameters:
+    idp:
+      name: idp
+      in: path
+      required: true
+      description: The alias of the idp
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

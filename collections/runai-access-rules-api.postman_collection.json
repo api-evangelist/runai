@@ -1,0 +1,3063 @@
+{
+  "item": [
+    {
+      "id": "7ccbd6d1-2fed-4afa-8056-6803dc78fcfa",
+      "name": "Access rules",
+      "description": {
+        "content": "Access rules provide user authorization to system resources and entities.\nIt is managed using Role-based access control (RBAC) which is a policy-neutral \naccess control mechanism defined around roles and privileges. \nThe components of RBAC make it simple to manage access to system resources and entities.\nFor more information, see [Access control](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/overview/#role-based-access-control).\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "00d73e7f-889a-4d42-b01e-e2eec3ad6aed",
+          "name": "Create an access rule.",
+          "request": {
+            "name": "Create an access rule.",
+            "description": {
+              "content": "Use to bind a predefined role to a subject (user, group or application) in a scope.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "authorization",
+                "access-rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"subjectId\": \"<string>\",\n  \"subjectType\": \"<string>\",\n  \"roleId\": \"<integer>\",\n  \"scopeId\": \"<string>\",\n  \"scopeType\": \"<string>\",\n  \"clusterId\": \"<uuid>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "becaab01-41ae-46ac-8e20-dc96899276d1",
+              "name": "Created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"subjectId\": \"user@run.ai\",\n  \"subjectType\": \"<string>\",\n  \"roleId\": 53142648,\n  \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n  \"scopeType\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdAt\": \"1995-08-03T15:35:22.426Z\",\n  \"createdBy\": \"user@run.ai\",\n  \"id\": 32,\n  \"roleId\": 53142648,\n  \"roleName\": \"admin\",\n  \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n  \"scopeName\": \"tenant-x\",\n  \"scopeType\": \"<string>\",\n  \"subjectId\": \"user@run.ai\",\n  \"subjectType\": \"<string>\",\n  \"tenantId\": 1001,\n  \"updatedAt\": \"2012-07-09T04:52:57.797Z\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"deletedAt\": \"2017-05-09T09:51:40.823Z\",\n  \"status\": {\n    \"phase\": \"Ready\",\n    \"message\": \"Failed to enforce department 'department-a'\",\n    \"details\": \"NotReady: [cluster1-uuid]; Ready: [cluster2-uuid, cluster3-uuid]\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa29f8ff-c5d6-4094-8bf3-74546a4955d7",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"subjectId\": \"user@run.ai\",\n  \"subjectType\": \"<string>\",\n  \"roleId\": 53142648,\n  \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n  \"scopeType\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Required parameter is missing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88d7e3f7-8d73-4391-9d02-c6a534edcb00",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"subjectId\": \"user@run.ai\",\n  \"subjectType\": \"<string>\",\n  \"roleId\": 53142648,\n  \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n  \"scopeType\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c32b7dbe-d3bf-4370-8388-da66e005dec1",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"subjectId\": \"user@run.ai\",\n  \"subjectType\": \"<string>\",\n  \"roleId\": 53142648,\n  \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n  \"scopeType\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e4d2cfc6-c6ae-4035-a1ce-7bea1b779002",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"subjectId\": \"user@run.ai\",\n  \"subjectType\": \"<string>\",\n  \"roleId\": 53142648,\n  \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n  \"scopeType\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "289ebd6b-688e-4f22-ad18-0f8164777981",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"subjectId\": \"user@run.ai\",\n  \"subjectType\": \"<string>\",\n  \"roleId\": 53142648,\n  \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n  \"scopeType\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d46190b-97ee-4be4-850e-2ce2903956d1",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"subjectId\": \"user@run.ai\",\n  \"subjectType\": \"<string>\",\n  \"roleId\": 53142648,\n  \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n  \"scopeType\": \"<string>\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5d5a2b0d-23e6-412c-85cc-29bc94d7cb10",
+          "name": "List the access rules.",
+          "request": {
+            "name": "List the access rules.",
+            "description": {
+              "content": "Retrieve a list of access rules.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "authorization",
+                "access-rules"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "subjectType",
+                  "value": "<string>",
+                  "description": "The type of resource we want to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "subjectIdFilter",
+                  "value": "<string>",
+                  "description": "Part of the subject id that we want to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "subjectIds",
+                  "value": "<string>,<string>",
+                  "description": "The ids of the subjects to filter the response for."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "The maximum number of entries to return."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "The offset of the first item returned in the collection."
+                },
+                {
+                  "disabled": false,
+                  "key": "lastUpdated",
+                  "value": "<string>",
+                  "description": "Filter by last update time."
+                },
+                {
+                  "disabled": false,
+                  "key": "includeDeleted",
+                  "value": "false",
+                  "description": "True to include deleted objects in the result."
+                },
+                {
+                  "disabled": false,
+                  "key": "clusterId",
+                  "value": "<uuid>",
+                  "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+                },
+                {
+                  "disabled": false,
+                  "key": "scopeType",
+                  "value": "<string>",
+                  "description": "The type of resource we want to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "scopeId",
+                  "value": "<string>",
+                  "description": "The scope resource id that we want to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "roleId",
+                  "value": "<integer>",
+                  "description": "The role id we want to filter by."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "description": "Sort results in descending or ascending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "<string>",
+                  "description": "Sort results by a parameter."
+                },
+                {
+                  "disabled": false,
+                  "key": "filterBy",
+                  "value": "<string>,<string>",
+                  "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Filter results by a free text search."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4a8e2c36-23d9-471a-8921-738f0c4e7be5",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "subjectType",
+                      "value": "user"
+                    },
+                    {
+                      "key": "subjectIdFilter",
+                      "value": "some.user"
+                    },
+                    {
+                      "key": "subjectIds",
+                      "value": "some.user@run.ai,some.user@run.ai"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "lastUpdated",
+                      "value": "2021-12-14T16:04:15.099Z"
+                    },
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "scopeType",
+                      "value": "project"
+                    },
+                    {
+                      "key": "scopeId",
+                      "value": "2"
+                    },
+                    {
+                      "key": "roleId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"totalRecords\": 1,\n  \"displayRecords\": 1,\n  \"accessRules\": [\n    {\n      \"createdAt\": \"2021-09-14T07:48:03.599Z\",\n      \"createdBy\": \"user@run.ai\",\n      \"id\": 32,\n      \"roleId\": 53142648,\n      \"roleName\": \"admin\",\n      \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n      \"scopeName\": \"tenant-x\",\n      \"scopeType\": \"<string>\",\n      \"subjectId\": \"user@run.ai\",\n      \"subjectType\": \"<string>\",\n      \"tenantId\": 1001,\n      \"updatedAt\": \"1950-09-20T20:05:41.458Z\",\n      \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n      \"deletedAt\": null,\n      \"status\": {\n        \"phase\": \"Ready\",\n        \"message\": \"Failed to enforce department 'department-a'\",\n        \"details\": \"NotReady: [cluster1-uuid]; Ready: [cluster2-uuid, cluster3-uuid]\"\n      }\n    },\n    {\n      \"createdAt\": \"1982-05-14T13:49:53.862Z\",\n      \"createdBy\": \"user@run.ai\",\n      \"id\": 32,\n      \"roleId\": 53142648,\n      \"roleName\": \"admin\",\n      \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n      \"scopeName\": \"tenant-x\",\n      \"scopeType\": \"<string>\",\n      \"subjectId\": \"user@run.ai\",\n      \"subjectType\": \"<string>\",\n      \"tenantId\": 1001,\n      \"updatedAt\": \"1986-08-26T08:16:46.246Z\",\n      \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n      \"deletedAt\": null,\n      \"status\": {\n        \"phase\": \"Ready\",\n        \"message\": \"Failed to enforce department 'department-a'\",\n        \"details\": \"NotReady: [cluster1-uuid]; Ready: [cluster2-uuid, cluster3-uuid]\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "35fac9f3-543d-496d-afb6-9b91dbb19649",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "subjectType",
+                      "value": "user"
+                    },
+                    {
+                      "key": "subjectIdFilter",
+                      "value": "some.user"
+                    },
+                    {
+                      "key": "subjectIds",
+                      "value": "some.user@run.ai,some.user@run.ai"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "lastUpdated",
+                      "value": "2021-12-14T16:04:15.099Z"
+                    },
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "scopeType",
+                      "value": "project"
+                    },
+                    {
+                      "key": "scopeId",
+                      "value": "2"
+                    },
+                    {
+                      "key": "roleId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00bbb5c5-bb73-4636-8850-e3916194e5e7",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "subjectType",
+                      "value": "user"
+                    },
+                    {
+                      "key": "subjectIdFilter",
+                      "value": "some.user"
+                    },
+                    {
+                      "key": "subjectIds",
+                      "value": "some.user@run.ai,some.user@run.ai"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "lastUpdated",
+                      "value": "2021-12-14T16:04:15.099Z"
+                    },
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "scopeType",
+                      "value": "project"
+                    },
+                    {
+                      "key": "scopeId",
+                      "value": "2"
+                    },
+                    {
+                      "key": "roleId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "47c95753-6d19-410e-8fe4-05b02de759a3",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "subjectType",
+                      "value": "user"
+                    },
+                    {
+                      "key": "subjectIdFilter",
+                      "value": "some.user"
+                    },
+                    {
+                      "key": "subjectIds",
+                      "value": "some.user@run.ai,some.user@run.ai"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "lastUpdated",
+                      "value": "2021-12-14T16:04:15.099Z"
+                    },
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "scopeType",
+                      "value": "project"
+                    },
+                    {
+                      "key": "scopeId",
+                      "value": "2"
+                    },
+                    {
+                      "key": "roleId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17013e9f-86c0-4801-ba68-3602878ffc3b",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "subjectType",
+                      "value": "user"
+                    },
+                    {
+                      "key": "subjectIdFilter",
+                      "value": "some.user"
+                    },
+                    {
+                      "key": "subjectIds",
+                      "value": "some.user@run.ai,some.user@run.ai"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "lastUpdated",
+                      "value": "2021-12-14T16:04:15.099Z"
+                    },
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "clusterId",
+                      "value": "d73a738f-fab3-430a-8fa3-5241493d7128"
+                    },
+                    {
+                      "key": "scopeType",
+                      "value": "project"
+                    },
+                    {
+                      "key": "scopeId",
+                      "value": "2"
+                    },
+                    {
+                      "key": "roleId",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4e8ac49d-8a2b-4798-9bd6-4328936db521",
+          "name": "Get an access rule.",
+          "request": {
+            "name": "Get an access rule.",
+            "description": {
+              "content": "Use to retrieve the details of an access rule by id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "authorization",
+                "access-rules",
+                ":accessRuleId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "accessRuleId",
+                  "description": "(Required) The id of the access rule to retrieve"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e00c5d96-1a1b-47bb-bb1b-46c768b605e5",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"createdAt\": \"1965-12-10T03:34:40.899Z\",\n  \"createdBy\": \"user@run.ai\",\n  \"id\": 32,\n  \"roleId\": 53142648,\n  \"roleName\": \"admin\",\n  \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n  \"scopeName\": \"tenant-x\",\n  \"scopeType\": \"<string>\",\n  \"subjectId\": \"user@run.ai\",\n  \"subjectType\": \"<string>\",\n  \"tenantId\": 1001,\n  \"updatedAt\": \"1962-04-30T02:53:42.189Z\",\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"deletedAt\": \"1993-07-17T20:20:21.881Z\",\n  \"status\": {\n    \"phase\": \"Ready\",\n    \"message\": \"Failed to enforce department 'department-a'\",\n    \"details\": \"NotReady: [cluster1-uuid]; Ready: [cluster2-uuid, cluster3-uuid]\"\n  },\n  \"scopePath\": \"runai/production-cluster/dep-42/prj-73\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4c39969-dcea-4c45-b47a-457fbf5cc914",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d79e5309-27d4-42e3-8e3e-ad20c62bbe45",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "484af753-bb32-4c5b-baf7-e337a5f30f1e",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "acaff923-1d3c-4097-bd49-9af984ed3868",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5c31f6c6-7f52-4d90-b8da-3bcae83bd592",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "aad15d13-de77-4656-88ed-220fe8ec85e3",
+          "name": "Delete an access rule.",
+          "request": {
+            "name": "Delete an access rule.",
+            "description": {
+              "content": "Use to delete the subject permissions assigned by access rule id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "authorization",
+                "access-rules",
+                ":accessRuleId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "accessRuleId",
+                  "description": "(Required) The id of the access rule to retrieve"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6d21d90d-0942-4eae-ba0d-8dd07679eb02",
+              "name": "No Content.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "91a2e923-d1b6-4553-805a-7291568dec41",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "589d99f9-90e0-48cb-b94f-2180dadc9f93",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c6df94d1-ef86-4195-9ed8-1f2796a2cb4f",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ddd9e1a-17ab-4c07-b078-53845ff9a9ee",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2766c9db-6e59-444a-bbe3-976f8c200395",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    ":accessRuleId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "accessRuleId",
+                      "description": "(Required) The id of the access rule to retrieve"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "40f487ac-8c52-42fc-b3f8-7d22950f1e41",
+          "name": "Count access rules.",
+          "request": {
+            "name": "Count access rules.",
+            "description": {
+              "content": "Use to retrieve the number of access rules.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "authorization",
+                "access-rules",
+                "count"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "includeDeleted",
+                  "value": "false",
+                  "description": "True to include deleted objects in the result."
+                },
+                {
+                  "disabled": false,
+                  "key": "filterBy",
+                  "value": "<string>,<string>",
+                  "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+                },
+                {
+                  "disabled": false,
+                  "key": "search",
+                  "value": "<string>",
+                  "description": "Filter results by a free text search."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b1ebbcba-e726-449b-9ab8-df52a8a2fec3",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac75563f-857c-454f-9680-754604515625",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Required parameter is missing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c6224405-0177-4a82-a86c-f2fe6fa90b8b",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "045d387d-ce39-4cb1-96bd-f5e8afd7cd5d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5308d32-74fc-401c-9cf1-0bca42a25d2c",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d2384436-e539-4db5-a5ee-e84695c10812",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "includeDeleted",
+                      "value": "false"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "<string>,<string>"
+                    },
+                    {
+                      "key": "search",
+                      "value": "test project"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "bfa05b68-9afc-483b-9f4a-91963acc75c1",
+          "name": "Delete Multiple Access Rules",
+          "request": {
+            "name": "Delete Multiple Access Rules",
+            "description": {},
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "authorization",
+                "access-rules",
+                "batch"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"action\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "af6605bb-9338-460a-bb1a-a955d20fa48c",
+              "name": "Request completed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"a76f8471-c8aa-6ea9-4fab-760da17aa7a1\",\n  \"succeeded\": [\n    \"8fa30971-0990-ab98-c71d-86478f9d6cc7\",\n    \"c1634700-d8d1-fbd0-8553-3a45e2c3f120\"\n  ],\n  \"failed\": [\n    {\n      \"id\": \"4dcd0356-e646-49eb-df8a-4d744f4a9b5f\",\n      \"code\": 5859,\n      \"message\": \"string\"\n    },\n    {\n      \"id\": \"ebd29f5b-71fb-acae-eb45-8c51533f7fe5\",\n      \"code\": 6223,\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "87fe442c-c424-4483-8f15-257475e671e3",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Required parameter is missing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01982bed-f19a-4f63-9649-cf810c8d7dbd",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f60b495b-c55c-4f2c-aa8f-df50f63c1532",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e4e0391-e4a2-4d3c-8691-c5b6a251ad95",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4e264e9f-b593-4c2d-b160-54edd1b5234e",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"action\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b5579bc3-1fe0-4038-8518-7008381248ee",
+          "name": "Create Multiple Access Rules",
+          "request": {
+            "name": "Create Multiple Access Rules",
+            "description": {
+              "content": "Creates a batch of access rules in a single operation. Requires a list of access rule objects, each specifying the subject, role, and scope. Returns the result of the operation, including which rules were successfully created and any that failed, along with error messages if applicable.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "authorization",
+                "access-rules",
+                "batch-create"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"payload\": {\n    \"subjects\": [\n      {\n        \"subjectId\": \"<string>\",\n        \"subjectType\": \"<string>\"\n      },\n      {\n        \"subjectId\": \"<string>\",\n        \"subjectType\": \"<string>\"\n      }\n    ],\n    \"roleId\": \"<integer>\",\n    \"scopes\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      }\n    ],\n    \"clusterId\": \"<uuid>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "24baaa5f-c6dc-44eb-99df-f45e486892fb",
+              "name": "Request completed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch-create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payload\": {\n    \"subjects\": [\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      },\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      }\n    ],\n    \"roleId\": 53142648,\n    \"scopes\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      }\n    ],\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"succeeded\": [\n    {\n      \"createdAt\": \"1999-09-22T13:06:52.653Z\",\n      \"createdBy\": \"user@run.ai\",\n      \"id\": 32,\n      \"roleId\": 53142648,\n      \"roleName\": \"admin\",\n      \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n      \"scopeName\": \"tenant-x\",\n      \"scopeType\": \"<string>\",\n      \"subjectId\": \"user@run.ai\",\n      \"subjectType\": \"<string>\",\n      \"tenantId\": 1001,\n      \"updatedAt\": \"2010-05-09T13:12:59.728Z\",\n      \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n      \"deletedAt\": null,\n      \"status\": {\n        \"phase\": \"Ready\",\n        \"message\": \"Failed to enforce department 'department-a'\",\n        \"details\": \"NotReady: [cluster1-uuid]; Ready: [cluster2-uuid, cluster3-uuid]\"\n      }\n    },\n    {\n      \"createdAt\": \"1947-07-04T00:47:05.731Z\",\n      \"createdBy\": \"user@run.ai\",\n      \"id\": 32,\n      \"roleId\": 53142648,\n      \"roleName\": \"admin\",\n      \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n      \"scopeName\": \"tenant-x\",\n      \"scopeType\": \"<string>\",\n      \"subjectId\": \"user@run.ai\",\n      \"subjectType\": \"<string>\",\n      \"tenantId\": 1001,\n      \"updatedAt\": \"1992-08-17T16:45:56.168Z\",\n      \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n      \"deletedAt\": \"1962-05-10T19:16:58.791Z\",\n      \"status\": {\n        \"phase\": \"Ready\",\n        \"message\": \"Failed to enforce department 'department-a'\",\n        \"details\": \"NotReady: [cluster1-uuid]; Ready: [cluster2-uuid, cluster3-uuid]\"\n      }\n    }\n  ],\n  \"failed\": [\n    {\n      \"payload\": {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\",\n        \"roleId\": 53142648,\n        \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n        \"scopeType\": \"<string>\",\n        \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n      },\n      \"code\": 1546,\n      \"message\": \"string\"\n    },\n    {\n      \"payload\": {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\",\n        \"roleId\": 53142648,\n        \"scopeId\": \"a418ed33-9399-48c0-a890-122cadd13bfd\",\n        \"scopeType\": \"<string>\",\n        \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n      },\n      \"code\": 2442,\n      \"message\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c21e2d56-61ec-43f8-871e-1d66da27415e",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch-create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payload\": {\n    \"subjects\": [\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      },\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      }\n    ],\n    \"roleId\": 53142648,\n    \"scopes\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      }\n    ],\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Required parameter is missing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5753a2c3-ce33-4e44-902f-45050c9c1d40",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch-create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payload\": {\n    \"subjects\": [\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      },\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      }\n    ],\n    \"roleId\": 53142648,\n    \"scopes\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      }\n    ],\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9a7a3f46-0538-44f6-908d-c91ca6bb5fc7",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch-create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payload\": {\n    \"subjects\": [\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      },\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      }\n    ],\n    \"roleId\": 53142648,\n    \"scopes\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      }\n    ],\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "72a2446a-6945-4efd-a8c9-1782174d0036",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch-create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payload\": {\n    \"subjects\": [\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      },\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      }\n    ],\n    \"roleId\": 53142648,\n    \"scopes\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      }\n    ],\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7ee0c38a-9e6e-4567-a4ba-c113ecc865c7",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "authorization",
+                    "access-rules",
+                    "batch-create"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"payload\": {\n    \"subjects\": [\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      },\n      {\n        \"subjectId\": \"user@run.ai\",\n        \"subjectType\": \"<string>\"\n      }\n    ],\n    \"roleId\": 53142648,\n    \"scopes\": [\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      },\n      {\n        \"scopeId\": \"<string>\",\n        \"scopeType\": \"<string>\"\n      }\n    ],\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.run.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "f5f12e03-8eca-439a-84c9-ba4ada6370fb",
+    "name": "NVIDIA Run:ai Access Keys Access rules API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.\n\nNVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.\nTo create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.\n\nAfter you have created a new service account, you will need to assign it access rules.\nTo assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).\nMake sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.\n\nTo get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).\n",
+      "type": "text/plain"
+    }
+  }
+}

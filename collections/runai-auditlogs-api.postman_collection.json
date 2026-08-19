@@ -1,0 +1,906 @@
+{
+  "item": [
+    {
+      "id": "e82f38b0-4296-4bb8-8d4b-5b4eb688d2f8",
+      "name": "AuditLogs",
+      "description": {
+        "content": "The audit log provides audit trail information for user activity, changes to business objects and other important information. For more information, see [Audit log](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/procedures/event-history).",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a6ca4a14-4374-4261-937e-1c3cb49a14da",
+          "name": "Get audit logs",
+          "request": {
+            "name": "Get audit logs",
+            "description": {
+              "content": "Get audit logs based on query params filter",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "audit",
+                "log"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<dateTime>",
+                  "description": "(Required) Start date of time range to fetch data in ISO 8601 timestamp format."
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<dateTime>",
+                  "description": "(Required) End date of time range to fetch data in ISO 8601 timestamp format."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "The offset of the first item returned in the collection."
+                },
+                {
+                  "disabled": false,
+                  "key": "numberOfSamples",
+                  "value": "20",
+                  "description": "The number of samples to take in the specified time range."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "description": "Sort results in descending or ascending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "<string>",
+                  "description": "Sort results by a parameters."
+                },
+                {
+                  "disabled": false,
+                  "key": "filterBy",
+                  "value": "<string>,<string>",
+                  "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ee0a0f76-5b9e-40a5-8c7c-ac3067ac1011",
+              "name": "Executed successfully",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "audit",
+                    "log"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2023-06-06T12:09:18.211Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2023-06-07T12:09:18.211Z"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "numberOfSamples",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "cluster_name==my-cluster_name,entity_type==cluster,entity_name==test"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"total\": 2000,\n  \"next\": 100,\n  \"audit_logs\": [\n    {\n      \"tenant_id\": \"string\",\n      \"subject\": \"researcher@run.ai\",\n      \"subject_type\": \"User\",\n      \"action\": \"sign-in\",\n      \"result\": \"Failed\",\n      \"id\": \"2bb140ba-67a1-2b7e-3bd6-967fb7d89305\",\n      \"timestamp\": \"2022-01-01T03:49:52.531Z\",\n      \"source_ip\": \"21.230.210.27\",\n      \"http_method\": \"DELETE\",\n      \"url\": \"https://qYRWLpzDQeJIIOphKnxgw.acorL-Ad+0zaEuhvkoE.Gi\",\n      \"entity_type\": \"project\",\n      \"entity_name\": \"project-1\",\n      \"entity_id\": \"1234\",\n      \"http_status_code\": 200,\n      \"cluster_name\": \"my favorite cluster\",\n      \"cluster_id\": \"7251904a-68e0-5e84-1a0d-a81346505bb4\",\n      \"request_id\": \"bb0c4742-e52f-4d5e-bfee-2c4ff57c339c\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\",\n        \"key_3\": \"string\",\n        \"key_4\": \"string\",\n        \"key_5\": \"string\",\n        \"key_6\": \"string\",\n        \"key_7\": \"string\",\n        \"key_8\": \"string\"\n      }\n    },\n    {\n      \"tenant_id\": \"string\",\n      \"subject\": \"researcher@run.ai\",\n      \"subject_type\": \"User\",\n      \"action\": \"sign-out\",\n      \"result\": \"Failed\",\n      \"id\": \"f6a5b1fb-f595-dd19-8ba4-3cca6fa5001f\",\n      \"timestamp\": \"2022-01-01T03:49:52.531Z\",\n      \"source_ip\": \"116.25.238.60\",\n      \"http_method\": \"PATCH\",\n      \"url\": \"https://hptHNDHMdBRAJCJ.fopzG5maJ1PRhI0bmWdEV2J,EDNAHulypa6sy6kntlXgAhw30slV9Re\",\n      \"entity_type\": \"project\",\n      \"entity_name\": \"project-1\",\n      \"entity_id\": \"1234\",\n      \"http_status_code\": 200,\n      \"cluster_name\": \"my favorite cluster\",\n      \"cluster_id\": \"1a19ea80-d727-8e03-5b94-2a65eecea30e\",\n      \"request_id\": \"bb0c4742-e52f-4d5e-bfee-2c4ff57c339c\",\n      \"metadata\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\",\n        \"key_3\": \"string\",\n        \"key_4\": \"string\",\n        \"key_5\": \"string\",\n        \"key_6\": \"string\",\n        \"key_7\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c5072dd8-b81b-4a7f-a695-c7aabf2dac98",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "audit",
+                    "log"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2023-06-06T12:09:18.211Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2023-06-07T12:09:18.211Z"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "numberOfSamples",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "cluster_name==my-cluster_name,entity_type==cluster,entity_name==test"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7fbc50e0-dcae-45be-9b28-e84ca32163e1",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "audit",
+                    "log"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2023-06-06T12:09:18.211Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2023-06-07T12:09:18.211Z"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "numberOfSamples",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "cluster_name==my-cluster_name,entity_type==cluster,entity_name==test"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "387696b4-f8fa-47e3-9227-ea60c84bfc58",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "audit",
+                    "log"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2023-06-06T12:09:18.211Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2023-06-07T12:09:18.211Z"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "numberOfSamples",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "cluster_name==my-cluster_name,entity_type==cluster,entity_name==test"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "54e9544a-d395-4f13-804d-c18e4883a2f2",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "audit",
+                    "log"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start",
+                      "value": "2023-06-06T12:09:18.211Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2023-06-07T12:09:18.211Z"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "numberOfSamples",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "cluster_name==my-cluster_name,entity_type==cluster,entity_name==test"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0872ef35-11e1-4265-8273-ca2e732b1a8f",
+          "name": "Download audit logs",
+          "request": {
+            "name": "Download audit logs",
+            "description": {
+              "content": "Download audit logs as a file, based on query params filter",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "audit",
+                "log",
+                "file"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "file_type",
+                  "value": "CSV"
+                },
+                {
+                  "disabled": false,
+                  "key": "start",
+                  "value": "<dateTime>",
+                  "description": "(Required) Start date of time range to fetch data in ISO 8601 timestamp format."
+                },
+                {
+                  "disabled": false,
+                  "key": "end",
+                  "value": "<dateTime>",
+                  "description": "(Required) End date of time range to fetch data in ISO 8601 timestamp format."
+                },
+                {
+                  "disabled": false,
+                  "key": "numberOfSamples",
+                  "value": "20",
+                  "description": "The number of samples to take in the specified time range."
+                },
+                {
+                  "disabled": false,
+                  "key": "filterBy",
+                  "value": "<string>,<string>",
+                  "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/octet-stream"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c2f2fbce-4731-42b9-84f4-c051bf7c727e",
+              "name": "File downloaded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "audit",
+                    "log",
+                    "file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "file_type",
+                      "value": "CSV"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2023-06-06T12:09:18.211Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2023-06-07T12:09:18.211Z"
+                    },
+                    {
+                      "key": "numberOfSamples",
+                      "value": "20"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "cluster_name==my-cluster_name,entity_type==cluster,entity_name==test"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/octet-stream"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/octet-stream"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "349f84aa-56b0-4ec0-a481-8341ca4de18c",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "audit",
+                    "log",
+                    "file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "file_type",
+                      "value": "CSV"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2023-06-06T12:09:18.211Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2023-06-07T12:09:18.211Z"
+                    },
+                    {
+                      "key": "numberOfSamples",
+                      "value": "20"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "cluster_name==my-cluster_name,entity_type==cluster,entity_name==test"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a298f305-9c9c-46e6-9911-f73b614ddd45",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "audit",
+                    "log",
+                    "file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "file_type",
+                      "value": "CSV"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2023-06-06T12:09:18.211Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2023-06-07T12:09:18.211Z"
+                    },
+                    {
+                      "key": "numberOfSamples",
+                      "value": "20"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "cluster_name==my-cluster_name,entity_type==cluster,entity_name==test"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "944e2fc6-faf0-4d04-bd66-422f411ac915",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "audit",
+                    "log",
+                    "file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "file_type",
+                      "value": "CSV"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2023-06-06T12:09:18.211Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2023-06-07T12:09:18.211Z"
+                    },
+                    {
+                      "key": "numberOfSamples",
+                      "value": "20"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "cluster_name==my-cluster_name,entity_type==cluster,entity_name==test"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "60a303f3-24f3-4d10-9699-ff5ee42f40ff",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "audit",
+                    "log",
+                    "file"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "file_type",
+                      "value": "CSV"
+                    },
+                    {
+                      "key": "start",
+                      "value": "2023-06-06T12:09:18.211Z"
+                    },
+                    {
+                      "key": "end",
+                      "value": "2023-06-07T12:09:18.211Z"
+                    },
+                    {
+                      "key": "numberOfSamples",
+                      "value": "20"
+                    },
+                    {
+                      "key": "filterBy",
+                      "value": "cluster_name==my-cluster_name,entity_type==cluster,entity_name==test"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.run.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "59c96529-2518-448d-9f71-bd443dbd276f",
+    "name": "NVIDIA Run:ai Access Keys Audit Logs API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.\n\nNVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.\nTo create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.\n\nAfter you have created a new service account, you will need to assign it access rules.\nTo assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).\nMake sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.\n\nTo get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).\n",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,1633 @@
+{
+  "item": [
+    {
+      "id": "26d5924c-866c-4abd-b2e6-0d98efa56ee6",
+      "name": "Workloads V2",
+      "description": {
+        "content": "The Workloads V2 API allows you to create, retrieve, and delete workloads that originate from third-party ML frameworks, tools, or the broader Kubernetes ecosystem. These workloads are registered in the platform through the Workload Types API, some are already registered in NVIDIA Run:ai, while others can be added by administrators.\nEach submission combines the user's Kubernetes manifest with NVIDIA Run:ai scheduling metadata, enabling consistent orchestration, monitoring, and governance. See [Extending workload support](https://run-ai-docs.nvidia.com/saas/workloads-in-nvidia-run-ai/workload-types/extending-workload-support) for more details.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3a91419d-7427-4237-95ce-5df3c2cab8b0",
+          "name": "Create a workload. [Experimental]",
+          "request": {
+            "name": "Create a workload. [Experimental]",
+            "description": {
+              "content": "Submit a workload with metadata and a Kubernetes manifest.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "workloads"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"useGivenNameAsPrefix\": false,\n    \"projectId\": \"<string>\",\n    \"clusterId\": \"<uuid>\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"key_0\": 5377\n  },\n  \"manifestBase64Encoded\": \"<byte>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "e272daff-cc93-4ca4-a442-0aacc91285f4",
+              "name": "Workload creation request accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"useGivenNameAsPrefix\": true,\n    \"projectId\": \"<string>\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"metadata\": {\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"createdAt\": \"2024-01-15T10:30:00Z\",\n    \"createdBy\": \"user@run.ai\",\n    \"departmentId\": \"Jiax\",\n    \"departmentName\": \"default\",\n    \"gvk\": {\n      \"group\": \"apps\",\n      \"version\": \"v1\",\n      \"kind\": \"Deployment\"\n    },\n    \"id\": \"59895f74-a871-3317-a021-62a6519e31a1\",\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"projectName\": \"project-a\",\n    \"tenantId\": 1001,\n    \"updatedAt\": \"2024-01-15T10:35:00Z\",\n    \"updatedBy\": \"user@run.ai\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"deletedAt\": \"2024-01-15T10:35:00Z\",\n    \"deletedBy\": \"user@run.ai\"\n  },\n  \"desiredPhase\": \"Stopped\",\n  \"workloadManifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"rawManifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef325e5d-4e77-4963-afe9-0c0c32252c8e",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"useGivenNameAsPrefix\": true,\n    \"projectId\": \"<string>\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Required parameter is missing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ad9a2ab-af79-4c41-b646-e9e61f3b1abc",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"useGivenNameAsPrefix\": true,\n    \"projectId\": \"<string>\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9da54b1f-014c-4c7c-83e7-18fad110981e",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"useGivenNameAsPrefix\": true,\n    \"projectId\": \"<string>\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6e8d040-cc4d-4906-b4ba-c621f19826e7",
+              "name": "The specified resource already exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"useGivenNameAsPrefix\": true,\n    \"projectId\": \"<string>\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 409,\n  \"message\": \"Resource with this name already exists\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ebcc1035-b31d-48f6-bd58-05af5f70311d",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"useGivenNameAsPrefix\": true,\n    \"projectId\": \"<string>\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9bf1454f-d07d-4434-87c1-ee39c6d5271f",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"useGivenNameAsPrefix\": true,\n    \"projectId\": \"<string>\",\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0d13fbf4-6be0-4669-85f8-c4a09804c32d",
+          "name": "Get a specific workload. [Experimental]",
+          "request": {
+            "name": "Get a specific workload. [Experimental]",
+            "description": {
+              "content": "Retrieve details of a specific workload by ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "workloads",
+                ":WorkloadV2Id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "WorkloadV2Id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "75bdb09e-8d2b-461a-9d1f-f8814e25bff3",
+              "name": "Successfully retrieved the workload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"workload\": {\n    \"metadata\": {\n      \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n      \"createdAt\": \"2024-01-15T10:30:00Z\",\n      \"createdBy\": \"user@run.ai\",\n      \"departmentId\": \"l(8r4Ei9\",\n      \"departmentName\": \"default\",\n      \"gvk\": {\n        \"group\": \"apps\",\n        \"version\": \"v1\",\n        \"kind\": \"Deployment\"\n      },\n      \"id\": \"40a197bb-42ea-73c9-af91-1d8b75165dad\",\n      \"name\": \"my-workload-name\",\n      \"projectId\": \"<string>\",\n      \"projectName\": \"project-a\",\n      \"tenantId\": 1001,\n      \"updatedAt\": \"2024-01-15T10:35:00Z\",\n      \"updatedBy\": \"user@run.ai\",\n      \"priority\": \"<string,null>\",\n      \"category\": \"<string,null>\",\n      \"preemptibility\": \"<string,null>\",\n      \"deletedAt\": \"2024-01-15T10:35:00Z\",\n      \"deletedBy\": \"user@run.ai\"\n    },\n    \"desiredPhase\": \"Deleted\",\n    \"workloadManifest\": {\n      \"apiVersion\": \"apps/v1\",\n      \"kind\": \"Deployment\",\n      \"metadata\": {\n        \"name\": \"my-app\"\n      },\n      \"spec\": {\n        \"replicas\": 1,\n        \"selector\": {\n          \"matchLabels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"template\": {\n          \"metadata\": {\n            \"labels\": {\n              \"app\": \"my-app\"\n            }\n          },\n          \"spec\": {\n            \"containers\": [\n              {\n                \"name\": \"app\",\n                \"image\": \"nginx:latest\"\n              }\n            ]\n          }\n        }\n      }\n    },\n    \"rawManifest\": {\n      \"apiVersion\": \"apps/v1\",\n      \"kind\": \"Deployment\",\n      \"metadata\": {\n        \"name\": \"my-app\"\n      },\n      \"spec\": {\n        \"replicas\": 1,\n        \"selector\": {\n          \"matchLabels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"template\": {\n          \"metadata\": {\n            \"labels\": {\n              \"app\": \"my-app\"\n            }\n          },\n          \"spec\": {\n            \"containers\": [\n              {\n                \"name\": \"app\",\n                \"image\": \"nginx:latest\"\n              }\n            ]\n          }\n        }\n      }\n    }\n  },\n  \"syncInfo\": {\n    \"status\": \"Deleted\",\n    \"message\": \"]neN,s+xa\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1ec68d3-baf8-4e41-8ba9-51d7130c71ff",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ce1f2a1e-5b18-4c08-bdb3-0f0e8b23e1d2",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "97ad0ee4-f5b0-4edf-8331-9a0bbaa092a3",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d8cc149f-4f2e-4f30-ab16-8a71003ab98a",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "344fb14a-1e5e-484a-855d-49c87c1d8a00",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8c879041-6fcb-4889-85b3-7fdd75aad47c",
+          "name": "Delete a workload. [Experimental]",
+          "request": {
+            "name": "Delete a workload. [Experimental]",
+            "description": {
+              "content": "Delete a specific workload by ID",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "workloads",
+                ":WorkloadV2Id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "WorkloadV2Id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a02ce490-1c27-4fd1-bb5b-25a0aa78ccc7",
+              "name": "Deletion request accepted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"metadata\": {\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"createdAt\": \"2024-01-15T10:30:00Z\",\n    \"createdBy\": \"user@run.ai\",\n    \"departmentId\": \"Jiax\",\n    \"departmentName\": \"default\",\n    \"gvk\": {\n      \"group\": \"apps\",\n      \"version\": \"v1\",\n      \"kind\": \"Deployment\"\n    },\n    \"id\": \"59895f74-a871-3317-a021-62a6519e31a1\",\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"projectName\": \"project-a\",\n    \"tenantId\": 1001,\n    \"updatedAt\": \"2024-01-15T10:35:00Z\",\n    \"updatedBy\": \"user@run.ai\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"deletedAt\": \"2024-01-15T10:35:00Z\",\n    \"deletedBy\": \"user@run.ai\"\n  },\n  \"desiredPhase\": \"Stopped\",\n  \"workloadManifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"rawManifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6d5f6ad-c57a-438f-82b7-b2a281b23206",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6311440a-82c2-4a5f-911d-14a3c7290eaf",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b7d714f7-3d7b-4af6-a0a6-0ecfc11d6aae",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7e41ed8a-b44b-4c64-a8f2-f7988a8904c7",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "19cb70ce-9efb-41d9-ab5b-076e615be13c",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8e0700ca-197e-40e5-9098-7abc548b9040",
+          "name": "Update workload spec. [Experimental]",
+          "request": {
+            "name": "Update workload spec. [Experimental]",
+            "description": {
+              "content": "Update the specification of an existing workload.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "workloads",
+                ":WorkloadV2Id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "WorkloadV2Id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"metadata\": {\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"key_0\": 8037.524717938658\n  },\n  \"manifestBase64Encoded\": \"<byte>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2032e486-fd3b-4970-a1a0-c1c777b35b89",
+              "name": "Workload update request accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"metadata\": {\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"createdAt\": \"2024-01-15T10:30:00Z\",\n    \"createdBy\": \"user@run.ai\",\n    \"departmentId\": \"Jiax\",\n    \"departmentName\": \"default\",\n    \"gvk\": {\n      \"group\": \"apps\",\n      \"version\": \"v1\",\n      \"kind\": \"Deployment\"\n    },\n    \"id\": \"59895f74-a871-3317-a021-62a6519e31a1\",\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"projectName\": \"project-a\",\n    \"tenantId\": 1001,\n    \"updatedAt\": \"2024-01-15T10:35:00Z\",\n    \"updatedBy\": \"user@run.ai\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"deletedAt\": \"2024-01-15T10:35:00Z\",\n    \"deletedBy\": \"user@run.ai\"\n  },\n  \"desiredPhase\": \"Stopped\",\n  \"workloadManifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"rawManifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "89023912-28ee-4878-8afe-247dbf7b2aa2",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "798d6e4d-d12a-4a35-8ce0-4fae25e3d72d",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f9b5b913-cce0-4aa9-b54e-b2b4e6bfe446",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "70d55c62-8576-49f1-a237-d6da23724fc8",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "68eb8cba-cd24-445f-9eda-682bea9e0b96",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\"\n  },\n  \"manifest\": {\n    \"apiVersion\": \"apps/v1\",\n    \"kind\": \"Deployment\",\n    \"metadata\": {\n      \"name\": \"my-app\"\n    },\n    \"spec\": {\n      \"replicas\": 1,\n      \"selector\": {\n        \"matchLabels\": {\n          \"app\": \"my-app\"\n        }\n      },\n      \"template\": {\n        \"metadata\": {\n          \"labels\": {\n            \"app\": \"my-app\"\n          }\n        },\n        \"spec\": {\n          \"containers\": [\n            {\n              \"name\": \"app\",\n              \"image\": \"nginx:latest\"\n            }\n          ]\n        }\n      }\n    }\n  },\n  \"manifestBase64Encoded\": \"YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.run.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "75ace6be-e6b6-4efa-9668-e4c3f78b4afb",
+    "name": "NVIDIA Run:ai Access Keys Workloads V2 API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.\n\nNVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.\nTo create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.\n\nAfter you have created a new service account, you will need to assign it access rules.\nTo assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).\nMake sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.\n\nTo get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).\n",
+      "type": "text/plain"
+    }
+  }
+}

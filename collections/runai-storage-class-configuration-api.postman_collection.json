@@ -1,0 +1,2668 @@
+{
+  "item": [
+    {
+      "id": "a3cf9b70-e6f0-457c-b325-b540972174df",
+      "name": "Storage Class Configuration",
+      "description": {
+        "content": "The storage class configuration API enables administrators to define, manage, and customize how storage classes are used across the NVIDIA Run:ai platform. Through this API, you can configure access modes, volume modes, and claim size restrictions for persistent volume claims (PVCs). These settings help standardize storage behavior, enforce organization-wide policies, and ensure consistent resource allocation across workloads.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "14cdea58-13ce-4822-a9b3-5995746daeab",
+          "name": "List storage class configurations",
+          "request": {
+            "name": "List storage class configurations",
+            "description": {
+              "content": "Retrieves a list of storage class configurations defined in the system.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "storage-class-configuration"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "filterBy",
+                  "value": "<string>,<string>",
+                  "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortBy",
+                  "value": "<string>",
+                  "description": "Sort results by a parameters."
+                },
+                {
+                  "disabled": false,
+                  "key": "sortOrder",
+                  "value": "asc",
+                  "description": "Sort results in descending or ascending order."
+                },
+                {
+                  "disabled": false,
+                  "key": "offset",
+                  "value": "<integer>",
+                  "description": "The offset of the first item returned in the collection."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "50",
+                  "description": "The maximum number of entries to return."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fd648149-ac07-4f2f-84ad-6f4df39d4735",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filterBy",
+                      "value": "name!=some-name"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"storageClassConfigurations\": [\n    {\n      \"id\": \"688004d0-ab86-2b05-d721-4756e9f28fcb\",\n      \"tenantId\": 1001,\n      \"scopeType\": \"cluster\",\n      \"scopeId\": \"c7d1f321-a36c-98f0-dab0-a11d2ac749eb\",\n      \"name\": \"Standard\",\n      \"permissions\": {\n        \"allowedForAssets\": true,\n        \"allowedForWorkloads\": true,\n        \"allowedForEphemeralVolumes\": false,\n        \"allowedForPersistentVolumes\": null,\n        \"allowDataSharing\": null\n      },\n      \"customization\": {\n        \"accessMode\": {\n          \"required\": null,\n          \"default\": {\n            \"readWriteOnce\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"readOnlyMany\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"readWriteMany\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"supportedValues\": {\n            \"readWriteOnce\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"readOnlyMany\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"readWriteMany\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"volumeMode\": {\n          \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n          \"type\": [\n            \"string\",\n            \"null\"\n          ],\n          \"enum\": [\n            \"Filesystem\",\n            \"Block\"\n          ]\n        },\n        \"claimSize\": {\n          \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n          \"type\": [\n            \"string\",\n            \"null\"\n          ],\n          \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n          \"example\": \"1G\"\n        },\n        \"attributes\": [\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"format\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"placeholder\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"required\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"defaultValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"validationRegexp\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"minValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maxValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"step\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"validationError\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"format\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"placeholder\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"required\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"defaultValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"validationRegexp\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"minValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maxValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"step\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"validationError\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    },\n    {\n      \"id\": \"5a320a41-9b29-d1f1-10d8-680985ee5089\",\n      \"tenantId\": 1001,\n      \"scopeType\": \"cluster\",\n      \"scopeId\": \"57be628c-9a8c-731d-4e6b-6062b03e6057\",\n      \"name\": \"Standard\",\n      \"permissions\": {\n        \"allowedForAssets\": null,\n        \"allowedForWorkloads\": null,\n        \"allowedForEphemeralVolumes\": true,\n        \"allowedForPersistentVolumes\": null,\n        \"allowDataSharing\": false\n      },\n      \"customization\": {\n        \"accessMode\": {\n          \"required\": null,\n          \"default\": {\n            \"readWriteOnce\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"readOnlyMany\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"readWriteMany\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"supportedValues\": {\n            \"readWriteOnce\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"readOnlyMany\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"readWriteMany\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        },\n        \"volumeMode\": {\n          \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n          \"type\": [\n            \"string\",\n            \"null\"\n          ],\n          \"enum\": [\n            \"Filesystem\",\n            \"Block\"\n          ]\n        },\n        \"claimSize\": {\n          \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n          \"type\": [\n            \"string\",\n            \"null\"\n          ],\n          \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n          \"example\": \"1G\"\n        },\n        \"attributes\": [\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"format\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"placeholder\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"required\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"defaultValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"validationRegexp\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"minValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maxValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"step\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"validationError\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          {\n            \"key\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"format\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"placeholder\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"required\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"defaultValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"validationRegexp\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"minValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"maxValue\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"step\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"validationError\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          }\n        ]\n      }\n    }\n  ],\n  \"next\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc38b9e2-1ba6-405c-8440-7c72bbf6b128",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filterBy",
+                      "value": "name!=some-name"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "997c6afb-8847-4873-9692-153ff6d26c29",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filterBy",
+                      "value": "name!=some-name"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "33f82a75-52b4-4ffc-8364-4afcc513e98c",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filterBy",
+                      "value": "name!=some-name"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8809ffbe-179e-41f2-9295-dc1fa3239eb6",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filterBy",
+                      "value": "name!=some-name"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb06d172-932a-442c-bfcb-c6c6d4234fc7",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "filterBy",
+                      "value": "name!=some-name"
+                    },
+                    {
+                      "key": "sortBy",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "sortOrder",
+                      "value": "asc"
+                    },
+                    {
+                      "key": "offset",
+                      "value": "100"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "50"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1e44c294-b468-4584-b9c8-3b83ee3394d5",
+          "name": "Create storage class configuration",
+          "request": {
+            "name": "Create storage class configuration",
+            "description": {
+              "content": "Creates a new storage class configuration in the NVIDIA Run:ai platform.\nThis endpoint enables administrators to define storage class behavior and customize their usage settings.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "storage-class-configuration"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"<string>\",\n  \"tenantId\": \"<integer,null>\",\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"<string>\",\n        \"format\": \"<string,null>\",\n        \"display\": \"<string,null>\",\n        \"description\": \"<string,null>\",\n        \"placeholder\": \"<string,null>\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"<string,null>\",\n        \"validationRegexp\": \"<string,null>\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"<string,null>\"\n      },\n      {\n        \"key\": \"<string>\",\n        \"format\": \"<string,null>\",\n        \"display\": \"<string,null>\",\n        \"description\": \"<string,null>\",\n        \"placeholder\": \"<string,null>\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"<string,null>\",\n        \"validationRegexp\": \"<string,null>\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"<string,null>\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "d7b4a973-42df-4ef4-a5eb-686196fd049a",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"tenantId\": 1001,\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"021c0b2d-87ff-2781-c11d-483696147811\",\n  \"tenantId\": 1001,\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b15a1f77-a146-42e8-b520-648c06db3164",
+              "name": "Bad request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"tenantId\": 1001,\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"Required parameter is missing\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a5228f2c-a6fd-453e-bea8-a1af092666fa",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"tenantId\": 1001,\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc4c56af-caac-4f4a-9abf-7d23e32d0619",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"tenantId\": 1001,\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "60f411ae-74a2-4507-94aa-2add8269fef1",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"tenantId\": 1001,\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2a033e85-c8aa-4d59-b9d2-53d4d0cf7d28",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"tenantId\": 1001,\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e5bce7e4-b908-4a62-87b1-5fd6c6ff941f",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"tenantId\": 1001,\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3cb745a5-73b0-418a-bd58-e635145a728b",
+          "name": "Get storage class configuration by id",
+          "request": {
+            "name": "Get storage class configuration by id",
+            "description": {
+              "content": "Retrieves a specific storage class configuration by its unique identifier. Use this endpoint to view detailed information about the configuration, including its permissions and customization options.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "storage-class-configuration",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "tenantId",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) unique identifier of the storage class configuration"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d762ba7a-aa2d-4889-a180-511e510d9173",
+              "name": "Storage class configuration",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"021c0b2d-87ff-2781-c11d-483696147811\",\n  \"tenantId\": 1001,\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7002c9d-2d44-4339-9dc8-829ff352a7ce",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8b6ec91c-3e40-4481-a04b-d062777ab571",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e668777-a29c-40e2-a30a-c2cd2c7ceb95",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "465c7cd8-d14f-4e25-850b-75d450c876fd",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d1e698f9-6353-46da-9200-127c887377b1",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e76345d0-00e3-4556-a842-9fc89bc890bf",
+          "name": "Patch storage class configuration by id",
+          "request": {
+            "name": "Patch storage class configuration by id",
+            "description": {
+              "content": "Partially updates an existing storage class configuration by its unique identifier. Use this endpoint to modify specific fields, such as permissions, customization values, or attributes, without replacing the entire configuration.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "storage-class-configuration",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "tenantId",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) unique identifier of the storage class configuration"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": \"<object,null>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c9b60cb6-a1a4-4344-b607-f715a6376c1f",
+              "name": "Storage class configuration",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ],\n    \"attributesToRemove\": [\n      \"dnsname\",\n      \"dnsip\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"021c0b2d-87ff-2781-c11d-483696147811\",\n  \"tenantId\": 1001,\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7d9a4567-26a1-4d46-9fd5-a8aad9f1a7e3",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ],\n    \"attributesToRemove\": [\n      \"dnsname\",\n      \"dnsip\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e0c8d4ee-0e3a-4536-a4af-f87046f18de8",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ],\n    \"attributesToRemove\": [\n      \"dnsname\",\n      \"dnsip\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1add383-5172-44ad-8e33-1fcf025ee67c",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ],\n    \"attributesToRemove\": [\n      \"dnsname\",\n      \"dnsip\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17250caf-4948-4108-a090-aa0bfbdbd13b",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ],\n    \"attributesToRemove\": [\n      \"dnsname\",\n      \"dnsip\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5694b78-1789-4488-be9e-4a4309f5bb96",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ],\n    \"attributesToRemove\": [\n      \"dnsname\",\n      \"dnsip\"\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7e18a1af-18eb-47e7-8c99-9b89622f020f",
+          "name": "Update storage class configuration by id",
+          "request": {
+            "name": "Update storage class configuration by id",
+            "description": {
+              "content": "Updates an existing storage class configuration by its unique identifier. Use this endpoint to fully replace an existing configuration, including permissions and customization settings.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "storage-class-configuration",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "tenantId",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) unique identifier of the storage class configuration"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"<string>\",\n        \"format\": \"<string,null>\",\n        \"display\": \"<string,null>\",\n        \"description\": \"<string,null>\",\n        \"placeholder\": \"<string,null>\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"<string,null>\",\n        \"validationRegexp\": \"<string,null>\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"<string,null>\"\n      },\n      {\n        \"key\": \"<string>\",\n        \"format\": \"<string,null>\",\n        \"display\": \"<string,null>\",\n        \"description\": \"<string,null>\",\n        \"placeholder\": \"<string,null>\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"<string,null>\",\n        \"validationRegexp\": \"<string,null>\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"<string,null>\"\n      }\n    ]\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2d6e45b6-c66f-45cf-8f15-e126f396566d",
+              "name": "Storage class configuration",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"021c0b2d-87ff-2781-c11d-483696147811\",\n  \"tenantId\": 1001,\n  \"scopeType\": \"cluster\",\n  \"scopeId\": \"<uuid>\",\n  \"name\": \"Standard\",\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "901e8c0d-8965-45b5-ae3e-1b50bf4ebed4",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17b26092-a456-46a4-9d42-c72ba55585e7",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "52935ab7-bc9e-4cd4-935b-ff78dd8ea854",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f69e6353-deba-4df7-8c5c-f86a36ae2ae9",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22e771cf-a597-4344-974f-6240aaa3184c",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"permissions\": {\n    \"allowedForAssets\": \"<boolean,null>\",\n    \"allowedForWorkloads\": \"<boolean,null>\",\n    \"allowedForEphemeralVolumes\": \"<boolean,null>\",\n    \"allowedForPersistentVolumes\": \"<boolean,null>\",\n    \"allowDataSharing\": \"<boolean,null>\"\n  },\n  \"customization\": {\n    \"accessMode\": {\n      \"required\": \"<boolean,null>\",\n      \"default\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": false,\n        \"readWriteMany\": false\n      },\n      \"supportedValues\": {\n        \"readWriteOnce\": true,\n        \"readOnlyMany\": true,\n        \"readWriteMany\": true\n      }\n    },\n    \"volumeMode\": {\n      \"description\": \"Default volume mode for the PVC. Choose between Filesystem (default) or Block.\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"enum\": [\n        \"Filesystem\",\n        \"Block\"\n      ],\n      \"default\": \"<string,null>\"\n    },\n    \"claimSize\": {\n      \"description\": \"Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB\",\n      \"type\": [\n        \"string\",\n        \"null\"\n      ],\n      \"pattern\": \"^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$\",\n      \"example\": \"1G\",\n      \"default\": \"<string,null>\"\n    },\n    \"attributes\": [\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      },\n      {\n        \"key\": \"dnsname\",\n        \"format\": \"<string,null>\",\n        \"display\": \"DNS Name\",\n        \"description\": \"The host name of the DNS\",\n        \"placeholder\": \"enter hostname or IP address\",\n        \"required\": \"<boolean,null>\",\n        \"defaultValue\": \"my.dns.com\",\n        \"validationRegexp\": \"^[a-zA-Z0-9.-_]+$\",\n        \"minValue\": \"<number,null>\",\n        \"maxValue\": \"<number,null>\",\n        \"step\": \"<number,null>\",\n        \"validationError\": \"Invalid URL\"\n      }\n    ]\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6de2c0d1-307b-4eb4-9049-85c3e1a0f131",
+          "name": "Delete storage class configuration by id",
+          "request": {
+            "name": "Delete storage class configuration by id",
+            "description": {
+              "content": "Deletes a specific storage class configuration by its unique identifier. Use this endpoint to permanently remove configurations that are no longer needed.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "storage-class-configuration",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "tenantId",
+                  "value": "<integer>"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) unique identifier of the storage class configuration"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5fb6ce6c-7f28-434c-839c-5366086022d1",
+              "name": "Storage class configuration deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f99a1806-458c-40a9-871a-4ad9030617c4",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d0db1c85-e480-4f07-98b0-a16205af1eac",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "57d49520-bbdc-47d9-9fd6-afe744ed24e3",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a77cb5f-b1a0-4c02-af79-af98f40aac06",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4d0c4bd7-568c-43a8-bfa3-e0085515e7a5",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "storage-class-configuration",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "tenantId",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) unique identifier of the storage class configuration"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.run.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a1a85df2-4d96-4f9a-9ff6-355407ff1e54",
+    "name": "NVIDIA Run:ai Access Keys Storage Class Configuration API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.\n\nNVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.\nTo create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.\n\nAfter you have created a new service account, you will need to assign it access rules.\nTo assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).\nMake sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.\n\nTo get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).\n",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,79 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys NVIDIA NIM API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "NVIDIA NIM",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a NVIDIA NIM service. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v2/workloads/nim-services",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a NVIDIA NIM service"
+        },
+        {
+          "info": {
+            "name": "Get a NVIDIA NIM service. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v2/workloads/nim-services/:WorkloadV2Id",
+            "params": [
+              {
+                "name": "WorkloadV2Id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve details of a specific NVIDIA NIM service, by id"
+        },
+        {
+          "info": {
+            "name": "Update NVIDIA NIM service spec. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v2/workloads/nim-services/:WorkloadV2Id",
+            "params": [
+              {
+                "name": "WorkloadV2Id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the specification of an existing NVIDIA NIM service."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

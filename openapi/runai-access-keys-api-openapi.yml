@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -247,6 +247,182 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  schemas:
+    AccessKeysAdministration:
+      type: object
+      required:
+      - accessKeys
+      properties:
+        accessKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessKeyAdministration'
+      example:
+        accessKeys:
+        - name: my-access-key
+          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+          clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
+          createdBy: test@run.ai
+          createdAt: '2020-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+        - name: another-access-key
+          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
+          clientId: 2545e-234344bc-5df4gc8-d66he-fg566f
+          createdBy: user@run.ai
+          createdAt: '2020-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+    AccessKeyPostResponse:
+      type: object
+      required:
+      - id
+      - name
+      - clientSecret
+      - clientId
+      - createdAt
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the access key.
+        clientId:
+          type: string
+          description: The client identifier associated with the access key. Used when requesting authentication tokens.
+        name:
+          type: string
+          description: The name of the access key.
+        clientSecret:
+          type: string
+          description: Secret credential paired with the client ID. Used to obtain authentication tokens. Displayed only once upon creation.
+        createdAt:
+          format: date-time
+          type:
+          - string
+          - 'null'
+          description: The timestamp for when the access key was created.
+      example:
+        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
+        clientId: 5e7b3b7b4b7b4b7b
+        name: access-key-123
+        clientSecret: this-is-the-access-key-secret
+        createdAt: '2020-01-01T00:00:00Z'
+    AccessKey1:
+      type: object
+      required:
+      - name
+      - id
+      - clientId
+      - createdAt
+      - lastLogin
+      properties:
+        name:
+          type: string
+          description: The name of the access key.
+        clientId:
+          type: string
+          description: The client identifier associated with the access key. Used when requesting authentication tokens.
+        id:
+          type: string
+          description: The unique identifier of the access key.
+        createdAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The timestamp for when the access key was created.
+        lastLogin:
+          type:
+          - string
+          - 'null'
+          format: date-time
+          description: The timestamp of the last time the access key was used to authenticate.
+      example:
+        name: my-access-key
+        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+        clientId: 3434c-12323ab-4ce2ea6
+        createdAt: '2019-01-01T00:00:00Z'
+        lastLogin: '2020-01-01T00:00:00Z'
+    AccessKeyCreationRequest1:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
+          description: The name of the access key. The name must be unique within the user's access keys list and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
+      example:
+        name: access-key-name
+    AccessKeyAdministration:
+      type: object
+      required:
+      - name
+      - id
+      - clientId
+      - createdBy
+      - createdAt
+      - lastLogin
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        clientId:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        lastLogin:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      example:
+        name: my-access-key
+        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+        clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
+        createdBy: test@run.ai
+        createdAt: '2020-01-01T00:00:00Z'
+        lastLogin: '2020-01-01T00:00:00Z'
+    AccessKeys:
+      type: object
+      required:
+      - accessKeys
+      properties:
+        accessKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessKey1'
+      example:
+        accessKeys:
+        - name: my-access-key
+          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+          clientId: 3434c-12323ab-4ce2ea6
+          createdAt: '2019-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+        - name: another-access-key
+          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
+          clientId: 5656d-45645cd-6de3fb7
+          createdAt: '2019-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
   responses:
     401Unauthorized:
       description: Unauthorized
@@ -257,15 +433,6 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
     500InternalServerError:
       description: unexpected error
       content:
@@ -302,6 +469,15 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
     409Conflict:
       description: The specified resource already exists
       content:
@@ -311,177 +487,6 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
-  schemas:
-    AccessKeyAdministration:
-      type: object
-      required:
-      - name
-      - id
-      - clientId
-      - createdBy
-      - createdAt
-      - lastLogin
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-        clientId:
-          type: string
-        createdBy:
-          type: string
-        createdAt:
-          type: string
-          format: date-time
-          nullable: true
-        lastLogin:
-          type: string
-          format: date-time
-          nullable: true
-      example:
-        name: my-access-key
-        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
-        clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
-        createdBy: test@run.ai
-        createdAt: '2020-01-01T00:00:00Z'
-        lastLogin: '2020-01-01T00:00:00Z'
-    AccessKeys:
-      type: object
-      required:
-      - accessKeys
-      properties:
-        accessKeys:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessKey1'
-      example:
-        accessKeys:
-        - name: my-access-key
-          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
-          clientId: 3434c-12323ab-4ce2ea6
-          createdAt: '2019-01-01T00:00:00Z'
-          lastLogin: '2020-01-01T00:00:00Z'
-        - name: another-access-key
-          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
-          clientId: 5656d-45645cd-6de3fb7
-          createdAt: '2019-01-01T00:00:00Z'
-          lastLogin: '2020-01-01T00:00:00Z'
-    AccessKeyCreationRequest1:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
-          description: The name of the access key. The name must be unique within the user's access keys list and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
-      example:
-        name: access-key-name
-    AccessKeyPostResponse:
-      type: object
-      required:
-      - id
-      - name
-      - clientSecret
-      - clientId
-      - createdAt
-      properties:
-        id:
-          type: string
-          description: The unique identifier of the access key.
-        clientId:
-          type: string
-          description: The client identifier associated with the access key. Used when requesting authentication tokens.
-        name:
-          type: string
-          description: The name of the access key.
-        clientSecret:
-          type: string
-          description: Secret credential paired with the client ID. Used to obtain authentication tokens. Displayed only once upon creation.
-        createdAt:
-          format: date-time
-          nullable: true
-          type: string
-          description: The timestamp for when the access key was created.
-      example:
-        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
-        clientId: 5e7b3b7b4b7b4b7b
-        name: access-key-123
-        clientSecret: this-is-the-access-key-secret
-        createdAt: '2020-01-01T00:00:00Z'
-    AccessKeysAdministration:
-      type: object
-      required:
-      - accessKeys
-      properties:
-        accessKeys:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessKeyAdministration'
-      example:
-        accessKeys:
-        - name: my-access-key
-          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
-          clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
-          createdBy: test@run.ai
-          createdAt: '2020-01-01T00:00:00Z'
-          lastLogin: '2020-01-01T00:00:00Z'
-        - name: another-access-key
-          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
-          clientId: 2545e-234344bc-5df4gc8-d66he-fg566f
-          createdBy: user@run.ai
-          createdAt: '2020-01-01T00:00:00Z'
-          lastLogin: '2020-01-01T00:00:00Z'
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    AccessKey1:
-      type: object
-      required:
-      - name
-      - id
-      - clientId
-      - createdAt
-      - lastLogin
-      properties:
-        name:
-          type: string
-          description: The name of the access key.
-        clientId:
-          type: string
-          description: The client identifier associated with the access key. Used when requesting authentication tokens.
-        id:
-          type: string
-          description: The unique identifier of the access key.
-        createdAt:
-          type: string
-          format: date-time
-          nullable: true
-          description: The timestamp for when the access key was created.
-        lastLogin:
-          type: string
-          format: date-time
-          nullable: true
-          description: The timestamp of the last time the access key was used to authenticate.
-      example:
-        name: my-access-key
-        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
-        clientId: 3434c-12323ab-4ce2ea6
-        createdAt: '2019-01-01T00:00:00Z'
-        lastLogin: '2020-01-01T00:00:00Z'
   parameters:
     accessKeyId:
       name: accessKeyId

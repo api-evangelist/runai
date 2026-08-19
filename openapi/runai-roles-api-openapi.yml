@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -101,15 +101,6 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
     500InternalServerError:
       description: unexpected error
       content:
@@ -128,15 +119,6 @@ components:
           example:
             code: 400
             message: Required parameter is missing
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
     403Forbidden:
       description: Forbidden
       content:
@@ -146,7 +128,49 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
   schemas:
+    Permissions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Permission'
+      x-schema-name: Permissions
+    Permission:
+      type: object
+      required:
+      - resourceType
+      - actions
+      - groupId
+      - displayName
+      properties:
+        resourceType:
+          $ref: '#/components/schemas/ResourceType'
+        displayName:
+          type: string
+          example: Projects
+        groupId:
+          $ref: '#/components/schemas/ResourceTypeGroupId'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
     RoleV1:
       type: object
       required:
@@ -171,8 +195,9 @@ components:
           type: string
           format: date-time
         deletedAt:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           format: date-time
         createdBy:
           type: string
@@ -191,9 +216,10 @@ components:
           type: string
           example: can manage all resources
         enabled:
-          type: boolean
+          type:
+          - boolean
+          - 'null'
           default: true
-          nullable: true
         kubernetesPermissions:
           $ref: '#/components/schemas/KubernetesPermissions'
     KubernetesPermissions:
@@ -201,38 +227,27 @@ components:
       description: This object indicate what kubernetes cluster permission should this role should get
       properties:
         predefinedRole:
-          type: string
+          type:
+          - string
+          - 'null'
           description: An id of a predefined role to copy the cluster permissions from
           example: '12'
-          nullable: true
-    Permission:
-      type: object
+    Error:
       required:
-      - resourceType
-      - actions
-      - groupId
-      - displayName
+      - code
+      - message
       properties:
-        resourceType:
-          $ref: '#/components/schemas/ResourceType'
-        displayName:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
           type: string
-          example: Projects
-        groupId:
-          $ref: '#/components/schemas/ResourceTypeGroupId'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
-    RolesV1:
-      type: array
-      items:
-        $ref: '#/components/schemas/RoleV1'
-    Permissions:
-      type: array
-      items:
-        $ref: '#/components/schemas/Permission'
-      x-schema-name: Permissions
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
     ResourceTypeGroupId:
       type: string
       enum:
@@ -242,6 +257,18 @@ components:
       - dashboard
       - workload
       - workload-asset
+    Action:
+      type: string
+      enum:
+      - create
+      - read
+      - update
+      - delete
+      - sync
+    RolesV1:
+      type: array
+      items:
+        $ref: '#/components/schemas/RoleV1'
     ResourceType:
       type: string
       description: "Resource type enum for authorization. \n\nNote: The 'apps' resource type is DEPRECATED. Please use 'service-account' instead for managing service accounts.\n"
@@ -289,30 +316,6 @@ components:
       - network-topologies
       - registries
       - scrapeable-metrics
-    Action:
-      type: string
-      enum:
-      - create
-      - read
-      - update
-      - delete
-      - sync
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
   parameters:
     RoleIdPath:
       name: roleIdPath

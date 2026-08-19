@@ -1,0 +1,555 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Projects API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/projects",
+            "params": [
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by a parameters."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "List projects"
+        },
+        {
+          "info": {
+            "name": "Create project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/org-unit/projects",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a project"
+        },
+        {
+          "info": {
+            "name": "Get project",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/projects/:projectId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "575c19e8-c7c3-45b0-8290-2f47397a8383",
+                "type": "path",
+                "description": "The project id"
+              }
+            ]
+          },
+          "docs": "Get a project by id"
+        },
+        {
+          "info": {
+            "name": "Update project",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/org-unit/projects/:projectId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "575c19e8-c7c3-45b0-8290-2f47397a8383",
+                "type": "path",
+                "description": "The project id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update project by Id"
+        },
+        {
+          "info": {
+            "name": "Delete project",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/org-unit/projects/:projectId",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "575c19e8-c7c3-45b0-8290-2f47397a8383",
+                "type": "path",
+                "description": "The project id"
+              }
+            ]
+          },
+          "docs": "Delete a project"
+        },
+        {
+          "info": {
+            "name": "Update project resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/org-unit/projects/:projectId/resources",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "575c19e8-c7c3-45b0-8290-2f47397a8383",
+                "type": "path",
+                "description": "The project id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update projects resources"
+        },
+        {
+          "info": {
+            "name": "Patch project resources",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v1/org-unit/projects/:projectId/resources",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "575c19e8-c7c3-45b0-8290-2f47397a8383",
+                "type": "path",
+                "description": "The project id"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Partial updates to specific items in the list. Should be used for update one or more attributes of an item without modifying the entire resource."
+        },
+        {
+          "info": {
+            "name": "Get project metrics data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/projects/:projectId/metrics",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "575c19e8-c7c3-45b0-8290-2f47397a8383",
+                "type": "path",
+                "description": "The project id"
+              },
+              {
+                "name": "metricType",
+                "value": "",
+                "type": "query",
+                "description": "Specify which data to request."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End date of time range to fetch data in ISO 8601 timestamp format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the nodepool."
+              }
+            ]
+          },
+          "docs": "Retrieves project data metrics from the metrics database. Use in reporting and analysis tools."
+        },
+        {
+          "info": {
+            "name": "Get projects telemetry",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/projects/telemetry",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "nodepoolId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the nodepool."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "groupBy",
+                "value": "",
+                "type": "query",
+                "description": "project fields to group the data by"
+              },
+              {
+                "name": "telemetryType",
+                "value": "",
+                "type": "query",
+                "description": "specifies what data to request"
+              }
+            ]
+          },
+          "docs": "Get projects telemetry data by the given query parameters"
+        },
+        {
+          "info": {
+            "name": "Count projects",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/org-unit/projects/count",
+            "params": [
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "count projects"
+        },
+        {
+          "info": {
+            "name": "Get metrics data for all projects.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterUuid/projects/metrics",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start of time range to fetch data from in UTC format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End of time range to fetch data from in UTC format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by unique nodepool name."
+              }
+            ]
+          },
+          "docs": "Retrieves data from the metrics database. \\n Use in reporting and analysis tools. \\n Use a time range to return historical data (optional). If you use a `start` date, an `end` date is required."
+        },
+        {
+          "info": {
+            "name": "Get metrics data for a specific project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterUuid/projects/:projectId/metrics",
+            "params": [
+              {
+                "name": "clusterUuid",
+                "value": "",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "path",
+                "description": "The unique project-id of the project."
+              },
+              {
+                "name": "start",
+                "value": "",
+                "type": "query",
+                "description": "Start of time range to fetch data from in UTC format."
+              },
+              {
+                "name": "end",
+                "value": "",
+                "type": "query",
+                "description": "End of time range to fetch data from in UTC format."
+              },
+              {
+                "name": "numberOfSamples",
+                "value": "",
+                "type": "query",
+                "description": "The number of samples to take in the specified time range."
+              },
+              {
+                "name": "nodepoolName",
+                "value": "",
+                "type": "query",
+                "description": "Filter by unique nodepool name."
+              }
+            ]
+          },
+          "docs": "Retrieves data from the metrics database. \\n Use in reporting and analysis tools. \\n Use a time range to return historical data (optional). If you use a `start` date, an `end` date is required."
+        },
+        {
+          "info": {
+            "name": "List all projects and their details.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/projects",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "9f55255e-11ed-47c7-acef-fc4054768dbc",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "excludePermissions",
+                "value": "true",
+                "type": "query",
+                "description": "Backward compatibility of the 'permissions' field. If 'true', the 'permissions' field in the returned projects is not set. If 'false', the 'permissions' field is set in the returned projects."
+              },
+              {
+                "name": "memoryUnitMb",
+                "value": "true",
+                "type": "query",
+                "description": "Memory returned in MB. When set to `false` (default) memory will be returned in MiB."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of all projects and details from a specific cluster. Use in reporting and analysis tools. Deprecated - use `/api/v1/org-unit/projects` instead."
+        },
+        {
+          "info": {
+            "name": "Create a new project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/projects",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "9f55255e-11ed-47c7-acef-fc4054768dbc",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "excludePermissions",
+                "value": "true",
+                "type": "query",
+                "description": "Backward compatibility of the `permissions` field. If `true`, the\n`permissions` field in the request body is ignored. If `false`,\nrelevant access rules for the `permissions` field are created in the project scope.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new project in a specific cluster. Deprecated - use `/api/v1/org-unit/projects` instead."
+        },
+        {
+          "info": {
+            "name": "List details of a specific project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/projects/:id",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "9f55255e-11ed-47c7-acef-fc4054768dbc",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique project-id identifying the project."
+              },
+              {
+                "name": "excludePermissions",
+                "value": "true",
+                "type": "query",
+                "description": "Backward compatibility of the 'permissions' field. If 'true', the 'permissions' field in the returned projects is not set. If 'false', the 'permissions' field is set in the returned projects."
+              }
+            ]
+          },
+          "docs": "Retrieves the details of a specific project from a specific cluster. Use for project analysis. **Requires `view` permissions to the queried project**. Deprecated - use `/api/v1/org-unit/projects/{projectId}` instead."
+        },
+        {
+          "info": {
+            "name": "Update a project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/projects/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "The unique project-id."
+              },
+              {
+                "name": "clusterId",
+                "value": "9f55255e-11ed-47c7-acef-fc4054768dbc",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "excludePermissions",
+                "value": "true",
+                "type": "query",
+                "description": "Backward compatibility of the `permissions` field. If `true`, the\n`permissions` field in the returned projects is not set. If `false`,\nthe `permissions` field is set in the returned projects.\n"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates a project's details in a specific cluster. For example, node pool resources, and others. Deprecated - use `/api/v1/org-unit/projects/{projectId}` instead."
+        },
+        {
+          "info": {
+            "name": "Delete a project.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/v1/k8s/clusters/:clusterId/projects/:id",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "9f55255e-11ed-47c7-acef-fc4054768dbc",
+                "type": "path",
+                "description": "The Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "id",
+                "value": "2",
+                "type": "path",
+                "description": "The unique id of the project."
+              }
+            ]
+          },
+          "docs": "Deletes a project from a specific cluster. Deprecated - use `/api/v1/org-unit/projects/{projectId}` instead."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

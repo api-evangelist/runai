@@ -1,0 +1,265 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Datavolumes API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Datavolumes",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List datavolumes in permitted scopes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/datavolumes",
+            "params": [
+              {
+                "name": "requestType",
+                "value": "",
+                "type": "query",
+                "description": "Which datavolumes would be returned in the response. Originated - datavolumes that are originated in the permitted scopes of the caller. UsableInProject - datavolumes that can be used in a specific project; if you use this value, you must also provide the project ID in the \"usableInProjectId\" query param."
+              },
+              {
+                "name": "usableInProjectId",
+                "value": "",
+                "type": "query",
+                "description": "Only when using \"UsableInProject\" requestType; Filter results for only datavolumes that are shared with - or originated in - the project."
+              },
+              {
+                "name": "offset",
+                "value": "",
+                "type": "query",
+                "description": "The offset of the first item returned in the collection."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "The maximum number of entries to return."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Sort results by a parameters."
+              },
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "Get requested datavolumes."
+        },
+        {
+          "info": {
+            "name": "Create a datavolume",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/datavolumes",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a datavolume"
+        },
+        {
+          "info": {
+            "name": "Get datavolume",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/datavolumes/:datavolumeId",
+            "params": [
+              {
+                "name": "datavolumeId",
+                "value": "71f69d83-ba66-4822-adf5-55ce55efd210",
+                "type": "path",
+                "description": "The id of the datavolume to retrieve"
+              }
+            ]
+          },
+          "docs": "Get datavolume"
+        },
+        {
+          "info": {
+            "name": "Patch datavolume",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v1/datavolumes/:datavolumeId",
+            "params": [
+              {
+                "name": "datavolumeId",
+                "value": "71f69d83-ba66-4822-adf5-55ce55efd210",
+                "type": "path",
+                "description": "The id of the datavolume to retrieve"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch datavolume"
+        },
+        {
+          "info": {
+            "name": "Delete datavolume",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/datavolumes/:datavolumeId",
+            "params": [
+              {
+                "name": "datavolumeId",
+                "value": "71f69d83-ba66-4822-adf5-55ce55efd210",
+                "type": "path",
+                "description": "The id of the datavolume to retrieve"
+              }
+            ]
+          },
+          "docs": "Delete datavolume"
+        },
+        {
+          "info": {
+            "name": "Data volumes name availability.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/datavolumes/name-availability",
+            "params": [
+              {
+                "name": "dataName",
+                "value": "",
+                "type": "query",
+                "description": "the name of the datavolume"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "The id of the cluster"
+              }
+            ]
+          },
+          "docs": "Checks if a specified data volume name is available under the given scope (e.g., project or department). Returns a 204 No Content response if the name is available, or 409 Conflict if the name is already in use."
+        },
+        {
+          "info": {
+            "name": "Count data volumes.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/datavolumes/count",
+            "params": [
+              {
+                "name": "requestType",
+                "value": "",
+                "type": "query",
+                "description": "Which datavolumes would be returned in the response. Originated - datavolumes that are originated in the permitted scopes of the caller. UsableInProject - datavolumes that can be used in a specific project; if you use this value, you must also provide the project ID in the \"usableInProjectId\" query param."
+              },
+              {
+                "name": "usableInProjectId",
+                "value": "",
+                "type": "query",
+                "description": "Only when using \"UsableInProject\" requestType; Filter results for only datavolumes that are shared with - or originated in - the project."
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=."
+              },
+              {
+                "name": "search",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a free text search."
+              }
+            ]
+          },
+          "docs": "Retrieve the number of data volumes."
+        },
+        {
+          "info": {
+            "name": "Get the datavolume's shared scopes",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/datavolumes/:datavolumeId/sharedScopes",
+            "params": [
+              {
+                "name": "datavolumeId",
+                "value": "71f69d83-ba66-4822-adf5-55ce55efd210",
+                "type": "path",
+                "description": "The id of the datavolume to retrieve"
+              }
+            ]
+          },
+          "docs": "Get the datavolume's shared scopes"
+        },
+        {
+          "info": {
+            "name": "Patch the datavolume's shared scopes",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v1/datavolumes/:datavolumeId/sharedScopes",
+            "params": [
+              {
+                "name": "datavolumeId",
+                "value": "71f69d83-ba66-4822-adf5-55ce55efd210",
+                "type": "path",
+                "description": "The id of the datavolume to retrieve"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Patch the datavolume's shared scopes"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

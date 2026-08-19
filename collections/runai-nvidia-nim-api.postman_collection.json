@@ -1,0 +1,1285 @@
+{
+  "item": [
+    {
+      "id": "6150433b-eb17-464f-81a2-35baf2471c69",
+      "name": "NVIDIA NIM",
+      "description": {
+        "content": "The NVIDIA NIM API provides endpoints to create and manage workloads that deploy NVIDIA Inference Microservices (NIM) through the NIM Operator. These workloads package optimized NVIDIA model servers and run as managed services on the NVIDIA Run:ai platform.\nEach request includes NVIDIA Run:ai scheduling metadata (for example, project, priority, and category) and a NIM service specification that defines the container image, compute resources, environment variables, storage, and networking configuration. Once submitted, NVIDIA Run:ai handles scheduling, orchestration, and lifecycle management of the NIM service to ensure reliable and efficient model serving.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7a380b47-d8ae-450d-aea2-3fb000501846",
+          "name": "Create a NVIDIA NIM service. [Experimental]",
+          "request": {
+            "name": "Create a NVIDIA NIM service. [Experimental]",
+            "description": {
+              "content": "Create a NVIDIA NIM service",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "workloads",
+                "nim-services"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"metadata\": {\n    \"name\": \"<string>\",\n    \"projectId\": \"<string>\",\n    \"useGivenNameAsPrefix\": false\n  },\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"<string,null>\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": \"<number,null-double>\",\n      \"cpuCoreRequest\": \"<number,null-double>\",\n      \"cpuMemoryLimit\": \"<string,null>\",\n      \"cpuMemoryRequest\": \"<string,null>\",\n      \"gpuDevicesRequest\": \"<integer,null-int32>\",\n      \"gpuMemoryLimit\": \"<string,null>\",\n      \"gpuMemoryRequest\": \"<string,null>\",\n      \"gpuPortionLimit\": \"<number,null-double>\",\n      \"gpuPortionRequest\": \"<number,null-double>\",\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"<string,null>\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"<string,null>\",\n        \"profile\": \"<string,null>\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"<string,null>\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"<string,null>\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": \"<integer,null-int32>\"\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": \"<array,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 1,\n    \"security\": {\n      \"runAsGid\": \"<integer,null-int64>\",\n      \"runAsUid\": \"<integer,null-int64>\"\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": \"<integer,null-int32>\",\n      \"grpcPort\": \"<integer,null-int32>\",\n      \"metricsPort\": \"<integer,null-int32>\",\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "72c70bd3-caee-43c4-90b3-1e64d8676b7d",
+              "name": "Workload creation accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"useGivenNameAsPrefix\": true\n  },\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  },\n  \"metadata\": {\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"createdAt\": \"2024-01-15T10:30:00Z\",\n    \"createdBy\": \"user@run.ai\",\n    \"departmentId\": \"&\",\n    \"departmentName\": \"default\",\n    \"gvk\": {\n      \"group\": \"apps\",\n      \"version\": \"v1\",\n      \"kind\": \"Deployment\"\n    },\n    \"id\": \"6387fdff-ab21-353f-5692-48fc9962ad2a\",\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"projectName\": \"project-a\",\n    \"tenantId\": 1001,\n    \"updatedAt\": \"2024-01-15T10:35:00Z\",\n    \"updatedBy\": \"user@run.ai\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"deletedAt\": \"2024-01-15T10:35:00Z\",\n    \"deletedBy\": \"user@run.ai\"\n  },\n  \"desiredPhase\": \"Running\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "58521db9-80e6-4b46-a419-af6ff80cc0b9",
+              "name": "Bad submission request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"useGivenNameAsPrefix\": true\n  },\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 400,\n  \"message\": \"The workload request does not comply with the policy set by the administrator\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b583d01a-4b66-4202-b577-34b95ee84b46",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"useGivenNameAsPrefix\": true\n  },\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "527f8a95-1931-43a2-bb9d-54dc100bccbd",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"useGivenNameAsPrefix\": true\n  },\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bea45133-eca5-439e-9bbb-abec2b539656",
+              "name": "The specified resource already exists",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"useGivenNameAsPrefix\": true\n  },\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 409,\n  \"message\": \"Resource with this name already exists\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "56e4fb23-5ad3-43e9-bf75-717f1a2794c2",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"useGivenNameAsPrefix\": true\n  },\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "94e504a8-c371-4dc6-9497-0553538cda32",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"metadata\": {\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"useGivenNameAsPrefix\": true\n  },\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d2f845e2-e436-44be-afa2-617ea68092fa",
+          "name": "Get a NVIDIA NIM service. [Experimental]",
+          "request": {
+            "name": "Get a NVIDIA NIM service. [Experimental]",
+            "description": {
+              "content": "Retrieve details of a specific NVIDIA NIM service, by id",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "workloads",
+                "nim-services",
+                ":WorkloadV2Id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "WorkloadV2Id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "713ba6bc-be74-41c4-9646-9d6ca524ceb2",
+              "name": "Successfully retrieved the workload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  },\n  \"metadata\": {\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"createdAt\": \"2024-01-15T10:30:00Z\",\n    \"createdBy\": \"user@run.ai\",\n    \"departmentId\": \"&\",\n    \"departmentName\": \"default\",\n    \"gvk\": {\n      \"group\": \"apps\",\n      \"version\": \"v1\",\n      \"kind\": \"Deployment\"\n    },\n    \"id\": \"6387fdff-ab21-353f-5692-48fc9962ad2a\",\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"projectName\": \"project-a\",\n    \"tenantId\": 1001,\n    \"updatedAt\": \"2024-01-15T10:35:00Z\",\n    \"updatedBy\": \"user@run.ai\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"deletedAt\": \"2024-01-15T10:35:00Z\",\n    \"deletedBy\": \"user@run.ai\"\n  },\n  \"desiredPhase\": \"Running\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8224078e-ab1d-479c-b0b2-6b804b97d3b9",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "008e7829-6033-4e36-8d36-df2143f3a13e",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e33992a2-15f8-465d-8634-9ff32e7f23f7",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5aacab8c-a9da-47ff-b7bb-d54516779793",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd64714d-de33-4d99-b772-f81bc065b483",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "accfe349-cdd8-4294-8cf8-b073549435fd",
+          "name": "Update NVIDIA NIM service spec. [Experimental]",
+          "request": {
+            "name": "Update NVIDIA NIM service spec. [Experimental]",
+            "description": {
+              "content": "Update the specification of an existing NVIDIA NIM service.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v2",
+                "workloads",
+                "nim-services",
+                ":WorkloadV2Id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "WorkloadV2Id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"<string,null>\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": \"<number,null-double>\",\n      \"cpuCoreRequest\": \"<number,null-double>\",\n      \"cpuMemoryLimit\": \"<string,null>\",\n      \"cpuMemoryRequest\": \"<string,null>\",\n      \"gpuDevicesRequest\": \"<integer,null-int32>\",\n      \"gpuMemoryLimit\": \"<string,null>\",\n      \"gpuMemoryRequest\": \"<string,null>\",\n      \"gpuPortionLimit\": \"<number,null-double>\",\n      \"gpuPortionRequest\": \"<number,null-double>\",\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"<string,null>\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"<string,null>\",\n        \"profile\": \"<string,null>\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"<string,null>\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"<string,null>\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": \"<integer,null-int32>\"\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": \"<array,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 1,\n    \"security\": {\n      \"runAsGid\": \"<integer,null-int64>\",\n      \"runAsUid\": \"<integer,null-int64>\"\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": \"<integer,null-int32>\",\n      \"grpcPort\": \"<integer,null-int32>\",\n      \"metricsPort\": \"<integer,null-int32>\",\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "608f2eae-c665-4842-b769-9f0d841f95ec",
+              "name": "Workload update request accepted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  },\n  \"metadata\": {\n    \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n    \"createdAt\": \"2024-01-15T10:30:00Z\",\n    \"createdBy\": \"user@run.ai\",\n    \"departmentId\": \"&\",\n    \"departmentName\": \"default\",\n    \"gvk\": {\n      \"group\": \"apps\",\n      \"version\": \"v1\",\n      \"kind\": \"Deployment\"\n    },\n    \"id\": \"6387fdff-ab21-353f-5692-48fc9962ad2a\",\n    \"name\": \"my-workload-name\",\n    \"projectId\": \"<string>\",\n    \"projectName\": \"project-a\",\n    \"tenantId\": 1001,\n    \"updatedAt\": \"2024-01-15T10:35:00Z\",\n    \"updatedBy\": \"user@run.ai\",\n    \"priority\": \"<string,null>\",\n    \"category\": \"<string,null>\",\n    \"preemptibility\": \"<string,null>\",\n    \"deletedAt\": \"2024-01-15T10:35:00Z\",\n    \"deletedBy\": \"user@run.ai\"\n  },\n  \"desiredPhase\": \"Running\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31069bef-3379-4e23-9b07-9e7fb5aee2d9",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eb8daf9c-5db4-4d5f-84b1-0c6233ef4ec7",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c6f98e93-a3c1-4605-aec2-ce3fa99cd0bf",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31e3dc7f-68e5-44f6-a263-e5982db03059",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e63699f-5759-4d71-9349-6474d19a4fc9",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v2",
+                    "workloads",
+                    "nim-services",
+                    ":WorkloadV2Id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "WorkloadV2Id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"spec\": {\n    \"annotations\": \"<array,null>\",\n    \"autoscaling\": {\n      \"maxReplicas\": \"<integer,null-int32>\",\n      \"metric\": \"http_requests_total\",\n      \"metricThreshold\": \"<integer,null-int32>\",\n      \"minReplicas\": \"<integer,null-int32>\",\n      \"scaleWindowSeconds\": \"<integer,null-int32>\"\n    },\n    \"category\": \"<string,null>\",\n    \"compute\": {\n      \"cpuCoreLimit\": 2,\n      \"cpuCoreRequest\": 0.5,\n      \"cpuMemoryLimit\": \"30M\",\n      \"cpuMemoryRequest\": \"20M\",\n      \"gpuDevicesRequest\": 1,\n      \"gpuMemoryLimit\": \"10M\",\n      \"gpuMemoryRequest\": \"10M\",\n      \"gpuPortionLimit\": 0.5,\n      \"gpuPortionRequest\": 0.5,\n      \"gpuRequestType\": \"<string,null>\"\n    },\n    \"environmentVariables\": \"<array,null>\",\n    \"image\": \"python:3.8\",\n    \"imagePullPolicy\": \"<string,null>\",\n    \"imagePullSecrets\": \"<array,null>\",\n    \"labels\": \"<array,null>\",\n    \"modelStore\": {\n      \"nimCache\": {\n        \"name\": \"nim-cache-a\",\n        \"profile\": \"tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2\"\n      },\n      \"pvc\": {\n        \"existingPvc\": false,\n        \"claimName\": \"my-claim\",\n        \"readOnly\": false,\n        \"claimInfo\": {\n          \"size\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"storageClass\": \"my-storage-class\",\n          \"accessModes\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"volumeMode\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"addedAttrValues\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"multiNode\": {\n      \"workers\": 3\n    },\n    \"ngcAuthSecret\": \"<string,null>\",\n    \"nodePools\": [\n      \"my-node-pool-a\",\n      \"my-node-pool-b\"\n    ],\n    \"preemptibility\": \"<string,null>\",\n    \"priorityClass\": \"<string,null>\",\n    \"probes\": {\n      \"readiness\": {\n        \"initialDelaySeconds\": \"<integer,null-int32>\",\n        \"periodSeconds\": \"<integer,null-int32>\",\n        \"timeoutSeconds\": \"<integer,null-int32>\",\n        \"successThreshold\": \"<integer,null-int32>\",\n        \"failureThreshold\": \"<integer,null-int32>\",\n        \"handler\": {\n          \"httpGet\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        }\n      }\n    },\n    \"replicas\": 2,\n    \"security\": {\n      \"runAsGid\": 30,\n      \"runAsUid\": 500\n    },\n    \"servingPort\": {\n      \"serviceType\": \"ClusterIP\",\n      \"port\": 8000,\n      \"grpcPort\": 8001,\n      \"metricsPort\": 8002,\n      \"exposeExternally\": true,\n      \"exposedUrl\": \"<string,null>\",\n      \"exposedProtocol\": \"<string,null>\"\n    },\n    \"tolerations\": \"<array,null>\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.run.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "32044fca-7f9e-4f9c-989e-e41f72eb7307",
+    "name": "NVIDIA Run:ai Access Keys NVIDIA NIM API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.\n\nNVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.\nTo create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.\n\nAfter you have created a new service account, you will need to assign it access rules.\nTo assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).\nMake sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.\n\nTo get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).\n",
+      "type": "text/plain"
+    }
+  }
+}

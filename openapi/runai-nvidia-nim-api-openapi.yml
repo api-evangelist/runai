@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -133,241 +133,21 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    Category:
-      description: Specify the workload category assigned to the workload. Categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform.
-      type: string
-      nullable: true
-      pattern: .*
-    Probe:
-      type: object
-      properties:
-        initialDelaySeconds:
-          description: Number of seconds after the container has started before liveness or readiness probes are initiated.
-          type: integer
-          format: int32
-          minimum: 0
-          nullable: true
-        periodSeconds:
-          description: How often (in seconds) to perform the probe.
-          type: integer
-          format: int32
-          minimum: 1
-          nullable: true
-        timeoutSeconds:
-          description: Number of seconds after which the probe times out.
-          type: integer
-          format: int32
-          minimum: 1
-          nullable: true
-        successThreshold:
-          description: Minimum consecutive successes for the probe to be considered successful after having failed.
-          type: integer
-          format: int32
-          minimum: 1
-          nullable: true
-        failureThreshold:
-          description: When a probe fails, the number of times to try before giving up.
-          type: integer
-          format: int32
-          minimum: 1
-          nullable: true
-        handler:
-          $ref: '#/components/schemas/ProbeHandler'
-      nullable: true
-    Labels:
-      description: Set of labels to populate into the container running the workload.
-      type: array
-      items:
-        $ref: '#/components/schemas/Label'
-      nullable: true
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    DepartmentName1:
-      type: string
-      description: The name of the department
-      example: default
-      minLength: 1
+    NimServiceNgcAuthSecret:
+      description: The name of a Kubernetes secret containing the NGC access credentials. The secret must contain a key named NGC_API_KEY with the API key as the value.
+      type:
+      - string
+      - 'null'
       pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-    CpuMemoryLimit:
-      description: Limitations on the CPU memory to allocate for this workload (1G, 20M, .etc). The system guarantees that this workload will not be able to consume more than this amount of memory. The workload will receive an error when trying to allocate more memory than this limit.
-      type: string
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 30M
-      nullable: true
-    PvcClaimSize:
-      description: 'Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB'
-      type: string
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 1G
-      nullable: true
-    PvcAddedAttrValues:
-      description: an optional array of key-values pairs that are written as annotations on the created PVC. the allowed attributes are determined according to the storage class configuration (see k8s-objects-tracker for further info).
-      type: array
-      items:
-        $ref: '#/components/schemas/PvcAddedAttrValue'
-    Toleration:
-      description: Toleration details.
-      properties:
-        name:
-          description: The name of the toleration.
-          type: string
-          minLength: 1
-          nullable: true
-          pattern: .*
-        operator:
-          $ref: '#/components/schemas/TolerationOperator'
-        key:
-          description: The taint key that the toleration applies to. (mandatory)
-          type: string
-          nullable: true
-          pattern: .*
-        value:
-          description: The taint value the toleration matches to. Mandatory if operator is Exists, forbidden otherwise.
-          type: string
-          nullable: true
-          pattern: .*
-        effect:
-          $ref: '#/components/schemas/TolerationEffect'
-        seconds:
-          description: The period of time the toleration tolerates the taint. Valid only if effect is NoExecute. taint.
-          type: integer
-          minimum: 1
-          nullable: true
-        exclude:
-          description: Use 'true' in case the label is defined in defaults of the policy, and you wish to exclude it from the workload.
-          type: boolean
-          example: false
-          nullable: true
-      nullable: true
-      type: object
-    ClusterId:
-      description: The id of the cluster.
-      type: string
-      format: uuid
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    GpuMemoryRequest:
-      description: Required if and only if gpuRequestType is memory. States the GPU memory to allocate for the created workload, per GPU device. Note that the workload will not be scheduled unless the system can guarantee this amount of GPU memory to the workload.
-      type: string
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 10M
-      nullable: true
-    NimServiceUpdateRequest:
-      type: object
-      required:
-      - spec
-      properties:
-        spec:
-          $ref: '#/components/schemas/NimServiceSpec'
-    NimServicePvcFields:
-      properties:
-        existingPvc:
-          description: Verify existing PVC. PVC is assumed to exist when set to `true`. If set to `false`, the PVC will be created, if it does not exist.
-          type: boolean
-          default: false
-          nullable: true
-        claimName:
-          description: Name for the PVC. Allow referencing it across workloads. If not provided, a name based on the workload name and scope will be auto-generated.
-          type: string
-          minLength: 1
-          maxLength: 63
-          example: my-claim
-          nullable: true
-          pattern: .*
-        readOnly:
-          description: Permit only read access to PVC.
-          type: boolean
-          default: false
-          nullable: true
-        claimInfo:
-          $ref: '#/components/schemas/ClaimInfo'
-      nullable: true
-      type: object
-    ServingPortServiceType:
-      description: The type of Kubernetes service to create for the inference deployment. Options include 'ClusterIP' (default), 'NodePort', 'LoadBalancer', and 'ExternalName'.
-      type: string
-      default: ClusterIP
-      enum:
-      - ClusterIP
-      - NodePort
-      - LoadBalancer
-      - ExternalName
-      nullable: true
-    EnvironmentVariable:
-      description: Details of an environment variable which is populated into the container.
-      properties:
-        name:
-          description: The name of the environment variable. (mandatory)
-          type: string
-          minLength: 1
-          example: HOME
-          nullable: true
-          pattern: .*
-        value:
-          description: The value of the environment variable. (mutually exclusive with secret, userCredential, configMap and podFieldRef)
-          type: string
-          example: /home/my-folder
-          nullable: true
-          pattern: .*
-        secret:
-          $ref: '#/components/schemas/EnvironmentVariableSecret'
-        configMap:
-          $ref: '#/components/schemas/EnvironmentVariableConfigMap'
-        podFieldRef:
-          $ref: '#/components/schemas/EnvironmentVariablePodFieldReference'
-        userCredential:
-          $ref: '#/components/schemas/EnvironmentVariableUserCredential'
-        exclude:
-          description: Use 'true' in case the environment variable is defined in defaults of the policy, and you wish to exclude it from the workload.
-          type: boolean
-          example: false
-          nullable: true
-        description:
-          description: Description of the environment variable.
-          type: string
-          example: Home directory of the user.
-          nullable: true
-          pattern: .*
-      nullable: true
-      type: object
-    RunAsGid:
-      description: The group id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsGid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
-      type: integer
-      format: int64
-      example: 30
-      nullable: true
-    EnvironmentVariableSecret:
-      description: Details of the secret and key use to populate the environment variable
-      properties:
-        name:
-          description: The name of the secret resource. (mandatory)
-          type: string
-          minLength: 1
-          example: postgress_secret
-          nullable: true
-          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-        key:
-          description: The key in the secret resource. (mandatory)
-          type: string
-          minLength: 1
-          example: POSTGRES_PASSWORD
-          nullable: true
-          pattern: .*
-      nullable: true
-      type: object
+    ServingPortMetricsPort:
+      description: The port where metrics are exposed, required only if it's different than the main port.
+      type:
+      - integer
+      - 'null'
+      format: int32
+      minimum: 1
+      maximum: 65535
+      example: 8002
     WorkloadV2MetadataResponse:
       type: object
       required:
@@ -384,20 +164,56 @@ components:
           $ref: '#/components/schemas/Category'
         preemptibility:
           $ref: '#/components/schemas/Preemptibility'
-    ServingPortExposeExternally:
-      description: Indicates whether the inference serving endpoint should be accessible outside the cluster. If set to true, the endpoint will be exposed externally. To enable external access, your administrator must configure the cluster as described in the [inference requirements](https://run-ai-docs.nvidia.com/saas/getting-started/installation/system-requirements#inference). section.
-      type: boolean
-      nullable: true
-      default: true
-    Annotations:
-      description: Set of annotations to populate into the container running the workload.
-      type: array
+    Tolerations:
+      description: Set of tolerations to apply to the workload.
+      type:
+      - array
+      - 'null'
       items:
-        $ref: '#/components/schemas/Annotation'
-      nullable: true
+        $ref: '#/components/schemas/Toleration'
+    ImagePullPolicy:
+      description: Image pull policy. Defaults to `Always` if `:latest` tag is specified, otherwise it is `IfNotPresent`.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      enum:
+      - Always
+      - Never
+      - IfNotPresent
+    Label:
+      description: Label details to be populated into the container.
+      properties:
+        name:
+          description: The name of the label (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 63
+          example: stage
+          pattern: .*
+        value:
+          description: The value of the label.
+          type:
+          - string
+          - 'null'
+          example: initial-research
+          pattern: .*
+        exclude:
+          description: Use 'true' in case the label is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type:
+          - boolean
+          - 'null'
+          example: false
+      type:
+      - object
+      - 'null'
     ProbeHandler:
       description: The action taken to determine the health of the container. (mandatory)
-      type: object
+      type:
+      - object
+      - 'null'
       properties:
         httpGet:
           description: An action based on HTTP Get requests.
@@ -405,214 +221,79 @@ components:
           properties:
             path:
               description: Path to access on the HTTP server, defaults to /.
-              type: string
+              type:
+              - string
+              - 'null'
               pattern: ^(\x2F[a-zA-Z0-9\-_.\x2F]*)?$
               example: /
-              nullable: true
             port:
               description: Number of the port to access on the container.
-              type: integer
+              type:
+              - integer
+              - 'null'
               format: int32
               minimum: 1
               maximum: 65535
-              nullable: true
             host:
               description: Host name to connect to, defaults to the pod IP.
-              type: string
+              type:
+              - string
+              - 'null'
               format: hostname
               example: example.com
-              nullable: true
               pattern: .*
             scheme:
               $ref: '#/components/schemas/ProbeHandlerScheme'
-      nullable: true
-    WorkloadId3:
-      description: A unique ID of the workload.
-      type: string
-      format: uuid
-    TolerationEffect:
-      description: The taint effect to match. (mandatory)
-      type: string
-      enum:
-      - NoSchedule
-      - NoExecute
-      - PreferNoSchedule
-      - Any
-      nullable: true
-    ImagePullPolicy:
-      description: Image pull policy. Defaults to `Always` if `:latest` tag is specified, otherwise it is `IfNotPresent`.
-      type: string
-      minLength: 1
-      enum:
-      - Always
-      - Never
-      - IfNotPresent
-      nullable: true
-    WorkloadName:
-      description: The name of the workload.
-      type: string
-      minLength: 1
-      example: my-workload-name
-      pattern: .*
-    ClaimInfo:
-      description: Claim information for the newly created PVC. The information should not be provided when attempting to use existing PVC.
-      properties:
-        size:
-          $ref: '#/components/schemas/PvcClaimSize'
-        storageClass:
-          description: Storage class name to associate with the PVC. This parameter may be omitted if there is a single storage class in the system, or you are using the default storage class. For more information, see [Storage class](https://kubernetes.io/docs/concepts/storage/storage-classes).
-          type: string
-          minLength: 1
-          example: my-storage-class
-          nullable: true
-          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-        accessModes:
-          $ref: '#/components/schemas/PvcAccessModes'
-        volumeMode:
-          $ref: '#/components/schemas/PvcVolumeMode'
-        addedAttrValues:
-          $ref: '#/components/schemas/PvcAddedAttrValues'
-      nullable: true
-      type: object
-    AutoScalingMinReplicas:
-      description: The minimum number of replicas for autoscaling. Defaults to 1.
-      type: integer
-      format: int32
-      minimum: 1
-      nullable: true
-    AutoScalingMetricNim:
-      description: The metric to use for autoscaling (mandatory).
-      type: string
-      pattern: ^[a-zA-Z_:][a-zA-Z0-9_:]*$
-      example: http_requests_total
-      nullable: true
-    WorkloadV2Metadata:
-      allOf:
-      - $ref: '#/components/schemas/WorkloadV2MetadataResponse'
-      - $ref: '#/components/schemas/WorkloadV2MetadataAutoFill'
-    EnvironmentVariables:
-      description: Set of environment variables to populate into the container running the workload.
-      type: array
-      items:
-        $ref: '#/components/schemas/EnvironmentVariable'
-      nullable: true
-    CpuCoreRequest:
-      description: CPU units to allocate for the created workload (0.5, 1, .etc). The workload will receive at least this amount of CPU. Note that the workload will not be scheduled unless the system can guarantee this amount of CPUs to the workload.
-      format: double
-      type: number
-      example: 0.5
-      nullable: true
-      minimum: 0
-    Preemptibility:
-      description: Specifies whether the workload can be preempted by higher-priority workloads. Valid values are preemptible and non-preemptible. If explicitly set, this value takes precedence. If not set, the system derives the preemptibility from the priorityClassName field, ensuring backward compatibility. Each workload type has a default preemptibility. To view the default preemptibility for each workload type, use the GET /workload-types endpoint.
-      type: string
-      minLength: 1
-      enum:
-      - preemptible
-      - non-preemptible
-      nullable: true
-    TenantId:
-      description: The id of the tenant.
-      type: integer
-      format: int32
-      example: 1001
-    PolicyRuleEnum:
-      description: Indicates which validation rule (e.g., min, max, step, options, required, canEdit, canAdd) conflicted with policy restrictions, causing the asset or template to be rejected.
-      type: string
-      nullable: true
-      enum:
-      - min
-      - max
-      - step
-      - options
-      - required
-      - canEdit
-      - canAdd
-      - locked
-    ImagePullSecrets:
-      description: A list of references to Kubernetes secrets in the same namespace used for pulling container images.
-      type: array
-      items:
-        $ref: '#/components/schemas/ImagePullSecret'
-      nullable: true
-    Image:
-      description: Docker image name. For more information, see [Images](https://kubernetes.io/docs/concepts/containers/images). The image name is mandatory for creating a workload.
-      type: string
-      minLength: 1
-      example: python:3.8
-      nullable: true
-      pattern: .*
-    NimServiceResponse:
+    NIMServiceMetadataCreateParams:
       type: object
       required:
-      - spec
-      - metadata
-      - desiredPhase
-      properties:
-        metadata:
-          $ref: '#/components/schemas/WorkloadV2Metadata'
-        desiredPhase:
-          $ref: '#/components/schemas/DesiredPhase'
-        spec:
-          $ref: '#/components/schemas/NimServiceSpec'
-    EnvironmentVariableUserCredential:
-      description: Defines a reference to a user-created credential and a specific key within that credential whose value will populate the environment variable. User credentials can only be accessed by the user who created them.
+      - name
+      - projectId
       properties:
         name:
-          description: The name of the user credential.  (mandatory)
-          type: string
-          minLength: 1
-          example: my_postgres_user_and_password
-          nullable: true
-        key:
-          description: The key in the user credential resource. (mandatory)
-          type: string
-          minLength: 1
-          example: POSTGRES_PASSWORD
-          nullable: true
-      nullable: true
-      type: object
-    ServingPortGrpcPort:
-      description: The GRPC port that the container running the inference service exposes.
-      type: integer
-      format: int32
-      minimum: 1
-      maximum: 65535
-      example: 8001
-      nullable: true
-    NimServiceWorkers:
-      description: Specifies the number of worker nodes to use when running the NIM service in multi-node.
-      type: integer
-      format: int32
-      minimum: 1
-      maximum: 1000
-      example: 3
-      nullable: true
-    Annotation:
-      description: Annotation details to be populated into the container.
-      properties:
-        name:
-          description: The name of the annotation (mandatory)
-          type: string
-          minLength: 1
-          maxLength: 63
-          example: billing
-          nullable: true
-          pattern: .*
-        value:
-          description: The value of the annotation.
-          type: string
-          example: my-billing-unit
-          nullable: true
-          pattern: .*
-        exclude:
-          description: Use 'true' in case the annotation is defined in defaults of the policy, and you wish to exclude it from the workload.
+          $ref: '#/components/schemas/WorkloadName'
+        useGivenNameAsPrefix:
+          description: When true, the requested name will be treated as a prefix. The final name of the workload will be composed of the name followed by a random set of characters.
           type: boolean
+          example: true
           default: false
-          example: false
-          nullable: true
-      nullable: true
-      type: object
+        projectId:
+          $ref: '#/components/schemas/ProjectId'
+    EnvironmentVariablePodFieldReference:
+      description: Details of the field-reference and key use to populate the environment variable
+      properties:
+        path:
+          description: The field path resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: metadata.name
+          pattern: .*
+      type:
+      - object
+      - 'null'
+    Labels:
+      description: Set of labels to populate into the container running the workload.
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/Label'
+    ImagePullSecrets:
+      description: A list of references to Kubernetes secrets in the same namespace used for pulling container images.
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/ImagePullSecret'
+    CpuMemoryLimit:
+      description: Limitations on the CPU memory to allocate for this workload (1G, 20M, .etc). The system guarantees that this workload will not be able to consume more than this amount of memory. The workload will receive an error when trying to allocate more memory than this limit.
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 30M
     WorkloadV2MetadataAutoFill:
       type: object
       required:
@@ -663,173 +344,50 @@ components:
           format: .*
           example: user@run.ai
         deletedAt:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
           description: The timestamp indicating when the workload was deleted.
           example: '2024-01-15T10:35:00Z'
-          nullable: true
         deletedBy:
-          type: string
+          type:
+          - string
+          - 'null'
           format: .*
           description: Identifier of the user who deleted the workload.
           example: user@run.ai
-          nullable: true
-    GpuMemoryLimit:
-      description: Limitation on the memory consumed by the workload, per GPU device. The system guarantees The gpuMemoryLimit must be no less than gpuMemoryRequest.
-      type: string
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 10M
-      nullable: true
-    EnvironmentVariableConfigMap:
-      description: Details of the configMap and key use to populate the environment variable
-      properties:
-        name:
-          description: The name of the config-map resource. (mandatory)
-          type: string
-          minLength: 1
-          example: my-config-map
-          nullable: true
-          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-        key:
-          description: The key in the config-map resource. (mandatory)
-          type: string
-          minLength: 1
-          example: MY_POSTGRES_SCHEMA
-          nullable: true
-          pattern: .*
-      nullable: true
-      type: object
-    DesiredPhase:
-      description: The desired phase of the workload.
-      type: string
-      enum:
-      - Running
-      - Stopped
-      - Deleted
-    CpuCoreLimit:
-      description: Limitations on the number of CPUs consumed by the workload (0.5, 1, .etc). The system guarantees that this workload will not be able to consume more than this amount of CPUs.
-      format: double
-      type: number
-      example: 2
-      nullable: true
-      minimum: 0
-    GpuDevicesRequest:
-      description: Requested number of GPU devices. Currently if more than one device is requested, it is not possible to provide values for gpuMemory or gpuPortion.
-      type: integer
-      format: int32
-      example: 1
-      nullable: true
-      minimum: 0
-    NodePools:
-      description: A prioritized list of node pools for the scheduler to run the workload on. The scheduler will always try to use the first node pool before moving to the next one if the first is not available.
-      type: array
-      items:
-        type: string
-        pattern: .*
-      example:
-      - my-node-pool-a
-      - my-node-pool-b
-      nullable: true
-    ServingPortExposedUrl:
-      description: The custom URL to use for the serving port. If empty (default), an autogenerated URL will be used.
-      type: string
-      nullable: true
-      pattern: .*
-    PvcAddedAttrValue:
-      type: object
-      required:
-      - key
-      properties:
-        key:
-          type: string
-          minLength: 1
-          maxLength: 63
-          pattern: ^([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]$
-          example: dnsname
-        value:
-          type: string
-          example: my.dns.com
-          pattern: .*
-    EnvironmentVariablePodFieldReference:
-      description: Details of the field-reference and key use to populate the environment variable
-      properties:
-        path:
-          description: The field path resource. (mandatory)
-          type: string
-          minLength: 1
-          example: metadata.name
-          nullable: true
-          pattern: .*
-      nullable: true
-      type: object
-    ProjectName2:
-      type: string
-      description: The name of the project
-      example: project-a
-      minLength: 1
-      pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
     AutoScalingMaxReplicas:
       description: The maximum number of replicas for autoscaling. Defaults to minReplicas. Must be no less than minReplicas.
-      type: integer
+      type:
+      - integer
+      - 'null'
       format: int32
       minimum: 1
-      nullable: true
-    GpuRequestType:
-      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
-      type: string
-      minLength: 1
-      enum:
-      - portion
-      - memory
-      nullable: true
-    NimServiceCreateRequest:
-      type: object
-      required:
-      - metadata
-      - spec
+    EnvironmentVariableUserCredential:
+      description: Defines a reference to a user-created credential and a specific key within that credential whose value will populate the environment variable. User credentials can only be accessed by the user who created them.
       properties:
-        metadata:
-          $ref: '#/components/schemas/NIMServiceMetadataCreateParams'
-        spec:
-          $ref: '#/components/schemas/NimServiceSpec'
-    NimServiceMultiNode:
-      description: Defines whether the NIM service runs as a multi-node deployment. If workers is set to 1 or more, the service runs in multi-node.
-      properties:
-        workers:
-          $ref: '#/components/schemas/NimServiceWorkers'
-      nullable: true
-      type: object
-    ProbeHandlerScheme:
-      description: Scheme to use for connecting to the host, defaults to HTTP.
-      type: string
-      enum:
-      - HTTP
-      - HTTPS
-      nullable: true
-    NimServiceReplicas:
-      default: 1
-      description: The number of replicas to deploy.
-      type: integer
-      format: int32
-      minimum: 0
-      maximum: 1000
-      example: 2
-      nullable: true
-    ServingPortMetricsPort:
-      description: The port where metrics are exposed, required only if it's different than the main port.
-      type: integer
-      format: int32
-      minimum: 1
-      maximum: 65535
-      example: 8002
-      nullable: true
-    AutoScalingScaleWindowSeconds:
-      description: The time window for autoscaling decisions, in seconds. Defaults to 300 seconds.
-      type: integer
-      format: int32
-      minimum: 60
-      maximum: 3600
-      nullable: true
+        name:
+          description: The name of the user credential.  (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: my_postgres_user_and_password
+        key:
+          description: The key in the user credential resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: POSTGRES_PASSWORD
+      type:
+      - object
+      - 'null'
+    WorkloadV2Metadata:
+      allOf:
+      - $ref: '#/components/schemas/WorkloadV2MetadataResponse'
+      - $ref: '#/components/schemas/WorkloadV2MetadataAutoFill'
     ComplianceIssuesV2:
       properties:
         complianceIssues:
@@ -848,134 +406,493 @@ components:
                 example: value must be no less than 3
               rule:
                 $ref: '#/components/schemas/PolicyRuleEnum'
-      nullable: true
-      type: object
-    PriorityClass:
-      description: 'Specifies the priority class for the workload, which determines its scheduling behavior. Valid values are: very-low, low, medium-low, medium, medium-high, high, and very-high. Each workload type has a default priority. To view the default priority for each workload type, use the GET /workload-types endpoint. Once you change the priority from the default value defined for that workload type, the preemptibility field is not automatically updated. Make sure to set the desired preemptibility value.'
-      type: string
-      nullable: true
-      pattern: .*
-    ServingPortExposedProtocol:
-      description: The protocol to use for the exposed URL. If grpcPort is set, this defaults to grpc. Otherwise, it defaults to http.
-      type: string
-      enum:
-      - http
-      - grpc
-      nullable: true
-    SubmissionErrorV2:
-      allOf:
-      - $ref: '#/components/schemas/Error'
-      - $ref: '#/components/schemas/ComplianceIssuesV2'
+      type:
+      - object
+      - 'null'
+    Annotations:
+      description: Set of annotations to populate into the container running the workload.
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/Annotation'
+    Annotation:
+      description: Annotation details to be populated into the container.
+      properties:
+        name:
+          description: The name of the annotation (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 63
+          example: billing
+          pattern: .*
+        value:
+          description: The value of the annotation.
+          type:
+          - string
+          - 'null'
+          example: my-billing-unit
+          pattern: .*
+        exclude:
+          description: Use 'true' in case the annotation is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type:
+          - boolean
+          - 'null'
+          default: false
+          example: false
+      type:
+      - object
+      - 'null'
+    AutoScalingMetricThreshold:
+      description: The threshold to use with the specified metric for autoscaling (mandatory).
+      type:
+      - integer
+      - 'null'
+      format: int32
+    RunAsUid:
+      description: The user id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsUid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
+      type:
+      - integer
+      - 'null'
+      format: int64
+      example: 500
     PvcVolumeMode:
       description: Default volume mode for the PVC. Choose between Filesystem (default) or Block.
-      type: string
+      type:
+      - string
+      - 'null'
       enum:
       - Filesystem
       - Block
-      nullable: true
-    Label:
-      description: Label details to be populated into the container.
-      properties:
-        name:
-          description: The name of the label (mandatory)
-          type: string
-          minLength: 1
-          maxLength: 63
-          example: stage
-          nullable: true
-          pattern: .*
-        value:
-          description: The value of the label.
-          type: string
-          example: initial-research
-          nullable: true
-          pattern: .*
-        exclude:
-          description: Use 'true' in case the label is defined in defaults of the policy, and you wish to exclude it from the workload.
-          type: boolean
-          example: false
-          nullable: true
-      nullable: true
+    NimServiceCreateRequest:
       type: object
-    Tolerations:
-      description: Set of tolerations to apply to the workload.
-      type: array
+      required:
+      - metadata
+      - spec
+      properties:
+        metadata:
+          $ref: '#/components/schemas/NIMServiceMetadataCreateParams'
+        spec:
+          $ref: '#/components/schemas/NimServiceSpec'
+    NodePools:
+      description: A prioritized list of node pools for the scheduler to run the workload on. The scheduler will always try to use the first node pool before moving to the next one if the first is not available.
+      type:
+      - array
+      - 'null'
       items:
-        $ref: '#/components/schemas/Toleration'
-      nullable: true
+        type: string
+        pattern: .*
+      example:
+      - my-node-pool-a
+      - my-node-pool-b
+    PvcClaimSize:
+      description: 'Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB'
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 1G
+    NimServiceWorkers:
+      description: Specifies the number of worker nodes to use when running the NIM service in multi-node.
+      type:
+      - integer
+      - 'null'
+      format: int32
+      minimum: 1
+      maximum: 1000
+      example: 3
     ServingPortPort:
       description: The port that the container running the inference service exposes (mandatory).
-      type: integer
+      type:
+      - integer
+      - 'null'
       format: int32
       minimum: 1
       maximum: 65535
       example: 8000
-      nullable: true
-    ProjectId:
-      description: The id of the project.
-      type: string
-      example: 1
-      pattern: .*
-    NIMServiceMetadataCreateParams:
-      type: object
-      required:
-      - name
-      - projectId
-      properties:
-        name:
-          $ref: '#/components/schemas/WorkloadName'
-        useGivenNameAsPrefix:
-          description: When true, the requested name will be treated as a prefix. The final name of the workload will be composed of the name followed by a random set of characters.
-          type: boolean
-          example: true
-          default: false
-        projectId:
-          $ref: '#/components/schemas/ProjectId'
-    CpuMemoryRequest:
-      description: The amount of CPU memory to allocate for this workload (1G, 20M, .etc). The workload will receive at least this amount of memory. Note that the workload will not be scheduled unless the system can guarantee this amount of memory to the workload
-      type: string
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 20M
-      nullable: true
-    GpuPortionRequest:
-      description: Required if and only if gpuRequestType is portion. States the portion of the GPU to allocate for the created workload, per GPU device, between 0 and 1. The default is no allocated GPUs.
-      type: number
-      format: double
-      example: 0.5
-      nullable: true
-      minimum: 0
-    NimCache:
-      description: The specification of a NIM cache volume.
-      type: object
-      properties:
-        name:
-          description: The NIMCache resource name (mandatory).
-          type: string
-          minLength: 1
-          example: nim-cache-a
-          nullable: true
-        profile:
-          description: The NIM profile to use (optional).
-          type: string
-          minLength: 1
-          example: tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2
-          nullable: true
-      nullable: true
+    EnvironmentVariables:
+      description: Set of environment variables to populate into the container running the workload.
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/EnvironmentVariable'
     GpuPortionLimit:
       description: Limitations on the portion consumed by the workload, per GPU device. The system guarantees The gpuPotionLimit must be no less than the gpuPortionRequest.
-      type: number
+      type:
+      - number
+      - 'null'
       format: double
       example: 0.5
-      nullable: true
       minimum: 0
+    ServingPortExposedUrl:
+      description: The custom URL to use for the serving port. If empty (default), an autogenerated URL will be used.
+      type:
+      - string
+      - 'null'
+      pattern: .*
+    NimServiceResponse:
+      type: object
+      required:
+      - spec
+      - metadata
+      - desiredPhase
+      properties:
+        metadata:
+          $ref: '#/components/schemas/WorkloadV2Metadata'
+        desiredPhase:
+          $ref: '#/components/schemas/DesiredPhase'
+        spec:
+          $ref: '#/components/schemas/NimServiceSpec'
+    EnvironmentVariableConfigMap:
+      description: Details of the configMap and key use to populate the environment variable
+      properties:
+        name:
+          description: The name of the config-map resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: my-config-map
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        key:
+          description: The key in the config-map resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: MY_POSTGRES_SCHEMA
+          pattern: .*
+      type:
+      - object
+      - 'null'
+    PolicyRuleEnum:
+      description: Indicates which validation rule (e.g., min, max, step, options, required, canEdit, canAdd) conflicted with policy restrictions, causing the asset or template to be rejected.
+      type:
+      - string
+      - 'null'
+      enum:
+      - min
+      - max
+      - step
+      - options
+      - required
+      - canEdit
+      - canAdd
+      - locked
+    AutoScalingMetricNim:
+      description: The metric to use for autoscaling (mandatory).
+      type:
+      - string
+      - 'null'
+      pattern: ^[a-zA-Z_:][a-zA-Z0-9_:]*$
+      example: http_requests_total
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    CpuMemoryRequest:
+      description: The amount of CPU memory to allocate for this workload (1G, 20M, .etc). The workload will receive at least this amount of memory. Note that the workload will not be scheduled unless the system can guarantee this amount of memory to the workload
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 20M
+    PvcAddedAttrValue:
+      type: object
+      required:
+      - key
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 63
+          pattern: ^([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]$
+          example: dnsname
+        value:
+          type: string
+          example: my.dns.com
+          pattern: .*
+    GVK:
+      type: object
+      description: Specifies the Group, Version, and Kind (GVK) of the Kubernetes resource that defines the workload.
+      required:
+      - group
+      - version
+      - kind
+      properties:
+        group:
+          description: The API group of the Kubernetes resource.
+          type: string
+          example: apps
+        version:
+          description: The API version of the resource within the specified group.
+          type: string
+          example: v1
+        kind:
+          description: The type of Kubernetes resource being referenced.
+          type: string
+          example: Deployment
+    GpuDevicesRequest:
+      description: Requested number of GPU devices. Currently if more than one device is requested, it is not possible to provide values for gpuMemory or gpuPortion.
+      type:
+      - integer
+      - 'null'
+      format: int32
+      example: 1
+      minimum: 0
+    Image:
+      description: Docker image name. For more information, see [Images](https://kubernetes.io/docs/concepts/containers/images). The image name is mandatory for creating a workload.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      example: python:3.8
+      pattern: .*
+    GpuRequestType:
+      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      enum:
+      - portion
+      - memory
+    ProjectName2:
+      type: string
+      description: The name of the project
+      example: project-a
+      minLength: 1
+      pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+    ProbeHandlerScheme:
+      description: Scheme to use for connecting to the host, defaults to HTTP.
+      type:
+      - string
+      - 'null'
+      enum:
+      - HTTP
+      - HTTPS
+    GpuPortionRequest:
+      description: Required if and only if gpuRequestType is portion. States the portion of the GPU to allocate for the created workload, per GPU device, between 0 and 1. The default is no allocated GPUs.
+      type:
+      - number
+      - 'null'
+      format: double
+      example: 0.5
+      minimum: 0
+    DepartmentId3:
+      description: The id of the department.
+      type: string
+      minLength: 1
+      example: 2
+      pattern: .*
+    GpuMemoryLimit:
+      description: Limitation on the memory consumed by the workload, per GPU device. The system guarantees The gpuMemoryLimit must be no less than gpuMemoryRequest.
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 10M
+    ClaimInfo:
+      description: Claim information for the newly created PVC. The information should not be provided when attempting to use existing PVC.
+      properties:
+        size:
+          $ref: '#/components/schemas/PvcClaimSize'
+        storageClass:
+          description: Storage class name to associate with the PVC. This parameter may be omitted if there is a single storage class in the system, or you are using the default storage class. For more information, see [Storage class](https://kubernetes.io/docs/concepts/storage/storage-classes).
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: my-storage-class
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        accessModes:
+          $ref: '#/components/schemas/PvcAccessModes'
+        volumeMode:
+          $ref: '#/components/schemas/PvcVolumeMode'
+        addedAttrValues:
+          $ref: '#/components/schemas/PvcAddedAttrValues'
+      type:
+      - object
+      - 'null'
+    NimServicePvcFields:
+      properties:
+        existingPvc:
+          description: Verify existing PVC. PVC is assumed to exist when set to `true`. If set to `false`, the PVC will be created, if it does not exist.
+          type:
+          - boolean
+          - 'null'
+          default: false
+        claimName:
+          description: Name for the PVC. Allow referencing it across workloads. If not provided, a name based on the workload name and scope will be auto-generated.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 63
+          example: my-claim
+          pattern: .*
+        readOnly:
+          description: Permit only read access to PVC.
+          type:
+          - boolean
+          - 'null'
+          default: false
+        claimInfo:
+          $ref: '#/components/schemas/ClaimInfo'
+      type:
+      - object
+      - 'null'
+    ServingPortGrpcPort:
+      description: The GRPC port that the container running the inference service exposes.
+      type:
+      - integer
+      - 'null'
+      format: int32
+      minimum: 1
+      maximum: 65535
+      example: 8001
+    ServingPortExposedProtocol:
+      description: The protocol to use for the exposed URL. If grpcPort is set, this defaults to grpc. Otherwise, it defaults to http.
+      type:
+      - string
+      - 'null'
+      enum:
+      - http
+      - grpc
+    PvcAccessModes:
+      description: Default access mode(s) applied to newly created PVCs unless explicitly overridden.
+      properties:
+        readWriteOnce:
+          description: Mount the volume as read/write by a single node.
+          type:
+          - boolean
+          - 'null'
+          default: true
+        readOnlyMany:
+          description: Mount the volume as read-only by many nodes.
+          type:
+          - boolean
+          - 'null'
+          default: false
+        readWriteMany:
+          description: Mount the volume as read/write by many nodes.
+          type:
+          - boolean
+          - 'null'
+          default: false
+      type:
+      - object
+      - 'null'
+    CpuCoreRequest:
+      description: CPU units to allocate for the created workload (0.5, 1, .etc). The workload will receive at least this amount of CPU. Note that the workload will not be scheduled unless the system can guarantee this amount of CPUs to the workload.
+      format: double
+      type:
+      - number
+      - 'null'
+      example: 0.5
+      minimum: 0
+    Category:
+      description: Specify the workload category assigned to the workload. Categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform.
+      type:
+      - string
+      - 'null'
+      pattern: .*
+    PvcAddedAttrValues:
+      description: an optional array of key-values pairs that are written as annotations on the created PVC. the allowed attributes are determined according to the storage class configuration (see k8s-objects-tracker for further info).
+      type: array
+      items:
+        $ref: '#/components/schemas/PvcAddedAttrValue'
+    DepartmentName1:
+      type: string
+      description: The name of the department
+      example: default
+      minLength: 1
+      pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+    Toleration:
+      description: Toleration details.
+      properties:
+        name:
+          description: The name of the toleration.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          pattern: .*
+        operator:
+          $ref: '#/components/schemas/TolerationOperator'
+        key:
+          description: The taint key that the toleration applies to. (mandatory)
+          type:
+          - string
+          - 'null'
+          pattern: .*
+        value:
+          description: The taint value the toleration matches to. Mandatory if operator is Exists, forbidden otherwise.
+          type:
+          - string
+          - 'null'
+          pattern: .*
+        effect:
+          $ref: '#/components/schemas/TolerationEffect'
+        seconds:
+          description: The period of time the toleration tolerates the taint. Valid only if effect is NoExecute. taint.
+          type:
+          - integer
+          - 'null'
+          minimum: 1
+        exclude:
+          description: Use 'true' in case the label is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type:
+          - boolean
+          - 'null'
+          example: false
+      type:
+      - object
+      - 'null'
+    CpuCoreLimit:
+      description: Limitations on the number of CPUs consumed by the workload (0.5, 1, .etc). The system guarantees that this workload will not be able to consume more than this amount of CPUs.
+      format: double
+      type:
+      - number
+      - 'null'
+      example: 2
+      minimum: 0
+    ImagePullSecret:
+      description: A reference to a secret in the same namespace used to pull container images.
+      properties:
+        name:
+          type: string
+          description: The name of the Kubernetes secret containing the image pull credentials.
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        userCredential:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the secret is a user credential. Set to true if the secret was created by the user and is only accessible by them.
+        exclude:
+          description: Use 'true' in case the secret is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type:
+          - boolean
+          - 'null'
+          default: false
+          example: false
+      type:
+      - object
+      - 'null'
+    WorkloadId3:
+      description: A unique ID of the workload.
+      type: string
+      format: uuid
     NimServiceSpec:
       allOf:
-      - nullable: true
-        properties:
+      - properties:
           annotations:
             $ref: '#/components/schemas/Annotations'
           autoscaling:
-            nullable: true
             properties:
               maxReplicas:
                 $ref: '#/components/schemas/AutoScalingMaxReplicas'
@@ -987,11 +904,12 @@ components:
                 $ref: '#/components/schemas/AutoScalingMinReplicas'
               scaleWindowSeconds:
                 $ref: '#/components/schemas/AutoScalingScaleWindowSeconds'
-            type: object
+            type:
+            - object
+            - 'null'
           category:
             $ref: '#/components/schemas/Category'
           compute:
-            nullable: true
             properties:
               cpuCoreLimit:
                 $ref: '#/components/schemas/CpuCoreLimit'
@@ -1013,7 +931,9 @@ components:
                 $ref: '#/components/schemas/GpuPortionRequest'
               gpuRequestType:
                 $ref: '#/components/schemas/GpuRequestType'
-            type: object
+            type:
+            - object
+            - 'null'
           environmentVariables:
             $ref: '#/components/schemas/EnvironmentVariables'
           image:
@@ -1025,13 +945,14 @@ components:
           labels:
             $ref: '#/components/schemas/Labels'
           modelStore:
-            nullable: true
             properties:
               nimCache:
                 $ref: '#/components/schemas/NimCache'
               pvc:
                 $ref: '#/components/schemas/NimServicePvcFields'
-            type: object
+            type:
+            - object
+            - 'null'
           multiNode:
             $ref: '#/components/schemas/NimServiceMultiNode'
           ngcAuthSecret:
@@ -1047,18 +968,206 @@ components:
           replicas:
             $ref: '#/components/schemas/NimServiceReplicas'
           security:
-            nullable: true
             properties:
               runAsGid:
                 $ref: '#/components/schemas/RunAsGid'
               runAsUid:
                 $ref: '#/components/schemas/RunAsUid'
-            type: object
+            type:
+            - object
+            - 'null'
           servingPort:
             $ref: '#/components/schemas/NimServiceServingPort'
           tolerations:
             $ref: '#/components/schemas/Tolerations'
-        type: object
+        type:
+        - object
+        - 'null'
+    ServingPortExposeExternally:
+      description: Indicates whether the inference serving endpoint should be accessible outside the cluster. If set to true, the endpoint will be exposed externally. To enable external access, your administrator must configure the cluster as described in the [inference requirements](https://run-ai-docs.nvidia.com/saas/getting-started/installation/system-requirements#inference). section.
+      type:
+      - boolean
+      - 'null'
+      default: true
+    SubmissionErrorV2:
+      allOf:
+      - $ref: '#/components/schemas/Error'
+      - $ref: '#/components/schemas/ComplianceIssuesV2'
+    NimServiceMultiNode:
+      description: Defines whether the NIM service runs as a multi-node deployment. If workers is set to 1 or more, the service runs in multi-node.
+      properties:
+        workers:
+          $ref: '#/components/schemas/NimServiceWorkers'
+      type:
+      - object
+      - 'null'
+    PriorityClass:
+      description: 'Specifies the priority class for the workload, which determines its scheduling behavior. Valid values are: very-low, low, medium-low, medium, medium-high, high, and very-high. Each workload type has a default priority. To view the default priority for each workload type, use the GET /workload-types endpoint. Once you change the priority from the default value defined for that workload type, the preemptibility field is not automatically updated. Make sure to set the desired preemptibility value.'
+      type:
+      - string
+      - 'null'
+      pattern: .*
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    Probes:
+      description: Probes are used to determine if the container is healthy and ready to accept traffic.
+      type:
+      - object
+      - 'null'
+      properties:
+        readiness:
+          $ref: '#/components/schemas/Probe'
+    AutoScalingMinReplicas:
+      description: The minimum number of replicas for autoscaling. Defaults to 1.
+      type:
+      - integer
+      - 'null'
+      format: int32
+      minimum: 1
+    Probe:
+      type:
+      - object
+      - 'null'
+      properties:
+        initialDelaySeconds:
+          description: Number of seconds after the container has started before liveness or readiness probes are initiated.
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 0
+        periodSeconds:
+          description: How often (in seconds) to perform the probe.
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 1
+        timeoutSeconds:
+          description: Number of seconds after which the probe times out.
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 1
+        successThreshold:
+          description: Minimum consecutive successes for the probe to be considered successful after having failed.
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 1
+        failureThreshold:
+          description: When a probe fails, the number of times to try before giving up.
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 1
+        handler:
+          $ref: '#/components/schemas/ProbeHandler'
+    GpuMemoryRequest:
+      description: Required if and only if gpuRequestType is memory. States the GPU memory to allocate for the created workload, per GPU device. Note that the workload will not be scheduled unless the system can guarantee this amount of GPU memory to the workload.
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 10M
+    RunAsGid:
+      description: The group id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsGid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
+      type:
+      - integer
+      - 'null'
+      format: int64
+      example: 30
+    NimServiceReplicas:
+      default: 1
+      description: The number of replicas to deploy.
+      type:
+      - integer
+      - 'null'
+      format: int32
+      minimum: 0
+      maximum: 1000
+      example: 2
+    EnvironmentVariable:
+      description: Details of an environment variable which is populated into the container.
+      properties:
+        name:
+          description: The name of the environment variable. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: HOME
+          pattern: .*
+        value:
+          description: The value of the environment variable. (mutually exclusive with secret, userCredential, configMap and podFieldRef)
+          type:
+          - string
+          - 'null'
+          example: /home/my-folder
+          pattern: .*
+        secret:
+          $ref: '#/components/schemas/EnvironmentVariableSecret'
+        configMap:
+          $ref: '#/components/schemas/EnvironmentVariableConfigMap'
+        podFieldRef:
+          $ref: '#/components/schemas/EnvironmentVariablePodFieldReference'
+        userCredential:
+          $ref: '#/components/schemas/EnvironmentVariableUserCredential'
+        exclude:
+          description: Use 'true' in case the environment variable is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type:
+          - boolean
+          - 'null'
+          example: false
+        description:
+          description: Description of the environment variable.
+          type:
+          - string
+          - 'null'
+          example: Home directory of the user.
+          pattern: .*
+      type:
+      - object
+      - 'null'
+    ProjectId:
+      description: The id of the project.
+      type: string
+      example: 1
+      pattern: .*
+    Preemptibility:
+      description: Specifies whether the workload can be preempted by higher-priority workloads. Valid values are preemptible and non-preemptible. If explicitly set, this value takes precedence. If not set, the system derives the preemptibility from the priorityClassName field, ensuring backward compatibility. Each workload type has a default preemptibility. To view the default preemptibility for each workload type, use the GET /workload-types endpoint.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      enum:
+      - preemptible
+      - non-preemptible
+    AutoScalingScaleWindowSeconds:
+      description: The time window for autoscaling decisions, in seconds. Defaults to 300 seconds.
+      type:
+      - integer
+      - 'null'
+      format: int32
+      minimum: 60
+      maximum: 3600
     NimServiceServingPort:
       description: A port for accessing the inference service
       properties:
@@ -1076,158 +1185,106 @@ components:
           $ref: '#/components/schemas/ServingPortExposedUrl'
         exposedProtocol:
           $ref: '#/components/schemas/ServingPortExposedProtocol'
-      nullable: true
-      type: object
-    NimServiceNgcAuthSecret:
-      description: The name of a Kubernetes secret containing the NGC access credentials. The secret must contain a key named NGC_API_KEY with the API key as the value.
-      type: string
-      pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-      nullable: true
-    Probes:
-      description: Probes are used to determine if the container is healthy and ready to accept traffic.
-      type: object
-      properties:
-        readiness:
-          $ref: '#/components/schemas/Probe'
-      nullable: true
-    AutoScalingMetricThreshold:
-      description: The threshold to use with the specified metric for autoscaling (mandatory).
-      type: integer
-      format: int32
-      nullable: true
-    GVK:
-      type: object
-      description: Specifies the Group, Version, and Kind (GVK) of the Kubernetes resource that defines the workload.
-      required:
-      - group
-      - version
-      - kind
-      properties:
-        group:
-          description: The API group of the Kubernetes resource.
-          type: string
-          example: apps
-        version:
-          description: The API version of the resource within the specified group.
-          type: string
-          example: v1
-        kind:
-          description: The type of Kubernetes resource being referenced.
-          type: string
-          example: Deployment
-    ImagePullSecret:
-      description: A reference to a secret in the same namespace used to pull container images.
-      properties:
-        name:
-          type: string
-          description: The name of the Kubernetes secret containing the image pull credentials.
-          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-        userCredential:
-          type: boolean
-          description: Indicates whether the secret is a user credential. Set to true if the secret was created by the user and is only accessible by them.
-          nullable: true
-        exclude:
-          description: Use 'true' in case the secret is defined in defaults of the policy, and you wish to exclude it from the workload.
-          type: boolean
-          default: false
-          example: false
-          nullable: true
-      nullable: true
-      type: object
-    DepartmentId3:
-      description: The id of the department.
-      type: string
-      minLength: 1
-      example: 2
-      pattern: .*
+      type:
+      - object
+      - 'null'
     TolerationOperator:
       description: A key's relationship to the value. Equal uses key and value. Exists is equivalent to wildcard for value, so that a workload can tolerate all taints of a particular category. (mandatory)
-      type: string
+      type:
+      - string
+      - 'null'
       enum:
       - Equal
       - Exists
-      nullable: true
-    RunAsUid:
-      description: The user id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsUid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
-      type: integer
-      format: int64
-      example: 500
-      nullable: true
-    PvcAccessModes:
-      description: Default access mode(s) applied to newly created PVCs unless explicitly overridden.
+    NimCache:
+      description: The specification of a NIM cache volume.
+      type:
+      - object
+      - 'null'
       properties:
-        readWriteOnce:
-          description: Mount the volume as read/write by a single node.
-          type: boolean
-          default: true
-          nullable: true
-        readOnlyMany:
-          description: Mount the volume as read-only by many nodes.
-          type: boolean
-          default: false
-          nullable: true
-        readWriteMany:
-          description: Mount the volume as read/write by many nodes.
-          type: boolean
-          default: false
-          nullable: true
-      nullable: true
+        name:
+          description: The NIMCache resource name (mandatory).
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: nim-cache-a
+        profile:
+          description: The NIM profile to use (optional).
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: tensorrt_llm-b200-fp8-tp2-pp1-latency-2901:10de-2
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    TolerationEffect:
+      description: The taint effect to match. (mandatory)
+      type:
+      - string
+      - 'null'
+      enum:
+      - NoSchedule
+      - NoExecute
+      - PreferNoSchedule
+      - Any
+    DesiredPhase:
+      description: The desired phase of the workload.
+      type: string
+      enum:
+      - Running
+      - Stopped
+      - Deleted
+    NimServiceUpdateRequest:
       type: object
+      required:
+      - spec
+      properties:
+        spec:
+          $ref: '#/components/schemas/NimServiceSpec'
+    WorkloadName:
+      description: The name of the workload.
+      type: string
+      minLength: 1
+      example: my-workload-name
+      pattern: .*
+    EnvironmentVariableSecret:
+      description: Details of the secret and key use to populate the environment variable
+      properties:
+        name:
+          description: The name of the secret resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: postgress_secret
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        key:
+          description: The key in the secret resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: POSTGRES_PASSWORD
+          pattern: .*
+      type:
+      - object
+      - 'null'
+    ServingPortServiceType:
+      description: The type of Kubernetes service to create for the inference deployment. Options include 'ClusterIP' (default), 'NodePort', 'LoadBalancer', and 'ExternalName'.
+      type:
+      - string
+      - 'null'
+      default: ClusterIP
+      enum:
+      - ClusterIP
+      - NodePort
+      - LoadBalancer
+      - ExternalName
   responses:
-    400SubmissionErrorV2:
-      description: Bad submission request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/SubmissionErrorV2'
-          example:
-            code: 400
-            message: The workload request does not comply with the policy set by the administrator
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
     403Forbidden:
       description: Forbidden
       content:
@@ -1237,6 +1294,60 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400SubmissionErrorV2:
+      description: Bad submission request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SubmissionErrorV2'
+          example:
+            code: 400
+            message: The workload request does not comply with the policy set by the administrator
   parameters:
     WorkloadV2Id:
       name: WorkloadV2Id

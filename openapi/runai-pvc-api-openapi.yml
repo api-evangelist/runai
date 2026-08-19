@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -198,53 +198,89 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  responses:
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    202Accepted:
+      description: Accepted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpResponse'
+          example:
+            code: 202
+            message: Request has been accepted.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
   schemas:
-    PvcFieldsNonUpdatable:
-      properties:
-        existingPvc:
-          description: Verify existing PVC. PVC is assumed to exist when set to `true`. If set to `false`, the PVC will be created, if it does not exist.
-          type: boolean
-          default: false
-          nullable: true
-        claimName:
-          description: Name for the PVC. Allow referencing it across workloads. If not provided, a name based on the workload name and scope will be auto-generated.
-          type: string
-          minLength: 1
-          maxLength: 63
-          example: my-claim
-          nullable: true
-          pattern: .*
-        readOnly:
-          description: Permit only read access to PVC.
-          type: boolean
-          default: false
-          nullable: true
-        ephemeral:
-          description: Use `true` to set PVC to ephemeral. If set to `true`, the PVC will be deleted when the workload is stopped. Not supported for inference workloads.
-          type: boolean
-          default: false
-          example: false
-          nullable: true
-        claimInfo:
-          $ref: '#/components/schemas/ClaimInfo'
-        dataSharing:
-          description: use `true` to share the PVC data to all projects under the selected scope.
-          type: boolean
-          default: false
-          example: false
-          nullable: true
-      nullable: true
-      type: object
+    AssetsUsageRefCompute:
+      allOf:
+      - $ref: '#/components/schemas/AssetRef'
+      type:
+      - object
+      - 'null'
     DataSourceOverrides:
       description: specific fields to override in the data source.
-      type: object
-      nullable: true
+      type:
+      - object
+      - 'null'
       properties:
         containerPath:
-          type: string
+          type:
+          - string
+          - 'null'
           minLength: 1
           example: /container/directory
-          nullable: true
     PVCListResponse:
       required:
       - entries
@@ -253,122 +289,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/PVCAsset'
-    AssetsUsageRefCompute:
-      allOf:
-      - $ref: '#/components/schemas/AssetRef'
-      nullable: true
-      type: object
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    EnvironmentAssetRef:
-      description: Reference information about environment asset.
-      required:
-      - id
-      - name
-      properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
-        name:
-          $ref: '#/components/schemas/AssetName'
-        toolTypes:
-          description: the type of tools as defined in the connections of the environment asset.
-          type: array
-          nullable: true
-          items:
-            $ref: '#/components/schemas/ToolType'
-    PVCAssetSpec:
-      allOf:
-      - $ref: '#/components/schemas/Pvc'
-    PVCCreationRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetCreationRequest'
-        spec:
-          $ref: '#/components/schemas/PVCAssetSpec'
-    PVCHistoryResponse:
-      type: object
-      required:
-      - records
-      properties:
-        next:
-          type: integer
-          example: 1
-        records:
-          $ref: '#/components/schemas/HistoryRecords'
-    PvcClaimSize:
-      description: 'Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB'
-      type: string
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 1G
-      nullable: true
-    UsageTimesInfo:
-      description: Details about times the asset has been used by workloads, etc.
-      properties:
-        lastUsedByWorkload:
-          description: The time at which the asset were last used by a workload of given type and project. This field requires complyToProject and complyToWorkload types flags of the API, to specify the workload type and project id.
-          type: string
-          minLength: 1
-          format: date-time
-          nullable: true
-      nullable: true
-      type: object
-    PvcAddedAttrValues:
-      description: an optional array of key-values pairs that are written as annotations on the created PVC. the allowed attributes are determined according to the storage class configuration (see k8s-objects-tracker for further info).
-      type: array
-      items:
-        $ref: '#/components/schemas/PvcAddedAttrValue'
-    AssetsUsageRef:
-      description: Reference information about usage of assets by other assets, for example datasources that uses credentials.
-      properties:
-        environment:
-          nullable: true
-          type: object
-          description: environment asset.
-          allOf:
-          - $ref: '#/components/schemas/EnvironmentAssetRef'
-          deprecated: true
-        environments:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetRef'
-        compute:
-          $ref: '#/components/schemas/AssetsUsageRefCompute'
-          deprecated: true
-        computes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetRef'
-        datasources:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetDatasourceRef'
-    AssetName:
-      description: The name of the asset.
-      type: string
-      minLength: 1
-      example: my-asset
-    ClusterId:
-      description: The id of the cluster.
-      type: string
-      format: uuid
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
     AssetCreationRequest:
       allOf:
       - $ref: '#/components/schemas/AssetUpdatableFields'
@@ -382,136 +302,168 @@ components:
           inference: false
           distributed: true
           distFramework: TF
-    Pvc:
-      allOf:
-      - $ref: '#/components/schemas/PvcFieldsUpdatable'
-      - $ref: '#/components/schemas/PvcFieldsNonUpdatable'
-    ComplianceInfoReason:
-      description: An issue preventing the use of a template or asset for creating workloads in a given project.
+    Event1:
+      type:
+      - object
+      - 'null'
       required:
-      - details
+      - createdAt
+      - type
+      - clusterId
+      - message
       properties:
-        field:
-          description: For policy related issues, includes a json path to the field in the policy for which the issue applies.
-          nullable: true
+        createdAt:
           type: string
-          pattern: .*
-        details:
-          description: Explanation of the issue.
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        id:
           type: string
-          pattern: .*
-        rule:
-          $ref: '#/components/schemas/PolicyRuleEnum'
-    AssetMeta:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      - $ref: '#/components/schemas/AssetReadOnlyFields'
-      example:
-        name: my-asset
-        scope: tenant
-        id: a418ed33-9399-48c0-a890-122cadd13bfd
-        kind: s3
-        createdBy: test@run.ai
-        createdAt: '2023-02-23T14:25:36.707685Z'
-        updatedBy: test@run.ai
-        updatedAt: '2023-02-23T14:25:36.707685Z'
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          distributed: true
-          distFramework: TF
-    AssetClusterStatusIssues:
-      type: array
-      items:
-        $ref: '#/components/schemas/AssetClusterStatusIssue'
-    AssetClusterStatusIssue:
-      type: object
-      required:
-      - scopeId
-      - scopeType
-      - issue
-      properties:
-        scopeId:
-          $ref: '#/components/schemas/ScopeId'
-        scopeType:
-          $ref: '#/components/schemas/ScopeType'
-        issue:
-          $ref: '#/components/schemas/AssetClusterStatusIssueEnum'
-    AssetDescription:
-      description: The description of the asset.
-      type: string
-      minLength: 1
-      maxLength: 250
-      example: description of my asset.
-      nullable: true
-    AssetClusterStatusInfo:
-      properties:
-        status:
-          $ref: '#/components/schemas/AssetSyncStatusEnum'
-        issues:
-          $ref: '#/components/schemas/AssetClusterStatusIssues'
+          format: uuid
+        type:
+          type: string
+          example: Normal
+        clusterId:
+          $ref: '#/components/schemas/ClusterId'
         message:
           type: string
-        url:
+          example: Started container z
+        reason:
           type: string
-      nullable: true
-      type: object
-    WorkloadName:
-      description: The name of the workload.
+          example: Started
+        source:
+          type: string
+          example: kubelet
+        involvedObject:
+          $ref: '#/components/schemas/InvolvedObject'
+    ToolType:
+      description: Super set of Internal and External tool types.
       type: string
       minLength: 1
-      example: my-workload-name
-      pattern: .*
-    ClaimInfo:
-      description: Claim information for the newly created PVC. The information should not be provided when attempting to use existing PVC.
-      properties:
-        size:
-          $ref: '#/components/schemas/PvcClaimSize'
-        storageClass:
-          description: Storage class name to associate with the PVC. This parameter may be omitted if there is a single storage class in the system, or you are using the default storage class. For more information, see [Storage class](https://kubernetes.io/docs/concepts/storage/storage-classes).
-          type: string
-          minLength: 1
-          example: my-storage-class
-          nullable: true
-          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-        accessModes:
-          $ref: '#/components/schemas/PvcAccessModes'
-        volumeMode:
-          $ref: '#/components/schemas/PvcVolumeMode'
-        addedAttrValues:
-          $ref: '#/components/schemas/PvcAddedAttrValues'
-      nullable: true
-      type: object
-    AssetId:
-      description: Unique identifier of the asset.
-      type: string
-      format: uuid
-      minLength: 1
-    HistoryRecord:
+      enum:
+      - jupyter-notebook
+      - pycharm
+      - visual-studio-code
+      - tensorboard
+      - rstudio
+      - mlflow
+      - custom
+      - wandb
+      - matlab
+      - comet
+      - chatbot-ui
+    InvolvedObject:
       type: object
       required:
-      - meta
-      - spec
+      - uid
+      - kind
+      - name
+      - namespace
       properties:
-        meta:
-          $ref: '#/components/schemas/HistoryRecordMeta'
-        spec:
-          type: object
-          properties:
-            event:
-              $ref: '#/components/schemas/Event1'
-            phaseUpdate:
-              $ref: '#/components/schemas/AssetPhaseUpdate'
-    HistoryRecordType:
+        uid:
+          type: string
+          format: uuid
+        kind:
+          type: string
+          example: Pod
+        name:
+          type: string
+          example: test-0-1
+        namespace:
+          type: string
+          example: runai-test
+    AssetDatasourceRef:
+      description: Reference information about a datasource asset.
+      required:
+      - id
+      - name
+      - kind
+      properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
+        kind:
+          $ref: '#/components/schemas/AssetKind'
+        overrides:
+          $ref: '#/components/schemas/DataSourceOverrides'
+          deprecated: true
+    ComplianceInfo:
+      description: Compliance of an asset with creation of workloads in a given project.
+      properties:
+        imposed:
+          description: Whether the asset is imposed on created workloads by the administrator.
+          type: boolean
+        compliance:
+          description: Whether the asset info complies with creation of workloads in the project.
+          type: boolean
+        reason:
+          description: For asset that does not comply, specify one or more reason why.
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplianceInfoReason'
+      type:
+      - object
+      - 'null'
+    ScopeId:
+      type: string
+      description: The id of the cluster, department or project, depending on the scope type.
+    PvcVolumeMode:
+      description: Default volume mode for the PVC. Choose between Filesystem (default) or Block.
+      type:
+      - string
+      - 'null'
+      enum:
+      - Filesystem
+      - Block
+    AssetRef:
+      description: Reference information about an asset.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
+    PvcClaimSize:
+      description: 'Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB'
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 1G
+    AssetUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      example:
+        name: my-asset
+    ScopeType:
       type: string
       enum:
-      - Event
-      - PhaseUpdate
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
+    WorkloadRefAndStatus:
+      description: Id, name and status of a workspace or training
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/WorkloadId1'
+        name:
+          $ref: '#/components/schemas/WorkloadName'
+        status:
+          description: The status of the workspace or training.
+          type: string
+          minLength: 1
     PolicyRuleEnum:
       description: Indicates which validation rule (e.g., min, max, step, options, required, canEdit, canAdd) conflicted with policy restrictions, causing the asset or template to be rejected.
-      type: string
-      nullable: true
+      type:
+      - string
+      - 'null'
       enum:
       - min
       - max
@@ -536,9 +488,10 @@ components:
           $ref: '#/components/schemas/AssetKind'
         tenantId:
           description: The id of the tenant.
-          type: integer
+          type:
+          - integer
+          - 'null'
           format: int32
-          nullable: true
         createdBy:
           description: The user who created the asset.
           type: string
@@ -568,17 +521,286 @@ components:
           minLength: 1
         projectName:
           description: The name of the project that the asset is associated with, for project scoped assets.
-          type: string
+          type:
+          - string
+          - 'null'
           minLength: 1
-          nullable: true
         updateCount:
           $ref: '#/components/schemas/UpdateCount'
       type: object
-    UpdateCount:
-      description: the value of an update counter of a data in the system.
-      type: integer
-      format: int64
-      example: 12345
+    ComplianceInfoReason:
+      description: An issue preventing the use of a template or asset for creating workloads in a given project.
+      required:
+      - details
+      properties:
+        field:
+          description: For policy related issues, includes a json path to the field in the policy for which the issue applies.
+          type:
+          - string
+          - 'null'
+          pattern: .*
+        details:
+          description: Explanation of the issue.
+          type: string
+          pattern: .*
+        rule:
+          $ref: '#/components/schemas/PolicyRuleEnum'
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    PvcAddedAttrValue:
+      type: object
+      required:
+      - key
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 63
+          pattern: ^([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]$
+          example: dnsname
+        value:
+          type: string
+          example: my.dns.com
+          pattern: .*
+    Scope:
+      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
+      type: string
+      minLength: 1
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
+    PvcFieldsUpdatable:
+      properties:
+        path:
+          description: Local path within the workload to which the PVC bucket will be mapped. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: /container/my-claim
+          pattern: .*
+      type:
+      - object
+      - 'null'
+    AssetPhaseUpdate:
+      type:
+      - object
+      - 'null'
+      required:
+      - phase
+      - phaseMessage
+      properties:
+        phase:
+          type: string
+          example: Creating
+        phaseMessage:
+          type: string
+          example: Creating PVC asset pvc-123
+    HttpResponse:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+    HistoryRecordType:
+      type: string
+      enum:
+      - Event
+      - PhaseUpdate
+    UsageTimesInfo:
+      description: Details about times the asset has been used by workloads, etc.
+      properties:
+        lastUsedByWorkload:
+          description: The time at which the asset were last used by a workload of given type and project. This field requires complyToProject and complyToWorkload types flags of the API, to specify the workload type and project id.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          format: date-time
+      type:
+      - object
+      - 'null'
+    AssetSyncStatusEnum:
+      type: string
+      enum:
+      - Creating
+      - Deleting
+      - Failed
+      - Deletion failed
+      - Issues found
+      - No issues found
+      - No status
+      - Updating
+    AssetClusterStatusIssue:
+      type: object
+      required:
+      - scopeId
+      - scopeType
+      - issue
+      properties:
+        scopeId:
+          $ref: '#/components/schemas/ScopeId'
+        scopeType:
+          $ref: '#/components/schemas/ScopeType'
+        issue:
+          $ref: '#/components/schemas/AssetClusterStatusIssueEnum'
+    AssetUpdatableFields:
+      required:
+      - name
+      properties:
+        name:
+          $ref: '#/components/schemas/AssetName'
+        description:
+          $ref: '#/components/schemas/AssetDescription'
+    ClaimInfo:
+      description: Claim information for the newly created PVC. The information should not be provided when attempting to use existing PVC.
+      properties:
+        size:
+          $ref: '#/components/schemas/PvcClaimSize'
+        storageClass:
+          description: Storage class name to associate with the PVC. This parameter may be omitted if there is a single storage class in the system, or you are using the default storage class. For more information, see [Storage class](https://kubernetes.io/docs/concepts/storage/storage-classes).
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: my-storage-class
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        accessModes:
+          $ref: '#/components/schemas/PvcAccessModes'
+        volumeMode:
+          $ref: '#/components/schemas/PvcVolumeMode'
+        addedAttrValues:
+          $ref: '#/components/schemas/PvcAddedAttrValues'
+      type:
+      - object
+      - 'null'
+    AssetsUsageRef:
+      description: Reference information about usage of assets by other assets, for example datasources that uses credentials.
+      properties:
+        environment:
+          type:
+          - object
+          - 'null'
+          description: environment asset.
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentAssetRef'
+          deprecated: true
+        environments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetRef'
+        compute:
+          $ref: '#/components/schemas/AssetsUsageRefCompute'
+          deprecated: true
+        computes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetRef'
+        datasources:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetDatasourceRef'
+    AssetClusterStatusIssues:
+      type: array
+      items:
+        $ref: '#/components/schemas/AssetClusterStatusIssue'
+    PvcAccessModes:
+      description: Default access mode(s) applied to newly created PVCs unless explicitly overridden.
+      properties:
+        readWriteOnce:
+          description: Mount the volume as read/write by a single node.
+          type:
+          - boolean
+          - 'null'
+          default: true
+        readOnlyMany:
+          description: Mount the volume as read-only by many nodes.
+          type:
+          - boolean
+          - 'null'
+          default: false
+        readWriteMany:
+          description: Mount the volume as read/write by many nodes.
+          type:
+          - boolean
+          - 'null'
+          default: false
+      type:
+      - object
+      - 'null'
+    PvcAddedAttrValues:
+      description: an optional array of key-values pairs that are written as annotations on the created PVC. the allowed attributes are determined according to the storage class configuration (see k8s-objects-tracker for further info).
+      type: array
+      items:
+        $ref: '#/components/schemas/PvcAddedAttrValue'
+    HistoryRecordMeta:
+      type: object
+      required:
+      - creationTimestamp
+      - type
+      properties:
+        creationTimestamp:
+          type: string
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        type:
+          $ref: '#/components/schemas/HistoryRecordType'
+    HistoryRecords:
+      type: array
+      items:
+        $ref: '#/components/schemas/HistoryRecord'
+      x-schema-name: HistoryRecords
+    Pvc:
+      allOf:
+      - $ref: '#/components/schemas/PvcFieldsUpdatable'
+      - $ref: '#/components/schemas/PvcFieldsNonUpdatable'
+    AssetId:
+      description: Unique identifier of the asset.
+      type: string
+      format: uuid
+      minLength: 1
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    HistoryRecord:
+      type: object
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/HistoryRecordMeta'
+        spec:
+          type: object
+          properties:
+            event:
+              $ref: '#/components/schemas/Event1'
+            phaseUpdate:
+              $ref: '#/components/schemas/AssetPhaseUpdate'
     AssetKind:
       description: The kind of the asset.
       type: string
@@ -602,39 +824,38 @@ components:
       - secret-volume
       - data-volume
       - ngcApiKey
-    AssetSyncStatusEnum:
-      type: string
-      enum:
-      - Creating
-      - Deleting
-      - Failed
-      - Deletion failed
-      - Issues found
-      - No issues found
-      - No status
-      - Updating
-    AssetDatasourceRef:
-      description: Reference information about a datasource asset.
-      required:
-      - id
-      - name
-      - kind
+    AssetClusterStatusInfo:
       properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
+        status:
+          $ref: '#/components/schemas/AssetSyncStatusEnum'
+        issues:
+          $ref: '#/components/schemas/AssetClusterStatusIssues'
+        message:
+          type: string
+        url:
+          type: string
+      type:
+      - object
+      - 'null'
+    ClusterIdOptional:
+      description: The id of the cluster.
+      type:
+      - string
+      - 'null'
+      format: uuid
+      minLength: 1
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    ClusterResourceInfo:
+      properties:
         name:
-          $ref: '#/components/schemas/AssetName'
-        kind:
-          $ref: '#/components/schemas/AssetKind'
-        overrides:
-          $ref: '#/components/schemas/DataSourceOverrides'
-          deprecated: true
-    AssetClusterStatusIssueEnum:
-      type: string
-      enum:
-      - ReplicationError
-      - LostPhase
-      - NotCreated
+          example: password-credential-1
+          description: The name of the resource created for the asset in the cluster.
+          type:
+          - string
+          - 'null'
+      type:
+      - object
+      - 'null'
     AssetUsageInfo:
       description: Details about resources that use the asset.
       properties:
@@ -666,77 +887,31 @@ components:
         assets:
           description: list of other assets that use this asset. specifically, accessKeys used by s3, and passwords used by git.
           $ref: '#/components/schemas/AssetsUsageRef'
-      nullable: true
-      type: object
-    ComplianceInfo:
-      description: Compliance of an asset with creation of workloads in a given project.
-      properties:
-        imposed:
-          description: Whether the asset is imposed on created workloads by the administrator.
-          type: boolean
-        compliance:
-          description: Whether the asset info complies with creation of workloads in the project.
-          type: boolean
-        reason:
-          description: For asset that does not comply, specify one or more reason why.
-          type: array
-          items:
-            $ref: '#/components/schemas/ComplianceInfoReason'
-      nullable: true
-      type: object
-    PvcAddedAttrValue:
-      type: object
-      required:
-      - key
-      properties:
-        key:
-          type: string
-          minLength: 1
-          maxLength: 63
-          pattern: ^([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9]$
-          example: dnsname
-        value:
-          type: string
-          example: my.dns.com
-          pattern: .*
-    HistoryRecordMeta:
-      type: object
-      required:
-      - creationTimestamp
-      - type
-      properties:
-        creationTimestamp:
-          type: string
-          format: date-time
-          example: '2022-01-01T03:49:52.531Z'
-        type:
-          $ref: '#/components/schemas/HistoryRecordType'
-    WorkloadRefAndStatus:
-      description: Id, name and status of a workspace or training
-      required:
-      - id
-      - name
-      properties:
-        id:
-          $ref: '#/components/schemas/WorkloadId1'
-        name:
-          $ref: '#/components/schemas/WorkloadName'
-        status:
-          description: The status of the workspace or training.
-          type: string
-          minLength: 1
-    Scope:
-      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
+      type:
+      - object
+      - 'null'
+    AssetClusterStatusIssueEnum:
+      type: string
+      enum:
+      - ReplicationError
+      - LostPhase
+      - NotCreated
+    AssetName:
+      description: The name of the asset.
       type: string
       minLength: 1
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
-    AssetRef:
-      description: Reference information about an asset.
+      example: my-asset
+    PVCUpdateRequest:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetUpdateRequest'
+        spec:
+          $ref: '#/components/schemas/PvcFieldsUpdatable'
+    EnvironmentAssetRef:
+      description: Reference information about environment asset.
       required:
       - id
       - name
@@ -745,18 +920,155 @@ components:
           $ref: '#/components/schemas/AssetId'
         name:
           $ref: '#/components/schemas/AssetName'
-    PvcVolumeMode:
-      description: Default volume mode for the PVC. Choose between Filesystem (default) or Block.
-      type: string
-      enum:
-      - Filesystem
-      - Block
-      nullable: true
-    AssetUpdateRequest:
+        toolTypes:
+          description: the type of tools as defined in the connections of the environment asset.
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolType'
+    PVCHistoryResponse:
+      type: object
+      required:
+      - records
+      properties:
+        next:
+          type: integer
+          example: 1
+        records:
+          $ref: '#/components/schemas/HistoryRecords'
+    PvcFieldsNonUpdatable:
+      properties:
+        existingPvc:
+          description: Verify existing PVC. PVC is assumed to exist when set to `true`. If set to `false`, the PVC will be created, if it does not exist.
+          type:
+          - boolean
+          - 'null'
+          default: false
+        claimName:
+          description: Name for the PVC. Allow referencing it across workloads. If not provided, a name based on the workload name and scope will be auto-generated.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 63
+          example: my-claim
+          pattern: .*
+        readOnly:
+          description: Permit only read access to PVC.
+          type:
+          - boolean
+          - 'null'
+          default: false
+        ephemeral:
+          description: Use `true` to set PVC to ephemeral. If set to `true`, the PVC will be deleted when the workload is stopped. Not supported for inference workloads.
+          type:
+          - boolean
+          - 'null'
+          default: false
+          example: false
+        claimInfo:
+          $ref: '#/components/schemas/ClaimInfo'
+        dataSharing:
+          description: use `true` to share the PVC data to all projects under the selected scope.
+          type:
+          - boolean
+          - 'null'
+          default: false
+          example: false
+      type:
+      - object
+      - 'null'
+    WorkloadSupportedTypes:
+      properties:
+        inference:
+          description: Is inference a supported workload type.
+          type:
+          - boolean
+          - 'null'
+        workspace:
+          description: Is workspace a supported workload type.
+          type:
+          - boolean
+          - 'null'
+        training:
+          description: Is training a supported workload type.
+          type:
+          - boolean
+          - 'null'
+        distributed:
+          description: Is distributed a supported workload type.
+          type:
+          - boolean
+          - 'null'
+        distFramework:
+          description: The distributed training framework used in the workload.
+          type:
+          - string
+          - 'null'
+          enum:
+          - MPI
+          - PyTorch
+          - TF
+          - XGBoost
+      type:
+      - object
+      - 'null'
+    AssetDescription:
+      description: The description of the asset.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      maxLength: 250
+      example: description of my asset.
+    AssetMeta:
       allOf:
       - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      - $ref: '#/components/schemas/AssetReadOnlyFields'
       example:
         name: my-asset
+        scope: tenant
+        id: a418ed33-9399-48c0-a890-122cadd13bfd
+        kind: s3
+        createdBy: test@run.ai
+        createdAt: '2023-02-23T14:25:36.707685Z'
+        updatedBy: test@run.ai
+        updatedAt: '2023-02-23T14:25:36.707685Z'
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          distributed: true
+          distFramework: TF
+    ClusterInfo1:
+      description: Cluster related information of the asset.
+      properties:
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClusterResourceInfo'
+      type:
+      - object
+      - 'null'
+    PVCAssetSpec:
+      allOf:
+      - $ref: '#/components/schemas/Pvc'
+    PVCCreationRequest:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetCreationRequest'
+        spec:
+          $ref: '#/components/schemas/PVCAssetSpec'
+    WorkloadName:
+      description: The name of the workload.
+      type: string
+      minLength: 1
+      example: my-workload-name
+      pattern: .*
     PVCAsset:
       required:
       - meta
@@ -776,126 +1088,6 @@ components:
           $ref: '#/components/schemas/AssetClusterStatusInfo'
         clusterInfo:
           $ref: '#/components/schemas/ClusterInfo1'
-    PVCUpdateRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetUpdateRequest'
-        spec:
-          $ref: '#/components/schemas/PvcFieldsUpdatable'
-    HttpResponse:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-    ClusterInfo1:
-      description: Cluster related information of the asset.
-      properties:
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ClusterResourceInfo'
-      nullable: true
-      type: object
-    InvolvedObject:
-      type: object
-      required:
-      - uid
-      - kind
-      - name
-      - namespace
-      properties:
-        uid:
-          type: string
-          format: uuid
-        kind:
-          type: string
-          example: Pod
-        name:
-          type: string
-          example: test-0-1
-        namespace:
-          type: string
-          example: runai-test
-    WorkloadId1:
-      description: A unique ID of the workload.
-      type: string
-      format: uuid
-    WorkloadSupportedTypes:
-      properties:
-        inference:
-          description: Is inference a supported workload type.
-          type: boolean
-          nullable: true
-        workspace:
-          description: Is workspace a supported workload type.
-          type: boolean
-          nullable: true
-        training:
-          description: Is training a supported workload type.
-          type: boolean
-          nullable: true
-        distributed:
-          description: Is distributed a supported workload type.
-          type: boolean
-          nullable: true
-        distFramework:
-          description: The distributed training framework used in the workload.
-          type: string
-          enum:
-          - MPI
-          - PyTorch
-          - TF
-          - XGBoost
-          nullable: true
-      nullable: true
-      type: object
-    AssetUpdatableFields:
-      required:
-      - name
-      properties:
-        name:
-          $ref: '#/components/schemas/AssetName'
-        description:
-          $ref: '#/components/schemas/AssetDescription'
-    HistoryRecords:
-      type: array
-      items:
-        $ref: '#/components/schemas/HistoryRecord'
-      x-schema-name: HistoryRecords
-    ClusterResourceInfo:
-      properties:
-        name:
-          example: password-credential-1
-          description: The name of the resource created for the asset in the cluster.
-          type: string
-          nullable: true
-      nullable: true
-      type: object
-    ToolType:
-      description: Super set of Internal and External tool types.
-      type: string
-      minLength: 1
-      enum:
-      - jupyter-notebook
-      - pycharm
-      - visual-studio-code
-      - tensorboard
-      - rstudio
-      - mlflow
-      - custom
-      - wandb
-      - matlab
-      - comet
-      - chatbot-ui
     AssetCreationFields:
       type: object
       required:
@@ -907,130 +1099,40 @@ components:
           $ref: '#/components/schemas/ClusterIdOptional'
         departmentId:
           description: The id of the department. Must be specified for department scoped assets.
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           minLength: 1
         projectId:
           description: The id of the project. Must be specified for project scoped assets.
-          type: integer
+          type:
+          - integer
+          - 'null'
           format: int32
-          nullable: true
         autoDelete:
           description: The asset will be deleted automatically. This is intended for internal use.
-          type: boolean
-          nullable: true
+          type:
+          - boolean
+          - 'null'
           default: false
         workloadSupportedTypes:
           $ref: '#/components/schemas/WorkloadSupportedTypes'
         private:
           description: The asset will be private to the user who created it. supported only for docker registry and generic secrets
-          type: boolean
-          nullable: true
+          type:
+          - boolean
+          - 'null'
           default: false
-    ScopeType:
-      type: string
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
-    ScopeId:
-      type: string
-      description: The id of the cluster, department or project, depending on the scope type.
-    Event1:
-      type: object
-      nullable: true
-      required:
-      - createdAt
-      - type
-      - clusterId
-      - message
-      properties:
-        createdAt:
-          type: string
-          format: date-time
-          example: '2022-01-01T03:49:52.531Z'
-        id:
-          type: string
-          format: uuid
-        type:
-          type: string
-          example: Normal
-        clusterId:
-          $ref: '#/components/schemas/ClusterId'
-        message:
-          type: string
-          example: Started container z
-        reason:
-          type: string
-          example: Started
-        source:
-          type: string
-          example: kubelet
-        involvedObject:
-          $ref: '#/components/schemas/InvolvedObject'
-    ClusterIdOptional:
-      description: The id of the cluster.
+    UpdateCount:
+      description: the value of an update counter of a data in the system.
+      type: integer
+      format: int64
+      example: 12345
+    WorkloadId1:
+      description: A unique ID of the workload.
       type: string
       format: uuid
-      minLength: 1
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-      nullable: true
-    AssetPhaseUpdate:
-      type: object
-      nullable: true
-      required:
-      - phase
-      - phaseMessage
-      properties:
-        phase:
-          type: string
-          example: Creating
-        phaseMessage:
-          type: string
-          example: Creating PVC asset pvc-123
-    PvcFieldsUpdatable:
-      properties:
-        path:
-          description: Local path within the workload to which the PVC bucket will be mapped. (mandatory)
-          type: string
-          minLength: 1
-          example: /container/my-claim
-          nullable: true
-          pattern: .*
-      nullable: true
-      type: object
-    PvcAccessModes:
-      description: Default access mode(s) applied to newly created PVCs unless explicitly overridden.
-      properties:
-        readWriteOnce:
-          description: Mount the volume as read/write by a single node.
-          type: boolean
-          default: true
-          nullable: true
-        readOnlyMany:
-          description: Mount the volume as read-only by many nodes.
-          type: boolean
-          default: false
-          nullable: true
-        readWriteMany:
-          description: Mount the volume as read/write by many nodes.
-          type: boolean
-          default: false
-          nullable: true
-      nullable: true
-      type: object
   parameters:
-    AssetIdsFilter:
-      name: assetIds
-      in: query
-      required: false
-      description: Filter results by the ids of the assets. Provided value should be a comma separated string of UUIDs.
-      schema:
-        type: string
-        example: dbf4767e-2fa1-43b0-97a2-7c0cecda180b,550e8400-e29b-41d4-a716-44665544000a
-        pattern: ^\b(?:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(?:,(?:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}))*\b$
     IncludeUsageInfo:
       name: usageInfo
       in: query
@@ -1038,17 +1140,6 @@ components:
       description: Whether the query should include asset usage information as part of the response.
       schema:
         type: boolean
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
     ComplyToWorkloadType:
       name: complyToWorkloadType
       in: query
@@ -1061,59 +1152,11 @@ components:
         - Training
         - Distributed
         - Inference
-    AssetClusterFilter:
-      name: clusterId
-      in: query
-      description: Filter results by Universally Unique Identifier (UUID) of the cluster. If scope filter is cluster, only assets from the specific cluster will be included in the response. Otherwise, the response will include cluster, tenant and system assets.
-      required: false
-      schema:
-        type: string
-        format: uuid
-        example: d73a738f-fab3-430a-8fa3-5241493d7128
-    AssetProjectFilter:
-      name: projectId
-      in: query
-      required: false
-      description: Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets.
-      schema:
-        type: integer
-        format: int32
     AssetNameFilter:
       name: name
       in: query
       required: false
       description: Filter results by name.
-      schema:
-        type: string
-    AssetDepartmentFilter:
-      name: departmentId
-      in: query
-      description: Filter results by department id. If scope filter is department, only assets from the specific department will be included in the response. Otherwise, the response will include department, cluster, tenant and system assets.
-      required: false
-      schema:
-        type: string
-        example: '1'
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
-    IncludeStatus:
-      name: statusInfo
-      in: query
-      required: false
-      description: Whether the query should include asset status information as part of the response.
-      schema:
-        type: boolean
-    AssetScopeFilter:
-      name: scope
-      in: query
-      required: false
-      description: 'Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project.'
       schema:
         type: string
     ComplyToProject:
@@ -1124,6 +1167,56 @@ components:
       schema:
         type: integer
         format: int32
+    AssetClusterFilter:
+      name: clusterId
+      in: query
+      description: Filter results by Universally Unique Identifier (UUID) of the cluster. If scope filter is cluster, only assets from the specific cluster will be included in the response. Otherwise, the response will include cluster, tenant and system assets.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: d73a738f-fab3-430a-8fa3-5241493d7128
+    AssetIdsFilter:
+      name: assetIds
+      in: query
+      required: false
+      description: Filter results by the ids of the assets. Provided value should be a comma separated string of UUIDs.
+      schema:
+        type: string
+        example: dbf4767e-2fa1-43b0-97a2-7c0cecda180b,550e8400-e29b-41d4-a716-44665544000a
+        pattern: ^\b(?:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(?:,(?:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}))*\b$
+    AssetProjectFilter:
+      name: projectId
+      in: query
+      required: false
+      description: Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets.
+      schema:
+        type: integer
+        format: int32
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    AssetDepartmentFilter:
+      name: departmentId
+      in: query
+      description: Filter results by department id. If scope filter is department, only assets from the specific department will be included in the response. Otherwise, the response will include department, cluster, tenant and system assets.
+      required: false
+      schema:
+        type: string
+        example: '1'
+    IncludeStatus:
+      name: statusInfo
+      in: query
+      required: false
+      description: Whether the query should include asset status information as part of the response.
+      schema:
+        type: boolean
     AssetId:
       name: AssetId
       in: path
@@ -1143,70 +1236,24 @@ components:
         enum:
         - Worker
         - Master
-  responses:
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    202Accepted:
-      description: Accepted.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HttpResponse'
-          example:
-            code: 202
-            message: Request has been accepted.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
+    AssetScopeFilter:
+      name: scope
+      in: query
+      required: false
+      description: 'Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project.'
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http

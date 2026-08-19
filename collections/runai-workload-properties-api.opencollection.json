@@ -1,0 +1,186 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Workload properties API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Workload properties",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List workload categories.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-categories"
+          },
+          "docs": "Retrieves a list of workload categories. These categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform."
+        },
+        {
+          "info": {
+            "name": "Get workload category by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-categories/:categoryId",
+            "params": [
+              {
+                "name": "categoryId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the workload category."
+              }
+            ]
+          },
+          "docs": "Retrieves a specific workload category by its ID. Workload categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform."
+        },
+        {
+          "info": {
+            "name": "List workload types.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-types",
+            "params": [
+              {
+                "name": "externalTypesOnly",
+                "value": "",
+                "type": "query",
+                "description": "Return only external and user_external sourced workload types."
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`."
+              }
+            ]
+          },
+          "docs": "Retrieves a list of workload types with their configurations - their corresponding workload categories and priorities."
+        },
+        {
+          "info": {
+            "name": "Create a workload type. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workload-types",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a new workload type in the system by providing its identification details and configuration, making it available for use and management within the platform."
+        },
+        {
+          "info": {
+            "name": "List workload type by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-types/:workloadTypeId",
+            "params": [
+              {
+                "name": "workloadTypeId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the workload type."
+              }
+            ]
+          },
+          "docs": "Retrieves a specific workload type by its ID."
+        },
+        {
+          "info": {
+            "name": "Update a workload type by id.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v1/workload-types/:workloadTypeId",
+            "params": [
+              {
+                "name": "workloadTypeId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the workload type."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the default category or priority assigned to a workload type."
+        },
+        {
+          "info": {
+            "name": "Delete a workload type by id. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/workload-types/:workloadTypeId",
+            "params": [
+              {
+                "name": "workloadTypeId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the workload type."
+              }
+            ]
+          },
+          "docs": "Deletes a specific workload type by its ID."
+        },
+        {
+          "info": {
+            "name": "Get workload priorities.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workload-priorities",
+            "params": [
+              {
+                "name": "sortOrder",
+                "value": "",
+                "type": "query",
+                "description": "Sort results in descending or ascending order."
+              },
+              {
+                "name": "sortBy",
+                "value": "",
+                "type": "query",
+                "description": "Defines the field to sort the results by"
+              },
+              {
+                "name": "filterBy",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >="
+              }
+            ]
+          },
+          "docs": "Retrieve the list of all workload priorities available in the system"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

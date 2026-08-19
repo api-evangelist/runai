@@ -1,0 +1,883 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Policy API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Policy",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List policies",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v2/policy",
+            "params": [
+              {
+                "name": "workloadType",
+                "value": "",
+                "type": "query",
+                "description": "Policy for a specific workload type."
+              },
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "filter by this scope."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "includeFallbackPolicies",
+                "value": "",
+                "type": "query",
+                "description": "whether to include fallback policies in the list. Default to false."
+              }
+            ]
+          },
+          "docs": "Retrieve a list of all the applied policies."
+        },
+        {
+          "info": {
+            "name": "Get a training policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v2/policy/trainings",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              }
+            ]
+          },
+          "docs": "Retrieve the details of a training policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Overwrite a training policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v2/policy/trainings",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply a training policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Update a training policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v2/policy/trainings",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply changes to a training policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Delete a training policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v2/policy/trainings",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ]
+          },
+          "docs": "Use to delete a training policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Get a workspace policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v2/policy/workspaces",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              }
+            ]
+          },
+          "docs": "Retrieve the details of a workspace policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Overwrite a workspace policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v2/policy/workspaces",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Ue to apply a workspace policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Update a workspace policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v2/policy/workspaces",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply changes to a workspace policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Delete a workspace policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v2/policy/workspaces",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ]
+          },
+          "docs": "Use to delete a workspace policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Get a distributed policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v2/policy/distributed",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              }
+            ]
+          },
+          "docs": "Retrieve the details of a distributed policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Overwrite a distributed policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v2/policy/distributed",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply a distributed policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Update a distributed policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v2/policy/distributed",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply changes to a distributed policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Delete a distributed policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v2/policy/distributed",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ]
+          },
+          "docs": "Use to delete a distributed policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Get an inference policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v2/policy/inferences",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              }
+            ]
+          },
+          "docs": "Retrieve the details of an inference policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Overwrite an inference policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v2/policy/inferences",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply an inference policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Update an inference policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v2/policy/inferences",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply changes to an inference policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Delete an inference policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v2/policy/inferences",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ]
+          },
+          "docs": "Use to delete an inference policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Get a distributed inference policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v2/policy/distributed-inferences",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              }
+            ]
+          },
+          "docs": "Retrieve the details of a distributed inference policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Overwrite a distributed inference policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v2/policy/distributed-inferences",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply a distributed inference policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Update a distributed inference policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v2/policy/distributed-inferences",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply changes to a distributed inference policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Delete a distributed inference policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v2/policy/distributed-inferences",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              },
+              {
+                "name": "approveClusterDeletion",
+                "value": "",
+                "type": "query",
+                "description": "Required when modifying or deleting a policy if the tenant includes one or more clusters running version 2.20 or earlier. In such cases, the platform must delete the policy from the affected clusters. This flag indicates that the administrator approves this deletion."
+              }
+            ]
+          },
+          "docs": "Use to delete a distributed inference policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Get NVIDIA NIM service policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v2/policy/nim-services",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              }
+            ]
+          },
+          "docs": "Retrieve the details of NVIDIA NIM service policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Overwrite NVIDIA NIM service policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://app.run.ai/api/v2/policy/nim-services",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply NVIDIA NIM service policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Update NVIDIA NIM service policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v2/policy/nim-services",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "Validate the given policy payload without applying it"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Use to apply changes to NVIDIA NIM service policy for a given organizational unit."
+        },
+        {
+          "info": {
+            "name": "Delete NVIDIA NIM service policy.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v2/policy/nim-services",
+            "params": [
+              {
+                "name": "scope",
+                "value": "",
+                "type": "query",
+                "description": "The scope that the policy relates to."
+              },
+              {
+                "name": "departmentId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the department id."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "project id to filter by"
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "query",
+                "description": "Filter using the Universally Unique Identifier (UUID) of the cluster."
+              }
+            ]
+          },
+          "docs": "Use to delete NVIDIA NIM service policy for a given organizational unit."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,100 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "NVIDIA Run:ai Access Keys Distributed Inferences API",
+    "version": "latest"
+  },
+  "request": {
+    "auth": {
+      "type": "bearer",
+      "token": "{{bearerToken}}"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Distributed Inferences",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a distributed inference. [Experimental]",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://app.run.ai/api/v1/workloads/distributed-inferences",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create a distributed inference using container related fields."
+        },
+        {
+          "info": {
+            "name": "Get a distributed inference data.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://app.run.ai/api/v1/workloads/distributed-inferences/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Retrieve a distributed inference details using a workload id."
+        },
+        {
+          "info": {
+            "name": "Update distributed inference spec.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://app.run.ai/api/v1/workloads/distributed-inferences/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update the specification of an existing distributed inference workload."
+        },
+        {
+          "info": {
+            "name": "Delete a distributed inference.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://app.run.ai/api/v1/workloads/distributed-inferences/:workloadId",
+            "params": [
+              {
+                "name": "workloadId",
+                "value": "",
+                "type": "path",
+                "description": "The  Universally Unique Identifier (UUID) of the workload."
+              }
+            ]
+          },
+          "docs": "Delete a distributed inference using a workload id."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

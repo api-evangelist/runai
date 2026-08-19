@@ -1,0 +1,1212 @@
+{
+  "item": [
+    {
+      "id": "220a3534-418d-4402-9637-770791a4500e",
+      "name": "Revisions",
+      "description": {
+        "content": "Revisions are associated with an inference workload and represent a snapshot of its configuration. A revision is created on each change to the inference workload.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6d5e5403-6c21-4908-b900-8528c360e870",
+          "name": "Get inference workload revisions by id. [Experimental]",
+          "request": {
+            "name": "Get inference workload revisions by id. [Experimental]",
+            "description": {
+              "content": "Retrieve the details of inference workload revisions by workload id. Supported for clusters v2.21+.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "inferences",
+                ":workloadId",
+                "revisions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "deleted",
+                  "value": "<boolean>",
+                  "description": "Return only deleted resources when `true`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workloadId",
+                  "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "62857e28-525a-4ab9-ae0d-86e164a31bea",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"revisions\": [\n    {\n      \"type\": \"runai-revision\",\n      \"name\": \"very-important-job\",\n      \"id\": \"c26eabe3-737e-bfc4-4a94-9002cdb0d9f8\",\n      \"workloadId\": \"8e7df459-a0ed-a7c2-3d0e-8c75f273b6df\",\n      \"tenantId\": 1001,\n      \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n      \"departmentId\": \".\",\n      \"projectId\": \"e_\",\n      \"createdAt\": \"2022-01-01T03:49:52.531Z\",\n      \"phase\": \"Unknown\",\n      \"deletedAt\": \"2022-08-12T19:28:24.131Z\",\n      \"revisionRequestedResources\": {\n        \"gpuRequestType\": \"portion\",\n        \"gpu\": {\n          \"limit\": 1.5,\n          \"request\": 1\n        },\n        \"gpuMemory\": {\n          \"limit\": \"2G\",\n          \"request\": \"200M\"\n        },\n        \"cpu\": {\n          \"limit\": 1.5,\n          \"request\": 1\n        },\n        \"cpuMemory\": {\n          \"limit\": \"2G\",\n          \"request\": \"200M\"\n        },\n        \"extendedResources\": [\n          \"\",\n          \"\"\n        ]\n      },\n      \"podsRequestedResources\": {\n        \"gpuRequestType\": \"portion\",\n        \"gpu\": {\n          \"limit\": 1.5,\n          \"request\": 1\n        },\n        \"gpuMemory\": {\n          \"limit\": \"2G\",\n          \"request\": \"200M\"\n        },\n        \"cpu\": {\n          \"limit\": 1.5,\n          \"request\": 1\n        },\n        \"cpuMemory\": {\n          \"limit\": \"2G\",\n          \"request\": \"200M\"\n        },\n        \"extendedResources\": [\n          \"\",\n          \"\"\n        ]\n      },\n      \"requestedPods\": {\n        \"number\": 1,\n        \"min\": 2,\n        \"max\": 5,\n        \"parallelism\": 3,\n        \"completions\": 5\n      },\n      \"requestedNodePools\": [\n        \"default\",\n        \"default\"\n      ],\n      \"allocatedResources\": {\n        \"gpu\": 1.5,\n        \"gpuMemory\": \"200Mi\",\n        \"cpu\": 0.5,\n        \"cpuMemory\": \"+4.84En226\",\n        \"extendedResources\": null\n      },\n      \"currentNodePools\": [\n        \"default\",\n        \"default\"\n      ],\n      \"runningPods\": 1,\n      \"images\": [\n        \"alpine:latest\",\n        \"alpine:latest\"\n      ],\n      \"environmentVariables\": {\n        \"key_0\": \"string\",\n        \"key_1\": \"string\",\n        \"key_2\": \"string\"\n      },\n      \"command\": \"sleep\",\n      \"arguments\": \"1000\",\n      \"conditions\": [\n        {\n          \"type\": \"Ready\",\n          \"status\": \"False\",\n          \"message\": \"Resource validation failed: ...\",\n          \"reason\": \"ErrorConfig\",\n          \"lastTransitionTime\": \"2022-01-01T03:49:52.531Z\"\n        },\n        {\n          \"type\": \"Ready\",\n          \"status\": \"False\",\n          \"message\": \"Resource validation failed: ...\",\n          \"reason\": \"ErrorConfig\",\n          \"lastTransitionTime\": \"2022-01-01T03:49:52.531Z\"\n        }\n      ],\n      \"phaseMessage\": \"Not enough resources in the requested nodepool\",\n      \"phaseUpdatedAt\": \"2022-06-08T11:28:24.131Z\",\n      \"additionalFields\": {\n        \"key_0\": 1227,\n        \"key_1\": \"string\",\n        \"key_2\": true\n      }\n    },\n    {\n      \"type\": \"runai-revision\",\n      \"name\": \"very-important-job\",\n      \"id\": \"519caa7f-4b9c-9fa3-6aed-ddaa2c326ffb\",\n      \"workloadId\": \"66feda4c-43b0-c4f8-1ce9-eeaeb825b1e1\",\n      \"tenantId\": 1001,\n      \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n      \"departmentId\": \"w*`kJ}K\",\n      \"projectId\": \"u]krBKJ%i\",\n      \"createdAt\": \"2022-01-01T03:49:52.531Z\",\n      \"phase\": \"Resuming\",\n      \"deletedAt\": \"2022-08-12T19:28:24.131Z\",\n      \"revisionRequestedResources\": {\n        \"gpuRequestType\": \"portion\",\n        \"gpu\": {\n          \"limit\": 1.5,\n          \"request\": 1\n        },\n        \"gpuMemory\": {\n          \"limit\": \"2G\",\n          \"request\": \"200M\"\n        },\n        \"cpu\": {\n          \"limit\": 1.5,\n          \"request\": 1\n        },\n        \"cpuMemory\": {\n          \"limit\": \"2G\",\n          \"request\": \"200M\"\n        },\n        \"extendedResources\": null\n      },\n      \"podsRequestedResources\": {\n        \"gpuRequestType\": \"portion\",\n        \"gpu\": {\n          \"limit\": 1.5,\n          \"request\": 1\n        },\n        \"gpuMemory\": {\n          \"limit\": \"2G\",\n          \"request\": \"200M\"\n        },\n        \"cpu\": {\n          \"limit\": 1.5,\n          \"request\": 1\n        },\n        \"cpuMemory\": {\n          \"limit\": \"2G\",\n          \"request\": \"200M\"\n        },\n        \"extendedResources\": null\n      },\n      \"requestedPods\": {\n        \"number\": 1,\n        \"min\": 2,\n        \"max\": 5,\n        \"parallelism\": 3,\n        \"completions\": 5\n      },\n      \"requestedNodePools\": [\n        \"default\",\n        \"default\"\n      ],\n      \"allocatedResources\": {\n        \"gpu\": 1.5,\n        \"gpuMemory\": \"200Mi\",\n        \"cpu\": 0.5,\n        \"cpuMemory\": \"+9447.KGiiiG-53\",\n        \"extendedResources\": null\n      },\n      \"currentNodePools\": [\n        \"default\",\n        \"default\"\n      ],\n      \"runningPods\": 1,\n      \"images\": [\n        \"alpine:latest\",\n        \"alpine:latest\"\n      ],\n      \"environmentVariables\": {\n        \"key_0\": \"string\"\n      },\n      \"command\": \"sleep\",\n      \"arguments\": \"1000\",\n      \"conditions\": [\n        {\n          \"type\": \"Ready\",\n          \"status\": \"False\",\n          \"message\": \"Resource validation failed: ...\",\n          \"reason\": \"ErrorConfig\",\n          \"lastTransitionTime\": \"2022-01-01T03:49:52.531Z\"\n        },\n        {\n          \"type\": \"Ready\",\n          \"status\": \"False\",\n          \"message\": \"Resource validation failed: ...\",\n          \"reason\": \"ErrorConfig\",\n          \"lastTransitionTime\": \"2022-01-01T03:49:52.531Z\"\n        }\n      ],\n      \"phaseMessage\": \"Not enough resources in the requested nodepool\",\n      \"phaseUpdatedAt\": \"2022-06-08T11:28:24.131Z\",\n      \"additionalFields\": {\n        \"key_0\": \"string\"\n      }\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee6f9922-020c-4cf3-a961-0c1916f6fb36",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e5458750-609d-4598-ab42-e94a642e2748",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "669085eb-acbf-48c4-acc1-502046fcf4d7",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f69e41a-aa3d-476a-a6df-12f0195970a1",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9733cb5e-1cf8-4bbf-9e1a-817eb237283e",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "fe2fce76-244e-4a79-a843-86bd95ae73f2",
+          "name": "Get inference workload revisions count. [Experimental]",
+          "request": {
+            "name": "Get inference workload revisions count. [Experimental]",
+            "description": {
+              "content": "Retrieve the number of an inference workload revisions from a cluster. Supported for clusters v2.21+.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "inferences",
+                ":workloadId",
+                "revisions",
+                "count"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "deleted",
+                  "value": "<boolean>",
+                  "description": "Return only deleted resources when `true`."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "workloadId",
+                  "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d24daff1-0a98-4a9f-8209-132bafac0f9a",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"count\": 1\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "744f58fd-e7be-403d-9e76-7bf6ca3e07cb",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e434ea7-d40a-4491-9c78-30b383a7b50f",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eb46e693-ddc9-4c76-9474-5f183d9f7920",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6a43f8c1-d68f-40bb-841a-179c89996111",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    ":workloadId",
+                    "revisions",
+                    "count"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "deleted",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "workloadId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the workload."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "693908d0-f7cd-4e9c-9de4-e06f2c9ec326",
+          "name": "Get revision data. [Experimental]",
+          "request": {
+            "name": "Get revision data. [Experimental]",
+            "description": {
+              "content": "Retrieve revision details using a revision id. Supported for clusters v2.21+.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v1",
+                "workloads",
+                "inferences",
+                "revisions",
+                ":revisionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "revisionId",
+                  "description": "(Required) The  Universally Unique Identifier (UUID) of the revision."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8128c5f6-bde7-4722-aaa7-fd0b068badd8",
+              "name": "Executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    "revisions",
+                    ":revisionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "revisionId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the revision."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"type\": \"runai-revision\",\n  \"name\": \"very-important-job\",\n  \"id\": \"110cdb48-4735-9cd8-e96a-2aca5c50f89f\",\n  \"workloadId\": \"3455f3b6-708e-8b21-8170-cb91b201d88b\",\n  \"tenantId\": 1001,\n  \"clusterId\": \"71f69d83-ba66-4822-adf5-55ce55efd210\",\n  \"departmentId\": \"IO<|7:\",\n  \"projectId\": \"rLEY\",\n  \"createdAt\": \"2022-01-01T03:49:52.531Z\",\n  \"phase\": \"Terminating\",\n  \"deletedAt\": \"2022-08-12T19:28:24.131Z\",\n  \"revisionRequestedResources\": {\n    \"gpuRequestType\": \"portion\",\n    \"gpu\": {\n      \"limit\": 1.5,\n      \"request\": 1\n    },\n    \"gpuMemory\": {\n      \"limit\": \"2G\",\n      \"request\": \"200M\"\n    },\n    \"cpu\": {\n      \"limit\": 1.5,\n      \"request\": 1\n    },\n    \"cpuMemory\": {\n      \"limit\": \"2G\",\n      \"request\": \"200M\"\n    },\n    \"extendedResources\": [\n      \"\",\n      \"\"\n    ]\n  },\n  \"podsRequestedResources\": {\n    \"gpuRequestType\": \"portion\",\n    \"gpu\": {\n      \"limit\": 1.5,\n      \"request\": 1\n    },\n    \"gpuMemory\": {\n      \"limit\": \"2G\",\n      \"request\": \"200M\"\n    },\n    \"cpu\": {\n      \"limit\": 1.5,\n      \"request\": 1\n    },\n    \"cpuMemory\": {\n      \"limit\": \"2G\",\n      \"request\": \"200M\"\n    },\n    \"extendedResources\": null\n  },\n  \"requestedPods\": {\n    \"number\": 1,\n    \"min\": 2,\n    \"max\": 5,\n    \"parallelism\": 3,\n    \"completions\": 5\n  },\n  \"requestedNodePools\": [\n    \"default\",\n    \"default\"\n  ],\n  \"allocatedResources\": {\n    \"gpu\": 1.5,\n    \"gpuMemory\": \"200Mi\",\n    \"cpu\": 0.5,\n    \"cpuMemory\": \"19393.nEMePiGT048462742\",\n    \"extendedResources\": null\n  },\n  \"currentNodePools\": [\n    \"default\",\n    \"default\"\n  ],\n  \"runningPods\": 1,\n  \"images\": [\n    \"alpine:latest\",\n    \"alpine:latest\"\n  ],\n  \"environmentVariables\": {\n    \"key_0\": \"string\"\n  },\n  \"command\": \"sleep\",\n  \"arguments\": \"1000\",\n  \"conditions\": [\n    {\n      \"type\": \"Ready\",\n      \"status\": \"False\",\n      \"message\": \"Resource validation failed: ...\",\n      \"reason\": \"ErrorConfig\",\n      \"lastTransitionTime\": \"2022-01-01T03:49:52.531Z\"\n    },\n    {\n      \"type\": \"Ready\",\n      \"status\": \"False\",\n      \"message\": \"Resource validation failed: ...\",\n      \"reason\": \"ErrorConfig\",\n      \"lastTransitionTime\": \"2022-01-01T03:49:52.531Z\"\n    }\n  ],\n  \"phaseMessage\": \"Not enough resources in the requested nodepool\",\n  \"phaseUpdatedAt\": \"2022-06-08T11:28:24.131Z\",\n  \"additionalFields\": {\n    \"key_0\": false,\n    \"key_1\": \"string\",\n    \"key_2\": true,\n    \"key_3\": 4785.032445345691\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6def94c7-2b73-4f06-81c3-ce8a3c98a108",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    "revisions",
+                    ":revisionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "revisionId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the revision."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 401,\n  \"message\": \"Issuer is not familiar.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e8f2e586-1375-4104-95fc-af9e4244d393",
+              "name": "Forbidden",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    "revisions",
+                    ":revisionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "revisionId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the revision."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 403,\n  \"message\": \"You do not have sufficient permissions.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0ca8f86c-3cf2-4523-a28a-eaa47243ed6b",
+              "name": "The specified resource was not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    "revisions",
+                    ":revisionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "revisionId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the revision."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 404,\n  \"message\": \"Resource id not found.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d4cb4f88-0310-48aa-89e2-e8af94851d39",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    "revisions",
+                    ":revisionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "revisionId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the revision."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 500,\n  \"message\": \"Something went wrong.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "db4c7bc2-af14-4fb7-8434-f05b05ff6d2d",
+              "name": "unexpected error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v1",
+                    "workloads",
+                    "inferences",
+                    "revisions",
+                    ":revisionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "revisionId",
+                      "description": "(Required) The  Universally Unique Identifier (UUID) of the revision."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 503,\n  \"message\": \"Please try again in few minutes.\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://app.run.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{bearerToken}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "6067d04a-1721-4a50-86d2-38c22b9f5907",
+    "name": "NVIDIA Run:ai Access Keys Revisions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "# Introduction\n\nThe NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.\n\nNVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.\nTo create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.\n\nAfter you have created a new service account, you will need to assign it access rules.\nTo assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).\nMake sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.\n\nTo get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).\n",
+      "type": "text/plain"
+    }
+  }
+}

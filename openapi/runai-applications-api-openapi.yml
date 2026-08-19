@@ -1,4 +1,4 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
   version: latest
   description: '# Introduction
@@ -233,15 +233,6 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
     500InternalServerError:
       description: unexpected error
       content:
@@ -260,15 +251,6 @@ components:
           example:
             code: 400
             message: Required parameter is missing
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
     403Forbidden:
       description: Forbidden
       content:
@@ -278,6 +260,24 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
     409Conflict:
       description: The specified resource already exists
       content:
@@ -287,26 +287,7 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
-  parameters:
-    appId:
-      name: appId
-      in: path
-      required: true
-      description: The application id to retrieve
-      schema:
-        type: string
   schemas:
-    ApplicationCreationRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
-          description: The name of the application. The name must be unique within the organization and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
-      example:
-        name: app-123
     ApplicationPostResponse:
       type: object
       required:
@@ -327,6 +308,30 @@ components:
         name: app123
         secret: asdasidjn9d
         clientId: app123
+    ApplicationCreationRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
+          description: The name of the application. The name must be unique within the organization and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
+      example:
+        name: app-123
+    Applications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Application'
+    ApplicationPatchRequest:
+      type: object
+      required:
+      - enabled
+      properties:
+        enabled:
+          type: boolean
+      example:
+        enabled: true
     Error:
       required:
       - code
@@ -360,21 +365,24 @@ components:
         createdBy:
           type: string
         createdAt:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
-          nullable: true
         updatedAt:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
-          nullable: true
         enabled:
           type: boolean
         tenantId:
           type: string
         lastLogin:
-          type: string
+          type:
+          - string
+          - 'null'
           format: date-time
-          nullable: true
         id:
           type: string
         clientId:
@@ -389,19 +397,14 @@ components:
         lastLogin: '2020-01-01T00:00:00Z'
         id: 3434c-12323ab-4ce2ea6-b44fc-db344d
         clientId: app123
-    Applications:
-      type: array
-      items:
-        $ref: '#/components/schemas/Application'
-    ApplicationPatchRequest:
-      type: object
-      required:
-      - enabled
-      properties:
-        enabled:
-          type: boolean
-      example:
-        enabled: true
+  parameters:
+    appId:
+      name: appId
+      in: path
+      required: true
+      description: The application id to retrieve
+      schema:
+        type: string
   securitySchemes:
     bearerAuth:
       type: http
