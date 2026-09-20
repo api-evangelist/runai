@@ -11,8 +11,19 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 14
+edge_count: 19
 edges:
+- tag: Access rules
+  spec_file: runai-access-rules-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: POST /api/v1/authorization/access-rules create_access_rule; schemas AccessRuleSubjects, ScopeType,
+    ScopeId
+  reason: Authorization rules binding subjects to roles at given scopes — plainly identity and access
+    management.
+  recovered_from: sweep-20260829T005356Z-edges.json
 - tag: Idps
   spec_file: runai-idps-api-openapi.yml
   capability_id: BC-620.20
@@ -63,6 +74,17 @@ edges:
     'InferenceSpecSpec'
   reason: Deployment, update and metric monitoring of model-inference workloads on GPU clusters — model
     serving within the AI/ML model lifecycle and MLOps capability.
+- tag: Permissions
+  spec_file: runai-permissions-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: GET /api/v1/authorization/permissions  "Get a summary of user permissions."; POST /api/v1/authorization/permitted-scopes
+    "Calculate permitted scopes"
+  reason: Operations resolve user permissions and permitted scopes under an /authorization path with Permission/Action/ResourceType
+    schemas — authorisation evaluation, which is Identity & Access Management.
+  recovered_from: sweep-20260829T005356Z-edges.json
 - tag: Service Accounts
   spec_file: runai-service-accounts-api-openapi.yml
   capability_id: BC-620.20
@@ -73,6 +95,17 @@ edges:
     'Regenerate a service account secret.'
   reason: Lifecycle of non-human identities and their credentials used to authenticate to the API — machine
     identity and credential management within IAM.
+- tag: Access Keys
+  spec_file: runai-access-keys-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.78
+  evidence: POST /api/v1/access-keys create_access_key1 Create an access key; POST /api/v1/access-keys/{accessKeyId}/secret
+    regenerate_access_key_secret
+  reason: Issuance, rotation and administrative deletion of user/service-account access keys used to authenticate
+    to the control plane — identity and access credential management.
+  recovered_from: sweep-20260829T005356Z-edges.json
 - tag: Clusters
   spec_file: runai-clusters-api-openapi.yml
   capability_id: BC-600.50
@@ -103,6 +136,18 @@ edges:
     password.'
   reason: User account provisioning, password reset and deletion within the platform is Identity & Access
     Management, not HR employee records.
+- tag: Applications
+  spec_file: runai-applications-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.72
+  evidence: POST /api/v1/apps create_application; POST /api/v1/apps/{appId}/secret  regenerate_application_secret  Regenerate
+    an application secret.
+  reason: '''Applications'' here are machine identities with client secrets used for API authentication
+    (the description ties them to service accounts and access rules), i.e. credential/identity management
+    rather than application portfolio management.'
+  recovered_from: sweep-20260829T005356Z-edges.json
 - tag: Storage Class Configuration
   spec_file: runai-storage-class-configuration-api-openapi.yml
   capability_id: BC-600.50
@@ -133,6 +178,17 @@ edges:
   reason: Defines reusable compute resource specifications (CPU cores, memory, GPU devices) allocated
     to workloads — compute infrastructure definition. Confidence moderate because these are reusable asset
     templates rather than physical infrastructure operation.
+- tag: Credentials
+  spec_file: runai-credentials-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: Create an access key. / Create a userid / password credential. / List docker registry credentials.
+  reason: Operations manage access keys, passwords, docker-registry credentials and generic secrets —
+    credential/secret stewardship, i.e. identity & access management. Could also be read as configuration
+    & secrets management, hence moderate confidence.
+  recovered_from: sweep-20260829T005356Z-edges.json
 - tag: Me
   spec_file: runai-me-api-openapi.yml
   capability_id: BC-620.20
