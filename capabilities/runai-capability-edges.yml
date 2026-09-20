@@ -1,0 +1,154 @@
+slug: runai
+provider: NVIDIA Run:ai
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Electrical Components & Equipment
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 14
+edges:
+- tag: Idps
+  spec_file: runai-idps-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: POST /api/v1/idps 'Configure external idp'; 'Get idp mappers'; schemas 'SamlCreationData',
+    'OidcData', 'MandatoryClaim'
+  reason: Configuration of external SAML/OIDC identity providers and claim mappers for platform login
+    — identity federation, squarely Identity & Access Management.
+- tag: Roles
+  spec_file: runai-roles-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.85
+  evidence: GET /api/v1/authorization/roles 'Get a list of roles.'; schemas Permissions, KubernetesPermissions,
+    RoleV1
+  reason: Authorization roles and permission sets used to grant access to platform resources — squarely
+    identity and access management.
+- tag: Distributed
+  spec_file: runai-distributed-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.8
+  evidence: POST /api/v1/workloads/distributed 'Create a distributed training.'; 'Suspend a distributed
+    training.'; schema 'DistributedSpec'
+  reason: Operations create, suspend, resume and delete distributed training workloads on GPU clusters
+    — this is ML training lifecycle / MLOps execution, mapping to Artificial Intelligence Management.
+- tag: Distributed Inferences
+  spec_file: runai-distributed-inferences-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.8
+  evidence: POST /api/v1/workloads/distributed-inferences 'Create a distributed inference. [Experimental]';
+    'Update distributed inference spec.'
+  reason: Lifecycle of distributed model-inference workloads (serving) on GPU infrastructure — model deployment/serving
+    is part of the AI/ML model lifecycle and MLOps capability.
+- tag: Inferences
+  spec_file: runai-inferences-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.8
+  evidence: POST /api/v1/workloads/inferences 'Create an inference.'; 'Get inference metrics data.'; schema
+    'InferenceSpecSpec'
+  reason: Deployment, update and metric monitoring of model-inference workloads on GPU clusters — model
+    serving within the AI/ML model lifecycle and MLOps capability.
+- tag: Service Accounts
+  spec_file: runai-service-accounts-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.8
+  evidence: POST /api/v1/service-accounts 'Create a service account.'; POST '/service-accounts/{serviceAccountId}/secret'
+    'Regenerate a service account secret.'
+  reason: Lifecycle of non-human identities and their credentials used to authenticate to the API — machine
+    identity and credential management within IAM.
+- tag: Clusters
+  spec_file: runai-clusters-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.75
+  evidence: POST /api/v1/clusters  create_cluster  Create a cluster.; GET /api/v1/clusters/{clusterUuid}/metrics  get_cluster_metrics  Get
+    the cluster metrics data.; GET /v1/k8s/clusters/{cluster_uuid}/installfile  getInstallFile
+  reason: Operations create, update, install and monitor Kubernetes GPU clusters — management of compute
+    infrastructure, i.e. IT Infrastructure Management. Some overlap with IT Operations monitoring keeps
+    confidence below 0.8.
+- tag: Trainings
+  spec_file: runai-trainings-api-openapi.yml
+  capability_id: BC-610.60
+  capability_id_l1: BC-610
+  capability_name: Artificial Intelligence Management
+  confidence: 0.75
+  evidence: POST /api/v1/workloads/trainings 'Create a training.'; 'Suspend a training.'; 'Resume a training.'
+  reason: Lifecycle control of model training jobs on a GPU orchestration platform is ML workload/MLOps
+    management, the closest candidate being Artificial Intelligence Management.
+- tag: Users
+  spec_file: runai-users-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.75
+  evidence: POST /api/v1/users 'Create a local user.'; POST /api/v1/users/{userId}/password 'Reset a user's
+    password.'
+  reason: User account provisioning, password reset and deletion within the platform is Identity & Access
+    Management, not HR employee records.
+- tag: Storage Class Configuration
+  spec_file: runai-storage-class-configuration-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.72
+  evidence: POST /api/v1/storage-class-configuration 'Create storage class configuration'; schemas PvcAccessModes,
+    PvcVolumeMode, StorageClassPermissions
+  reason: Configuration of Kubernetes storage classes and PVC attributes for the GPU cluster is storage/cloud
+    infrastructure administration, i.e. IT Infrastructure Management. No business-domain reading fits.
+- tag: Storage Classes
+  spec_file: runai-storage-classes-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.72
+  evidence: GET /v1/k8s/clusters/{uuid}/storage-classes 'Get all storageClasses from a cluster.'
+  reason: Read surface over cluster storage classes — infrastructure (storage) inventory for a Kubernetes
+    platform, mapping to IT Infrastructure Management.
+- tag: Compute
+  spec_file: runai-compute-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.7
+  evidence: POST /api/v1/asset/compute  create_compute_asset  Create compute asset.; schemas GpuDevicesRequest,
+    CpuCoreRequest, CpuMemoryLimit
+  reason: Defines reusable compute resource specifications (CPU cores, memory, GPU devices) allocated
+    to workloads — compute infrastructure definition. Confidence moderate because these are reusable asset
+    templates rather than physical infrastructure operation.
+- tag: Me
+  spec_file: runai-me-api-openapi.yml
+  capability_id: BC-620.20
+  capability_id_l1: BC-620
+  capability_name: Identity & Access Management
+  confidence: 0.7
+  evidence: GET /api/v1/authorization/me/access-rules 'List the access rules assigned to the requesting
+    user.'
+  reason: Introspection of the calling user's authorization rules and scopes — access-rights resolution
+    within Identity & Access Management. Read-only self-service endpoint, so confidence moderate.
+- tag: NodePools
+  spec_file: runai-nodepools-api-openapi.yml
+  capability_id: BC-600.50
+  capability_id_l1: BC-600
+  capability_name: IT Infrastructure Management
+  confidence: 0.7
+  evidence: POST /v1/k8s/clusters/{clusterId}/node-pools  createNodePool  Create a Node Pool.
+  reason: Lifecycle and metrics of Kubernetes node pools (compute capacity groupings) within clusters
+    — compute/cloud infrastructure management, not any industry business capability.
