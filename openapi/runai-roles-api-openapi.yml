@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Roles API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Roles API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -36,11 +19,15 @@ security:
 - bearerAuth: []
 tags:
 - name: Roles
-  description: "A role is a group of permissions that can be granted. \nPermissions are a set of actions that can be applied to entities.\nFor more information, see [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles).\n"
+  description: 'A role is a group of permissions that can be granted.
+
+    Permissions are a set of actions that can be applied to entities.
+
+    For more information, see Roles.'
 paths:
   /api/v1/authorization/roles:
     get:
-      summary: Get a list of roles.
+      summary: Get a list of roles
       description: Use to retrieve a list of roles.
       operationId: get_roles_v1
       tags:
@@ -64,7 +51,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
   /api/v1/authorization/roles/{roleIdPath}:
     get:
-      summary: Get a role by id.
+      summary: Get a role by id
       description: Retrieve the details of a role by id.
       operationId: get_role_v1
       tags:
@@ -91,67 +78,72 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  responses:
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
   schemas:
-    Permissions:
-      type: array
-      items:
-        $ref: '#/components/schemas/Permission'
-      x-schema-name: Permissions
+    Action:
+      type: string
+      enum:
+      - create
+      - read
+      - update
+      - delete
+      - sync
+    ResourceType:
+      type: string
+      description: "Resource type enum for authorization. \n\nNote: The 'apps' resource type is DEPRECATED. Please use 'service-account' instead for managing service accounts.\n"
+      enum:
+      - department
+      - tenant
+      - project
+      - cluster
+      - cluster-config
+      - nodepools
+      - nodes
+      - settings
+      - security-settings
+      - branding-settings
+      - users
+      - apps
+      - service-account
+      - dashboards-overview
+      - dashboards-analytics
+      - dashboards-consumption
+      - roles
+      - access_rules
+      - jobs
+      - workloads
+      - workspaces
+      - trainings
+      - inferences
+      - environments
+      - pvc-assets
+      - git-assets
+      - host-path-assets
+      - nfs-assets
+      - s3-assets
+      - compute-resources
+      - templates
+      - credentials
+      - events-history
+      - policies
+      - cm-volume-assets
+      - datavolumes
+      - secret-volume-assets
+      - storage-class-configuration
+      - access-keys
+      - workload-properties
+      - network-topologies
+      - registries
+      - scrapeable-metrics
+    KubernetesPermissions:
+      type: object
+      description: This object indicate what kubernetes cluster permission should this role should get
+      properties:
+        predefinedRole:
+          type:
+          - string
+          - 'null'
+          description: An id of a predefined role to copy the cluster permissions from
+          example: '12'
     Permission:
       type: object
       required:
@@ -171,6 +163,40 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Action'
+    Permissions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Permission'
+      x-schema-name: Permissions
+    ResourceTypeGroupId:
+      type: string
+      enum:
+      - organization
+      - physical-resource
+      - iam
+      - dashboard
+      - workload
+      - workload-asset
+    RolesV1:
+      type: array
+      items:
+        $ref: '#/components/schemas/RoleV1'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
     RoleV1:
       type: object
       required:
@@ -222,100 +248,61 @@ components:
           default: true
         kubernetesPermissions:
           $ref: '#/components/schemas/KubernetesPermissions'
-    KubernetesPermissions:
-      type: object
-      description: This object indicate what kubernetes cluster permission should this role should get
-      properties:
-        predefinedRole:
-          type:
-          - string
-          - 'null'
-          description: An id of a predefined role to copy the cluster permissions from
-          example: '12'
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    ResourceTypeGroupId:
-      type: string
-      enum:
-      - organization
-      - physical-resource
-      - iam
-      - dashboard
-      - workload
-      - workload-asset
-    Action:
-      type: string
-      enum:
-      - create
-      - read
-      - update
-      - delete
-      - sync
-    RolesV1:
-      type: array
-      items:
-        $ref: '#/components/schemas/RoleV1'
-    ResourceType:
-      type: string
-      description: "Resource type enum for authorization. \n\nNote: The 'apps' resource type is DEPRECATED. Please use 'service-account' instead for managing service accounts.\n"
-      enum:
-      - department
-      - tenant
-      - project
-      - cluster
-      - cluster-config
-      - nodepools
-      - nodes
-      - settings
-      - security-settings
-      - branding-settings
-      - users
-      - apps
-      - service-account
-      - dashboards-overview
-      - dashboards-analytics
-      - dashboards-consumption
-      - roles
-      - access_rules
-      - jobs
-      - workloads
-      - workspaces
-      - trainings
-      - inferences
-      - environments
-      - pvc-assets
-      - git-assets
-      - host-path-assets
-      - nfs-assets
-      - s3-assets
-      - compute-resources
-      - templates
-      - credentials
-      - events-history
-      - policies
-      - cm-volume-assets
-      - datavolumes
-      - secret-volume-assets
-      - storage-class-configuration
-      - access-keys
-      - workload-properties
-      - network-topologies
-      - registries
-      - scrapeable-metrics
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
   parameters:
     RoleIdPath:
       name: roleIdPath

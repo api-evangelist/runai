@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Registry API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Registry API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -42,7 +25,7 @@ paths:
     get:
       tags:
       - Registry
-      summary: Get registries.
+      summary: Get registries
       description: Retrieve a list of registries assets.
       operationId: list_registries
       parameters:
@@ -63,7 +46,7 @@ paths:
     post:
       tags:
       - Registry
-      summary: Create a registry asset.
+      summary: Create a registry asset
       description: Use to create a registry asset containing a registry base url and credentials.
       operationId: create_registry
       requestBody:
@@ -95,7 +78,7 @@ paths:
     get:
       tags:
       - Registry
-      summary: Get a registry.
+      summary: Get a registry
       description: Retrieve a registry asset by id.
       operationId: get_registry_by_id
       responses:
@@ -116,7 +99,7 @@ paths:
     delete:
       tags:
       - Registry
-      summary: Delete a registry asset.
+      summary: Delete a registry asset
       description: Use to delete a registry asset containing registry base url and credentials by id.
       operationId: delete_registry
       responses:
@@ -135,7 +118,7 @@ paths:
     put:
       tags:
       - Registry
-      summary: Update a registry asset.
+      summary: Update a registry asset
       description: Use to update a registry asset containing registry base url and credentials by id.
       operationId: update_registry
       requestBody:
@@ -165,7 +148,7 @@ paths:
     get:
       tags:
       - Registry
-      summary: Get the repositories in the registry.
+      summary: Get the repositories in the registry
       parameters:
       - $ref: '#/components/parameters/AssetId'
       - $ref: '#/components/parameters/SearchName'
@@ -192,7 +175,7 @@ paths:
     get:
       tags:
       - Registry
-      summary: Get the repositories tags in the registry.
+      summary: Get the repositories tags in the registry
       parameters:
       - $ref: '#/components/parameters/AssetId'
       - name: repository
@@ -223,143 +206,35 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  responses:
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   schemas:
-    RepositoryTags:
-      required:
-      - name
-      - tags
-      properties:
-        name:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-    ClusterIdOptional:
-      description: The id of the cluster.
-      type:
-      - string
-      - 'null'
-      format: uuid
-      minLength: 1
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    CredentialKind:
-      description: The kind of credential used.
-      type: string
-      minLength: 1
-      example: password
-      enum:
-      - password
-    RegistryUpdateRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetUpdateRequest'
-    AssetUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      example:
-        name: my-asset
     AssetName:
       description: The name of the asset.
       type: string
       minLength: 1
       example: my-asset
-    AssetUpdatableFields:
-      required:
-      - name
-      properties:
-        name:
-          $ref: '#/components/schemas/AssetName'
-        description:
-          $ref: '#/components/schemas/AssetDescription'
-    Registry:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetMeta'
-        spec:
-          $ref: '#/components/schemas/RegistrySpec'
-    AssetCreationRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      example:
-        name: my-asset
-        scope: tenant
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          inference: false
-          distributed: true
-          distFramework: TF
-    Repositories:
-      required:
-      - repositories
-      properties:
-        repositories:
-          type: array
-          items:
-            type: string
+    AssetKind:
+      description: The kind of the asset.
+      type: string
+      minLength: 1
+      enum:
+      - compute
+      - environment
+      - accessKey
+      - dockerRegistry
+      - password
+      - genericSecret
+      - registry
+      - s3
+      - git
+      - nfs
+      - pvc
+      - hostPath
+      - workload-template
+      - model
+      - config-map
+      - secret-volume
+      - data-volume
+      - ngcApiKey
     RegistryCreationRequest:
       required:
       - meta
@@ -369,6 +244,75 @@ components:
           $ref: '#/components/schemas/AssetCreationRequest'
         spec:
           $ref: '#/components/schemas/RegistrySpec'
+    AssetUpdatableFields:
+      required:
+      - name
+      properties:
+        name:
+          $ref: '#/components/schemas/AssetName'
+        description:
+          $ref: '#/components/schemas/AssetDescription'
+    ClusterIdOptional:
+      description: The id of the cluster.
+      type:
+      - string
+      - 'null'
+      format: uuid
+      minLength: 1
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    UpdateCount:
+      description: the value of an update counter of a data in the system.
+      type: integer
+      format: int64
+      example: 12345
+    RegistrySpec:
+      required:
+      - url
+      - credentialKind
+      - user
+      - password
+      properties:
+        url:
+          description: The registry base url.
+          type: string
+          example: https://hub.docker.com/
+          minLength: 1
+        credentialKind:
+          $ref: '#/components/schemas/CredentialKind'
+        user:
+          description: The name of the user.
+          type: string
+          example: admin
+          minLength: 1
+        password:
+          description: The password.
+          type: string
+          example: 12345678
+          minLength: 1
+    AssetUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      example:
+        name: my-asset
+    Registry:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetMeta'
+        spec:
+          $ref: '#/components/schemas/RegistrySpec'
+    Scope:
+      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
+      type: string
+      minLength: 1
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
     AssetReadOnlyFields:
       required:
       - id
@@ -424,6 +368,54 @@ components:
         updateCount:
           $ref: '#/components/schemas/UpdateCount'
       type: object
+    AssetId:
+      description: Unique identifier of the asset.
+      type: string
+      format: uuid
+      minLength: 1
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    RepositoryTags:
+      required:
+      - name
+      - tags
+      properties:
+        name:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    Repositories:
+      required:
+      - repositories
+      properties:
+        repositories:
+          type: array
+          items:
+            type: string
+    RegistryListResponse:
+      required:
+      - entries
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Registry'
     WorkloadSupportedTypes:
       properties:
         inference:
@@ -467,64 +459,6 @@ components:
       minLength: 1
       maxLength: 250
       example: description of my asset.
-    AssetMeta:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      - $ref: '#/components/schemas/AssetReadOnlyFields'
-      example:
-        name: my-asset
-        scope: tenant
-        id: a418ed33-9399-48c0-a890-122cadd13bfd
-        kind: s3
-        createdBy: test@run.ai
-        createdAt: '2023-02-23T14:25:36.707685Z'
-        updatedBy: test@run.ai
-        updatedAt: '2023-02-23T14:25:36.707685Z'
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          distributed: true
-          distFramework: TF
-    RegistrySpec:
-      required:
-      - url
-      - credentialKind
-      - user
-      - password
-      properties:
-        url:
-          description: The registry base url.
-          type: string
-          example: https://hub.docker.com/
-          minLength: 1
-        credentialKind:
-          $ref: '#/components/schemas/CredentialKind'
-        user:
-          description: The name of the user.
-          type: string
-          example: admin
-          minLength: 1
-        password:
-          description: The password.
-          type: string
-          example: 12345678
-          minLength: 1
-    Scope:
-      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
-      type: string
-      minLength: 1
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
-    AssetId:
-      description: Unique identifier of the asset.
-      type: string
-      format: uuid
-      minLength: 1
     AssetCreationFields:
       type: object
       required:
@@ -560,59 +494,117 @@ components:
           - boolean
           - 'null'
           default: false
-    UpdateCount:
-      description: the value of an update counter of a data in the system.
-      type: integer
-      format: int64
-      example: 12345
-    Error:
+    RegistryUpdateRequest:
       required:
-      - code
-      - message
+      - meta
+      - spec
       properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
+        meta:
+          $ref: '#/components/schemas/AssetUpdateRequest'
+    AssetCreationRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
       example:
-        code: 400
-        message: Bad request - Resource should have a name
-    AssetKind:
-      description: The kind of the asset.
+        name: my-asset
+        scope: tenant
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          inference: false
+          distributed: true
+          distFramework: TF
+    CredentialKind:
+      description: The kind of credential used.
       type: string
       minLength: 1
+      example: password
       enum:
-      - compute
-      - environment
-      - accessKey
-      - dockerRegistry
       - password
-      - genericSecret
-      - registry
-      - s3
-      - git
-      - nfs
-      - pvc
-      - hostPath
-      - workload-template
-      - model
-      - config-map
-      - secret-volume
-      - data-volume
-      - ngcApiKey
-    RegistryListResponse:
-      required:
-      - entries
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/Registry'
+    AssetMeta:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      - $ref: '#/components/schemas/AssetReadOnlyFields'
+      example:
+        name: my-asset
+        scope: tenant
+        id: a418ed33-9399-48c0-a890-122cadd13bfd
+        kind: s3
+        createdBy: test@run.ai
+        createdAt: '2023-02-23T14:25:36.707685Z'
+        updatedBy: test@run.ai
+        updatedAt: '2023-02-23T14:25:36.707685Z'
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          distributed: true
+          distFramework: TF
+  responses:
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
   parameters:
+    AssetId:
+      name: AssetId
+      in: path
+      required: true
+      description: Unique identifier of the asset.
+      schema:
+        type: string
+        format: uuid
+        minLength: 1
     AssetNameFilter:
       name: name
       in: query
@@ -628,15 +620,6 @@ components:
       schema:
         type: string
       allowReserved: true
-    AssetId:
-      name: AssetId
-      in: path
-      required: true
-      description: Unique identifier of the asset.
-      schema:
-        type: string
-        format: uuid
-        minLength: 1
   securitySchemes:
     bearerAuth:
       type: http

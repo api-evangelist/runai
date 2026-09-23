@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Settings API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Settings API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -36,9 +19,7 @@ security:
 - bearerAuth: []
 tags:
 - name: Settings
-  description: 'View and manage configuration settings for your organization.
-
-    '
+  description: View and manage configuration settings for your organization.
 paths:
   /api/v1/security/settings:
     get:
@@ -142,77 +123,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  responses:
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   schemas:
-    AutoRedirectSsoSetting:
-      type: object
-      properties:
-        enabled:
-          type:
-          - boolean
-          - 'null'
-        idpAlias:
-          type:
-          - string
-          - 'null'
-          pattern: ^[a-z0-9_-]*$
-      example:
-        enabled: false
-        idpAlias: oidc
     SettingsGetResponse:
       type: object
       properties:
@@ -233,15 +144,17 @@ components:
           description: Duration in minutes that a user can remain inactive before their browser session automatically expires and requires re-authentication
           default: 60
           minimum: 1
-    Settings:
+    LogoutRedirectUriSetting:
       type: object
-      additionalProperties: true
-    settingsKeyEnum:
-      type: string
-      enum:
-      - autoRedirectSSO
-      - browserSessionTimeout
-      - logoutRedirectUri
+      description: Settings for configuring the logout redirect URI that determines where users are redirected after logging out.
+      properties:
+        uri:
+          type:
+          - string
+          - 'null'
+          description: The URI where users will be redirected after logging out of the application
+          pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
+          example: https://example.com/logout
     Error:
       required:
       - code
@@ -258,17 +171,85 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-    LogoutRedirectUriSetting:
+    AutoRedirectSsoSetting:
       type: object
-      description: Settings for configuring the logout redirect URI that determines where users are redirected after logging out.
       properties:
-        uri:
+        enabled:
+          type:
+          - boolean
+          - 'null'
+        idpAlias:
           type:
           - string
           - 'null'
-          description: The URI where users will be redirected after logging out of the application
-          pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
-          example: https://example.com/logout
+          pattern: ^[a-z0-9_-]*$
+      example:
+        enabled: false
+        idpAlias: oidc
+    Settings:
+      type: object
+      additionalProperties: true
+    settingsKeyEnum:
+      type: string
+      enum:
+      - autoRedirectSSO
+      - browserSessionTimeout
+      - logoutRedirectUri
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
   parameters:
     settingsKey:
       name: key

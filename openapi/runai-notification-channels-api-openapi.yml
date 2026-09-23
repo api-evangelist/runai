@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Notification Channels API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Notification Channels API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -35,16 +18,15 @@ servers:
 security:
 - bearerAuth: []
 tags:
-- name: NotificationChannels
+- name: Notification Channels
   description: Notification Channels are the medium through which notifications are sent.
 paths:
   /api/v1/notification-channels:
     get:
       tags:
-      - NotificationChannels
+      - Notification Channels
       operationId: getNotificationChannels
       summary: Get supported Notification Channels
-      description: Get supported Notification Channels
       responses:
         '200':
           description: Notification Channel types
@@ -68,10 +50,9 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
     post:
       tags:
-      - NotificationChannels
+      - Notification Channels
       operationId: createNotificationChannelConfig
       summary: Create configuration of notification channel
-      description: Create configuration of notification channel
       requestBody:
         content:
           application/json:
@@ -99,10 +80,9 @@ paths:
   /api/v1/notification-channels/slack/create-app:
     post:
       tags:
-      - NotificationChannels
+      - Notification Channels
       operationId: createSlackApp
       summary: Create Slack app
-      description: Create Slack app
       requestBody:
         content:
           application/json:
@@ -134,10 +114,9 @@ paths:
     - $ref: '#/components/parameters/NotificationChannelName'
     get:
       tags:
-      - NotificationChannels
+      - Notification Channels
       operationId: getNotificationChannelConfig
       summary: Get configuration of notification channel
-      description: Get configuration of notification channel
       responses:
         '200':
           description: Notification channel config
@@ -161,10 +140,9 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
     patch:
       tags:
-      - NotificationChannels
+      - Notification Channels
       operationId: patchNotificationChannelConfig
       summary: Patch configuration of Notification Channel
-      description: Patch configuration of Notification Channel
       requestBody:
         content:
           application/json:
@@ -189,10 +167,9 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
     put:
       tags:
-      - NotificationChannels
+      - Notification Channels
       operationId: updateNotificationChannelConfig
       summary: Update configuration of Notification Channel
-      description: Update configuration of Notification Channel
       requestBody:
         content:
           application/json:
@@ -217,10 +194,9 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
     delete:
       tags:
-      - NotificationChannels
+      - Notification Channels
       operationId: deleteNotificationChannelConfig
       summary: Delete configuration of Notification Channel
-      description: Delete configuration of Notification Channel
       responses:
         '204':
           description: Notification Channel config deleted
@@ -241,10 +217,9 @@ paths:
   /api/v1/validate-notification-channel:
     post:
       tags:
-      - NotificationChannels
+      - Notification Channels
       operationId: validateNotificationChannel
       summary: Validate configuration of Notification Channel
-      description: Validate configuration of Notification Channel
       requestBody:
         content:
           application/json:
@@ -276,42 +251,6 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   responses:
-    501NotImplemented:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 501
-            message: Not implemented
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
     500InternalServerError:
       description: unexpected error
       content:
@@ -330,15 +269,15 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
-    400BadRequest:
-      description: Bad request.
+    501NotImplemented:
+      description: unexpected error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            code: 400
-            message: Required parameter is missing
+            code: 501
+            message: Not implemented
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -348,77 +287,43 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
   schemas:
-    NotificationChannelForValidate:
-      type: object
-      required:
-      - type
-      - config
-      allOf:
-      - $ref: '#/components/schemas/NotificationChannelForPatch'
-    SlackNotificationChannelConfig:
-      type: object
-      properties:
-        recipients:
-          type: array
-          items:
-            type: string
-          default: []
-        directNotifications:
-          type:
-          - boolean
-          - 'null'
-        apiToken:
-          type: string
-      example:
-        apiToken: <your_api_token>
-    EmailAuthType:
-      type: string
-      enum:
-      - auth_login
-      - auth_plain
-      - auth_none
-      - ''
-      default: auth_login
-    NotificationChannelType:
-      type: string
-      enum:
-      - email
-      - slack
-      default: email
-    NotificationChannelResponse:
-      type: object
-      required:
-      - type
-      - config
-      - name
-      allOf:
-      - $ref: '#/components/schemas/NotificationChannel'
-      - type: object
-        properties:
-          name:
-            type: string
-    NotificationChannel:
-      type: object
-      required:
-      - type
-      - config
-      allOf:
-      - $ref: '#/components/schemas/NotificationChannelForPatch'
-    NotificationChannelConfig:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/EmailNotificationChannelConfig'
-      - $ref: '#/components/schemas/SlackNotificationChannelConfig'
-    CreateSlackAppResponse:
-      type: object
-      required:
-      - slackAppUrl
-      properties:
-        slackAppUrl:
-          type: string
-      example:
-        slackAppUrl: https://api.slack.com/apps/A089PHD5S0Q
     EmailNotificationChannelConfig:
       type: object
       properties:
@@ -464,6 +369,57 @@ components:
         smtpHost: smtp.gmail.com
         from: email@gmail.com
         subject: My subject
+    EmailAuthType:
+      type: string
+      enum:
+      - auth_login
+      - auth_plain
+      - auth_none
+      - ''
+      default: auth_login
+    NotificationChannelForValidate:
+      type: object
+      required:
+      - type
+      - config
+      allOf:
+      - $ref: '#/components/schemas/NotificationChannelForPatch'
+    NotificationChannelType:
+      type: string
+      enum:
+      - email
+      - slack
+      default: email
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    NotificationChannelForPatch:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+        config:
+          allOf:
+          - $ref: '#/components/schemas/NotificationChannelConfig'
+          example:
+            username: email@gmail.com
+            password: 123456
+            smtpHost: smtp.gmail.com
+            from: email@gmail.com
+            subject: My subject
     CreateSlackAppRequestBody:
       type: object
       required:
@@ -474,6 +430,55 @@ components:
           description: The access token required for creating slack app
       example:
         accessToken: REDACTED_SLACK_TOKEN
+    SlackNotificationChannelConfig:
+      type: object
+      properties:
+        recipients:
+          type: array
+          items:
+            type: string
+          default: []
+        directNotifications:
+          type:
+          - boolean
+          - 'null'
+        apiToken:
+          type: string
+      example:
+        apiToken: <your_api_token>
+    NotificationChannelResponse:
+      type: object
+      required:
+      - type
+      - config
+      - name
+      allOf:
+      - $ref: '#/components/schemas/NotificationChannel'
+      - type: object
+        properties:
+          name:
+            type: string
+    CreateSlackAppResponse:
+      type: object
+      required:
+      - slackAppUrl
+      properties:
+        slackAppUrl:
+          type: string
+      example:
+        slackAppUrl: https://api.slack.com/apps/A089PHD5S0Q
+    NotificationChannel:
+      type: object
+      required:
+      - type
+      - config
+      allOf:
+      - $ref: '#/components/schemas/NotificationChannelForPatch'
+    NotificationChannelConfig:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/EmailNotificationChannelConfig'
+      - $ref: '#/components/schemas/SlackNotificationChannelConfig'
     NotificationChannelMeta:
       type: object
       required:
@@ -491,36 +496,6 @@ components:
       example:
         name: my-email
         type: email
-    NotificationChannelForPatch:
-      type: object
-      properties:
-        type:
-          $ref: '#/components/schemas/NotificationChannelType'
-        config:
-          allOf:
-          - $ref: '#/components/schemas/NotificationChannelConfig'
-          example:
-            username: email@gmail.com
-            password: 123456
-            smtpHost: smtp.gmail.com
-            from: email@gmail.com
-            subject: My subject
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
   parameters:
     NotificationChannelName:
       name: name

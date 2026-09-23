@@ -4,24 +4,7 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
   title: NVIDIA Run:ai Access Keys API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
@@ -42,13 +25,11 @@ tags:
 
     Access keys can be managed by individual users for their own use, or by administrators for organization-wide access.
 
-    For more information, see [Access control](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/overview/#role-based-access-control).
-
-    '
+    For more information, see Access control.'
 paths:
   /api/v1/access-keys:
     get:
-      summary: Get a list of access keys.
+      summary: Get a list of access keys
       description: Retrieve a list of the user's access keys.
       operationId: get_access_keys
       tags:
@@ -69,7 +50,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
     post:
-      summary: Create an access key.
+      summary: Create an access key
       description: Used to create an access key.
       operationId: create_access_key1
       tags:
@@ -102,7 +83,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
   /api/v1/access-keys/{accessKeyId}:
     get:
-      summary: Get access key by id.
+      summary: Get access key by id
       description: Retrieve the details of an access key by id.
       operationId: get_access_key_by_id1
       tags:
@@ -127,7 +108,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
     delete:
-      summary: Delete an access key by id.
+      summary: Delete an access key by id
       description: Use to delete an access key by id.
       operationId: delete_access_key_by_id
       tags:
@@ -151,7 +132,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
   /api/v1/access-keys/{accessKeyId}/secret:
     post:
-      summary: Regenerate an access key secret.
+      summary: Regenerate an access key secret
       description: Use to regenerate the access key secret by id.
       operationId: regenerate_access_key_secret
       tags:
@@ -185,7 +166,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
   /api/v1/administration/access-keys:
     get:
-      summary: Get a list of all access keys.
+      summary: Get a list of all access keys
       description: Retrieve a list of all access keys.
       operationId: get_access_keys_administration
       tags:
@@ -224,7 +205,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
   /api/v1/administration/access-keys/{accessKeyId}:
     delete:
-      summary: Delete an access key by id for administrations.
+      summary: Delete an access key by id for administrations
       description: Use to delete an access key by id for administrations.
       operationId: delete_access_key_by_id_administration
       tags:
@@ -247,30 +228,15 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  parameters:
+    accessKeyId:
+      name: accessKeyId
+      in: path
+      required: true
+      description: The access key ID
+      schema:
+        type: string
   schemas:
-    AccessKeysAdministration:
-      type: object
-      required:
-      - accessKeys
-      properties:
-        accessKeys:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessKeyAdministration'
-      example:
-        accessKeys:
-        - name: my-access-key
-          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
-          clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
-          createdBy: test@run.ai
-          createdAt: '2020-01-01T00:00:00Z'
-          lastLogin: '2020-01-01T00:00:00Z'
-        - name: another-access-key
-          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
-          clientId: 2545e-234344bc-5df4gc8-d66he-fg566f
-          createdBy: user@run.ai
-          createdAt: '2020-01-01T00:00:00Z'
-          lastLogin: '2020-01-01T00:00:00Z'
     AccessKeyPostResponse:
       type: object
       required:
@@ -423,6 +389,29 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
+    AccessKeysAdministration:
+      type: object
+      required:
+      - accessKeys
+      properties:
+        accessKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessKeyAdministration'
+      example:
+        accessKeys:
+        - name: my-access-key
+          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+          clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
+          createdBy: test@run.ai
+          createdAt: '2020-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+        - name: another-access-key
+          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
+          clientId: 2545e-234344bc-5df4gc8-d66he-fg566f
+          createdBy: user@run.ai
+          createdAt: '2020-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
   responses:
     401Unauthorized:
       description: Unauthorized
@@ -433,33 +422,6 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -478,6 +440,33 @@ components:
           example:
             code: 404
             message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
     409Conflict:
       description: The specified resource already exists
       content:
@@ -487,14 +476,6 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
-  parameters:
-    accessKeyId:
-      name: accessKeyId
-      in: path
-      required: true
-      description: The access key ID
-      schema:
-        type: string
   securitySchemes:
     bearerAuth:
       type: http

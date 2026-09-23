@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys User Applications API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai User Applications API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -36,17 +19,15 @@ security:
 - bearerAuth: []
 tags:
 - name: User Applications
-  description: '**DEPRECATED:** User Applications have been renamed to Access Keys. Please use the [Access Keys](/latest/#tag/Access-Keys) endpoints instead.
+  description: '**DEPRECATED:** User Applications have been renamed to Access Keys. Please use the Access Keys endpoints instead.
 
 
-    User Applications allow users to authenticate and interact programmatically with the NVIDIA Run:ai API.
-
-    '
+    User Applications allow users to authenticate and interact programmatically with the NVIDIA Run:ai API.'
 paths:
   /api/v1/user-applications:
     get:
       deprecated: true
-      summary: Get a list of users applications.
+      summary: Get a list of users applications
       description: Retrieve a list of the users applications.
       operationId: get_user_applications
       tags:
@@ -68,7 +49,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
     post:
       deprecated: true
-      summary: Create a user application.
+      summary: Create a user application
       description: Used to create a user application.
       operationId: create_user_application
       tags:
@@ -102,7 +83,7 @@ paths:
   /api/v1/user-applications/{appId}:
     get:
       deprecated: true
-      summary: Get user application by id.
+      summary: Get user application by id
       description: Retrieve the details of a user's application by app id.
       operationId: get_user_application_by_id
       tags:
@@ -128,7 +109,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
     delete:
       deprecated: true
-      summary: Delete a user application byid.
+      summary: Delete a user application byid
       description: Use to user a user application by id.
       operationId: delete_user_application_by_id
       tags:
@@ -153,7 +134,7 @@ paths:
   /api/v1/user-applications/{appId}/secret:
     post:
       deprecated: true
-      summary: Regenerate a user application secret.
+      summary: Regenerate a user application secret
       description: Use to regenerate the user application secret by id.
       operationId: regenerate_user_application_secret
       tags:
@@ -188,7 +169,7 @@ paths:
   /api/v1/administration/user-applications:
     get:
       deprecated: true
-      summary: Get a list of all users applications.
+      summary: Get a list of all users applications
       description: Retrieve a list of all users applications.
       operationId: get_user_applications_administration
       tags:
@@ -228,7 +209,7 @@ paths:
   /api/v1/administration/user-applications/{appId}:
     delete:
       deprecated: true
-      summary: Delete a user application by id for adminstrations.
+      summary: Delete a user application by id for adminstrations
       description: Use to delete a user application by id for adminstrations.
       operationId: delete_user_application_by_id_administration
       tags:
@@ -251,90 +232,15 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  responses:
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
   schemas:
-    UserApps:
-      type: array
-      items:
-        $ref: '#/components/schemas/UserApp'
     UserAppsAdministration:
       type: array
       items:
         $ref: '#/components/schemas/UserAppAdministration'
-    UserAppCreationRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
-          description: The name of the user application. The name must be unique within the user's applications list and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
-      example:
-        name: app-name
+    UserApps:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserApp'
     UserApp:
       type: object
       required:
@@ -366,6 +272,22 @@ components:
         clientId: 3434c-12323ab-4ce2ea6
         createdAt: '2019-01-01T00:00:00Z'
         lastLogin: '2020-01-01T00:00:00Z'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
     UserAppPostResponse:
       type: object
       required:
@@ -394,22 +316,6 @@ components:
         name: app123
         secret: this-is-the-app-secret
         createdAt: '2020-01-01T00:00:00Z'
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
     UserAppAdministration:
       type: object
       required:
@@ -445,6 +351,81 @@ components:
         createdBy: test@run.ai
         createdAt: '2020-01-01T00:00:00Z'
         lastLogin: '2020-01-01T00:00:00Z'
+    UserAppCreationRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
+          description: The name of the user application. The name must be unique within the user's applications list and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
+      example:
+        name: app-name
+  responses:
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
   parameters:
     appId:
       name: appId

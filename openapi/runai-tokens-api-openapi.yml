@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Tokens API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Tokens API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -36,7 +19,11 @@ security:
 - bearerAuth: []
 tags:
 - name: Tokens
-  description: "Use tokens to facilitate authentication to the NVIDIA Run:ai API. \nThe API server must be configured to use the NVIDIA Run:ai identity \nservice to validate authentication tokens.\n"
+  description: 'Use tokens to facilitate authentication to the NVIDIA Run:ai API.
+
+    The API server must be configured to use the NVIDIA Run:ai identity
+
+    service to validate authentication tokens.'
 paths:
   /api/v1/token:
     post:
@@ -96,9 +83,7 @@ paths:
       tags:
       - Tokens
       summary: Create an access token v2
-      description: 'Use this endpoint to obtain an access token. Compliant with standard OAuth2 protocol and supports the common OAuth2 grant types.
-
-        '
+      description: Use this endpoint to obtain an access token. Compliant with standard OAuth2 protocol and supports the common OAuth2 grant types.
       operationId: grant_token_v2
       requestBody:
         required: true
@@ -203,9 +188,7 @@ paths:
 
         The application token is retrieved from the authorization server.
 
-        This endpoint is deprecated.  Use /api/v1/token with the grantType parameter set to app_token instead, with AppID and appSecret set accordingly to get an application token
-
-        '
+        This endpoint is deprecated. Use /api/v1/token with the grantType parameter set to app_token instead, with AppID and appSecret set accordingly to get an application token'
       operationId: app_token
       requestBody:
         content:
@@ -227,71 +210,6 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    OAuth2TokenResponse:
-      type: object
-      required:
-      - access_token
-      - token_type
-      properties:
-        access_token:
-          type: string
-          description: The access token issued by the authorization server
-        token_type:
-          type: string
-          description: The type of the token issued (typically "Bearer")
-          example: Bearer
-        expires_in:
-          type: integer
-          description: The lifetime in seconds of the access token
-          example: 3600
-        refresh_token:
-          type: string
-          description: The refresh token, which can be used to obtain new access tokens
-        id_token:
-          type: string
-          description: ID Token value associated with the authenticated session (OpenID Connect)
-        scope:
-          type: string
-          description: The scope of the access token
-    AppTokenRequest:
-      type: object
-      required:
-      - id
-      - name
-      - secret
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        secret:
-          type: string
-    OAuth2Error:
-      type: object
-      description: OAuth 2.0 error response (RFC 6749 Section 5.2)
-      required:
-      - error
-      properties:
-        error:
-          type: string
-          description: A single ASCII error code
-          enum:
-          - invalid_request
-          - invalid_client
-          - invalid_grant
-          - unauthorized_client
-          - unsupported_grant_type
-          - invalid_scope
-          - server_error
-          - temporarily_unavailable
-          example: invalid_client
-        error_description:
-          type: string
-          description: Human-readable ASCII text providing additional information
-          example: Client authentication failed
-        error_uri:
-          type: string
-          description: URI identifying a human-readable web page with information about the error
     TokenRequest:
       type: object
       properties:
@@ -319,18 +237,16 @@ components:
           type: string
         externalToken:
           type: string
-    TokenResponse:
+    AppTokenResponse:
       type: object
+      required:
+      - access_token
+      - id_token
       properties:
-        accessToken:
+        access_token:
           type: string
-        idToken:
+        id_token:
           type: string
-        refreshToken:
-          type: string
-        expiresIn:
-          type: integer
-          description: Token lifetime in seconds
     TokenRequestGrantTypeEnum:
       enum:
       - app_token
@@ -339,6 +255,71 @@ components:
       - exchange_token
       - password
       - external_token_exchange
+    AppTokenRequest:
+      type: object
+      required:
+      - id
+      - name
+      - secret
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        secret:
+          type: string
+    OAuth2TokenResponse:
+      type: object
+      required:
+      - access_token
+      - token_type
+      properties:
+        access_token:
+          type: string
+          description: The access token issued by the authorization server
+        token_type:
+          type: string
+          description: The type of the token issued (typically "Bearer")
+          example: Bearer
+        expires_in:
+          type: integer
+          description: The lifetime in seconds of the access token
+          example: 3600
+        refresh_token:
+          type: string
+          description: The refresh token, which can be used to obtain new access tokens
+        id_token:
+          type: string
+          description: ID Token value associated with the authenticated session (OpenID Connect)
+        scope:
+          type: string
+          description: The scope of the access token
+    OAuth2Error:
+      type: object
+      description: OAuth 2.0 error response (RFC 6749 Section 5.2)
+      required:
+      - error
+      properties:
+        error:
+          type: string
+          description: A single ASCII error code
+          enum:
+          - invalid_request
+          - invalid_client
+          - invalid_grant
+          - unauthorized_client
+          - unsupported_grant_type
+          - invalid_scope
+          - server_error
+          - temporarily_unavailable
+          example: invalid_client
+        error_description:
+          type: string
+          description: Human-readable ASCII text providing additional information
+          example: Client authentication failed
+        error_uri:
+          type: string
+          description: URI identifying a human-readable web page with information about the error
     Error:
       required:
       - code
@@ -355,17 +336,28 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-    AppTokenResponse:
+    TokenResponse:
       type: object
-      required:
-      - access_token
-      - id_token
       properties:
-        access_token:
+        accessToken:
           type: string
-        id_token:
+        idToken:
           type: string
+        refreshToken:
+          type: string
+        expiresIn:
+          type: integer
+          description: Token lifetime in seconds
   responses:
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
     500InternalServerError:
       description: unexpected error
       content:
@@ -384,15 +376,6 @@ components:
           example:
             code: 400
             message: Required parameter is missing
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   securitySchemes:
     bearerAuth:
       type: http

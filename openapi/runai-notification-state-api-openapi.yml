@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Notification State API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Notification State API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -44,7 +27,6 @@ paths:
       - Notification State
       operationId: getNotificationState
       summary: Get notification state
-      description: Get notification state
       responses:
         '200':
           description: Notification state
@@ -116,33 +98,6 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -161,7 +116,45 @@ components:
           example:
             code: 404
             message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
   schemas:
+    SlackNotificationsState:
+      type: object
+      properties:
+        enabled:
+          type:
+          - boolean
+          - 'null'
+        workspaceName:
+          type:
+          - string
+          - 'null'
     NotificationState:
       type: object
       properties:
@@ -182,16 +175,12 @@ components:
         slack:
           enabled: true
           workspaceName: <your_workspace_name>
-    SlackNotificationsState:
+    EmailNotificationsState:
       type: object
       properties:
         enabled:
           type:
           - boolean
-          - 'null'
-        workspaceName:
-          type:
-          - string
           - 'null'
     Error:
       required:
@@ -209,13 +198,6 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-    EmailNotificationsState:
-      type: object
-      properties:
-        enabled:
-          type:
-          - boolean
-          - 'null'
   securitySchemes:
     bearerAuth:
       type: http

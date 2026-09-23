@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Template API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Template API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -40,7 +23,7 @@ tags:
 paths:
   /api/v1/asset/workload-template:
     get:
-      summary: List templates.
+      summary: List templates
       description: Retrieve a list of templates.
       operationId: list_templates
       deprecated: true
@@ -70,7 +53,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
     post:
-      summary: Create a template.
+      summary: Create a template
       description: Use to create a template.
       operationId: create_template
       deprecated: true
@@ -102,7 +85,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/AssetId'
     get:
-      summary: Get a template.
+      summary: Get a template
       description: Retrieve the details of a template by id.
       operationId: get_template_by_id
       deprecated: true
@@ -124,7 +107,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
     put:
-      summary: Update a template.
+      summary: Update a template
       description: Use to update the details of a template by id.
       operationId: update_template
       deprecated: true
@@ -153,7 +136,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
     delete:
-      summary: Delete a template.
+      summary: Delete a template
       description: Use to delete a template by id.
       operationId: delete_template_by_id
       deprecated: true
@@ -172,112 +155,41 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    PodAffinity:
-      description: Pod affinity scheduling rules (e.g. co-locate this workload in the same node, zone, etc. as some other workloads).
-      type:
-      - object
-      - 'null'
+    ConcurrencyHardLimitField:
       properties:
-        type:
-          $ref: '#/components/schemas/PodAffinityType'
-        key:
-          description: The label key to use. (mandatory)
-          type:
-          - string
-          - 'null'
-          pattern: .*
-    InitialReplicasField:
-      properties:
-        initialReplicas:
-          description: The number of replicas to run when initializing the workload for the first time. Defaults to minReplicas, or to 1 if minReplicas is set to 0
+        concurrencyHardLimit:
+          description: The maximum number of requests allowed to flow to a single replica at any time. 0 means no limit
           type:
           - integer
           - 'null'
           format: int32
           minimum: 0
-    NodeAffinityRequired:
-      type:
-      - object
-      - 'null'
-      description: If the affinity requirements specified by this field are not met at scheduling time, the pod will not be scheduled onto the node. If the affinity requirements specified by this field cease to be met at some point during pod execution (e.g. due to an update), the system may or may not try to eventually evict the pod from its node.
-      properties:
-        nodeSelectorTerms:
-          description: A list of node selector terms. The terms are ORed.
-          type: array
-          items:
-            $ref: '#/components/schemas/NodeSelectorTerm'
-    DataSourceOverrides:
-      description: specific fields to override in the data source.
-      type:
-      - object
-      - 'null'
-      properties:
-        containerPath:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: /container/directory
-    SupplementalGroups:
-      description: Comma separated list of groups that the user running the container belongs to, in addition to the group indicated by runAsGid. Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled. Using an empty string implies reverting the supplementary groups of the image.
-      type:
-      - string
-      - 'null'
-      example: 2,3,5,8
-      pattern: .*
-    Tolerations:
-      description: Set of tolerations to apply to the workload.
+    EnvironmentVariablesOfAsset:
+      description: Set of environment variables to populate into the container running the workspace.
       type:
       - array
       - 'null'
       items:
-        $ref: '#/components/schemas/Toleration'
-    InitializationTimeoutField:
-      properties:
-        initializationTimeoutSeconds:
-          description: Use `servingConfiguration.initializationTimeoutSeconds` instead.  If this field is set, it will be ignored and the value under `servingConfiguration` will be used. The maximum amount of time (in seconds) to wait for the container to become ready.
-          type:
-          - integer
-          - 'null'
-          format: int32
-          minimum: 1
-          deprecated: true
-    TerminationGracePeriod:
-      description: Duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down).
-      format: int64
+        $ref: '#/components/schemas/EnvironmentVariableOfAsset'
+    RunAsUid:
+      description: The user id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsUid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
       type:
       - integer
       - 'null'
-      minimum: 0
-      example: 20
-    Label:
-      description: Label details to be populated into the container.
-      properties:
-        name:
-          description: The name of the label (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 63
-          example: stage
-          pattern: .*
-        value:
-          description: The value of the label.
-          type:
-          - string
-          - 'null'
-          example: initial-research
-          pattern: .*
-        exclude:
-          description: Use 'true' in case the label is defined in defaults of the policy, and you wish to exclude it from the workload.
-          type:
-          - boolean
-          - 'null'
-          example: false
+      format: int64
+      example: 500
+    AssetsRefOptional:
+      allOf:
+      - $ref: '#/components/schemas/AssetsRef'
       type:
       - object
       - 'null'
+    PriorityClass:
+      description: 'Specifies the priority class for the workload, which determines its scheduling behavior. Valid values are: very-low, low, medium-low, medium, medium-high, high, and very-high. Each workload type has a default priority. To view the default priority for each workload type, use the GET /workload-types endpoint. Once you change the priority from the default value defined for that workload type, the preemptibility field is not automatically updated. Make sure to set the desired preemptibility value.'
+      type:
+      - string
+      - 'null'
+      pattern: .*
     EnvironmentVariablePodFieldReference:
       description: Details of the field-reference and key use to populate the environment variable
       properties:
@@ -292,171 +204,6 @@ components:
       type:
       - object
       - 'null'
-    Labels:
-      description: Set of labels to populate into the container running the workload.
-      type:
-      - array
-      - 'null'
-      items:
-        $ref: '#/components/schemas/Label'
-    ImagePullSecrets:
-      description: A list of references to Kubernetes secrets in the same namespace used for pulling container images.
-      type:
-      - array
-      - 'null'
-      items:
-        $ref: '#/components/schemas/ImagePullSecret'
-    AssetCreationRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      example:
-        name: my-asset
-        scope: tenant
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          inference: false
-          distributed: true
-          distFramework: TF
-    ServingPortAccessAuthorizationTypeEnum:
-      type:
-      - string
-      - 'null'
-      enum:
-      - public
-      - authenticatedUsers
-      - authorizedUsers
-      - authorizedGroups
-      - authorizedUsersOrGroups
-      description: 'Specifies who can send inference requests to the serving endpoint:
-
-
-        Possible values:
-
-        - `public`: No authorization is required. (Default)
-
-        - `authenticatedUsers`: Any NVIDIA Run:ai authenticated user and service account can send requests.
-
-        - `authorizedUsers`: Only users listed in the authorizedUsers field can send requests.
-
-        - `authorizedGroups`: Only members of user groups listed in the authorizedGroups field can send requests.
-
-        - `authorizedUsersOrGroups`: Requires either authorizedUsers or authorizedGroups to be provided; if neither is set, or if both are set, a mutual exclusion error is reported. Supported from cluster version 2.19.
-
-        '
-    SpecificRunConnectionInfo:
-      required:
-      - connectionName
-      properties:
-        name:
-          type: string
-          minLength: 1
-          description: Unique identifier of the connection. Will be used to correlate between the information given here and the information provided for the connection in the environment asset.
-        nodePort:
-          description: Port number of the host that will be connected with the container port. Required if and only if isCustomPort is set to true in the environment asset.
-          type:
-          - integer
-          - 'null'
-          format: int32
-          minimum: 0
-          maximum: 65535
-        externalUrl:
-          description: URL to associated with the container port. Required if and only if isCustomExternalUrl is set to true in the environment asset.
-          type:
-          - string
-          - 'null'
-          minLength: 1
-        authorizedUsers:
-          description: List of users or applications that are allowed to access the URL. Note that authorizedUsers and authorizedGroups are mutually exclusive.
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        authorizedGroups:
-          description: Specifies the names of those groups that are allowed to access the connection. Note that authorizedUsers and authorizedGroups are mutually exclusive.
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-    DistributedFramework:
-      description: The distributed training framework used in the workload.
-      type:
-      - string
-      - 'null'
-      enum:
-      - MPI
-      - PyTorch
-      - TF
-      - XGBoost
-      - JAX
-    Args:
-      description: Arguments to the command that the container running the workload executes.
-      type:
-      - string
-      - 'null'
-      minLength: 1
-      example: -x my-script.py
-      pattern: .*
-    ToolType:
-      description: Super set of Internal and External tool types.
-      type: string
-      minLength: 1
-      enum:
-      - jupyter-notebook
-      - pycharm
-      - visual-studio-code
-      - tensorboard
-      - rstudio
-      - mlflow
-      - custom
-      - wandb
-      - matlab
-      - comet
-      - chatbot-ui
-    AutoDeletionTimeAfterPreemption:
-      description: Specifies the duration after which a finished workload (completed or failed) will be automatically deleted. The default is 30 days. Log retention is managed separately.
-      format: int64
-      type:
-      - integer
-      - 'null'
-      example: 15
-    AutoScalingCommonFields:
-      allOf:
-      - $ref: '#/components/schemas/MetricThresholdPercentageField'
-      - $ref: '#/components/schemas/InferencesMinReplicasField'
-      - $ref: '#/components/schemas/InferencesMaxReplicasField'
-      - $ref: '#/components/schemas/InitialReplicasField'
-      - $ref: '#/components/schemas/ActivationReplicasField'
-      - $ref: '#/components/schemas/ConcurrencyHardLimitField'
-      - $ref: '#/components/schemas/ScaleToZeroRetentionField'
-      - $ref: '#/components/schemas/ScaleDownDelayField'
-      - $ref: '#/components/schemas/InitializationTimeoutField'
-      type:
-      - object
-      - 'null'
-    EnvironmentVariableCredential:
-      description: Details of the secret and key use to populate the environment variable. (mutually exclusive with value)
-      properties:
-        assetId:
-          description: Unique identifier of the asset. (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          format: uuid
-        key:
-          description: The key in the secret resource. (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: POSTGRES_PASSWORD
-      type:
-      - object
-      - 'null'
     PodAffinityType:
       description: The affinity type, required or preferred. (mandatory)
       type:
@@ -465,69 +212,13 @@ components:
       enum:
       - Required
       - Preferred
-    Annotations:
-      description: Set of annotations to populate into the container running the workload.
-      type:
-      - array
-      - 'null'
-      items:
-        $ref: '#/components/schemas/Annotation'
-    Annotation:
-      description: Annotation details to be populated into the container.
-      properties:
-        name:
-          description: The name of the annotation (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          maxLength: 63
-          example: billing
-          pattern: .*
-        value:
-          description: The value of the annotation.
-          type:
-          - string
-          - 'null'
-          example: my-billing-unit
-          pattern: .*
-        exclude:
-          description: Use 'true' in case the annotation is defined in defaults of the policy, and you wish to exclude it from the workload.
-          type:
-          - boolean
-          - 'null'
-          default: false
-          example: false
-      type:
-      - object
-      - 'null'
-    RunAsUid:
-      description: The user id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsUid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
-      type:
-      - integer
-      - 'null'
+    UpdateCount:
+      description: the value of an update counter of a data in the system.
+      type: integer
       format: int64
-      example: 500
-    BackoffLimit:
-      description: Specifies the number of retries before marking a workload as failed (not applicable to Inference workloads). The default value is 6.
-      format: int64
-      type:
-      - integer
-      - 'null'
-      example: 3
-    NodePools:
-      description: A prioritized list of node pools for the scheduler to run the workload on. The scheduler will always try to use the first node pool before moving to the next one if the first is not available.
-      type:
-      - array
-      - 'null'
-      items:
-        type: string
-        pattern: .*
-      example:
-      - my-node-pool-a
-      - my-node-pool-b
-    AssetRef:
-      description: Reference information about an asset.
+      example: 12345
+    EnvironmentAssetRef:
+      description: Reference information about environment asset.
       required:
       - id
       - name
@@ -536,109 +227,31 @@ components:
           $ref: '#/components/schemas/AssetId'
         name:
           $ref: '#/components/schemas/AssetName'
-    AssetsRefOptional:
-      allOf:
-      - $ref: '#/components/schemas/AssetsRef'
+        toolTypes:
+          description: the type of tools as defined in the connections of the environment asset.
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolType'
+    Args:
+      description: Arguments to the command that the container running the workload executes.
       type:
-      - object
+      - string
       - 'null'
-    AssetUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      example:
-        name: my-asset
-    SpecificRunServingPortAccess:
-      properties:
-        servingPortAccess:
-          allOf:
-          - $ref: '#/components/schemas/ServingPortAccess'
-          type:
-          - object
-          - 'null'
-      type:
-      - object
-      - 'null'
-    DatasourceRef:
-      description: Reference information about a datasource asset.
-      required:
-      - id
-      - name
-      - kind
-      properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
-        name:
-          $ref: '#/components/schemas/AssetName'
-        kind:
-          $ref: '#/components/schemas/AssetKind'
-        overrides:
-          $ref: '#/components/schemas/DataSourceOverrides'
-    EnvironmentVariableOfAsset:
-      description: Details of an environment variable which is populated into the container.
-      properties:
-        name:
-          description: The name of the environment variable. (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: HOME
-        value:
-          description: The value of the environment variable. (mutually exclusive with credential, configMap and podFieldRef)
-          type:
-          - string
-          - 'null'
-          example: /home/my-folder
-        credential:
-          $ref: '#/components/schemas/EnvironmentVariableCredential'
-        configMap:
-          $ref: '#/components/schemas/EnvironmentVariableConfigMap'
-        podFieldRef:
-          $ref: '#/components/schemas/EnvironmentVariablePodFieldReference'
-        exclude:
-          description: Use 'true' in case the environment variable is defined in defaults of the policy, and you wish to exclude it from the workload.
-          type:
-          - boolean
-          - 'null'
-          example: false
-        description:
-          description: Description of the environment variable.
-          type:
-          - string
-          - 'null'
-          example: Home directory of the user.
-      type:
-      - object
-      - 'null'
-    Completions:
-      description: Used with Hyperparameter Optimization. Specifies the number of successful pods the job should reach to be completed. The Job will be marked as successful once the specified amount of pods has been reached (applicable to standard training only).
-      type:
-      - integer
-      - 'null'
-      format: int32
-      example: 1
-    EnvironmentVariableConfigMap:
-      description: Details of the configMap and key use to populate the environment variable
-      properties:
-        name:
-          description: The name of the config-map resource. (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: my-config-map
-          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-        key:
-          description: The key in the config-map resource. (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: MY_POSTGRES_SCHEMA
-          pattern: .*
-      type:
-      - object
-      - 'null'
+      minLength: 1
+      example: -x my-script.py
+      pattern: .*
+    Scope:
+      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
+      type: string
+      minLength: 1
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
     AssetReadOnlyFields:
       required:
       - id
@@ -694,10 +307,63 @@ components:
         updateCount:
           $ref: '#/components/schemas/UpdateCount'
       type: object
-    InferencesMinReplicasField:
+    Error:
+      required:
+      - code
+      - message
       properties:
-        minReplicas:
-          description: The minimum number of replicas for autoscaling. Defaults to 1. Use 0 to allow scale-to-zero
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    ScaleDownDelayField:
+      properties:
+        scaleDownDelaySeconds:
+          description: The minimum amount of time (in seconds) that a replica will remain active after a scale-down decision
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 0
+          maximum: 3600
+    TerminationGracePeriod:
+      description: Duration in seconds the pod needs to terminate gracefully upon probe failure. The grace period is the duration in seconds after the processes running in the pod are sent a termination signal and the time when the processes are forcibly halted with a kill signal. Set this value longer than the expected cleanup time for your process. Value must be non-negative integer. The value zero indicates stop immediately via the kill signal (no opportunity to shut down).
+      format: int64
+      type:
+      - integer
+      - 'null'
+      minimum: 0
+      example: 20
+    InfoDistMaster:
+      description: 'Parameters which apply to the master in a distributed training.
+
+        '
+      type:
+      - object
+      - 'null'
+      properties:
+        assets:
+          $ref: '#/components/schemas/AssetsRefOptional'
+        specificEnv:
+          $ref: '#/components/schemas/SpecificRunParams'
+    Labels:
+      description: Set of labels to populate into the container running the workload.
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/Label'
+    InitialReplicasField:
+      properties:
+        initialReplicas:
+          description: The number of replicas to run when initializing the workload for the first time. Defaults to minReplicas, or to 1 if minReplicas is set to 0
           type:
           - integer
           - 'null'
@@ -711,58 +377,20 @@ components:
       minLength: 1
       example: python
       pattern: .*
-    Scope:
-      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
-      type: string
-      minLength: 1
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
-    SpecificRunAutoScaling:
-      properties:
-        autoScaling:
-          allOf:
-          - $ref: '#/components/schemas/AutoScalingCommonFields'
-          - $ref: '#/components/schemas/SpecificRunMetricFields'
-          type:
-          - object
-          - 'null'
+    AutoScalingCommonFields:
+      allOf:
+      - $ref: '#/components/schemas/MetricThresholdPercentageField'
+      - $ref: '#/components/schemas/InferencesMinReplicasField'
+      - $ref: '#/components/schemas/InferencesMaxReplicasField'
+      - $ref: '#/components/schemas/InitialReplicasField'
+      - $ref: '#/components/schemas/ActivationReplicasField'
+      - $ref: '#/components/schemas/ConcurrencyHardLimitField'
+      - $ref: '#/components/schemas/ScaleToZeroRetentionField'
+      - $ref: '#/components/schemas/ScaleDownDelayField'
+      - $ref: '#/components/schemas/InitializationTimeoutField'
       type:
       - object
       - 'null'
-    AssetsRef:
-      description: Reference information about a set of assets. used to describe - assets comprising a workspace - assets comprising a workspace template - assets that use other assets (e.g. s3 asset which uses access key).
-      required:
-      - environment
-      properties:
-        environment:
-          description: environment asset.
-          allOf:
-          - $ref: '#/components/schemas/EnvironmentAssetRef'
-        compute:
-          $ref: '#/components/schemas/AssetsRefCompute'
-        datasources:
-          type: array
-          items:
-            $ref: '#/components/schemas/DatasourceRef'
-        workloadVolumes:
-          type: array
-          items:
-            type: string
-    HttpResponse:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
     NodeType1:
       description: Nodes (machines), or a group of nodes on which the workload will run. To use this feature, your Administrator will need to label nodes. For more information, see [Group Nodes](https://docs.run.ai/latest/admin/researcher-setup/limit-to-node-group). When using this flag with with Project-based affinity, it refines the list of allowable node groups set in the Project. For more information, see [Projects](https://docshub.run.ai/guides/platform-management/aiinitiatives/organization/projects).
       type:
@@ -771,132 +399,17 @@ components:
       minLength: 1
       example: my-node-type
       pattern: .*
-    AssetsRefCompute:
-      allOf:
-      - $ref: '#/components/schemas/AssetRef'
-      type:
-      - object
-      - 'null'
-    WorkloadTemplateCreationRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetCreationRequest'
-        spec:
-          $ref: '#/components/schemas/SpecificRunCreationFields'
-    InferencesMaxReplicasField:
-      properties:
-        maxReplicas:
-          description: The maximum number of replicas for autoscaling. Defaults to minReplicas, or to 1 if minReplicas is set to 0
-          type:
-          - integer
-          - 'null'
-          format: int32
-          minimum: 1
-    InfoDistributed:
-      description: 'Parameters which apply to distributed training.
-
-        '
-      allOf:
-      - properties:
-          numWorkers:
-            type: integer
-          noMaster:
-            type:
-            - boolean
-            - 'null'
-          distFramework:
-            $ref: '#/components/schemas/DistributedFramework'
-          master:
-            $ref: '#/components/schemas/InfoDistMaster'
-      type:
-      - object
-      - 'null'
-    AssetUpdatableFields:
-      required:
-      - name
-      properties:
-        name:
-          $ref: '#/components/schemas/AssetName'
-        description:
-          $ref: '#/components/schemas/AssetDescription'
-    NodeSelectorTerm:
-      type:
-      - object
-      - 'null'
-      description: A null or empty node selector term matches no objects. The requirements of them are ANDed.
-      properties:
-        matchExpressions:
-          description: A list of node selector requirements by node's labels.
-          type: array
-          items:
-            $ref: '#/components/schemas/MatchExpression'
-    MatchExpression:
-      type:
-      - object
-      - 'null'
-      description: A selector that contains values, a key, and an operator that relates the key and values.
-      properties:
-        key:
-          description: The label key that the selector applies to (mandatory).
-          type: string
-          pattern: .*
-        operator:
-          $ref: '#/components/schemas/MatchExpressionOperator'
-        values:
-          description: An array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. If the operator is Gt or Lt, the values array must have a single element, which will be interpreted as an integer.
-          type: array
-          items:
-            type: string
-            pattern: .*
-      required:
-      - key
-      - operator
-    WorkloadTemplate:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetMeta'
-        spec:
-          $ref: '#/components/schemas/SpecificRunInfoFields'
-    MatchExpressionOperator:
-      description: Represents a key's relationship to a set of values (mandatory).
-      type: string
-      enum:
-      - In
-      - NotIn
-      - Exists
-      - DoesNotExist
-      - Gt
-      - Lt
-    Category:
-      description: Specify the workload category assigned to the workload. Categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform.
+    DistributedFramework:
+      description: The distributed training framework used in the workload.
       type:
       - string
       - 'null'
-      pattern: .*
-    ActivationReplicasField:
-      properties:
-        activationReplicas:
-          description: The number of replicas to run when scaling-up from zero. Defaults to minReplicas, or to 1 if minReplicas is set to 0
-          type:
-          - integer
-          - 'null'
-          format: int32
-          minimum: 1
-    WorkloadTemplateListResponse:
-      type: object
-      required:
-      - entries
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkloadTemplate'
+      enum:
+      - MPI
+      - PyTorch
+      - TF
+      - XGBoost
+      - JAX
     Toleration:
       description: Toleration details.
       properties:
@@ -938,20 +451,27 @@ components:
       type:
       - object
       - 'null'
-    ImagePullSecret:
-      description: A reference to a secret in the same namespace used to pull container images.
+    Annotation:
+      description: Annotation details to be populated into the container.
       properties:
         name:
-          type: string
-          description: The name of the Kubernetes secret containing the image pull credentials.
-          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-        userCredential:
+          description: The name of the annotation (mandatory)
           type:
-          - boolean
+          - string
           - 'null'
-          description: Indicates whether the secret is a user credential. Set to true if the secret was created by the user and is only accessible by them.
+          minLength: 1
+          maxLength: 63
+          example: billing
+          pattern: .*
+        value:
+          description: The value of the annotation.
+          type:
+          - string
+          - 'null'
+          example: my-billing-unit
+          pattern: .*
         exclude:
-          description: Use 'true' in case the secret is defined in defaults of the policy, and you wish to exclude it from the workload.
+          description: Use 'true' in case the annotation is defined in defaults of the policy, and you wish to exclude it from the workload.
           type:
           - boolean
           - 'null'
@@ -960,86 +480,112 @@ components:
       type:
       - object
       - 'null'
-    InfoDistMaster:
-      description: 'Parameters which apply to the master in a distributed training.
-
-        '
-      type:
-      - object
-      - 'null'
-      properties:
-        assets:
-          $ref: '#/components/schemas/AssetsRefOptional'
-        specificEnv:
-          $ref: '#/components/schemas/SpecificRunParams'
-    EnvironmentVariablesOfAsset:
-      description: Set of environment variables to populate into the container running the workspace.
-      type:
-      - array
-      - 'null'
-      items:
-        $ref: '#/components/schemas/EnvironmentVariableOfAsset'
-    PriorityClass:
-      description: 'Specifies the priority class for the workload, which determines its scheduling behavior. Valid values are: very-low, low, medium-low, medium, medium-high, high, and very-high. Each workload type has a default priority. To view the default priority for each workload type, use the GET /workload-types endpoint. Once you change the priority from the default value defined for that workload type, the preemptibility field is not automatically updated. Make sure to set the desired preemptibility value.'
+    ServingPortAccessAuthorizationTypeEnum:
       type:
       - string
       - 'null'
-      pattern: .*
-    AssetId:
-      description: Unique identifier of the asset.
-      type: string
-      format: uuid
-      minLength: 1
-    SpecificRunConnections:
-      properties:
-        connections:
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/SpecificRunConnectionInfo'
+      enum:
+      - public
+      - authenticatedUsers
+      - authorizedUsers
+      - authorizedGroups
+      - authorizedUsersOrGroups
+      description: 'Specifies who can send inference requests to the serving endpoint:
+
+
+        Possible values:
+
+        - `public`: No authorization is required. (Default)
+
+        - `authenticatedUsers`: Any NVIDIA Run:ai authenticated user and service account can send requests.
+
+        - `authorizedUsers`: Only users listed in the authorizedUsers field can send requests.
+
+        - `authorizedGroups`: Only members of user groups listed in the authorizedGroups field can send requests.
+
+        - `authorizedUsersOrGroups`: Requires either authorizedUsers or authorizedGroups to be provided; if neither is set, or if both are set, a mutual exclusion error is reported. Supported from cluster version 2.19.
+
+        '
+    PodAffinity:
+      description: Pod affinity scheduling rules (e.g. co-locate this workload in the same node, zone, etc. as some other workloads).
       type:
       - object
       - 'null'
-    Error:
-      required:
-      - code
-      - message
       properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    AssetKind:
-      description: The kind of the asset.
+        type:
+          $ref: '#/components/schemas/PodAffinityType'
+        key:
+          description: The label key to use. (mandatory)
+          type:
+          - string
+          - 'null'
+          pattern: .*
+    WorkloadTemplateUpdateRequest:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetUpdateRequest'
+        spec:
+          $ref: '#/components/schemas/SpecificRunCreationFields'
+    AssetName:
+      description: The name of the asset.
+      type: string
+      minLength: 1
+      example: my-asset
+    InferencesMinReplicasField:
+      properties:
+        minReplicas:
+          description: The minimum number of replicas for autoscaling. Defaults to 1. Use 0 to allow scale-to-zero
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 0
+    AssetUpdatableFields:
+      required:
+      - name
+      properties:
+        name:
+          $ref: '#/components/schemas/AssetName'
+        description:
+          $ref: '#/components/schemas/AssetDescription'
+    BackoffLimit:
+      description: Specifies the number of retries before marking a workload as failed (not applicable to Inference workloads). The default value is 6.
+      format: int64
+      type:
+      - integer
+      - 'null'
+      example: 3
+    SpecificRunAutoScaling:
+      properties:
+        autoScaling:
+          allOf:
+          - $ref: '#/components/schemas/AutoScalingCommonFields'
+          - $ref: '#/components/schemas/SpecificRunMetricFields'
+          type:
+          - object
+          - 'null'
+      type:
+      - object
+      - 'null'
+    ToolType:
+      description: Super set of Internal and External tool types.
       type: string
       minLength: 1
       enum:
-      - compute
-      - environment
-      - accessKey
-      - dockerRegistry
-      - password
-      - genericSecret
-      - registry
-      - s3
-      - git
-      - nfs
-      - pvc
-      - hostPath
-      - workload-template
-      - model
-      - config-map
-      - secret-volume
-      - data-volume
-      - ngcApiKey
+      - jupyter-notebook
+      - pycharm
+      - visual-studio-code
+      - tensorboard
+      - rstudio
+      - mlflow
+      - custom
+      - wandb
+      - matlab
+      - comet
+      - chatbot-ui
     SpecificRunParams:
       allOf:
       - $ref: '#/components/schemas/SpecificRunConnections'
@@ -1104,138 +650,47 @@ components:
       type:
       - object
       - 'null'
-    AutoScalingMetric:
-      description: The metric to use for autoscaling. Mandatory if minReplicas < maxReplicas, except for the special case where minReplicas is set to 0 and maxReplicas is set to 1, as in this case autoscaling decisions are made according to network activity rather than metrics. Use one of the built-in metrics of 'throughput', 'concurrency' or 'latency', or any other available custom metric. Only the 'throughput' and 'concurrency' metrics support scale-to-zero
-      type:
-      - string
-      - 'null'
-      pattern: ^[a-zA-Z_:][a-zA-Z0-9_:]*$
-      example: http_requests_total
-    AssetIdAndKind:
-      description: Asset id and its kind.
-      required:
-      - id
-      - kind
+    EnvironmentVariableCredential:
+      description: Details of the secret and key use to populate the environment variable. (mutually exclusive with value)
       properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
-        kind:
-          $ref: '#/components/schemas/AssetKind'
-        overrides:
-          $ref: '#/components/schemas/DataSourceOverrides'
-    ScaleDownDelayField:
-      properties:
-        scaleDownDelaySeconds:
-          description: The minimum amount of time (in seconds) that a replica will remain active after a scale-down decision
-          type:
-          - integer
-          - 'null'
-          format: int32
-          minimum: 0
-          maximum: 3600
-    RunAsGid:
-      description: The group id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsGid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
-      type:
-      - integer
-      - 'null'
-      format: int64
-      example: 30
-    ClusterIdOptional:
-      description: The id of the cluster.
-      type:
-      - string
-      - 'null'
-      format: uuid
-      minLength: 1
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    AssetName:
-      description: The name of the asset.
-      type: string
-      minLength: 1
-      example: my-asset
-    AllowOverQuota:
-      properties:
-        allowOverQuota:
-          description: Whether to allow the workload to exceed the quota of the project.
-          type:
-          - boolean
-          - 'null'
-    AssetsIds:
-      description: Set of assets comprising a workspace or a workspace template.
-      required:
-      - environment
-      properties:
-        environment:
-          $ref: '#/components/schemas/AssetId'
-        compute:
+        assetId:
+          description: Unique identifier of the asset. (mandatory)
           type:
           - string
           - 'null'
-          allOf:
-          - $ref: '#/components/schemas/AssetId'
-        datasources:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetIdAndKind'
-        workloadVolumes:
-          type: array
-          items:
-            type: string
-    Preemptibility:
-      description: Specifies whether the workload can be preempted by higher-priority workloads. Valid values are preemptible and non-preemptible. If explicitly set, this value takes precedence. If not set, the system derives the preemptibility from the priorityClassName field, ensuring backward compatibility. Each workload type has a default preemptibility. To view the default preemptibility for each workload type, use the GET /workload-types endpoint.
+          minLength: 1
+          format: uuid
+        key:
+          description: The key in the secret resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: POSTGRES_PASSWORD
+      type:
+      - object
+      - 'null'
+    RestartPolicy:
+      description: Specify the restart policy of the workload pods. Default is empty, which is determine by the framework default
       type:
       - string
       - 'null'
       minLength: 1
       enum:
-      - preemptible
-      - non-preemptible
-    EnvironmentAssetRef:
-      description: Reference information about environment asset.
-      required:
-      - id
-      - name
-      properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
-        name:
-          $ref: '#/components/schemas/AssetName'
-        toolTypes:
-          description: the type of tools as defined in the connections of the environment asset.
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ToolType'
-    SpecificRunInfoFields:
-      description: Information about the set of assets which comprises a workspace, training or template, and an optional set of specific run parameters.
-      required:
-      - assets
-      properties:
-        assets:
-          $ref: '#/components/schemas/AssetsRef'
-        specificEnv:
-          $ref: '#/components/schemas/SpecificRunParams'
-        distributed:
-          $ref: '#/components/schemas/InfoDistributed'
-    TolerationOperator:
-      description: A key's relationship to the value. Equal uses key and value. Exists is equivalent to wildcard for value, so that a workload can tolerate all taints of a particular category. (mandatory)
+      - Always
+      - Never
+      - OnFailure
+    NodeSelectorTerm:
       type:
-      - string
+      - object
       - 'null'
-      enum:
-      - Equal
-      - Exists
-    MetricThresholdPercentageField:
+      description: A null or empty node selector term matches no objects. The requirements of them are ANDed.
       properties:
-        metricThresholdPercentage:
-          description: The percentage of metric threshold value to use for autoscaling. Defaults to 70. Applicable only with the 'throughput' and 'concurrency' metrics
-          type:
-          - number
-          - 'null'
-          format: float
-          minimum: 1
-          maximum: 100
+        matchExpressions:
+          description: A list of node selector requirements by node's labels.
+          type: array
+          items:
+            $ref: '#/components/schemas/MatchExpression'
     SpecificRunMetricFields:
       properties:
         thresholdMetric:
@@ -1249,41 +704,6 @@ components:
       type:
       - object
       - 'null'
-    WorkloadTemplateUpdateRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetUpdateRequest'
-        spec:
-          $ref: '#/components/schemas/SpecificRunCreationFields'
-    ConcurrencyHardLimitField:
-      properties:
-        concurrencyHardLimit:
-          description: The maximum number of requests allowed to flow to a single replica at any time. 0 means no limit
-          type:
-          - integer
-          - 'null'
-          format: int32
-          minimum: 0
-    Parallelism:
-      description: Used with Hyperparameter Optimization. Specifies the maximum number of pods the workload should run at any given time (applicable to standard training only).
-      type:
-      - integer
-      - 'null'
-      format: int32
-      example: 1
-    ScaleToZeroRetentionField:
-      properties:
-        scaleToZeroRetentionSeconds:
-          description: The minimum amount of time (in seconds) that the last replica will remain active after a scale-to-zero decision. Defaults to 0. Available only if minReplicas is set to 0
-          type:
-          - integer
-          - 'null'
-          format: int32
-          minimum: 0
-          maximum: 3600
     WorkloadSupportedTypes:
       properties:
         inference:
@@ -1319,89 +739,13 @@ components:
       type:
       - object
       - 'null'
-    TolerationEffect:
-      description: The taint effect to match. (mandatory)
+    RunAsGid:
+      description: The group id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsGid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
       type:
-      - string
+      - integer
       - 'null'
-      enum:
-      - NoSchedule
-      - NoExecute
-      - PreferNoSchedule
-      - Any
-    AssetDescription:
-      description: The description of the asset.
-      type:
-      - string
-      - 'null'
-      minLength: 1
-      maxLength: 250
-      example: description of my asset.
-    AssetMeta:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      - $ref: '#/components/schemas/AssetReadOnlyFields'
-      example:
-        name: my-asset
-        scope: tenant
-        id: a418ed33-9399-48c0-a890-122cadd13bfd
-        kind: s3
-        createdBy: test@run.ai
-        createdAt: '2023-02-23T14:25:36.707685Z'
-        updatedBy: test@run.ai
-        updatedAt: '2023-02-23T14:25:36.707685Z'
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          distributed: true
-          distFramework: TF
-    TerminateAfterPreemption:
-      description: Indicates if the job should be terminated by the system after it has been preempted.
-      type:
-      - boolean
-      - 'null'
-      example: false
-    ServingPortAccess:
-      properties:
-        authorizationType:
-          $ref: '#/components/schemas/ServingPortAccessAuthorizationTypeEnum'
-        authorizedUsers:
-          description: A list of users and service accounts allowed to send inference requests to the serving endpoint. `Note:` Cannot be used together with authorizedGroups.
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            pattern: .*
-          example:
-          - user.a@example.com
-          - user.b@example.com
-        authorizedGroups:
-          description: List of groups that are allowed to access the URL. Note that authorizedUsers and authorizedGroups are mutually exclusive.
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            pattern: .*
-          example:
-          - group-a
-          - group-b
-        clusterLocalAccessOnly:
-          description: Configure the serving port URL to be available only on the cluster-local network, and not externally. Defaults to false
-          type:
-          - boolean
-          - 'null'
-    SpecificRunCreationFields:
-      description: The information needed for creating az template - a set of assets and an optional set of specific environment parameters.
-      required:
-      - assets
-      properties:
-        assets:
-          $ref: '#/components/schemas/AssetsIds'
-        specificEnv:
-          $ref: '#/components/schemas/SpecificRunParams'
+      format: int64
+      example: 30
     AssetCreationFields:
       type: object
       required:
@@ -1437,21 +781,660 @@ components:
           - boolean
           - 'null'
           default: false
-    UpdateCount:
-      description: the value of an update counter of a data in the system.
-      type: integer
+    ImagePullSecrets:
+      description: A list of references to Kubernetes secrets in the same namespace used for pulling container images.
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/ImagePullSecret'
+    AssetCreationRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      example:
+        name: my-asset
+        scope: tenant
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          inference: false
+          distributed: true
+          distFramework: TF
+    SpecificRunInfoFields:
+      description: Information about the set of assets which comprises a workspace, training or template, and an optional set of specific run parameters.
+      required:
+      - assets
+      properties:
+        assets:
+          $ref: '#/components/schemas/AssetsRef'
+        specificEnv:
+          $ref: '#/components/schemas/SpecificRunParams'
+        distributed:
+          $ref: '#/components/schemas/InfoDistributed'
+    InfoDistributed:
+      description: 'Parameters which apply to distributed training.
+
+        '
+      allOf:
+      - properties:
+          numWorkers:
+            type: integer
+          noMaster:
+            type:
+            - boolean
+            - 'null'
+          distFramework:
+            $ref: '#/components/schemas/DistributedFramework'
+          master:
+            $ref: '#/components/schemas/InfoDistMaster'
+      type:
+      - object
+      - 'null'
+    Tolerations:
+      description: Set of tolerations to apply to the workload.
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/Toleration'
+    AssetMeta:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      - $ref: '#/components/schemas/AssetReadOnlyFields'
+      example:
+        name: my-asset
+        scope: tenant
+        id: a418ed33-9399-48c0-a890-122cadd13bfd
+        kind: s3
+        createdBy: test@run.ai
+        createdAt: '2023-02-23T14:25:36.707685Z'
+        updatedBy: test@run.ai
+        updatedAt: '2023-02-23T14:25:36.707685Z'
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          distributed: true
+          distFramework: TF
+    AssetKind:
+      description: The kind of the asset.
+      type: string
+      minLength: 1
+      enum:
+      - compute
+      - environment
+      - accessKey
+      - dockerRegistry
+      - password
+      - genericSecret
+      - registry
+      - s3
+      - git
+      - nfs
+      - pvc
+      - hostPath
+      - workload-template
+      - model
+      - config-map
+      - secret-volume
+      - data-volume
+      - ngcApiKey
+    SpecificRunConnections:
+      properties:
+        connections:
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/SpecificRunConnectionInfo'
+      type:
+      - object
+      - 'null'
+    ActivationReplicasField:
+      properties:
+        activationReplicas:
+          description: The number of replicas to run when scaling-up from zero. Defaults to minReplicas, or to 1 if minReplicas is set to 0
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 1
+    MetricThresholdPercentageField:
+      properties:
+        metricThresholdPercentage:
+          description: The percentage of metric threshold value to use for autoscaling. Defaults to 70. Applicable only with the 'throughput' and 'concurrency' metrics
+          type:
+          - number
+          - 'null'
+          format: float
+          minimum: 1
+          maximum: 100
+    TolerationEffect:
+      description: The taint effect to match. (mandatory)
+      type:
+      - string
+      - 'null'
+      enum:
+      - NoSchedule
+      - NoExecute
+      - PreferNoSchedule
+      - Any
+    AutoDeletionTimeAfterPreemption:
+      description: Specifies the duration after which a finished workload (completed or failed) will be automatically deleted. The default is 30 days. Log retention is managed separately.
       format: int64
-      example: 12345
-    RestartPolicy:
-      description: Specify the restart policy of the workload pods. Default is empty, which is determine by the framework default
+      type:
+      - integer
+      - 'null'
+      example: 15
+    Label:
+      description: Label details to be populated into the container.
+      properties:
+        name:
+          description: The name of the label (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          maxLength: 63
+          example: stage
+          pattern: .*
+        value:
+          description: The value of the label.
+          type:
+          - string
+          - 'null'
+          example: initial-research
+          pattern: .*
+        exclude:
+          description: Use 'true' in case the label is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type:
+          - boolean
+          - 'null'
+          example: false
+      type:
+      - object
+      - 'null'
+    Annotations:
+      description: Set of annotations to populate into the container running the workload.
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/Annotation'
+    MatchExpressionOperator:
+      description: Represents a key's relationship to a set of values (mandatory).
+      type: string
+      enum:
+      - In
+      - NotIn
+      - Exists
+      - DoesNotExist
+      - Gt
+      - Lt
+    SpecificRunCreationFields:
+      description: The information needed for creating az template - a set of assets and an optional set of specific environment parameters.
+      required:
+      - assets
+      properties:
+        assets:
+          $ref: '#/components/schemas/AssetsIds'
+        specificEnv:
+          $ref: '#/components/schemas/SpecificRunParams'
+    ServingPortAccess:
+      properties:
+        authorizationType:
+          $ref: '#/components/schemas/ServingPortAccessAuthorizationTypeEnum'
+        authorizedUsers:
+          description: A list of users and service accounts allowed to send inference requests to the serving endpoint. `Note:` Cannot be used together with authorizedGroups.
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            pattern: .*
+          example:
+          - user.a@example.com
+          - user.b@example.com
+        authorizedGroups:
+          description: List of groups that are allowed to access the URL. Note that authorizedUsers and authorizedGroups are mutually exclusive.
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            pattern: .*
+          example:
+          - group-a
+          - group-b
+        clusterLocalAccessOnly:
+          description: Configure the serving port URL to be available only on the cluster-local network, and not externally. Defaults to false
+          type:
+          - boolean
+          - 'null'
+    Preemptibility:
+      description: Specifies whether the workload can be preempted by higher-priority workloads. Valid values are preemptible and non-preemptible. If explicitly set, this value takes precedence. If not set, the system derives the preemptibility from the priorityClassName field, ensuring backward compatibility. Each workload type has a default preemptibility. To view the default preemptibility for each workload type, use the GET /workload-types endpoint.
       type:
       - string
       - 'null'
       minLength: 1
       enum:
-      - Always
-      - Never
-      - OnFailure
+      - preemptible
+      - non-preemptible
+    ScaleToZeroRetentionField:
+      properties:
+        scaleToZeroRetentionSeconds:
+          description: The minimum amount of time (in seconds) that the last replica will remain active after a scale-to-zero decision. Defaults to 0. Available only if minReplicas is set to 0
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 0
+          maximum: 3600
+    AssetDescription:
+      description: The description of the asset.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      maxLength: 250
+      example: description of my asset.
+    TerminateAfterPreemption:
+      description: Indicates if the job should be terminated by the system after it has been preempted.
+      type:
+      - boolean
+      - 'null'
+      example: false
+    Parallelism:
+      description: Used with Hyperparameter Optimization. Specifies the maximum number of pods the workload should run at any given time (applicable to standard training only).
+      type:
+      - integer
+      - 'null'
+      format: int32
+      example: 1
+    TolerationOperator:
+      description: A key's relationship to the value. Equal uses key and value. Exists is equivalent to wildcard for value, so that a workload can tolerate all taints of a particular category. (mandatory)
+      type:
+      - string
+      - 'null'
+      enum:
+      - Equal
+      - Exists
+    SpecificRunServingPortAccess:
+      properties:
+        servingPortAccess:
+          allOf:
+          - $ref: '#/components/schemas/ServingPortAccess'
+          type:
+          - object
+          - 'null'
+      type:
+      - object
+      - 'null'
+    Category:
+      description: Specify the workload category assigned to the workload. Categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform.
+      type:
+      - string
+      - 'null'
+      pattern: .*
+    SpecificRunConnectionInfo:
+      required:
+      - connectionName
+      properties:
+        name:
+          type: string
+          minLength: 1
+          description: Unique identifier of the connection. Will be used to correlate between the information given here and the information provided for the connection in the environment asset.
+        nodePort:
+          description: Port number of the host that will be connected with the container port. Required if and only if isCustomPort is set to true in the environment asset.
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 0
+          maximum: 65535
+        externalUrl:
+          description: URL to associated with the container port. Required if and only if isCustomExternalUrl is set to true in the environment asset.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+        authorizedUsers:
+          description: List of users or applications that are allowed to access the URL. Note that authorizedUsers and authorizedGroups are mutually exclusive.
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        authorizedGroups:
+          description: Specifies the names of those groups that are allowed to access the connection. Note that authorizedUsers and authorizedGroups are mutually exclusive.
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+    WorkloadTemplateListResponse:
+      type: object
+      required:
+      - entries
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkloadTemplate'
+    HttpResponse:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+    InferencesMaxReplicasField:
+      properties:
+        maxReplicas:
+          description: The maximum number of replicas for autoscaling. Defaults to minReplicas, or to 1 if minReplicas is set to 0
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 1
+    MatchExpression:
+      type:
+      - object
+      - 'null'
+      description: A selector that contains values, a key, and an operator that relates the key and values.
+      properties:
+        key:
+          description: The label key that the selector applies to (mandatory).
+          type: string
+          pattern: .*
+        operator:
+          $ref: '#/components/schemas/MatchExpressionOperator'
+        values:
+          description: An array of string values. If the operator is In or NotIn, the values array must be non-empty. If the operator is Exists or DoesNotExist, the values array must be empty. If the operator is Gt or Lt, the values array must have a single element, which will be interpreted as an integer.
+          type: array
+          items:
+            type: string
+            pattern: .*
+      required:
+      - key
+      - operator
+    EnvironmentVariableOfAsset:
+      description: Details of an environment variable which is populated into the container.
+      properties:
+        name:
+          description: The name of the environment variable. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: HOME
+        value:
+          description: The value of the environment variable. (mutually exclusive with credential, configMap and podFieldRef)
+          type:
+          - string
+          - 'null'
+          example: /home/my-folder
+        credential:
+          $ref: '#/components/schemas/EnvironmentVariableCredential'
+        configMap:
+          $ref: '#/components/schemas/EnvironmentVariableConfigMap'
+        podFieldRef:
+          $ref: '#/components/schemas/EnvironmentVariablePodFieldReference'
+        exclude:
+          description: Use 'true' in case the environment variable is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type:
+          - boolean
+          - 'null'
+          example: false
+        description:
+          description: Description of the environment variable.
+          type:
+          - string
+          - 'null'
+          example: Home directory of the user.
+      type:
+      - object
+      - 'null'
+    InitializationTimeoutField:
+      properties:
+        initializationTimeoutSeconds:
+          description: Use `servingConfiguration.initializationTimeoutSeconds` instead.  If this field is set, it will be ignored and the value under `servingConfiguration` will be used. The maximum amount of time (in seconds) to wait for the container to become ready.
+          type:
+          - integer
+          - 'null'
+          format: int32
+          minimum: 1
+          deprecated: true
+    AssetRef:
+      description: Reference information about an asset.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
+    EnvironmentVariableConfigMap:
+      description: Details of the configMap and key use to populate the environment variable
+      properties:
+        name:
+          description: The name of the config-map resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: my-config-map
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        key:
+          description: The key in the config-map resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: MY_POSTGRES_SCHEMA
+          pattern: .*
+      type:
+      - object
+      - 'null'
+    AllowOverQuota:
+      properties:
+        allowOverQuota:
+          description: Whether to allow the workload to exceed the quota of the project.
+          type:
+          - boolean
+          - 'null'
+    Completions:
+      description: Used with Hyperparameter Optimization. Specifies the number of successful pods the job should reach to be completed. The Job will be marked as successful once the specified amount of pods has been reached (applicable to standard training only).
+      type:
+      - integer
+      - 'null'
+      format: int32
+      example: 1
+    WorkloadTemplateCreationRequest:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetCreationRequest'
+        spec:
+          $ref: '#/components/schemas/SpecificRunCreationFields'
+    ClusterIdOptional:
+      description: The id of the cluster.
+      type:
+      - string
+      - 'null'
+      format: uuid
+      minLength: 1
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    DatasourceRef:
+      description: Reference information about a datasource asset.
+      required:
+      - id
+      - name
+      - kind
+      properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
+        kind:
+          $ref: '#/components/schemas/AssetKind'
+        overrides:
+          $ref: '#/components/schemas/DataSourceOverrides'
+    AutoScalingMetric:
+      description: The metric to use for autoscaling. Mandatory if minReplicas < maxReplicas, except for the special case where minReplicas is set to 0 and maxReplicas is set to 1, as in this case autoscaling decisions are made according to network activity rather than metrics. Use one of the built-in metrics of 'throughput', 'concurrency' or 'latency', or any other available custom metric. Only the 'throughput' and 'concurrency' metrics support scale-to-zero
+      type:
+      - string
+      - 'null'
+      pattern: ^[a-zA-Z_:][a-zA-Z0-9_:]*$
+      example: http_requests_total
+    AssetUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      example:
+        name: my-asset
+    SupplementalGroups:
+      description: Comma separated list of groups that the user running the container belongs to, in addition to the group indicated by runAsGid. Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled. Using an empty string implies reverting the supplementary groups of the image.
+      type:
+      - string
+      - 'null'
+      example: 2,3,5,8
+      pattern: .*
+    AssetsIds:
+      description: Set of assets comprising a workspace or a workspace template.
+      required:
+      - environment
+      properties:
+        environment:
+          $ref: '#/components/schemas/AssetId'
+        compute:
+          type:
+          - string
+          - 'null'
+          allOf:
+          - $ref: '#/components/schemas/AssetId'
+        datasources:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetIdAndKind'
+        workloadVolumes:
+          type: array
+          items:
+            type: string
+    AssetId:
+      description: Unique identifier of the asset.
+      type: string
+      format: uuid
+      minLength: 1
+    NodeAffinityRequired:
+      type:
+      - object
+      - 'null'
+      description: If the affinity requirements specified by this field are not met at scheduling time, the pod will not be scheduled onto the node. If the affinity requirements specified by this field cease to be met at some point during pod execution (e.g. due to an update), the system may or may not try to eventually evict the pod from its node.
+      properties:
+        nodeSelectorTerms:
+          description: A list of node selector terms. The terms are ORed.
+          type: array
+          items:
+            $ref: '#/components/schemas/NodeSelectorTerm'
+    AssetsRef:
+      description: Reference information about a set of assets. used to describe - assets comprising a workspace - assets comprising a workspace template - assets that use other assets (e.g. s3 asset which uses access key).
+      required:
+      - environment
+      properties:
+        environment:
+          description: environment asset.
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentAssetRef'
+        compute:
+          $ref: '#/components/schemas/AssetsRefCompute'
+        datasources:
+          type: array
+          items:
+            $ref: '#/components/schemas/DatasourceRef'
+        workloadVolumes:
+          type: array
+          items:
+            type: string
+    AssetsRefCompute:
+      allOf:
+      - $ref: '#/components/schemas/AssetRef'
+      type:
+      - object
+      - 'null'
+    ImagePullSecret:
+      description: A reference to a secret in the same namespace used to pull container images.
+      properties:
+        name:
+          type: string
+          description: The name of the Kubernetes secret containing the image pull credentials.
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        userCredential:
+          type:
+          - boolean
+          - 'null'
+          description: Indicates whether the secret is a user credential. Set to true if the secret was created by the user and is only accessible by them.
+        exclude:
+          description: Use 'true' in case the secret is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type:
+          - boolean
+          - 'null'
+          default: false
+          example: false
+      type:
+      - object
+      - 'null'
+    AssetIdAndKind:
+      description: Asset id and its kind.
+      required:
+      - id
+      - kind
+      properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
+        kind:
+          $ref: '#/components/schemas/AssetKind'
+        overrides:
+          $ref: '#/components/schemas/DataSourceOverrides'
+    NodePools:
+      description: A prioritized list of node pools for the scheduler to run the workload on. The scheduler will always try to use the first node pool before moving to the next one if the first is not available.
+      type:
+      - array
+      - 'null'
+      items:
+        type: string
+        pattern: .*
+      example:
+      - my-node-pool-a
+      - my-node-pool-b
+    DataSourceOverrides:
+      description: specific fields to override in the data source.
+      type:
+      - object
+      - 'null'
+      properties:
+        containerPath:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: /container/directory
+    WorkloadTemplate:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetMeta'
+        spec:
+          $ref: '#/components/schemas/SpecificRunInfoFields'
   responses:
     403Forbidden:
       description: Forbidden
@@ -1471,24 +1454,6 @@ components:
           example:
             code: 404
             message: Resource id not found.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -1498,15 +1463,6 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
-    202Accepted:
-      description: Accepted.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HttpResponse'
-          example:
-            code: 202
-            message: Request has been accepted.
     401Unauthorized:
       description: Unauthorized
       content:
@@ -1516,55 +1472,41 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
+    202Accepted:
+      description: Accepted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpResponse'
+          example:
+            code: 202
+            message: Request has been accepted.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
   parameters:
-    AssetNameFilter:
-      name: name
+    AssetScopeFilter:
+      name: scope
       in: query
       required: false
-      description: Filter results by name.
+      description: 'Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project.'
       schema:
         type: string
-    IsTrainingQuery:
-      name: isTraining
-      in: query
-      required: false
-      description: Filter results to workload of type training.
-      schema:
-        type: boolean
-      allowReserved: true
-    AssetClusterFilter:
-      name: clusterId
-      in: query
-      description: Filter results by Universally Unique Identifier (UUID) of the cluster. If scope filter is cluster, only assets from the specific cluster will be included in the response. Otherwise, the response will include cluster, tenant and system assets.
-      required: false
-      schema:
-        type: string
-        format: uuid
-        example: d73a738f-fab3-430a-8fa3-5241493d7128
-    AssetProjectFilter:
-      name: projectId
-      in: query
-      required: false
-      description: Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets.
-      schema:
-        type: integer
-        format: int32
-    IsDistributedQuery:
-      name: isDistributed
-      in: query
-      required: false
-      description: Filter results to workload of type distributed.
-      schema:
-        type: boolean
-      allowReserved: true
-    AssetDepartmentFilter:
-      name: departmentId
-      in: query
-      description: Filter results by department id. If scope filter is department, only assets from the specific department will be included in the response. Otherwise, the response will include department, cluster, tenant and system assets.
-      required: false
-      schema:
-        type: string
-        example: '1'
     AssetId:
       name: AssetId
       in: path
@@ -1574,21 +1516,6 @@ components:
         type: string
         format: uuid
         minLength: 1
-    DistributedFrameworkQuery:
-      name: distributedFramework
-      in: query
-      required: false
-      description: Filter results to workload of type distributed and distributedFramework.
-      schema:
-        type: string
-      allowReserved: true
-    AssetScopeFilter:
-      name: scope
-      in: query
-      required: false
-      description: 'Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project.'
-      schema:
-        type: string
     IsWorkspaceQuery:
       name: isWorkspace
       in: query
@@ -1596,6 +1523,62 @@ components:
       description: Filter results to workload of type workspace.
       schema:
         type: boolean
+      allowReserved: true
+    AssetNameFilter:
+      name: name
+      in: query
+      required: false
+      description: Filter results by name.
+      schema:
+        type: string
+    AssetProjectFilter:
+      name: projectId
+      in: query
+      required: false
+      description: Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets.
+      schema:
+        type: integer
+        format: int32
+    AssetClusterFilter:
+      name: clusterId
+      in: query
+      description: Filter results by Universally Unique Identifier (UUID) of the cluster. If scope filter is cluster, only assets from the specific cluster will be included in the response. Otherwise, the response will include cluster, tenant and system assets.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: d73a738f-fab3-430a-8fa3-5241493d7128
+    AssetDepartmentFilter:
+      name: departmentId
+      in: query
+      description: Filter results by department id. If scope filter is department, only assets from the specific department will be included in the response. Otherwise, the response will include department, cluster, tenant and system assets.
+      required: false
+      schema:
+        type: string
+        example: '1'
+    IsDistributedQuery:
+      name: isDistributed
+      in: query
+      required: false
+      description: Filter results to workload of type distributed.
+      schema:
+        type: boolean
+      allowReserved: true
+    IsTrainingQuery:
+      name: isTraining
+      in: query
+      required: false
+      description: Filter results to workload of type training.
+      schema:
+        type: boolean
+      allowReserved: true
+    DistributedFrameworkQuery:
+      name: distributedFramework
+      in: query
+      required: false
+      description: Filter results to workload of type distributed and distributedFramework.
+      schema:
+        type: string
       allowReserved: true
   securitySchemes:
     bearerAuth:

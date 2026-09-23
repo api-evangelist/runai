@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Subscriptions API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Subscriptions API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -44,7 +27,6 @@ paths:
       - Subscriptions
       operationId: getMySubscriptions
       summary: Get current users subscriptions
-      description: Get current users subscriptions
       responses:
         '200':
           description: A Subscription
@@ -69,7 +51,6 @@ paths:
       - Subscriptions
       operationId: createSubscription
       summary: Create user subscription
-      description: Create user subscription
       requestBody:
         content:
           application/json:
@@ -104,7 +85,6 @@ paths:
       - Subscriptions
       operationId: updateSubscription
       summary: Update user subscription
-      description: Update user subscription
       requestBody:
         content:
           application/json:
@@ -136,7 +116,6 @@ paths:
       - Subscriptions
       operationId: deleteSubscription
       summary: Delete user subscription
-      description: Delete user subscription
       responses:
         '204':
           description: Subscription deleted successfully
@@ -174,33 +153,6 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -219,6 +171,41 @@ components:
           example:
             code: 404
             message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+  parameters:
+    SubscriptionId:
+      name: id
+      in: path
+      description: Subscription id
+      required: true
+      schema:
+        type: string
   schemas:
     SubscriptionEvent:
       type: object
@@ -232,10 +219,10 @@ components:
           type: array
           items:
             type: string
-    Subscriptions:
+    SubscriptionEvents:
       type: array
       items:
-        $ref: '#/components/schemas/Subscription'
+        $ref: '#/components/schemas/SubscriptionEvent'
     Subscription:
       type: object
       required:
@@ -249,31 +236,6 @@ components:
             type: string
       example:
         id: 1234
-        events:
-        - category: cat1
-          types:
-          - type1
-          - type2
-        - category: cat2
-          types:
-          - type3
-          - type4
-        channels:
-        - email
-        - email1
-    SubscriptionForPut:
-      type: object
-      required:
-      - events
-      - channels
-      properties:
-        events:
-          $ref: '#/components/schemas/SubscriptionEvents'
-        channels:
-          type: array
-          items:
-            type: string
-      example:
         events:
         - category: cat1
           types:
@@ -302,18 +264,35 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-    SubscriptionEvents:
+    SubscriptionForPut:
+      type: object
+      required:
+      - events
+      - channels
+      properties:
+        events:
+          $ref: '#/components/schemas/SubscriptionEvents'
+        channels:
+          type: array
+          items:
+            type: string
+      example:
+        events:
+        - category: cat1
+          types:
+          - type1
+          - type2
+        - category: cat2
+          types:
+          - type3
+          - type4
+        channels:
+        - email
+        - email1
+    Subscriptions:
       type: array
       items:
-        $ref: '#/components/schemas/SubscriptionEvent'
-  parameters:
-    SubscriptionId:
-      name: id
-      in: path
-      description: Subscription id
-      required: true
-      schema:
-        type: string
+        $ref: '#/components/schemas/Subscription'
   securitySchemes:
     bearerAuth:
       type: http

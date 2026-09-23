@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Events API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Events API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -40,7 +23,7 @@ tags:
 paths:
   /api/v1/workloads/{workloadId}/events:
     get:
-      summary: Get the workload events.
+      summary: Get the workload events
       description: Retrieve all the workload events using a workload id.
       operationId: get_workload_events
       tags:
@@ -77,7 +60,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
   /api/v1/workloads/{workloadId}/history:
     get:
-      summary: Get the workload history.
+      summary: Get the workload history
       description: Retrieve workload history details, including events, using a workload id.
       operationId: get_workload_history
       tags:
@@ -185,58 +168,24 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  responses:
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   schemas:
-    HistoryRecordType:
+    HistoryRecordMeta:
+      type: object
+      required:
+      - creationTimestamp
+      - type
+      properties:
+        creationTimestamp:
+          type: string
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        type:
+          $ref: '#/components/schemas/HistoryRecordType'
+    ClusterId:
+      description: The id of the cluster.
       type: string
-      enum:
-      - Event
-      - PhaseUpdate
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
     PhaseUpdate:
       type:
       - object
@@ -251,6 +200,44 @@ components:
         phaseMessage:
           type: string
           example: Not enough resources in the requested nodepool
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    Events:
+      type: array
+      items:
+        $ref: '#/components/schemas/Event2'
+      x-schema-name: Events
+    Phase:
+      type: string
+      enum:
+      - Creating
+      - Initializing
+      - Resuming
+      - Pending
+      - Deleting
+      - Running
+      - Updating
+      - Stopped
+      - Stopping
+      - Degraded
+      - Failed
+      - Completed
+      - Terminating
+      - Unknown
     Event2:
       type:
       - object
@@ -284,23 +271,11 @@ components:
           example: kubelet
         involvedObject:
           $ref: '#/components/schemas/InvolvedObject'
-    Phase:
+    HistoryRecordType:
       type: string
       enum:
-      - Creating
-      - Initializing
-      - Resuming
-      - Pending
-      - Deleting
-      - Running
-      - Updating
-      - Stopped
-      - Stopping
-      - Degraded
-      - Failed
-      - Completed
-      - Terminating
-      - Unknown
+      - Event
+      - PhaseUpdate
     InvolvedObject:
       type: object
       required:
@@ -321,49 +296,6 @@ components:
         namespace:
           type: string
           example: runai-test
-    HistoryRecordMeta:
-      type: object
-      required:
-      - creationTimestamp
-      - type
-      properties:
-        creationTimestamp:
-          type: string
-          format: date-time
-          example: '2022-01-01T03:49:52.531Z'
-        type:
-          $ref: '#/components/schemas/HistoryRecordType'
-    ClusterId:
-      description: The id of the cluster.
-      type: string
-      format: uuid
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    Events:
-      type: array
-      items:
-        $ref: '#/components/schemas/Event2'
-      x-schema-name: Events
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    HistoryRecords1:
-      type: array
-      items:
-        $ref: '#/components/schemas/HistoryRecord1'
-      x-schema-name: HistoryRecords
     HistoryRecord1:
       type: object
       required:
@@ -379,6 +311,11 @@ components:
               $ref: '#/components/schemas/Event2'
             phaseUpdate:
               $ref: '#/components/schemas/PhaseUpdate'
+    HistoryRecords1:
+      type: array
+      items:
+        $ref: '#/components/schemas/HistoryRecord1'
+      x-schema-name: HistoryRecords
   parameters:
     Limit:
       name: limit
@@ -391,20 +328,11 @@ components:
         default: 50
         minimum: 1
         maximum: 500
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
-    WorkloadId:
-      name: workloadId
+    RevisionId:
+      name: revisionId
       in: path
       required: true
-      description: The  Universally Unique Identifier (UUID) of the workload.
+      description: The  Universally Unique Identifier (UUID) of the revision.
       schema:
         type: string
         format: uuid
@@ -419,14 +347,69 @@ components:
         - asc
         - desc
         default: desc
-    RevisionId:
-      name: revisionId
+    WorkloadId:
+      name: workloadId
       in: path
       required: true
-      description: The  Universally Unique Identifier (UUID) of the revision.
+      description: The  Universally Unique Identifier (UUID) of the workload.
       schema:
         type: string
         format: uuid
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+  responses:
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
   securitySchemes:
     bearerAuth:
       type: http

@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Audit Logs API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Audit Logs API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -35,8 +18,8 @@ servers:
 security:
 - bearerAuth: []
 tags:
-- name: AuditLogs
-  description: The audit log provides audit trail information for user activity, changes to business objects and other important information. For more information, see [Audit log](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/procedures/event-history).
+- name: Audit Logs
+  description: The audit log provides audit trail information for user activity, changes to business objects and other important information. For more information, see Audit log.
 paths:
   /api/v1/audit/log:
     get:
@@ -44,7 +27,7 @@ paths:
       summary: Get audit logs
       operationId: getAuditLogs
       tags:
-      - AuditLogs
+      - Audit Logs
       parameters:
       - $ref: '#/components/parameters/StartRequired'
       - $ref: '#/components/parameters/EndRequired'
@@ -85,7 +68,7 @@ paths:
       summary: Download audit logs
       operationId: downloadAuditLogs
       tags:
-      - AuditLogs
+      - Audit Logs
       parameters:
       - in: query
         name: file_type
@@ -126,15 +109,6 @@ components:
         - asc
         - desc
         default: asc
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
     AuditLogSort:
       name: sortBy
       in: query
@@ -154,6 +128,20 @@ components:
         - entity_type
         - entity_name
         - entity_id
+    AuditLogFilter:
+      name: filterBy
+      in: query
+      required: false
+      explode: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(timestamp|subject|subject_type|source_ip|action|result|url|entity_type|entity_name|cluster_name)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - cluster_name==my-cluster_name
+        - entity_type==cluster,entity_name==test
     EndRequired:
       name: end
       in: query
@@ -163,6 +151,15 @@ components:
         type: string
         format: date-time
         example: '2023-06-07T12:09:18.211Z'
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
     StartRequired:
       name: start
       in: query
@@ -183,20 +180,6 @@ components:
         maximum: 1000
         minimum: 0
         default: 20
-    AuditLogFilter:
-      name: filterBy
-      in: query
-      required: false
-      explode: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(timestamp|subject|subject_type|source_ip|action|result|url|entity_type|entity_name|cluster_name)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-        example:
-        - cluster_name==my-cluster_name
-        - entity_type==cluster,entity_name==test
   responses:
     401Unauthorized:
       description: Unauthorized
@@ -207,6 +190,15 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
     500InternalServerError:
       description: unexpected error
       content:
@@ -225,15 +217,6 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   schemas:
     AuditLog:
       type: object

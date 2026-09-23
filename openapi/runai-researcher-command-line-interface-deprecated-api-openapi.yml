@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Researcher Command Line Interface Deprecated API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Researcher Command Line Interface Deprecated…
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -41,9 +24,7 @@ paths:
     get:
       deprecated: true
       summary: Download Unix installer script
-      description: 'This endpoint returns a unix script that can be used to install the Run:ai CLI.
-
-        '
+      description: This endpoint returns a unix script that can be used to install the Run:ai CLI.
       operationId: get_installer_unix_deprecated
       tags:
       - Researcher Command Line Interface Deprecated
@@ -69,9 +50,7 @@ paths:
     get:
       deprecated: true
       summary: Get Unix installer script commands
-      description: 'This endpoint returns a unix script commands that can be used to install the Run:ai CLI.
-
-        '
+      description: This endpoint returns a unix script commands that can be used to install the Run:ai CLI.
       operationId: get_installer_unix_commands_deprecated
       tags:
       - Researcher Command Line Interface Deprecated
@@ -97,9 +76,7 @@ paths:
     get:
       deprecated: true
       summary: Download Mac installer script
-      description: 'This endpoint returns a Mac script that can be used to install the Run:ai CLI.
-
-        '
+      description: This endpoint returns a Mac script that can be used to install the Run:ai CLI.
       operationId: get_installer_mac_deprecated
       tags:
       - Researcher Command Line Interface Deprecated
@@ -125,9 +102,7 @@ paths:
     get:
       deprecated: true
       summary: Get Mac installer script commands
-      description: 'This endpoint returns a Mac script commands that can be used to install the Run:ai CLI.
-
-        '
+      description: This endpoint returns a Mac script commands that can be used to install the Run:ai CLI.
       operationId: get_installer_mac_commands_deprecated
       tags:
       - Researcher Command Line Interface Deprecated
@@ -153,9 +128,7 @@ paths:
     get:
       deprecated: true
       summary: Download Linux installer script
-      description: 'This endpoint returns a Linux script that can be used to install the Run:ai CLI.
-
-        '
+      description: This endpoint returns a Linux script that can be used to install the Run:ai CLI.
       operationId: get_installer_linux_deprecated
       tags:
       - Researcher Command Line Interface Deprecated
@@ -181,9 +154,7 @@ paths:
     get:
       deprecated: true
       summary: Get Linux installer script commands
-      description: 'This endpoint returns a linux script commands that can be used to install the Run:ai CLI.
-
-        '
+      description: This endpoint returns a linux script commands that can be used to install the Run:ai CLI.
       operationId: get_installer_linux_commands_deprecated
       tags:
       - Researcher Command Line Interface Deprecated
@@ -209,9 +180,7 @@ paths:
     get:
       deprecated: true
       summary: Get Windows MSI installer script commands
-      description: 'This endpoint returns a windows script commands that can be used to install the Run:ai CLI.
-
-        '
+      description: This endpoint returns a windows script commands that can be used to install the Run:ai CLI.
       operationId: get_installer_windows_commands_deprecated
       tags:
       - Researcher Command Line Interface Deprecated
@@ -237,9 +206,7 @@ paths:
     get:
       deprecated: true
       summary: Download RunAI Researcher command line binary
-      description: 'This endpoint returns a binary file that run the Run:ai CLI.
-
-        '
+      description: This endpoint returns a binary file that run the Run:ai CLI.
       operationId: get_binary_deprecated
       tags:
       - Researcher Command Line Interface Deprecated
@@ -267,9 +234,7 @@ paths:
     get:
       deprecated: true
       summary: Get CLI document by name
-      description: 'This endpoint returns a document of help for the Run:ai CLI.
-
-        '
+      description: This endpoint returns a document of help for the Run:ai CLI.
       operationId: get_manual_document_deprecated
       tags:
       - Researcher Command Line Interface Deprecated
@@ -291,6 +256,39 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  parameters:
+    DocumentName:
+      name: documentName
+      in: path
+      required: true
+      description: The manual document name.
+      schema:
+        type: string
+        minLength: 4
+        pattern: ^[A-Za-z0-9_]+\.md$
+        example: runai.md
+    OperatingSystem:
+      name: operatingSystem
+      in: path
+      required: true
+      description: The operating system name.
+      schema:
+        type: string
+        enum:
+        - linux
+        - windows
+        - darwin
+        minLength: 4
+        example: linux
+    Architecture:
+      name: architecture
+      in: path
+      required: true
+      description: The architecture type.
+      schema:
+        type: string
+        minLength: 4
+        example: arm64
   responses:
     401Unauthorized:
       description: Unauthorized
@@ -301,6 +299,24 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
     500InternalServerError:
       description: unexpected error
       content:
@@ -319,34 +335,7 @@ components:
           example:
             code: 400
             message: Required parameter is missing
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   schemas:
-    Command1:
-      type: object
-      required:
-      - command
-      properties:
-        command:
-          type: string
-          example: runai version
-          description: The commands that can be used to install the Run:ai CLI.
     Error:
       required:
       - code
@@ -363,39 +352,15 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-  parameters:
-    Architecture:
-      name: architecture
-      in: path
-      required: true
-      description: The architecture type.
-      schema:
-        type: string
-        minLength: 4
-        example: arm64
-    OperatingSystem:
-      name: operatingSystem
-      in: path
-      required: true
-      description: The operating system name.
-      schema:
-        type: string
-        enum:
-        - linux
-        - windows
-        - darwin
-        minLength: 4
-        example: linux
-    DocumentName:
-      name: documentName
-      in: path
-      required: true
-      description: The manual document name.
-      schema:
-        type: string
-        minLength: 4
-        pattern: ^[A-Za-z0-9_]+\.md$
-        example: runai.md
+    Command1:
+      type: object
+      required:
+      - command
+      properties:
+        command:
+          type: string
+          example: runai version
+          description: The commands that can be used to install the Run:ai CLI.
   securitySchemes:
     bearerAuth:
       type: http

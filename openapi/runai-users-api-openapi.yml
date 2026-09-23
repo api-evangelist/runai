@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Users API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Users API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -39,7 +22,7 @@ tags:
 paths:
   /api/v1/users:
     get:
-      summary: Get users.
+      summary: Get users
       description: Retrieve a list of platform users.
       operationId: get_users
       tags:
@@ -77,7 +60,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
     post:
-      summary: Create a local user.
+      summary: Create a local user
       description: Use to create a local platform user.
       operationId: create_user
       tags:
@@ -142,7 +125,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
   /api/v1/users/{userId}/logout:
     post:
-      summary: Logout a user.
+      summary: Logout a user
       description: Use to force a user to logout.
       operationId: logout_user
       tags:
@@ -166,7 +149,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
   /api/v1/users/{userId}/password:
     post:
-      summary: Reset a user's password.
+      summary: Reset a user's password
       description: Use to to reset a user's password.
       operationId: reset_user_password
       tags:
@@ -199,7 +182,7 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
   /api/v1/users/{userId}:
     get:
-      summary: Get a user by id.
+      summary: Get a user by id
       description: Retrieve a user's details by id.
       operationId: get_user_by_id
       tags:
@@ -226,7 +209,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
     delete:
-      summary: Delete a user by id.
+      summary: Delete a user by id
       description: Use to delete a user by id.
       operationId: delete_user_by_id
       tags:
@@ -288,50 +271,74 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  parameters:
+    userId:
+      name: userId
+      in: path
+      required: true
+      description: The id of the user
+      schema:
+        type: string
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    usersSortBy:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results by a parameters.
+      schema:
+        $ref: '#/components/schemas/UsersFilterSortFields'
+    search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test@run
+    usersFilterBy:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are <= Less than or equal, >= Greater than or equal, =@ contains. Dates are in ISO 8601 timestamp format and available for operators <=, >= and ==.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(username|createdBy|lastLogin|creationTime|lastUpdated|isLocal)(==|<=|>=|=@).+$
+        example:
+        - username=@test,lastLogin>=2024-09-24T00:00:00.00Z,isLocal==false
+      explode: false
+    limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 500
+        minimum: 1
+        maximum: 500
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
   schemas:
-    UserPostResponse:
-      type: object
-      required:
-      - id
-      - username
-      - tempPassword
-      properties:
-        id:
-          type: string
-        username:
-          type: string
-        tempPassword:
-          type: string
-      example:
-        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
-        username: test@run.ai
-        tempPassword: asdasidjn9d
-    Users1:
-      type: array
-      items:
-        $ref: '#/components/schemas/User2'
-    UsersFilterSortFields:
-      type: string
-      enum:
-      - username
-      - createdBy
-      - lastLogin
-      - creationTime
-      - lastUpdated
-      - type
-    UserChangePasswordRequest:
-      type: object
-      required:
-      - currentPassword
-      - newPassword
-      properties:
-        currentPassword:
-          type: string
-        newPassword:
-          type: string
-      example:
-        currentPassword: Abcd!234
-        newPassword: Zxcv!567
     User2:
       type: object
       required:
@@ -385,6 +392,65 @@ components:
         groups:
         - groupA
         - groupB
+    UsersFilterSortFields:
+      type: string
+      enum:
+      - username
+      - createdBy
+      - lastLogin
+      - creationTime
+      - lastUpdated
+      - type
+    Users1:
+      type: array
+      items:
+        $ref: '#/components/schemas/User2'
+    UserPostResponse:
+      type: object
+      required:
+      - id
+      - username
+      - tempPassword
+      properties:
+        id:
+          type: string
+        username:
+          type: string
+        tempPassword:
+          type: string
+      example:
+        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
+        username: test@run.ai
+        tempPassword: asdasidjn9d
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    UserChangePasswordRequest:
+      type: object
+      required:
+      - currentPassword
+      - newPassword
+      properties:
+        currentPassword:
+          type: string
+        newPassword:
+          type: string
+      example:
+        currentPassword: Abcd!234
+        newPassword: Zxcv!567
     UserCreationRequest1:
       type: object
       required:
@@ -407,50 +473,7 @@ components:
         email: test@run.ai
         resetPassword: false
         notify: true
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
   responses:
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
     500InternalServerError:
       description: unexpected error
       content:
@@ -469,15 +492,6 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -487,73 +501,42 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
-  parameters:
-    userId:
-      name: userId
-      in: path
-      required: true
-      description: The id of the user
-      schema:
-        type: string
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
-    usersSortBy:
-      name: sortBy
-      in: query
-      required: false
-      description: Sort results by a parameters.
-      schema:
-        $ref: '#/components/schemas/UsersFilterSortFields'
-    limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 500
-        minimum: 1
-        maximum: 500
-    usersFilterBy:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are <= Less than or equal, >= Greater than or equal, =@ contains. Dates are in ISO 8601 timestamp format and available for operators <=, >= and ==.
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(username|createdBy|lastLogin|creationTime|lastUpdated|isLocal)(==|<=|>=|=@).+$
-        example:
-        - username=@test,lastLogin>=2024-09-24T00:00:00.00Z,isLocal==false
-      explode: false
-    search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test@run
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
   securitySchemes:
     bearerAuth:
       type: http

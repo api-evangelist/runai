@@ -4,25 +4,8 @@ info:
   description: '# Introduction
 
 
-    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.
-
-
-    NVIDIA Run:ai APIs are accessed using *bearer tokens*. To obtain a token, you need to create a **Service account** through the NVIDIA Run:ai user interface.
-
-    To create a service account, in your UI, go to Access → Service Accounts (for organization-level service accounts) or User settings → Access Keys (for user access keys), and create a new one.
-
-
-    After you have created a new service account, you will need to assign it access rules.
-
-    To assign access rules to the service account, see [Create access rules](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/accessrules#create-or-delete-rules).
-
-    Make sure you assign the correct rules to your service account. Use the [Roles](https://run-ai-docs.nvidia.com/saas/infrastructure-setup/authentication/roles) to assign the correct access rules.
-
-
-    To get your access token, follow the instructions in [Request a token](https://run-ai-docs.nvidia.com/saas/reference/api/rest-auth/#request-an-api-token).
-
-    '
-  title: NVIDIA Run:ai Access Keys Config Map API
+    The NVIDIA Run:ai Control-Plane API reference is a guide that provides an easy-to-use programming interface for adding various tasks to your application, including workload submission, resource management, and administrative operations.'
+  title: NVIDIA Run:ai Config Map API
   x-logo:
     url: https://api.redocly.com/registry/raw/runai-xq8/saas/latest/public/runai-logo-api.png
     altText: NVIDIA Run:ai
@@ -40,7 +23,7 @@ tags:
 paths:
   /api/v1/asset/datasource/config-map:
     get:
-      summary: List ConfigMap datasource assets.
+      summary: List ConfigMap datasource assets
       description: Retrieve a list of ConfigMap datasource assets.
       operationId: list_config_map_assets
       tags:
@@ -71,7 +54,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
     post:
-      summary: Create a ConfigMap datasource asset.
+      summary: Create a ConfigMap datasource asset
       description: Use to create a ConfigMap datasource asset.
       operationId: create_config_map_asset
       tags:
@@ -102,7 +85,7 @@ paths:
     parameters:
     - $ref: '#/components/parameters/AssetId'
     get:
-      summary: Get a ConfigMap asset.
+      summary: Get a ConfigMap asset
       description: Retrieve the details of ConfigMap datasource asset by id.
       operationId: get_config_map_asset_by_id
       tags:
@@ -129,7 +112,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
     put:
-      summary: Update a ConfigMap asset.
+      summary: Update a ConfigMap asset
       description: Use to update the details of a ConfigMap datasource asset by id.
       operationId: update_config_map_asset_by_id
       tags:
@@ -155,7 +138,7 @@ paths:
         default:
           $ref: '#/components/responses/503ServiceUnavailable'
     delete:
-      summary: Delete a ConfigMap asset.
+      summary: Delete a ConfigMap asset
       description: Use to delete a ConfigMap datasource asset by id.
       operationId: delete_config_map_asset_by_id
       tags:
@@ -173,15 +156,6 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    ConfigMapCreationRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetCreationRequest'
-        spec:
-          $ref: '#/components/schemas/ConfigMapAssetSpec'
     HttpResponse:
       required:
       - code
@@ -193,131 +167,54 @@ components:
           maximum: 599
         message:
           type: string
-    AssetClusterStatusInfo:
-      properties:
-        status:
-          $ref: '#/components/schemas/AssetSyncStatusEnum'
-        issues:
-          $ref: '#/components/schemas/AssetClusterStatusIssues'
-        message:
-          type: string
-        url:
-          type: string
-      type:
-      - object
-      - 'null'
-    UsageTimesInfo:
-      description: Details about times the asset has been used by workloads, etc.
-      properties:
-        lastUsedByWorkload:
-          description: The time at which the asset were last used by a workload of given type and project. This field requires complyToProject and complyToWorkload types flags of the API, to specify the workload type and project id.
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          format: date-time
-      type:
-      - object
-      - 'null'
-    AssetRef:
-      description: Reference information about an asset.
+    WorkloadRefAndStatus:
+      description: Id, name and status of a workspace or training
       required:
       - id
       - name
       properties:
         id:
-          $ref: '#/components/schemas/AssetId'
+          $ref: '#/components/schemas/WorkloadId1'
         name:
-          $ref: '#/components/schemas/AssetName'
-    AssetsUsageRefCompute:
-      allOf:
-      - $ref: '#/components/schemas/AssetRef'
-      type:
-      - object
-      - 'null'
-    DataSourceOverrides:
-      description: specific fields to override in the data source.
-      type:
-      - object
-      - 'null'
+          $ref: '#/components/schemas/WorkloadName'
+        status:
+          description: The status of the workspace or training.
+          type: string
+          minLength: 1
+    ConfigMapAsset:
+      required:
+      - meta
+      - spec
       properties:
-        containerPath:
+        meta:
+          $ref: '#/components/schemas/AssetMeta'
+        spec:
+          $ref: '#/components/schemas/ConfigMapAssetSpec'
+        usedBy:
+          $ref: '#/components/schemas/AssetUsageInfo'
+        usageTimes:
+          $ref: '#/components/schemas/UsageTimesInfo'
+        compliance:
+          $ref: '#/components/schemas/ComplianceInfo'
+        status:
+          $ref: '#/components/schemas/AssetClusterStatusInfo'
+    ComplianceInfoReason:
+      description: An issue preventing the use of a template or asset for creating workloads in a given project.
+      required:
+      - details
+      properties:
+        field:
+          description: For policy related issues, includes a json path to the field in the policy for which the issue applies.
           type:
           - string
           - 'null'
-          minLength: 1
-          example: /container/directory
-    ClusterIdOptional:
-      description: The id of the cluster.
-      type:
-      - string
-      - 'null'
-      format: uuid
-      minLength: 1
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    AssetUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      example:
-        name: my-asset
-    AssetSyncStatusEnum:
-      type: string
-      enum:
-      - Creating
-      - Deleting
-      - Failed
-      - Deletion failed
-      - Issues found
-      - No issues found
-      - No status
-      - Updating
-    AssetClusterStatusIssue:
-      type: object
-      required:
-      - scopeId
-      - scopeType
-      - issue
-      properties:
-        scopeId:
-          $ref: '#/components/schemas/ScopeId'
-        scopeType:
-          $ref: '#/components/schemas/ScopeType'
-        issue:
-          $ref: '#/components/schemas/AssetClusterStatusIssueEnum'
-    AssetUsageInfo:
-      description: Details about resources that use the asset.
-      properties:
-        workspaces:
-          description: workspaces that rely on this asset.
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkloadRefAndStatus'
-        trainings:
-          description: trainings that rely on this asset.
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkloadRefAndStatus'
-        distributed:
-          description: distributed trainings that rely on this asset.
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkloadRefAndStatus'
-        inferences:
-          description: inferences that rely on this asset.
-          type: array
-          items:
-            $ref: '#/components/schemas/WorkloadRefAndStatus'
-        templates:
-          description: templates that rely on this asset.
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetRef'
-        assets:
-          description: list of other assets that use this asset. specifically, accessKeys used by s3, and passwords used by git.
-          $ref: '#/components/schemas/AssetsUsageRef'
-      type:
-      - object
-      - 'null'
+          pattern: .*
+        details:
+          description: Explanation of the issue.
+          type: string
+          pattern: .*
+        rule:
+          $ref: '#/components/schemas/PolicyRuleEnum'
     AssetClusterStatusIssueEnum:
       type: string
       enum:
@@ -329,51 +226,6 @@ components:
       type: string
       minLength: 1
       example: my-asset
-    AssetUpdatableFields:
-      required:
-      - name
-      properties:
-        name:
-          $ref: '#/components/schemas/AssetName'
-        description:
-          $ref: '#/components/schemas/AssetDescription'
-    ScopeType:
-      type: string
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
-    EnvironmentAssetRef:
-      description: Reference information about environment asset.
-      required:
-      - id
-      - name
-      properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
-        name:
-          $ref: '#/components/schemas/AssetName'
-        toolTypes:
-          description: the type of tools as defined in the connections of the environment asset.
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ToolType'
-    ConfigMapUpdateRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetUpdateRequest'
-    UpdateCount:
-      description: the value of an update counter of a data in the system.
-      type: integer
-      format: int64
-      example: 12345
     ConfigMapListResponse:
       required:
       - entries
@@ -382,19 +234,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ConfigMapAsset'
-    AssetCreationRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      example:
-        name: my-asset
-        scope: tenant
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          inference: false
-          distributed: true
-          distFramework: TF
+    AssetKind:
+      description: The kind of the asset.
+      type: string
+      minLength: 1
+      enum:
+      - compute
+      - environment
+      - accessKey
+      - dockerRegistry
+      - password
+      - genericSecret
+      - registry
+      - s3
+      - git
+      - nfs
+      - pvc
+      - hostPath
+      - workload-template
+      - model
+      - config-map
+      - secret-volume
+      - data-volume
+      - ngcApiKey
+    AssetRef:
+      description: Reference information about an asset.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
     AssetsUsageRef:
       description: Reference information about usage of assets by other assets, for example datasources that uses credentials.
       properties:
@@ -421,24 +293,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/AssetDatasourceRef'
-    AssetClusterStatusIssues:
-      type: array
-      items:
-        $ref: '#/components/schemas/AssetClusterStatusIssue'
-    WorkloadRefAndStatus:
-      description: Id, name and status of a workspace or training
-      required:
-      - id
-      - name
-      properties:
-        id:
-          $ref: '#/components/schemas/WorkloadId1'
-        name:
-          $ref: '#/components/schemas/WorkloadName'
-        status:
-          description: The status of the workspace or training.
-          type: string
-          minLength: 1
     PolicyRuleEnum:
       description: Indicates which validation rule (e.g., min, max, step, options, required, canEdit, canAdd) conflicted with policy restrictions, causing the asset or template to be rejected.
       type:
@@ -453,6 +307,186 @@ components:
       - canEdit
       - canAdd
       - locked
+    ComplianceInfo:
+      description: Compliance of an asset with creation of workloads in a given project.
+      properties:
+        imposed:
+          description: Whether the asset is imposed on created workloads by the administrator.
+          type: boolean
+        compliance:
+          description: Whether the asset info complies with creation of workloads in the project.
+          type: boolean
+        reason:
+          description: For asset that does not comply, specify one or more reason why.
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplianceInfoReason'
+      type:
+      - object
+      - 'null'
+    AssetsUsageRefCompute:
+      allOf:
+      - $ref: '#/components/schemas/AssetRef'
+      type:
+      - object
+      - 'null'
+    DefaultMode:
+      type:
+      - string
+      - 'null'
+      description: 'File permission mode in octal string format. This value must be a 4-digit octal number, representing the default file mode when mounting a Secret or ConfigMap as a volume.
+
+        '
+      minLength: 4
+      maxLength: 4
+      example: '0644'
+      pattern: 0[0-7]{3}
+    AssetClusterStatusIssues:
+      type: array
+      items:
+        $ref: '#/components/schemas/AssetClusterStatusIssue'
+    AssetClusterStatusInfo:
+      properties:
+        status:
+          $ref: '#/components/schemas/AssetSyncStatusEnum'
+        issues:
+          $ref: '#/components/schemas/AssetClusterStatusIssues'
+        message:
+          type: string
+        url:
+          type: string
+      type:
+      - object
+      - 'null'
+    AssetClusterStatusIssue:
+      type: object
+      required:
+      - scopeId
+      - scopeType
+      - issue
+      properties:
+        scopeId:
+          $ref: '#/components/schemas/ScopeId'
+        scopeType:
+          $ref: '#/components/schemas/ScopeType'
+        issue:
+          $ref: '#/components/schemas/AssetClusterStatusIssueEnum'
+    AssetMeta:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      - $ref: '#/components/schemas/AssetReadOnlyFields'
+      example:
+        name: my-asset
+        scope: tenant
+        id: a418ed33-9399-48c0-a890-122cadd13bfd
+        kind: s3
+        createdBy: test@run.ai
+        createdAt: '2023-02-23T14:25:36.707685Z'
+        updatedBy: test@run.ai
+        updatedAt: '2023-02-23T14:25:36.707685Z'
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          distributed: true
+          distFramework: TF
+    AssetUpdatableFields:
+      required:
+      - name
+      properties:
+        name:
+          $ref: '#/components/schemas/AssetName'
+        description:
+          $ref: '#/components/schemas/AssetDescription'
+    ClusterIdOptional:
+      description: The id of the cluster.
+      type:
+      - string
+      - 'null'
+      format: uuid
+      minLength: 1
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    UpdateCount:
+      description: the value of an update counter of a data in the system.
+      type: integer
+      format: int64
+      example: 12345
+    AssetDatasourceRef:
+      description: Reference information about a datasource asset.
+      required:
+      - id
+      - name
+      - kind
+      properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
+        kind:
+          $ref: '#/components/schemas/AssetKind'
+        overrides:
+          $ref: '#/components/schemas/DataSourceOverrides'
+          deprecated: true
+    ConfigMapUpdateRequest:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetUpdateRequest'
+    AssetUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      example:
+        name: my-asset
+    EnvironmentAssetRef:
+      description: Reference information about environment asset.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
+        toolTypes:
+          description: the type of tools as defined in the connections of the environment asset.
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolType'
+    ToolType:
+      description: Super set of Internal and External tool types.
+      type: string
+      minLength: 1
+      enum:
+      - jupyter-notebook
+      - pycharm
+      - visual-studio-code
+      - tensorboard
+      - rstudio
+      - mlflow
+      - custom
+      - wandb
+      - matlab
+      - comet
+      - chatbot-ui
+    Scope:
+      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
+      type: string
+      minLength: 1
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
+    AssetId:
+      description: Unique identifier of the asset.
+      type: string
+      format: uuid
+      minLength: 1
     AssetReadOnlyFields:
       required:
       - id
@@ -508,23 +542,22 @@ components:
         updateCount:
           $ref: '#/components/schemas/UpdateCount'
       type: object
-    ComplianceInfoReason:
-      description: An issue preventing the use of a template or asset for creating workloads in a given project.
+    Error:
       required:
-      - details
+      - code
+      - message
       properties:
-        field:
-          description: For policy related issues, includes a json path to the field in the policy for which the issue applies.
-          type:
-          - string
-          - 'null'
-          pattern: .*
-        details:
-          description: Explanation of the issue.
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
           type: string
-          pattern: .*
-        rule:
-          $ref: '#/components/schemas/PolicyRuleEnum'
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
     ConfigMap:
       properties:
         configMap:
@@ -553,6 +586,17 @@ components:
       type:
       - object
       - 'null'
+    ConfigMapAssetSpec:
+      allOf:
+      - $ref: '#/components/schemas/ConfigMap'
+    ScopeType:
+      type: string
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
     WorkloadSupportedTypes:
       properties:
         inference:
@@ -588,39 +632,6 @@ components:
       type:
       - object
       - 'null'
-    ConfigMapAsset:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetMeta'
-        spec:
-          $ref: '#/components/schemas/ConfigMapAssetSpec'
-        usedBy:
-          $ref: '#/components/schemas/AssetUsageInfo'
-        usageTimes:
-          $ref: '#/components/schemas/UsageTimesInfo'
-        compliance:
-          $ref: '#/components/schemas/ComplianceInfo'
-        status:
-          $ref: '#/components/schemas/AssetClusterStatusInfo'
-    ToolType:
-      description: Super set of Internal and External tool types.
-      type: string
-      minLength: 1
-      enum:
-      - jupyter-notebook
-      - pycharm
-      - visual-studio-code
-      - tensorboard
-      - rstudio
-      - mlflow
-      - custom
-      - wandb
-      - matlab
-      - comet
-      - chatbot-ui
     AssetDescription:
       description: The description of the asset.
       type:
@@ -629,79 +640,25 @@ components:
       minLength: 1
       maxLength: 250
       example: description of my asset.
-    AssetMeta:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      - $ref: '#/components/schemas/AssetReadOnlyFields'
-      example:
-        name: my-asset
-        scope: tenant
-        id: a418ed33-9399-48c0-a890-122cadd13bfd
-        kind: s3
-        createdBy: test@run.ai
-        createdAt: '2023-02-23T14:25:36.707685Z'
-        updatedBy: test@run.ai
-        updatedAt: '2023-02-23T14:25:36.707685Z'
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          distributed: true
-          distFramework: TF
+    WorkloadId1:
+      description: A unique ID of the workload.
+      type: string
+      format: uuid
+    ConfigMapCreationRequest:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetCreationRequest'
+        spec:
+          $ref: '#/components/schemas/ConfigMapAssetSpec'
     WorkloadName:
       description: The name of the workload.
       type: string
       minLength: 1
       example: my-workload-name
       pattern: .*
-    AssetDatasourceRef:
-      description: Reference information about a datasource asset.
-      required:
-      - id
-      - name
-      - kind
-      properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
-        name:
-          $ref: '#/components/schemas/AssetName'
-        kind:
-          $ref: '#/components/schemas/AssetKind'
-        overrides:
-          $ref: '#/components/schemas/DataSourceOverrides'
-          deprecated: true
-    ComplianceInfo:
-      description: Compliance of an asset with creation of workloads in a given project.
-      properties:
-        imposed:
-          description: Whether the asset is imposed on created workloads by the administrator.
-          type: boolean
-        compliance:
-          description: Whether the asset info complies with creation of workloads in the project.
-          type: boolean
-        reason:
-          description: For asset that does not comply, specify one or more reason why.
-          type: array
-          items:
-            $ref: '#/components/schemas/ComplianceInfoReason'
-      type:
-      - object
-      - 'null'
-    AssetId:
-      description: Unique identifier of the asset.
-      type: string
-      format: uuid
-      minLength: 1
-    Scope:
-      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
-      type: string
-      minLength: 1
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
     AssetCreationFields:
       type: object
       required:
@@ -737,92 +694,100 @@ components:
           - boolean
           - 'null'
           default: false
-    DefaultMode:
+    AssetCreationRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      example:
+        name: my-asset
+        scope: tenant
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          inference: false
+          distributed: true
+          distFramework: TF
+    AssetSyncStatusEnum:
+      type: string
+      enum:
+      - Creating
+      - Deleting
+      - Failed
+      - Deletion failed
+      - Issues found
+      - No issues found
+      - No status
+      - Updating
+    DataSourceOverrides:
+      description: specific fields to override in the data source.
       type:
-      - string
+      - object
       - 'null'
-      description: 'File permission mode in octal string format. This value must be a 4-digit octal number, representing the default file mode when mounting a Secret or ConfigMap as a volume.
-
-        '
-      minLength: 4
-      maxLength: 4
-      example: '0644'
-      pattern: 0[0-7]{3}
+      properties:
+        containerPath:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: /container/directory
+    UsageTimesInfo:
+      description: Details about times the asset has been used by workloads, etc.
+      properties:
+        lastUsedByWorkload:
+          description: The time at which the asset were last used by a workload of given type and project. This field requires complyToProject and complyToWorkload types flags of the API, to specify the workload type and project id.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          format: date-time
+      type:
+      - object
+      - 'null'
     ScopeId:
       type: string
       description: The id of the cluster, department or project, depending on the scope type.
-    ConfigMapAssetSpec:
-      allOf:
-      - $ref: '#/components/schemas/ConfigMap'
-    Error:
-      required:
-      - code
-      - message
+    AssetUsageInfo:
+      description: Details about resources that use the asset.
       properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    AssetKind:
-      description: The kind of the asset.
-      type: string
-      minLength: 1
-      enum:
-      - compute
-      - environment
-      - accessKey
-      - dockerRegistry
-      - password
-      - genericSecret
-      - registry
-      - s3
-      - git
-      - nfs
-      - pvc
-      - hostPath
-      - workload-template
-      - model
-      - config-map
-      - secret-volume
-      - data-volume
-      - ngcApiKey
-    WorkloadId1:
-      description: A unique ID of the workload.
-      type: string
-      format: uuid
+        workspaces:
+          description: workspaces that rely on this asset.
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkloadRefAndStatus'
+        trainings:
+          description: trainings that rely on this asset.
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkloadRefAndStatus'
+        distributed:
+          description: distributed trainings that rely on this asset.
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkloadRefAndStatus'
+        inferences:
+          description: inferences that rely on this asset.
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkloadRefAndStatus'
+        templates:
+          description: templates that rely on this asset.
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetRef'
+        assets:
+          description: list of other assets that use this asset. specifically, accessKeys used by s3, and passwords used by git.
+          $ref: '#/components/schemas/AssetsUsageRef'
+      type:
+      - object
+      - 'null'
   parameters:
-    AssetProjectFilter:
-      name: projectId
+    IncludeStatus:
+      name: statusInfo
       in: query
       required: false
-      description: Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets.
+      description: Whether the query should include asset status information as part of the response.
       schema:
-        type: integer
-        format: int32
-    AssetNameFilter:
-      name: name
-      in: query
-      required: false
-      description: Filter results by name.
-      schema:
-        type: string
-    ComplyToReplicaType:
-      name: complyToReplicaType
-      in: query
-      required: false
-      description: Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well.
-      schema:
-        type: string
-        enum:
-        - Worker
-        - Master
+        type: boolean
     AssetDepartmentFilter:
       name: departmentId
       in: query
@@ -831,13 +796,6 @@ components:
       schema:
         type: string
         example: '1'
-    AssetScopeFilter:
-      name: scope
-      in: query
-      required: false
-      description: 'Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project.'
-      schema:
-        type: string
     ComplyToProject:
       name: complyToProject
       in: query
@@ -846,29 +804,6 @@ components:
       schema:
         type: integer
         format: int32
-    IncludeStatus:
-      name: statusInfo
-      in: query
-      required: false
-      description: Whether the query should include asset status information as part of the response.
-      schema:
-        type: boolean
-    AssetId:
-      name: AssetId
-      in: path
-      required: true
-      description: Unique identifier of the asset.
-      schema:
-        type: string
-        format: uuid
-        minLength: 1
-    IncludeUsageInfo:
-      name: usageInfo
-      in: query
-      required: false
-      description: Whether the query should include asset usage information as part of the response.
-      schema:
-        type: boolean
     ComplyToWorkloadType:
       name: complyToWorkloadType
       in: query
@@ -881,6 +816,20 @@ components:
         - Training
         - Distributed
         - Inference
+    AssetNameFilter:
+      name: name
+      in: query
+      required: false
+      description: Filter results by name.
+      schema:
+        type: string
+    AssetScopeFilter:
+      name: scope
+      in: query
+      required: false
+      description: 'Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project.'
+      schema:
+        type: string
     AssetClusterFilter:
       name: clusterId
       in: query
@@ -890,6 +839,31 @@ components:
         type: string
         format: uuid
         example: d73a738f-fab3-430a-8fa3-5241493d7128
+    AssetProjectFilter:
+      name: projectId
+      in: query
+      required: false
+      description: Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets.
+      schema:
+        type: integer
+        format: int32
+    IncludeUsageInfo:
+      name: usageInfo
+      in: query
+      required: false
+      description: Whether the query should include asset usage information as part of the response.
+      schema:
+        type: boolean
+    ComplyToReplicaType:
+      name: complyToReplicaType
+      in: query
+      required: false
+      description: Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well.
+      schema:
+        type: string
+        enum:
+        - Worker
+        - Master
     AssetIdsFilter:
       name: assetIds
       in: query
@@ -899,43 +873,16 @@ components:
         type: string
         example: dbf4767e-2fa1-43b0-97a2-7c0cecda180b,550e8400-e29b-41d4-a716-44665544000a
         pattern: ^\b(?:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})(?:,(?:[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}))*\b$
+    AssetId:
+      name: AssetId
+      in: path
+      required: true
+      description: Unique identifier of the asset.
+      schema:
+        type: string
+        format: uuid
+        minLength: 1
   responses:
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    202Accepted:
-      description: Accepted.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HttpResponse'
-          example:
-            code: 202
-            message: Request has been accepted.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
     409Conflict:
       description: The specified resource already exists
       content:
@@ -945,15 +892,6 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -963,6 +901,51 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    202Accepted:
+      description: Accepted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpResponse'
+          example:
+            code: 202
+            message: Request has been accepted.
   securitySchemes:
     bearerAuth:
       type: http
