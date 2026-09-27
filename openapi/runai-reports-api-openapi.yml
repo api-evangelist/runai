@@ -196,26 +196,55 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  responses:
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    204NoContent:
+      description: No Content.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
   parameters:
-    Search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test project
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
     Limit:
       name: limit
       in: query
@@ -240,6 +269,25 @@ components:
         example:
         - name!=some-name
       explode: false
+    Search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test project
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
     ReportsSortBy:
       name: sortBy
       in: query
@@ -247,15 +295,6 @@ components:
       description: Sort results by a parameters.
       schema:
         $ref: '#/components/schemas/ReportFilterAndSortFields'
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
     ReportId:
       name: reportId
       in: path
@@ -265,59 +304,27 @@ components:
       schema:
         type: string
         format: uuid
-  responses:
-    204NoContent:
-      description: No Content.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
   schemas:
-    Report:
-      allOf:
-      - $ref: '#/components/schemas/ReportRequestFields'
-      - $ref: '#/components/schemas/ReportCalculatedFields'
+    ReportStatus:
+      type: string
+      enum:
+      - Pending
+      - Processing
+      - Ready
+      - Failed
+    Reports:
+      type: array
+      items:
+        $ref: '#/components/schemas/Report'
     ReportGroupByOptions:
       type:
       - string
@@ -327,13 +334,6 @@ components:
       - Project
       - Department
       - Cluster
-    ReportStatus:
-      type: string
-      enum:
-      - Pending
-      - Processing
-      - Ready
-      - Failed
     CountResponse:
       type: object
       required:
@@ -343,6 +343,13 @@ components:
           type: integer
           format: int64
           example: 1
+    ReportFilterAndSortFields:
+      type: string
+      enum:
+      - name
+      - createdAt
+      - createdBy
+      - status
     Error:
       required:
       - code
@@ -359,42 +366,6 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-    ReportCalculatedFields:
-      type: object
-      required:
-      - id
-      - tenantId
-      - createdAt
-      - createdBy
-      - status
-      - statusUpdatedAt
-      properties:
-        id:
-          type: string
-          format: uuid
-        createdAt:
-          type: string
-          format: date-time
-        createdBy:
-          type: string
-          example: user@run.ai
-        tenantId:
-          type: integer
-          format: int32
-          description: ID of the tenant where the project is located.
-          example: 2
-        status:
-          $ref: '#/components/schemas/ReportStatus'
-        statusUpdatedAt:
-          type: string
-          format: date-time
-        statusMessage:
-          type: string
-          example: Report in queue
-    Reports:
-      type: array
-      items:
-        $ref: '#/components/schemas/Report'
     ReportRequestFields:
       type: object
       required:
@@ -429,13 +400,42 @@ components:
             pattern: ^(projectName|departmentName|clusterId)(==).+$
           example:
           - projectName==some-name
-    ReportFilterAndSortFields:
-      type: string
-      enum:
-      - name
+    ReportCalculatedFields:
+      type: object
+      required:
+      - id
+      - tenantId
       - createdAt
       - createdBy
       - status
+      - statusUpdatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+          example: user@run.ai
+        tenantId:
+          type: integer
+          format: int32
+          description: ID of the tenant where the project is located.
+          example: 2
+        status:
+          $ref: '#/components/schemas/ReportStatus'
+        statusUpdatedAt:
+          type: string
+          format: date-time
+        statusMessage:
+          type: string
+          example: Report in queue
+    Report:
+      allOf:
+      - $ref: '#/components/schemas/ReportRequestFields'
+      - $ref: '#/components/schemas/ReportCalculatedFields'
   securitySchemes:
     bearerAuth:
       type: http

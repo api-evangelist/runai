@@ -233,10 +233,33 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    UserAppsAdministration:
-      type: array
-      items:
-        $ref: '#/components/schemas/UserAppAdministration'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    UserAppCreationRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
+          description: The name of the user application. The name must be unique within the user's applications list and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
+      example:
+        name: app-name
     UserApps:
       type: array
       items:
@@ -272,50 +295,10 @@ components:
         clientId: 3434c-12323ab-4ce2ea6
         createdAt: '2019-01-01T00:00:00Z'
         lastLogin: '2020-01-01T00:00:00Z'
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    UserAppPostResponse:
-      type: object
-      required:
-      - id
-      - name
-      - secret
-      - clientId
-      - createdAt
-      properties:
-        id:
-          type: string
-        clientId:
-          type: string
-        name:
-          type: string
-        secret:
-          type: string
-        createdAt:
-          format: date-time
-          type:
-          - string
-          - 'null'
-      example:
-        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
-        clientId: 5e7b3b7b4b7b4b7b
-        name: app123
-        secret: this-is-the-app-secret
-        createdAt: '2020-01-01T00:00:00Z'
+    UserAppsAdministration:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserAppAdministration'
     UserAppAdministration:
       type: object
       required:
@@ -351,27 +334,43 @@ components:
         createdBy: test@run.ai
         createdAt: '2020-01-01T00:00:00Z'
         lastLogin: '2020-01-01T00:00:00Z'
-    UserAppCreationRequest:
+    UserAppPostResponse:
       type: object
       required:
+      - id
       - name
+      - secret
+      - clientId
+      - createdAt
       properties:
+        id:
+          type: string
+        clientId:
+          type: string
         name:
           type: string
-          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
-          description: The name of the user application. The name must be unique within the user's applications list and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
+        secret:
+          type: string
+        createdAt:
+          format: date-time
+          type:
+          - string
+          - 'null'
       example:
-        name: app-name
+        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
+        clientId: 5e7b3b7b4b7b4b7b
+        name: app123
+        secret: this-is-the-app-secret
+        createdAt: '2020-01-01T00:00:00Z'
+  parameters:
+    appId:
+      name: appId
+      in: path
+      required: true
+      description: The application id to retrieve
+      schema:
+        type: string
   responses:
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
     400BadRequest:
       description: Bad request.
       content:
@@ -381,15 +380,6 @@ components:
           example:
             code: 400
             message: Required parameter is missing
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
     404NotFound:
       description: The specified resource was not found
       content:
@@ -408,15 +398,6 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
     409Conflict:
       description: The specified resource already exists
       content:
@@ -426,14 +407,33 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
-  parameters:
-    appId:
-      name: appId
-      in: path
-      required: true
-      description: The application id to retrieve
-      schema:
-        type: string
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
   securitySchemes:
     bearerAuth:
       type: http

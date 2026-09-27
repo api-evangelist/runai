@@ -319,42 +319,159 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    HttpResponse:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-    ResourcesData:
+    ClusterUpdateRequest:
       type: object
       required:
-      - numberOfPendingWorkloads
-      - gpu
-      - cpu
-      - memory
+      - name
       properties:
-        numberOfPendingWorkloads:
-          type: integer
-          example: 1
-        gpu:
-          description: GPU resources in fractions. 0.7 = 70% of a gpu
-          $ref: '#/components/schemas/ResourceData'
-        cpu:
-          description: CPU resources in millicpus. 1000 = 1 cpu
-          $ref: '#/components/schemas/ResourceData'
-        memory:
-          description: Memory resources in megabytes. 1 = 10^6  (1000*1000)
-          $ref: '#/components/schemas/ResourceData'
+        name:
+          type: string
     ClusterId:
       description: The id of the cluster.
       type: string
       format: uuid
       example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    ClusterState:
+      type: string
+      description: The cluster's state.
+      enum:
+      - WaitingToConnect
+      - Connected
+      - Disconnected
+      - MissingPrerequisites
+      - ServiceIssues
+      - Unknown
+    MetricsType:
+      type: string
+      description: specifies what data to request
+      enum:
+      - TOTAL_GPU_NODES
+      - GPU_UTILIZATION
+      - GPU_UTILIZATION_DISTRIBUTION
+      - GPU_MEMORY_UTILIZATION
+      - CPU_UTILIZATION
+      - CPU_MEMORY_UTILIZATION
+      - TOTAL_GPU
+      - GPU_QUOTA
+      - ALLOCATED_GPU
+      - UNALLOCATED_GPU
+      - AVG_WORKLOAD_WAIT_TIME
+      - WORKLOADS_COUNT
+    DisplayedCluster:
+      type: object
+      required:
+      - uuid
+      - tenantId
+      - name
+      - createdAt
+      properties:
+        uuid:
+          type: string
+          format: uuid
+        tenantId:
+          $ref: '#/components/schemas/TenantId'
+        name:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+        domain:
+          type:
+          - string
+          - 'null'
+        version:
+          type:
+          - string
+          - 'null'
+        status:
+          $ref: '#/components/schemas/ClusterDisplayedStatus'
+        updatedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        deletedAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        lastLiveness:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        deleteRequestedAt:
+          description: the timestamp value of when the cluster deletion request was received
+          type:
+          - string
+          - 'null'
+          format: date-time
+      example:
+        uuid: A0EEBC99-9C0B-4EF8-BB6D-6BB9BD380A11
+        name: example
+        tenantId: 1001
+        domain: my.company.com
+        status: {}
+        createdAt: '2020-01-01T00:00:00Z'
+        updatedAt: '2020-01-02T00:00:00Z'
+        lastLiveness: '2020-01-02T00:00:00Z'
+        version: 2.15.0
+    ClusterName:
+      type: string
+      example: cluster-a
+    cluster:
+      type: object
+      required:
+      - metadata
+      - current
+      properties:
+        metadata:
+          type: object
+          required:
+          - clusterId
+          - clusterName
+          properties:
+            clusterId:
+              $ref: '#/components/schemas/ClusterId'
+            clusterName:
+              $ref: '#/components/schemas/ClusterName'
+        current:
+          type: object
+          description: Current reported metrics data. resources holds data that is summed up to the cluster level and projectResources explains the division of it to projects
+          required:
+          - resources
+          - projectResources
+          properties:
+            resources:
+              type: array
+              items:
+                allOf:
+                - $ref: '#/components/schemas/ResourcesData'
+                - type: object
+                  required:
+                  - nodepoolName
+                  properties:
+                    nodepoolName:
+                      $ref: '#/components/schemas/NodepoolName'
+            projectResources:
+              type: array
+              items:
+                allOf:
+                - $ref: '#/components/schemas/ResourcesData'
+                - type: object
+                  required:
+                  - projectName
+                  - departmentName
+                  - nodepoolName
+                  properties:
+                    projectName:
+                      $ref: '#/components/schemas/ProjectName1'
+                    departmentName:
+                      $ref: '#/components/schemas/DepartmentName'
+                    nodepoolName:
+                      $ref: '#/components/schemas/nodepoolName'
+        timeRange:
+          $ref: '#/components/schemas/TimeRange'
     ClusterInstallationInfoResponse:
       type: object
       required:
@@ -376,55 +493,53 @@ components:
         repositoryName: runai
         chartRepoURL: https://runai.jfrog.io/artifactory/charts
         clientSecret: ABC333DDD
-    ClusterName:
+    ResourceData:
+      type: object
+      description: quota equals to the given resources and allocated equal to the real count of used resources
+      required:
+      - quota
+      - allocated
+      properties:
+        quota:
+          type: number
+          example: 3
+        allocated:
+          type: number
+          example: 2.5
+        utilization:
+          type: number
+          example: 0.765
+    GroupedMetricsResponse:
+      type: object
+      required:
+      - measurements
+      properties:
+        measurements:
+          type: array
+          items:
+            $ref: '#/components/schemas/GroupedMeasurementResponse'
+    nodepoolName:
       type: string
-      example: cluster-a
-    GroupedMeasurementGroup:
-      type: object
+      example: nodepoola
+    Error:
       required:
-      - key
-      - value
+      - code
+      - message
       properties:
-        key:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
           type: string
-          example: Nodepool
-          description: The grouping key
-        value:
+        details:
           type: string
-          example: gpu-pool-1
-          description: The grouping value
-    ClusterDependenciesStatus:
-      type: object
-      required:
-      - required
-      - optional
-      properties:
-        required:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ClusterDependencyStatus'
-        optional:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/ClusterDependencyStatus'
-    ClusterDisplayedStatus:
-      type:
-      - object
-      - 'null'
-      description: The cluster's displayed status.
-      allOf:
-      - $ref: '#/components/schemas/ClusterReportedStatus'
-      - type: object
-        properties:
-          state:
-            $ref: '#/components/schemas/ClusterState'
-    ClusterUpdateRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    DepartmentName:
+      type: string
+      example: default
     Error1:
       required:
       - code
@@ -459,22 +574,9 @@ components:
           - 'null'
           description: the ingress class that is configured for the cluster
           example: nginx
-    nodepoolName:
+    NodepoolName:
       type: string
       example: nodepoola
-    ProjectName1:
-      type: string
-      example: project-a
-    ClusterState:
-      type: string
-      description: The cluster's state.
-      enum:
-      - WaitingToConnect
-      - Connected
-      - Disconnected
-      - MissingPrerequisites
-      - ServiceIssues
-      - Unknown
     ClusterReportedStatus:
       type: object
       description: the cluster status reported by the cluster
@@ -571,147 +673,51 @@ components:
           $ref: '#/components/schemas/ClusterReportedConfig'
         dependencies:
           $ref: '#/components/schemas/ClusterDependenciesStatus'
-    Error:
+    ResourcesData:
+      type: object
       required:
-      - code
-      - message
+      - numberOfPendingWorkloads
+      - gpu
+      - cpu
+      - memory
       properties:
-        code:
+        numberOfPendingWorkloads:
           type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    cluster:
+          example: 1
+        gpu:
+          description: GPU resources in fractions. 0.7 = 70% of a gpu
+          $ref: '#/components/schemas/ResourceData'
+        cpu:
+          description: CPU resources in millicpus. 1000 = 1 cpu
+          $ref: '#/components/schemas/ResourceData'
+        memory:
+          description: Memory resources in megabytes. 1 = 10^6  (1000*1000)
+          $ref: '#/components/schemas/ResourceData'
+    ClusterDependenciesStatus:
       type: object
       required:
-      - metadata
-      - current
+      - required
+      - optional
       properties:
-        metadata:
+        required:
           type: object
-          required:
-          - clusterId
-          - clusterName
-          properties:
-            clusterId:
-              $ref: '#/components/schemas/ClusterId'
-            clusterName:
-              $ref: '#/components/schemas/ClusterName'
-        current:
+          additionalProperties:
+            $ref: '#/components/schemas/ClusterDependencyStatus'
+        optional:
           type: object
-          description: Current reported metrics data. resources holds data that is summed up to the cluster level and projectResources explains the division of it to projects
-          required:
-          - resources
-          - projectResources
-          properties:
-            resources:
-              type: array
-              items:
-                allOf:
-                - $ref: '#/components/schemas/ResourcesData'
-                - type: object
-                  required:
-                  - nodepoolName
-                  properties:
-                    nodepoolName:
-                      $ref: '#/components/schemas/NodepoolName'
-            projectResources:
-              type: array
-              items:
-                allOf:
-                - $ref: '#/components/schemas/ResourcesData'
-                - type: object
-                  required:
-                  - projectName
-                  - departmentName
-                  - nodepoolName
-                  properties:
-                    projectName:
-                      $ref: '#/components/schemas/ProjectName1'
-                    departmentName:
-                      $ref: '#/components/schemas/DepartmentName'
-                    nodepoolName:
-                      $ref: '#/components/schemas/nodepoolName'
-        timeRange:
-          $ref: '#/components/schemas/TimeRange'
-    DisplayedCluster:
+          additionalProperties:
+            $ref: '#/components/schemas/ClusterDependencyStatus'
+    ClusterCreationRequest:
       type: object
       required:
-      - uuid
-      - tenantId
       - name
-      - createdAt
       properties:
-        uuid:
-          type: string
-          format: uuid
-        tenantId:
-          $ref: '#/components/schemas/TenantId'
         name:
           type: string
-        createdAt:
-          type: string
-          format: date-time
         domain:
-          type:
-          - string
-          - 'null'
+          type: string
         version:
-          type:
-          - string
-          - 'null'
-        status:
-          $ref: '#/components/schemas/ClusterDisplayedStatus'
-        updatedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        deletedAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        lastLiveness:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        deleteRequestedAt:
-          description: the timestamp value of when the cluster deletion request was received
-          type:
-          - string
-          - 'null'
-          format: date-time
-      example:
-        uuid: A0EEBC99-9C0B-4EF8-BB6D-6BB9BD380A11
-        name: example
-        tenantId: 1001
-        domain: my.company.com
-        status: {}
-        createdAt: '2020-01-01T00:00:00Z'
-        updatedAt: '2020-01-02T00:00:00Z'
-        lastLiveness: '2020-01-02T00:00:00Z'
-        version: 2.15.0
-    DepartmentName:
-      type: string
-      example: default
-    TimeRange:
-      type: object
-      description: Overtime metrics data. Returned only if both start and end query parameters are set.
-      required:
-      - resources
-      properties:
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResourcesDataOvertime'
+          type: string
     ClusterDependencyStatus:
       type: object
       required:
@@ -727,52 +733,21 @@ components:
           type: object
           additionalProperties:
             $ref: '#/components/schemas/ClusterDependencyStatus'
-    MetricsType:
-      type: string
-      description: specifies what data to request
-      enum:
-      - TOTAL_GPU_NODES
-      - GPU_UTILIZATION
-      - GPU_UTILIZATION_DISTRIBUTION
-      - GPU_MEMORY_UTILIZATION
-      - CPU_UTILIZATION
-      - CPU_MEMORY_UTILIZATION
-      - TOTAL_GPU
-      - GPU_QUOTA
-      - ALLOCATED_GPU
-      - UNALLOCATED_GPU
-      - AVG_WORKLOAD_WAIT_TIME
-      - WORKLOADS_COUNT
-    ResourceData:
-      type: object
-      description: quota equals to the given resources and allocated equal to the real count of used resources
-      required:
-      - quota
-      - allocated
-      properties:
-        quota:
-          type: number
-          example: 3
-        allocated:
-          type: number
-          example: 2.5
-        utilization:
-          type: number
-          example: 0.765
-    GroupedMetricsResponse:
-      type: object
-      required:
-      - measurements
-      properties:
-        measurements:
-          type: array
-          items:
-            $ref: '#/components/schemas/GroupedMeasurementResponse'
     TenantId:
       description: The id of the tenant.
       type: integer
       format: int32
       example: 1001
+    TimeRange:
+      type: object
+      description: Overtime metrics data. Returned only if both start and end query parameters are set.
+      required:
+      - resources
+      properties:
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResourcesDataOvertime'
     ResourcesDataOvertime:
       allOf:
       - $ref: '#/components/schemas/ResourcesData'
@@ -784,6 +759,45 @@ components:
             type: string
             format: date-time
             example: '2023-06-06T12:09:18.211Z'
+    HttpResponse:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+    GroupedMeasurementGroup:
+      type: object
+      required:
+      - key
+      - value
+      properties:
+        key:
+          type: string
+          example: Nodepool
+          description: The grouping key
+        value:
+          type: string
+          example: gpu-pool-1
+          description: The grouping value
+    ProjectName1:
+      type: string
+      example: project-a
+    ClusterDisplayedStatus:
+      type:
+      - object
+      - 'null'
+      description: The cluster's displayed status.
+      allOf:
+      - $ref: '#/components/schemas/ClusterReportedStatus'
+      - type: object
+        properties:
+          state:
+            $ref: '#/components/schemas/ClusterState'
     GroupedMeasurementResponse:
       type: object
       required:
@@ -826,105 +840,7 @@ components:
           description: Group information for this measurement
           items:
             $ref: '#/components/schemas/GroupedMeasurementGroup'
-    ClusterCreationRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-        domain:
-          type: string
-        version:
-          type: string
-    NodepoolName:
-      type: string
-      example: nodepoola
   responses:
-    204NoContent:
-      description: No Content.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    422UnprocessableEntity:
-      description: Unprocessable entity - The request was well-formed but contains semantic errors.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 422
-            message: Validation failed - Invalid workload configuration
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    OK:
-      description: OK
-      content:
-        application/json:
-          schema:
-            type: string
-            format: text
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    202Accepted:
-      description: Accepted.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HttpResponse'
-          example:
-            code: 202
-            message: Request has been accepted.
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error1'
     404NotFound:
       description: The specified resource was not found
       content:
@@ -934,24 +850,136 @@ components:
           example:
             code: 404
             message: Resource id not found.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    OK:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: string
+            format: text
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    204NoContent:
+      description: No Content.
+    422UnprocessableEntity:
+      description: Unprocessable entity - The request was well-formed but contains semantic errors.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 422
+            message: Validation failed - Invalid workload configuration
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error1'
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    202Accepted:
+      description: Accepted.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HttpResponse'
+          example:
+            code: 202
+            message: Request has been accepted.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
   parameters:
-    QueryIncludeRequestedForDelete:
-      name: includeRequestedForDelete
+    Start:
+      name: start
       in: query
-      required: false
-      example: true
-      schema:
-        type: boolean
-      description: When true, includes clusters that are marked for deletion
-    End:
-      name: end
-      in: query
-      description: End of time range to fetch data from in UTC format.
+      description: Start of time range to fetch data from in UTC format.
       required: false
       schema:
         type: string
         format: date-time
-        example: '2023-06-07 12:09:18.211'
+        example: '2023-06-06 12:09:18.211'
+    NodepoolName:
+      in: query
+      name: nodepoolName
+      schema:
+        type: string
+        example: default
+      required: false
+      description: Filter by unique nodepool name.
+    ClusterRemoteURL:
+      name: remoteClusterUrl
+      in: query
+      required: false
+      description: The remote URL of the runai cluster
+      schema:
+        type: string
+        example: https://cluster.runai
+    EndRequired:
+      name: end
+      in: query
+      description: End date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-07T12:09:18.211Z'
+    NumberOfSamples:
+      name: numberOfSamples
+      in: query
+      description: The number of samples to take in the specified time range.
+      required: false
+      schema:
+        type: integer
+        example: 20
+        maximum: 1000
+        minimum: 0
+        default: 20
     MetricsType:
       name: metricType
       in: query
@@ -962,32 +990,6 @@ components:
         type: array
         items:
           $ref: '#/components/schemas/MetricsType'
-    EndRequired:
-      name: end
-      in: query
-      description: End date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-07T12:09:18.211Z'
-    Start:
-      name: start
-      in: query
-      description: Start of time range to fetch data from in UTC format.
-      required: false
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-06 12:09:18.211'
-    FilterByNodepoolName:
-      name: nodepoolName
-      in: query
-      description: Filter using the nodepool.
-      required: false
-      schema:
-        type: string
-        example: default
     QueryVerbosity:
       name: verbosity
       in: query
@@ -1002,6 +1004,34 @@ components:
         - metadata
         - full
         default: full
+    FilterByNodepoolName:
+      name: nodepoolName
+      in: query
+      description: Filter using the nodepool.
+      required: false
+      schema:
+        type: string
+        example: default
+    StartRequired:
+      name: start
+      in: query
+      description: Start date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-06T12:09:18.211Z'
+    QueryForceDelete:
+      name: force
+      in: query
+      required: false
+      description: 'if true will force cluster instant deletion otherwise will start cluster graceful deletion process.
+
+        '
+      example: true
+      schema:
+        type: boolean
+        default: false
     ClusterVersion:
       name: version
       in: query
@@ -1010,6 +1040,15 @@ components:
       schema:
         type: string
         example: 2.16
+    End:
+      name: end
+      in: query
+      description: End of time range to fetch data from in UTC format.
+      required: false
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-07 12:09:18.211'
     ClusterMetricsGroupBy:
       name: groupBy
       in: query
@@ -1026,14 +1065,6 @@ components:
         - Project
         - Department
       example: Category
-    NodepoolName:
-      in: query
-      name: nodepoolName
-      schema:
-        type: string
-        example: default
-      required: false
-      description: Filter by unique nodepool name.
     ClusterUuid:
       name: clusterUuid
       in: path
@@ -1044,45 +1075,14 @@ components:
         format: uuid
         minLength: 1
         example: 9f55255e-11ed-47c7-acef-fc4054768dbc
-    QueryForceDelete:
-      name: force
+    QueryIncludeRequestedForDelete:
+      name: includeRequestedForDelete
       in: query
       required: false
-      description: 'if true will force cluster instant deletion otherwise will start cluster graceful deletion process.
-
-        '
       example: true
       schema:
         type: boolean
-        default: false
-    ClusterRemoteURL:
-      name: remoteClusterUrl
-      in: query
-      required: false
-      description: The remote URL of the runai cluster
-      schema:
-        type: string
-        example: https://cluster.runai
-    StartRequired:
-      name: start
-      in: query
-      description: Start date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-06T12:09:18.211Z'
-    NumberOfSamples:
-      name: numberOfSamples
-      in: query
-      description: The number of samples to take in the specified time range.
-      required: false
-      schema:
-        type: integer
-        example: 20
-        maximum: 1000
-        minimum: 0
-        default: 20
+      description: When true, includes clusters that are marked for deletion
   securitySchemes:
     bearerAuth:
       type: http

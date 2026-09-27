@@ -253,39 +253,100 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    AccessRuleDeletionBatchErrorMessage:
-      type: string
-      description: A human-readable message describing the access rule IDs that failed to delete.
-    AccessRuleDeletionBatchErrorCode:
-      type: integer
-      format: int32
-      description: A numeric code representing the error type.
     ClusterId:
       description: The id of the cluster.
       type: string
       format: uuid
       example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    ErrorCode:
-      type: integer
-      format: int32
-      description: A numeric code representing the error type.
-    AccessRuleSubjects:
-      type: array
-      description: subjects for the access rules. must have at least one value
-      items:
-        type: object
-        required:
-        - subjectId
-        - subjectType
+    AccessRulesBatchCreateFields:
+      type: object
+      required:
+      - payload
+      properties:
+        payload:
+          type: object
+          description: An array of access rule objects, each containing the role, subject, cluster, and scope to apply.
+          required:
+          - subjects
+          - roleId
+          - scopes
+          properties:
+            roleId:
+              type: integer
+              format: int32
+              description: The numeric ID of the role to assign (e.g., admin, viewer).
+              example: 53142648
+            clusterId:
+              $ref: '#/components/schemas/ClusterId'
+            subjects:
+              $ref: '#/components/schemas/AccessRuleSubjects'
+            scopes:
+              $ref: '#/components/schemas/AccessRuleScopes'
+    AccessRule:
+      allOf:
+      - $ref: '#/components/schemas/AccessRuleCreationFields'
+      - $ref: '#/components/schemas/EnrichmentDataFields'
+      - $ref: '#/components/schemas/AccessRuleMetadataFields'
+      - type: object
         properties:
-          subjectId:
-            type: string
-            description: The unique identifier of the subject e.g., user, group, or app).
-            example: user@run.ai
-          subjectType:
-            allOf:
-            - $ref: '#/components/schemas/SubjectType'
-            - description: 'The subject assigned to the access rule. Valid values: user, group, app.'
+          status:
+            $ref: '#/components/schemas/AccessRuleStatusResponse'
+      - required:
+        - tenantId
+    SubjectType:
+      type: string
+      description: 'Subject type enum for access rules.
+
+
+        Note: The ''app'' subject type is DEPRECATED. Please use ''service-account'' instead for service accounts.
+
+        '
+      enum:
+      - user
+      - app
+      - service-account
+      - group
+    AccessRuleDeletionBatchResponseFailureItem:
+      type: object
+      required:
+      - id
+      - code
+      - message
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          $ref: '#/components/schemas/AccessRuleDeletionBatchErrorCode'
+        message:
+          $ref: '#/components/schemas/AccessRuleDeletionBatchErrorMessage'
+    AccessRulesBatchAction:
+      type: string
+      description: Specifies the operation to perform. Must be set to "delete".
+      enum:
+      - delete
+      - validate_delete
+    ScopeId:
+      type: string
+      description: The id of the cluster, department or project, depending on the scope type.
+    AccessRulesBatchCreateResponse:
+      type: object
+      properties:
+        succeeded:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessRule'
+        failed:
+          type: array
+          items:
+            properties:
+              payload:
+                $ref: '#/components/schemas/AccessRuleCreationFields'
+              code:
+                $ref: '#/components/schemas/ErrorCode'
+              message:
+                type: string
+                description: A human-readable message describing the access rule IDs that failed to create.
     AccessRuleCreationFields:
       type: object
       required:
@@ -318,38 +379,160 @@ components:
           - description: 'The type of scope the access rule applies to. Valid values: system, tenant, cluster, department, project.'
         clusterId:
           $ref: '#/components/schemas/ClusterId'
-    IdsList:
+    AccessRulePhase:
+      type: string
+      enum:
+      - Creating
+      - Ready
+      - NotReady
+      - Deleting
+      description: Phase of the Access Rule in the cluster.
+      example: Ready
+    AccessRuleById:
+      allOf:
+      - $ref: '#/components/schemas/AccessRule'
+      - properties:
+          scopePath:
+            type:
+            - string
+            - 'null'
+            example: runai/production-cluster/dep-42/prj-73
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    EnrichmentDataFields:
+      type: object
+      required:
+      - roleName
+      - scopeName
+      properties:
+        roleName:
+          type: string
+          description: The name of the assigned role (e.g., admin, viewer).
+          example: admin
+        scopeName:
+          type: string
+          description: Human-readable name of the scope (e.g., tenant-x).
+          example: tenant-x
+    AccessRuleSubjects:
       type: array
-      description: List of ids to perform the action on.
+      description: subjects for the access rules. must have at least one value
+      items:
+        type: object
+        required:
+        - subjectId
+        - subjectType
+        properties:
+          subjectId:
+            type: string
+            description: The unique identifier of the subject e.g., user, group, or app).
+            example: user@run.ai
+          subjectType:
+            allOf:
+            - $ref: '#/components/schemas/SubjectType'
+            - description: 'The subject assigned to the access rule. Valid values: user, group, app.'
+    AccessRuleDeletionBatchResponse:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/AccessRuleDeletionBatchId'
+        succeeded:
+          $ref: '#/components/schemas/AccessRuleDeletionBatchIdsList'
+        failed:
+          type: array
+          description: Details of the access rule IDs that failed to delete.
+          items:
+            $ref: '#/components/schemas/AccessRuleDeletionBatchResponseFailureItem'
+    ErrorCode:
+      type: integer
+      format: int32
+      description: A numeric code representing the error type.
+    AccessRuleScopes:
+      type: array
+      description: scopes for the access rules. must have at least one value
+      items:
+        type: object
+        required:
+        - scopeId
+        - scopeType
+        properties:
+          scopeId:
+            $ref: '#/components/schemas/ScopeId'
+          scopeType:
+            allOf:
+            - $ref: '#/components/schemas/ScopeType'
+            - description: 'The scope to apply the access rule to. Valid values: system, tenant, cluster, department, project.'
+    AccessRuleStatusResponse:
+      type: object
+      description: Status of the Access Rule in the cluster. Available only for clusters of version 2.22.0 or above.
+      properties:
+        phase:
+          $ref: '#/components/schemas/AccessRulePhase'
+        message:
+          type: string
+          description: Message for status of Access Rule in the cluster
+          example: Failed to enforce department 'department-a'
+        details:
+          type: string
+          description: Details for status of Access Rule in the clusters
+          example: 'NotReady: [cluster1-uuid]; Ready: [cluster2-uuid, cluster3-uuid]'
+    AccessRulesBatchFields:
+      type: object
+      description: Deletes a batch of access rules in a single operation. It requires a list of rule IDs and an action flag explicitly set to "delete". It returns the result of the operation, including which items were successfully deleted and which failed.
+      required:
+      - ids
+      - action
+      properties:
+        ids:
+          $ref: '#/components/schemas/IdsList'
+        action:
+          $ref: '#/components/schemas/AccessRulesBatchAction'
+    AccessRuleDeletionBatchIdsList:
+      type: array
+      description: List of access rule IDs that were successfully deleted.
       items:
         type: string
         format: uuid
-        description: Id to perform the action on.
       minLength: 1
-    AccessRulesBatchCreateFields:
-      type: object
-      required:
-      - payload
-      properties:
-        payload:
-          type: object
-          description: An array of access rule objects, each containing the role, subject, cluster, and scope to apply.
-          required:
-          - subjects
-          - roleId
-          - scopes
-          properties:
-            roleId:
-              type: integer
-              format: int32
-              description: The numeric ID of the role to assign (e.g., admin, viewer).
-              example: 53142648
-            clusterId:
-              $ref: '#/components/schemas/ClusterId'
-            subjects:
-              $ref: '#/components/schemas/AccessRuleSubjects'
-            scopes:
-              $ref: '#/components/schemas/AccessRuleScopes'
+    AccessRuleDeletionBatchId:
+      type: string
+      format: uuid
+      description: The unique ID of the batch operation.
+    AccessRuleDeletionBatchErrorCode:
+      type: integer
+      format: int32
+      description: A numeric code representing the error type.
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    AccessRuleDeletionBatchErrorMessage:
+      type: string
+      description: A human-readable message describing the access rule IDs that failed to delete.
+    ScopeType:
+      type: string
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
     AccessRulesSortFilterFields:
       type: string
       enum:
@@ -364,24 +547,19 @@ components:
       - deletedAt
       - createdBy
       - phase
-    AccessRulesBatchCreateResponse:
-      type: object
-      properties:
-        succeeded:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessRule'
-        failed:
-          type: array
-          items:
-            properties:
-              payload:
-                $ref: '#/components/schemas/AccessRuleCreationFields'
-              code:
-                $ref: '#/components/schemas/ErrorCode'
-              message:
-                type: string
-                description: A human-readable message describing the access rule IDs that failed to create.
+    AccessRules:
+      type: array
+      items:
+        $ref: '#/components/schemas/AccessRule'
+      x-schema-name: AccessRules
+    IdsList:
+      type: array
+      description: List of ids to perform the action on.
+      items:
+        type: string
+        format: uuid
+        description: Id to perform the action on.
+      minLength: 1
     AccessRuleMetadataFields:
       type: object
       required:
@@ -415,283 +593,7 @@ components:
           type: string
           example: user@run.ai
           description: Identifier of the user who created the access rule.
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    AccessRuleDeletionBatchResponse:
-      type: object
-      required:
-      - id
-      properties:
-        id:
-          $ref: '#/components/schemas/AccessRuleDeletionBatchId'
-        succeeded:
-          $ref: '#/components/schemas/AccessRuleDeletionBatchIdsList'
-        failed:
-          type: array
-          description: Details of the access rule IDs that failed to delete.
-          items:
-            $ref: '#/components/schemas/AccessRuleDeletionBatchResponseFailureItem'
-    AccessRules:
-      type: array
-      items:
-        $ref: '#/components/schemas/AccessRule'
-      x-schema-name: AccessRules
-    SubjectType:
-      type: string
-      description: 'Subject type enum for access rules.
-
-
-        Note: The ''app'' subject type is DEPRECATED. Please use ''service-account'' instead for service accounts.
-
-        '
-      enum:
-      - user
-      - app
-      - service-account
-      - group
-    AccessRuleById:
-      allOf:
-      - $ref: '#/components/schemas/AccessRule'
-      - properties:
-          scopePath:
-            type:
-            - string
-            - 'null'
-            example: runai/production-cluster/dep-42/prj-73
-    AccessRuleDeletionBatchId:
-      type: string
-      format: uuid
-      description: The unique ID of the batch operation.
-    AccessRuleDeletionBatchResponseFailureItem:
-      type: object
-      required:
-      - id
-      - code
-      - message
-      properties:
-        id:
-          type: string
-          format: uuid
-        code:
-          $ref: '#/components/schemas/AccessRuleDeletionBatchErrorCode'
-        message:
-          $ref: '#/components/schemas/AccessRuleDeletionBatchErrorMessage'
-    AccessRuleDeletionBatchIdsList:
-      type: array
-      description: List of access rule IDs that were successfully deleted.
-      items:
-        type: string
-        format: uuid
-      minLength: 1
-    AccessRulesBatchFields:
-      type: object
-      description: Deletes a batch of access rules in a single operation. It requires a list of rule IDs and an action flag explicitly set to "delete". It returns the result of the operation, including which items were successfully deleted and which failed.
-      required:
-      - ids
-      - action
-      properties:
-        ids:
-          $ref: '#/components/schemas/IdsList'
-        action:
-          $ref: '#/components/schemas/AccessRulesBatchAction'
-    AccessRule:
-      allOf:
-      - $ref: '#/components/schemas/AccessRuleCreationFields'
-      - $ref: '#/components/schemas/EnrichmentDataFields'
-      - $ref: '#/components/schemas/AccessRuleMetadataFields'
-      - type: object
-        properties:
-          status:
-            $ref: '#/components/schemas/AccessRuleStatusResponse'
-      - required:
-        - tenantId
-    AccessRuleScopes:
-      type: array
-      description: scopes for the access rules. must have at least one value
-      items:
-        type: object
-        required:
-        - scopeId
-        - scopeType
-        properties:
-          scopeId:
-            $ref: '#/components/schemas/ScopeId'
-          scopeType:
-            allOf:
-            - $ref: '#/components/schemas/ScopeType'
-            - description: 'The scope to apply the access rule to. Valid values: system, tenant, cluster, department, project.'
-    TenantId:
-      description: The id of the tenant.
-      type: integer
-      format: int32
-      example: 1001
-    AccessRulePhase:
-      type: string
-      enum:
-      - Creating
-      - Ready
-      - NotReady
-      - Deleting
-      description: Phase of the Access Rule in the cluster.
-      example: Ready
-    EnrichmentDataFields:
-      type: object
-      required:
-      - roleName
-      - scopeName
-      properties:
-        roleName:
-          type: string
-          description: The name of the assigned role (e.g., admin, viewer).
-          example: admin
-        scopeName:
-          type: string
-          description: Human-readable name of the scope (e.g., tenant-x).
-          example: tenant-x
-    AccessRulesBatchAction:
-      type: string
-      description: Specifies the operation to perform. Must be set to "delete".
-      enum:
-      - delete
-      - validate_delete
-    AccessRuleStatusResponse:
-      type: object
-      description: Status of the Access Rule in the cluster. Available only for clusters of version 2.22.0 or above.
-      properties:
-        phase:
-          $ref: '#/components/schemas/AccessRulePhase'
-        message:
-          type: string
-          description: Message for status of Access Rule in the cluster
-          example: Failed to enforce department 'department-a'
-        details:
-          type: string
-          description: Details for status of Access Rule in the clusters
-          example: 'NotReady: [cluster1-uuid]; Ready: [cluster2-uuid, cluster3-uuid]'
-    ScopeType:
-      type: string
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
-    ScopeId:
-      type: string
-      description: The id of the cluster, department or project, depending on the scope type.
   parameters:
-    Search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test project
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
-    ScopeIdOptional:
-      name: scopeId
-      in: query
-      required: false
-      description: The scope resource id that we want to filter by.
-      schema:
-        type: string
-        example: '2'
-    AccessRulesFilter:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(subjectId|subjectType|roleId|scopeId|scopeType|roleName|scopeName|createdAt|deletedAt|createdBy|phase)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-      example:
-      - name!=some-access-rule-name
-      - createdAt>=2023-01-01T00:00:00Z
-      explode: false
-    ScopeTypeOptionalQueryDeprecated:
-      name: scopeType
-      in: query
-      required: false
-      description: The type of resource we want to filter by.
-      deprecated: true
-      schema:
-        type: string
-        example: project
-    FilterByCluster:
-      name: clusterId
-      in: query
-      description: Filter using the Universally Unique Identifier (UUID) of the cluster.
-      required: false
-      schema:
-        type: string
-        format: uuid
-        example: d73a738f-fab3-430a-8fa3-5241493d7128
-    SubjectIdOptional:
-      name: subjectIdFilter
-      in: query
-      required: false
-      description: Part of the subject id that we want to filter by.
-      deprecated: true
-      schema:
-        type: string
-        example: some.user
-    RoleId:
-      name: roleId
-      in: query
-      required: false
-      description: The role id we want to filter by.
-      deprecated: true
-      schema:
-        type: integer
-        format: int32
-        minimum: 1
-    IncludeDeleted:
-      name: includeDeleted
-      in: query
-      required: false
-      description: True to include deleted objects in the result.
-      schema:
-        type: boolean
-        example: false
-        default: false
     AccessRulesSort:
       name: sortBy
       in: query
@@ -710,6 +612,17 @@ components:
         items:
           type: string
           example: some.user@run.ai
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
     AccessRuleId:
       name: accessRuleId
       in: path
@@ -720,14 +633,6 @@ components:
         type: integer
         format: int32
         minimum: 0
-    LastUpdated:
-      name: lastUpdated
-      in: query
-      required: false
-      description: Filter by last update time.
-      schema:
-        type: string
-        example: '2021-12-14T16:04:15.099Z'
     SubjectTypeOptional:
       name: subjectType
       in: query
@@ -736,6 +641,101 @@ components:
       schema:
         type: string
         example: user
+    RoleId:
+      name: roleId
+      in: query
+      required: false
+      description: The role id we want to filter by.
+      deprecated: true
+      schema:
+        type: integer
+        format: int32
+        minimum: 1
+    SubjectIdOptional:
+      name: subjectIdFilter
+      in: query
+      required: false
+      description: Part of the subject id that we want to filter by.
+      deprecated: true
+      schema:
+        type: string
+        example: some.user
+    IncludeDeleted:
+      name: includeDeleted
+      in: query
+      required: false
+      description: True to include deleted objects in the result.
+      schema:
+        type: boolean
+        example: false
+        default: false
+    Search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test project
+    FilterByCluster:
+      name: clusterId
+      in: query
+      description: Filter using the Universally Unique Identifier (UUID) of the cluster.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: d73a738f-fab3-430a-8fa3-5241493d7128
+    AccessRulesFilter:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(subjectId|subjectType|roleId|scopeId|scopeType|roleName|scopeName|createdAt|deletedAt|createdBy|phase)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+      example:
+      - name!=some-access-rule-name
+      - createdAt>=2023-01-01T00:00:00Z
+      explode: false
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    ScopeTypeOptionalQueryDeprecated:
+      name: scopeType
+      in: query
+      required: false
+      description: The type of resource we want to filter by.
+      deprecated: true
+      schema:
+        type: string
+        example: project
+    LastUpdated:
+      name: lastUpdated
+      in: query
+      required: false
+      description: Filter by last update time.
+      schema:
+        type: string
+        example: '2021-12-14T16:04:15.099Z'
+    ScopeIdOptional:
+      name: scopeId
+      in: query
+      required: false
+      description: The scope resource id that we want to filter by.
+      schema:
+        type: string
+        example: '2'
     Offset:
       name: offset
       in: query
@@ -746,8 +746,15 @@ components:
         format: int32
         example: 100
   responses:
-    204NoContent:
-      description: No Content.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
     500InternalServerError:
       description: unexpected error
       content:
@@ -766,24 +773,8 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
+    204NoContent:
+      description: No Content.
     401Unauthorized:
       description: Unauthorized
       content:
@@ -793,15 +784,24 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
+    400BadRequest:
+      description: Bad request.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            code: 404
-            message: Resource id not found.
+            code: 400
+            message: Required parameter is missing
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
   securitySchemes:
     bearerAuth:
       type: http

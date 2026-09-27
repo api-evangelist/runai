@@ -210,51 +210,22 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    TokenRequest:
-      type: object
-      properties:
-        grantType:
-          $ref: '#/components/schemas/TokenRequestGrantTypeEnum'
-        appID:
-          deprecated: true
-          type: string
-        appSecret:
-          deprecated: true
-          type: string
-        code:
-          type: string
-        redirectUri:
-          type: string
-        refreshToken:
-          type: string
-        username:
-          type: string
-        password:
-          type: string
-        clientID:
-          type: string
-        clientSecret:
-          type: string
-        externalToken:
-          type: string
-    AppTokenResponse:
-      type: object
+    Error:
       required:
-      - access_token
-      - id_token
+      - code
+      - message
       properties:
-        access_token:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
           type: string
-        id_token:
+        details:
           type: string
-    TokenRequestGrantTypeEnum:
-      enum:
-      - app_token
-      - client_credentials
-      - refresh_token
-      - exchange_token
-      - password
-      - external_token_exchange
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
     AppTokenRequest:
       type: object
       required:
@@ -294,6 +265,45 @@ components:
         scope:
           type: string
           description: The scope of the access token
+    TokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        idToken:
+          type: string
+        refreshToken:
+          type: string
+        expiresIn:
+          type: integer
+          description: Token lifetime in seconds
+    TokenRequest:
+      type: object
+      properties:
+        grantType:
+          $ref: '#/components/schemas/TokenRequestGrantTypeEnum'
+        appID:
+          deprecated: true
+          type: string
+        appSecret:
+          deprecated: true
+          type: string
+        code:
+          type: string
+        redirectUri:
+          type: string
+        refreshToken:
+          type: string
+        username:
+          type: string
+        password:
+          type: string
+        clientID:
+          type: string
+        clientSecret:
+          type: string
+        externalToken:
+          type: string
     OAuth2Error:
       type: object
       description: OAuth 2.0 error response (RFC 6749 Section 5.2)
@@ -320,53 +330,25 @@ components:
         error_uri:
           type: string
           description: URI identifying a human-readable web page with information about the error
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    TokenResponse:
+    AppTokenResponse:
       type: object
+      required:
+      - access_token
+      - id_token
       properties:
-        accessToken:
+        access_token:
           type: string
-        idToken:
+        id_token:
           type: string
-        refreshToken:
-          type: string
-        expiresIn:
-          type: integer
-          description: Token lifetime in seconds
+    TokenRequestGrantTypeEnum:
+      enum:
+      - app_token
+      - client_credentials
+      - refresh_token
+      - exchange_token
+      - password
+      - external_token_exchange
   responses:
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
     400BadRequest:
       description: Bad request.
       content:
@@ -376,6 +358,24 @@ components:
           example:
             code: 400
             message: Required parameter is missing
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
   securitySchemes:
     bearerAuth:
       type: http

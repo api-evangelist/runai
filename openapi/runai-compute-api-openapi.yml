@@ -160,165 +160,106 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  parameters:
+    IncludeUsageInfo:
+      name: usageInfo
+      in: query
+      required: false
+      description: Whether the query should include asset usage information as part of the response.
+      schema:
+        type: boolean
+    ComplyToReplicaType:
+      name: complyToReplicaType
+      in: query
+      required: false
+      description: Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well.
+      schema:
+        type: string
+        enum:
+        - Worker
+        - Master
+    AssetNameFilter:
+      name: name
+      in: query
+      required: false
+      description: Filter results by name.
+      schema:
+        type: string
+    AssetScopeFilter:
+      name: scope
+      in: query
+      required: false
+      description: 'Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project.'
+      schema:
+        type: string
+    AssetClusterFilter:
+      name: clusterId
+      in: query
+      description: Filter results by Universally Unique Identifier (UUID) of the cluster. If scope filter is cluster, only assets from the specific cluster will be included in the response. Otherwise, the response will include cluster, tenant and system assets.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: d73a738f-fab3-430a-8fa3-5241493d7128
+    includeDescendants:
+      name: includeDescendants
+      in: query
+      required: false
+      description: Indicates whether to include assets from all descendant scopes under the specified scope. When set to true, and a specific scope identifier (for example, clusterId) is provided, the query also returns assets from all nested scopes within it (for example, departments and projects).  Mutually exclusive with scope.
+      schema:
+        type: boolean
+    AssetProjectFilter:
+      name: projectId
+      in: query
+      required: false
+      description: Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets.
+      schema:
+        type: integer
+        format: int32
+    ComplyToWorkloadType:
+      name: complyToWorkloadType
+      in: query
+      required: false
+      description: Include workload creation compliance information of an asset, for a given workload type, as part of the response. To check compliance, you need to provide both project id and workload type.
+      schema:
+        type: string
+        enum:
+        - Workspace
+        - Training
+        - Distributed
+        - Inference
+    AssetId:
+      name: AssetId
+      in: path
+      required: true
+      description: Unique identifier of the asset.
+      schema:
+        type: string
+        format: uuid
+        minLength: 1
+    AssetDepartmentFilter:
+      name: departmentId
+      in: query
+      description: Filter results by department id. If scope filter is department, only assets from the specific department will be included in the response. Otherwise, the response will include department, cluster, tenant and system assets.
+      required: false
+      schema:
+        type: string
+        example: '1'
+    ComplyToProject:
+      name: complyToProject
+      in: query
+      required: false
+      description: Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type.
+      schema:
+        type: integer
+        format: int32
   schemas:
-    HttpResponse:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-    CpuMemoryRequest:
-      description: The amount of CPU memory to allocate for this workload (1G, 20M, .etc). The workload will receive at least this amount of memory. Note that the workload will not be scheduled unless the system can guarantee this amount of memory to the workload
+    AssetsUsageRefCompute:
+      allOf:
+      - $ref: '#/components/schemas/AssetRef'
       type:
-      - string
+      - object
       - 'null'
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 20M
-    GpuDevicesRequest:
-      description: Requested number of GPU devices. Currently if more than one device is requested, it is not possible to provide values for gpuMemory or gpuPortion.
-      type:
-      - integer
-      - 'null'
-      format: int32
-      example: 1
-      minimum: 0
-    WorkloadRefAndStatus:
-      description: Id, name and status of a workspace or training
-      required:
-      - id
-      - name
-      properties:
-        id:
-          $ref: '#/components/schemas/WorkloadId1'
-        name:
-          $ref: '#/components/schemas/WorkloadName'
-        status:
-          description: The status of the workspace or training.
-          type: string
-          minLength: 1
-    ComplianceInfoReason:
-      description: An issue preventing the use of a template or asset for creating workloads in a given project.
-      required:
-      - details
-      properties:
-        field:
-          description: For policy related issues, includes a json path to the field in the policy for which the issue applies.
-          type:
-          - string
-          - 'null'
-          pattern: .*
-        details:
-          description: Explanation of the issue.
-          type: string
-          pattern: .*
-        rule:
-          $ref: '#/components/schemas/PolicyRuleEnum'
-    AssetName:
-      description: The name of the asset.
-      type: string
-      minLength: 1
-      example: my-asset
-    AssetKind:
-      description: The kind of the asset.
-      type: string
-      minLength: 1
-      enum:
-      - compute
-      - environment
-      - accessKey
-      - dockerRegistry
-      - password
-      - genericSecret
-      - registry
-      - s3
-      - git
-      - nfs
-      - pvc
-      - hostPath
-      - workload-template
-      - model
-      - config-map
-      - secret-volume
-      - data-volume
-      - ngcApiKey
-    GpuMemoryLimit:
-      description: Limitation on the memory consumed by the workload, per GPU device. The system guarantees The gpuMemoryLimit must be no less than gpuMemoryRequest.
-      type:
-      - string
-      - 'null'
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 10M
-    AssetRef:
-      description: Reference information about an asset.
-      required:
-      - id
-      - name
-      properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
-        name:
-          $ref: '#/components/schemas/AssetName'
-    AssetsUsageRef:
-      description: Reference information about usage of assets by other assets, for example datasources that uses credentials.
-      properties:
-        environment:
-          type:
-          - object
-          - 'null'
-          description: environment asset.
-          allOf:
-          - $ref: '#/components/schemas/EnvironmentAssetRef'
-          deprecated: true
-        environments:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetRef'
-        compute:
-          $ref: '#/components/schemas/AssetsUsageRefCompute'
-          deprecated: true
-        computes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetRef'
-        datasources:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetDatasourceRef'
-    PolicyRuleEnum:
-      description: Indicates which validation rule (e.g., min, max, step, options, required, canEdit, canAdd) conflicted with policy restrictions, causing the asset or template to be rejected.
-      type:
-      - string
-      - 'null'
-      enum:
-      - min
-      - max
-      - step
-      - options
-      - required
-      - canEdit
-      - canAdd
-      - locked
-    GpuPortionLimit:
-      description: Limitations on the portion consumed by the workload, per GPU device. The system guarantees The gpuPotionLimit must be no less than the gpuPortionRequest.
-      type:
-      - number
-      - 'null'
-      format: double
-      example: 0.5
-      minimum: 0
-    CpuCoreLimit:
-      description: Limitations on the number of CPUs consumed by the workload (0.5, 1, .etc). The system guarantees that this workload will not be able to consume more than this amount of CPUs.
-      format: double
-      type:
-      - number
-      - 'null'
-      example: 2
-      minimum: 0
     ComplianceInfo:
       description: Compliance of an asset with creation of workloads in a given project.
       properties:
@@ -336,111 +277,6 @@ components:
       type:
       - object
       - 'null'
-    AssetsUsageRefCompute:
-      allOf:
-      - $ref: '#/components/schemas/AssetRef'
-      type:
-      - object
-      - 'null'
-    AssetMeta:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      - $ref: '#/components/schemas/AssetReadOnlyFields'
-      example:
-        name: my-asset
-        scope: tenant
-        id: a418ed33-9399-48c0-a890-122cadd13bfd
-        kind: s3
-        createdBy: test@run.ai
-        createdAt: '2023-02-23T14:25:36.707685Z'
-        updatedBy: test@run.ai
-        updatedAt: '2023-02-23T14:25:36.707685Z'
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          distributed: true
-          distFramework: TF
-    AssetUpdatableFields:
-      required:
-      - name
-      properties:
-        name:
-          $ref: '#/components/schemas/AssetName'
-        description:
-          $ref: '#/components/schemas/AssetDescription'
-    UpdateCount:
-      description: the value of an update counter of a data in the system.
-      type: integer
-      format: int64
-      example: 12345
-    ClusterIdOptional:
-      description: The id of the cluster.
-      type:
-      - string
-      - 'null'
-      format: uuid
-      minLength: 1
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    AssetDatasourceRef:
-      description: Reference information about a datasource asset.
-      required:
-      - id
-      - name
-      - kind
-      properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
-        name:
-          $ref: '#/components/schemas/AssetName'
-        kind:
-          $ref: '#/components/schemas/AssetKind'
-        overrides:
-          $ref: '#/components/schemas/DataSourceOverrides'
-          deprecated: true
-    EnvironmentAssetRef:
-      description: Reference information about environment asset.
-      required:
-      - id
-      - name
-      properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
-        name:
-          $ref: '#/components/schemas/AssetName'
-        toolTypes:
-          description: the type of tools as defined in the connections of the environment asset.
-          type:
-          - array
-          - 'null'
-          items:
-            $ref: '#/components/schemas/ToolType'
-    AssetUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      example:
-        name: my-asset
-    ToolType:
-      description: Super set of Internal and External tool types.
-      type: string
-      minLength: 1
-      enum:
-      - jupyter-notebook
-      - pycharm
-      - visual-studio-code
-      - tensorboard
-      - rstudio
-      - mlflow
-      - custom
-      - wandb
-      - matlab
-      - comet
-      - chatbot-ui
-    AssetId:
-      description: Unique identifier of the asset.
-      type: string
-      format: uuid
-      minLength: 1
     AssetReadOnlyFields:
       required:
       - id
@@ -496,207 +332,56 @@ components:
         updateCount:
           $ref: '#/components/schemas/UpdateCount'
       type: object
-    CpuCoreRequest:
-      description: CPU units to allocate for the created workload (0.5, 1, .etc). The workload will receive at least this amount of CPU. Note that the workload will not be scheduled unless the system can guarantee this amount of CPUs to the workload.
+    CpuCoreLimit:
+      description: Limitations on the number of CPUs consumed by the workload (0.5, 1, .etc). The system guarantees that this workload will not be able to consume more than this amount of CPUs.
       format: double
       type:
       - number
       - 'null'
-      example: 0.5
+      example: 2
       minimum: 0
-    Error:
-      required:
-      - code
-      - message
+    ExtendedResource:
+      description: Quantity of an extended resource.
       properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    Scope:
-      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
-      type: string
-      minLength: 1
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
-    ComputeCreationRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetCreationRequest'
-        spec:
-          allOf:
-          - $ref: '#/components/schemas/ComputeAssetSpec'
-          type:
-          - object
-          - 'null'
-    ExtendedResources:
-      description: Extended resources and their quantity.
-      type:
-      - array
-      - 'null'
-      items:
-        $ref: '#/components/schemas/ExtendedResource'
-    GpuPortionRequest:
-      description: Required if and only if gpuRequestType is portion. States the portion of the GPU to allocate for the created workload, per GPU device, between 0 and 1. The default is no allocated GPUs.
-      type:
-      - number
-      - 'null'
-      format: double
-      example: 0.5
-      minimum: 0
-    ComputeListResponse:
-      required:
-      - entries
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/ComputeAsset'
-    ComputeAssetSpec:
-      properties:
-        cpuCoreLimit:
-          $ref: '#/components/schemas/CpuCoreLimit'
-        cpuCoreRequest:
-          $ref: '#/components/schemas/CpuCoreRequest'
-        cpuMemoryLimit:
-          $ref: '#/components/schemas/CpuMemoryLimit'
-        cpuMemoryRequest:
-          $ref: '#/components/schemas/CpuMemoryRequest'
-        extendedResources:
-          $ref: '#/components/schemas/ExtendedResources'
-        gpuDevicesRequest:
-          $ref: '#/components/schemas/GpuDevicesRequest'
-        gpuMemoryLimit:
-          $ref: '#/components/schemas/GpuMemoryLimit'
-        gpuMemoryRequest:
-          $ref: '#/components/schemas/GpuMemoryRequest'
-        gpuPortionLimit:
-          $ref: '#/components/schemas/GpuPortionLimit'
-        gpuPortionRequest:
-          $ref: '#/components/schemas/GpuPortionRequest'
-        gpuRequestType:
-          $ref: '#/components/schemas/GpuRequestType'
-        largeShmRequest:
-          $ref: '#/components/schemas/LargeShmRequest'
-      type: object
-    WorkloadSupportedTypes:
-      properties:
-        inference:
-          description: Is inference a supported workload type.
-          type:
-          - boolean
-          - 'null'
-        workspace:
-          description: Is workspace a supported workload type.
-          type:
-          - boolean
-          - 'null'
-        training:
-          description: Is training a supported workload type.
-          type:
-          - boolean
-          - 'null'
-        distributed:
-          description: Is distributed a supported workload type.
-          type:
-          - boolean
-          - 'null'
-        distFramework:
-          description: The distributed training framework used in the workload.
+        resource:
+          description: The name of the extended resource (mandatory)
           type:
           - string
           - 'null'
-          enum:
-          - MPI
-          - PyTorch
-          - TF
-          - XGBoost
+          example: hardware-vendor.example/foo
+          minLength: 1
+          pattern: .*
+        quantity:
+          description: The requested quantity for the resource.
+          type:
+          - string
+          - 'null'
+          example: 2
+          minLength: 1
+          pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+        exclude:
+          description: Use 'true' in case the extended resource is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type:
+          - boolean
+          - 'null'
+          example: false
       type:
       - object
       - 'null'
-    CpuMemoryLimit:
-      description: Limitations on the CPU memory to allocate for this workload (1G, 20M, .etc). The system guarantees that this workload will not be able to consume more than this amount of memory. The workload will receive an error when trying to allocate more memory than this limit.
+    LargeShmRequest:
+      description: A large /dev/shm device to mount into a container running the created workload. An shm is a shared file system mounted on RAM.
       type:
-      - string
+      - boolean
       - 'null'
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 30M
-    WorkloadId1:
-      description: A unique ID of the workload.
-      type: string
-      format: uuid
-    AssetDescription:
-      description: The description of the asset.
+      example: false
+    GpuDevicesRequest:
+      description: Requested number of GPU devices. Currently if more than one device is requested, it is not possible to provide values for gpuMemory or gpuPortion.
       type:
-      - string
+      - integer
       - 'null'
-      minLength: 1
-      maxLength: 250
-      example: description of my asset.
-    ComputeUpdateRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetUpdateRequest'
-        spec:
-          allOf:
-          - $ref: '#/components/schemas/ComputeAssetSpec'
-          type:
-          - object
-          - 'null'
-    GpuMemoryRequest:
-      description: Required if and only if gpuRequestType is memory. States the GPU memory to allocate for the created workload, per GPU device. Note that the workload will not be scheduled unless the system can guarantee this amount of GPU memory to the workload.
-      type:
-      - string
-      - 'null'
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 10M
-    WorkloadName:
-      description: The name of the workload.
-      type: string
-      minLength: 1
-      example: my-workload-name
-      pattern: .*
-    GpuRequestType:
-      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
-      type:
-      - string
-      - 'null'
-      minLength: 1
-      enum:
-      - portion
-      - memory
-    ComputeAsset:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetMeta'
-        spec:
-          $ref: '#/components/schemas/ComputeAssetSpec'
-        usedBy:
-          $ref: '#/components/schemas/AssetUsageInfo'
-        usageTimes:
-          $ref: '#/components/schemas/UsageTimesInfo'
-        compliance:
-          $ref: '#/components/schemas/ComplianceInfo'
+      format: int32
+      example: 1
+      minimum: 0
     AssetCreationFields:
       type: object
       required:
@@ -732,47 +417,6 @@ components:
           - boolean
           - 'null'
           default: false
-    ExtendedResource:
-      description: Quantity of an extended resource.
-      properties:
-        resource:
-          description: The name of the extended resource (mandatory)
-          type:
-          - string
-          - 'null'
-          example: hardware-vendor.example/foo
-          minLength: 1
-          pattern: .*
-        quantity:
-          description: The requested quantity for the resource.
-          type:
-          - string
-          - 'null'
-          example: 2
-          minLength: 1
-          pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-        exclude:
-          description: Use 'true' in case the extended resource is defined in defaults of the policy, and you wish to exclude it from the workload.
-          type:
-          - boolean
-          - 'null'
-          example: false
-      type:
-      - object
-      - 'null'
-    AssetCreationRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      example:
-        name: my-asset
-        scope: tenant
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          inference: false
-          distributed: true
-          distFramework: TF
     DataSourceOverrides:
       description: specific fields to override in the data source.
       type:
@@ -785,25 +429,16 @@ components:
           - 'null'
           minLength: 1
           example: /container/directory
-    UsageTimesInfo:
-      description: Details about times the asset has been used by workloads, etc.
+    AssetRef:
+      description: Reference information about an asset.
+      required:
+      - id
+      - name
       properties:
-        lastUsedByWorkload:
-          description: The time at which the asset were last used by a workload of given type and project. This field requires complyToProject and complyToWorkload types flags of the API, to specify the workload type and project id.
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          format: date-time
-      type:
-      - object
-      - 'null'
-    LargeShmRequest:
-      description: A large /dev/shm device to mount into a container running the created workload. An shm is a shared file system mounted on RAM.
-      type:
-      - boolean
-      - 'null'
-      example: false
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
     AssetUsageInfo:
       description: Details about resources that use the asset.
       properties:
@@ -838,118 +473,465 @@ components:
       type:
       - object
       - 'null'
-  parameters:
-    AssetDepartmentFilter:
-      name: departmentId
-      in: query
-      description: Filter results by department id. If scope filter is department, only assets from the specific department will be included in the response. Otherwise, the response will include department, cluster, tenant and system assets.
-      required: false
-      schema:
-        type: string
-        example: '1'
-    ComplyToProject:
-      name: complyToProject
-      in: query
-      required: false
-      description: Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type.
-      schema:
-        type: integer
-        format: int32
-    ComplyToWorkloadType:
-      name: complyToWorkloadType
-      in: query
-      required: false
-      description: Include workload creation compliance information of an asset, for a given workload type, as part of the response. To check compliance, you need to provide both project id and workload type.
-      schema:
-        type: string
-        enum:
-        - Workspace
-        - Training
-        - Distributed
-        - Inference
-    AssetNameFilter:
-      name: name
-      in: query
-      required: false
-      description: Filter results by name.
-      schema:
-        type: string
-    AssetScopeFilter:
-      name: scope
-      in: query
-      required: false
-      description: 'Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project.'
-      schema:
-        type: string
-    includeDescendants:
-      name: includeDescendants
-      in: query
-      required: false
-      description: Indicates whether to include assets from all descendant scopes under the specified scope. When set to true, and a specific scope identifier (for example, clusterId) is provided, the query also returns assets from all nested scopes within it (for example, departments and projects).  Mutually exclusive with scope.
-      schema:
-        type: boolean
-    AssetProjectFilter:
-      name: projectId
-      in: query
-      required: false
-      description: Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets.
-      schema:
-        type: integer
-        format: int32
-    IncludeUsageInfo:
-      name: usageInfo
-      in: query
-      required: false
-      description: Whether the query should include asset usage information as part of the response.
-      schema:
-        type: boolean
-    ComplyToReplicaType:
-      name: complyToReplicaType
-      in: query
-      required: false
-      description: Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well.
-      schema:
-        type: string
-        enum:
-        - Worker
-        - Master
-    AssetClusterFilter:
-      name: clusterId
-      in: query
-      description: Filter results by Universally Unique Identifier (UUID) of the cluster. If scope filter is cluster, only assets from the specific cluster will be included in the response. Otherwise, the response will include cluster, tenant and system assets.
-      required: false
-      schema:
-        type: string
-        format: uuid
-        example: d73a738f-fab3-430a-8fa3-5241493d7128
+    ComputeCreationRequest:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetCreationRequest'
+        spec:
+          allOf:
+          - $ref: '#/components/schemas/ComputeAssetSpec'
+          type:
+          - object
+          - 'null'
+    AssetUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      example:
+        name: my-asset
+    CpuCoreRequest:
+      description: CPU units to allocate for the created workload (0.5, 1, .etc). The workload will receive at least this amount of CPU. Note that the workload will not be scheduled unless the system can guarantee this amount of CPUs to the workload.
+      format: double
+      type:
+      - number
+      - 'null'
+      example: 0.5
+      minimum: 0
+    AssetDescription:
+      description: The description of the asset.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      maxLength: 250
+      example: description of my asset.
+    ExtendedResources:
+      description: Extended resources and their quantity.
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/ExtendedResource'
+    CpuMemoryLimit:
+      description: Limitations on the CPU memory to allocate for this workload (1G, 20M, .etc). The system guarantees that this workload will not be able to consume more than this amount of memory. The workload will receive an error when trying to allocate more memory than this limit.
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 30M
+    AssetUpdatableFields:
+      required:
+      - name
+      properties:
+        name:
+          $ref: '#/components/schemas/AssetName'
+        description:
+          $ref: '#/components/schemas/AssetDescription'
+    AssetKind:
+      description: The kind of the asset.
+      type: string
+      minLength: 1
+      enum:
+      - compute
+      - environment
+      - accessKey
+      - dockerRegistry
+      - password
+      - genericSecret
+      - registry
+      - s3
+      - git
+      - nfs
+      - pvc
+      - hostPath
+      - workload-template
+      - model
+      - config-map
+      - secret-volume
+      - data-volume
+      - ngcApiKey
+    ToolType:
+      description: Super set of Internal and External tool types.
+      type: string
+      minLength: 1
+      enum:
+      - jupyter-notebook
+      - pycharm
+      - visual-studio-code
+      - tensorboard
+      - rstudio
+      - mlflow
+      - custom
+      - wandb
+      - matlab
+      - comet
+      - chatbot-ui
+    Scope:
+      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
+      type: string
+      minLength: 1
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
+    AssetMeta:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      - $ref: '#/components/schemas/AssetReadOnlyFields'
+      example:
+        name: my-asset
+        scope: tenant
+        id: a418ed33-9399-48c0-a890-122cadd13bfd
+        kind: s3
+        createdBy: test@run.ai
+        createdAt: '2023-02-23T14:25:36.707685Z'
+        updatedBy: test@run.ai
+        updatedAt: '2023-02-23T14:25:36.707685Z'
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          distributed: true
+          distFramework: TF
+    WorkloadRefAndStatus:
+      description: Id, name and status of a workspace or training
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/WorkloadId1'
+        name:
+          $ref: '#/components/schemas/WorkloadName'
+        status:
+          description: The status of the workspace or training.
+          type: string
+          minLength: 1
+    WorkloadName:
+      description: The name of the workload.
+      type: string
+      minLength: 1
+      example: my-workload-name
+      pattern: .*
+    WorkloadId1:
+      description: A unique ID of the workload.
+      type: string
+      format: uuid
+    ComputeUpdateRequest:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetUpdateRequest'
+        spec:
+          allOf:
+          - $ref: '#/components/schemas/ComputeAssetSpec'
+          type:
+          - object
+          - 'null'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    GpuMemoryRequest:
+      description: Required if and only if gpuRequestType is memory. States the GPU memory to allocate for the created workload, per GPU device. Note that the workload will not be scheduled unless the system can guarantee this amount of GPU memory to the workload.
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 10M
+    ClusterIdOptional:
+      description: The id of the cluster.
+      type:
+      - string
+      - 'null'
+      format: uuid
+      minLength: 1
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    GpuPortionLimit:
+      description: Limitations on the portion consumed by the workload, per GPU device. The system guarantees The gpuPotionLimit must be no less than the gpuPortionRequest.
+      type:
+      - number
+      - 'null'
+      format: double
+      example: 0.5
+      minimum: 0
+    PolicyRuleEnum:
+      description: Indicates which validation rule (e.g., min, max, step, options, required, canEdit, canAdd) conflicted with policy restrictions, causing the asset or template to be rejected.
+      type:
+      - string
+      - 'null'
+      enum:
+      - min
+      - max
+      - step
+      - options
+      - required
+      - canEdit
+      - canAdd
+      - locked
+    AssetsUsageRef:
+      description: Reference information about usage of assets by other assets, for example datasources that uses credentials.
+      properties:
+        environment:
+          type:
+          - object
+          - 'null'
+          description: environment asset.
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentAssetRef'
+          deprecated: true
+        environments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetRef'
+        compute:
+          $ref: '#/components/schemas/AssetsUsageRefCompute'
+          deprecated: true
+        computes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetRef'
+        datasources:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetDatasourceRef'
+    GpuRequestType:
+      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      enum:
+      - portion
+      - memory
+    GpuPortionRequest:
+      description: Required if and only if gpuRequestType is portion. States the portion of the GPU to allocate for the created workload, per GPU device, between 0 and 1. The default is no allocated GPUs.
+      type:
+      - number
+      - 'null'
+      format: double
+      example: 0.5
+      minimum: 0
+    UsageTimesInfo:
+      description: Details about times the asset has been used by workloads, etc.
+      properties:
+        lastUsedByWorkload:
+          description: The time at which the asset were last used by a workload of given type and project. This field requires complyToProject and complyToWorkload types flags of the API, to specify the workload type and project id.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          format: date-time
+      type:
+      - object
+      - 'null'
+    ComputeAssetSpec:
+      properties:
+        cpuCoreLimit:
+          $ref: '#/components/schemas/CpuCoreLimit'
+        cpuCoreRequest:
+          $ref: '#/components/schemas/CpuCoreRequest'
+        cpuMemoryLimit:
+          $ref: '#/components/schemas/CpuMemoryLimit'
+        cpuMemoryRequest:
+          $ref: '#/components/schemas/CpuMemoryRequest'
+        extendedResources:
+          $ref: '#/components/schemas/ExtendedResources'
+        gpuDevicesRequest:
+          $ref: '#/components/schemas/GpuDevicesRequest'
+        gpuMemoryLimit:
+          $ref: '#/components/schemas/GpuMemoryLimit'
+        gpuMemoryRequest:
+          $ref: '#/components/schemas/GpuMemoryRequest'
+        gpuPortionLimit:
+          $ref: '#/components/schemas/GpuPortionLimit'
+        gpuPortionRequest:
+          $ref: '#/components/schemas/GpuPortionRequest'
+        gpuRequestType:
+          $ref: '#/components/schemas/GpuRequestType'
+        largeShmRequest:
+          $ref: '#/components/schemas/LargeShmRequest'
+      type: object
+    EnvironmentAssetRef:
+      description: Reference information about environment asset.
+      required:
+      - id
+      - name
+      properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
+        toolTypes:
+          description: the type of tools as defined in the connections of the environment asset.
+          type:
+          - array
+          - 'null'
+          items:
+            $ref: '#/components/schemas/ToolType'
+    CpuMemoryRequest:
+      description: The amount of CPU memory to allocate for this workload (1G, 20M, .etc). The workload will receive at least this amount of memory. Note that the workload will not be scheduled unless the system can guarantee this amount of memory to the workload
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 20M
+    GpuMemoryLimit:
+      description: Limitation on the memory consumed by the workload, per GPU device. The system guarantees The gpuMemoryLimit must be no less than gpuMemoryRequest.
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 10M
+    AssetCreationRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      example:
+        name: my-asset
+        scope: tenant
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          inference: false
+          distributed: true
+          distFramework: TF
+    ComputeListResponse:
+      required:
+      - entries
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/ComputeAsset'
     AssetId:
-      name: AssetId
-      in: path
-      required: true
       description: Unique identifier of the asset.
-      schema:
-        type: string
-        format: uuid
-        minLength: 1
+      type: string
+      format: uuid
+      minLength: 1
+    HttpResponse:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+    ComputeAsset:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetMeta'
+        spec:
+          $ref: '#/components/schemas/ComputeAssetSpec'
+        usedBy:
+          $ref: '#/components/schemas/AssetUsageInfo'
+        usageTimes:
+          $ref: '#/components/schemas/UsageTimesInfo'
+        compliance:
+          $ref: '#/components/schemas/ComplianceInfo'
+    ComplianceInfoReason:
+      description: An issue preventing the use of a template or asset for creating workloads in a given project.
+      required:
+      - details
+      properties:
+        field:
+          description: For policy related issues, includes a json path to the field in the policy for which the issue applies.
+          type:
+          - string
+          - 'null'
+          pattern: .*
+        details:
+          description: Explanation of the issue.
+          type: string
+          pattern: .*
+        rule:
+          $ref: '#/components/schemas/PolicyRuleEnum'
+    WorkloadSupportedTypes:
+      properties:
+        inference:
+          description: Is inference a supported workload type.
+          type:
+          - boolean
+          - 'null'
+        workspace:
+          description: Is workspace a supported workload type.
+          type:
+          - boolean
+          - 'null'
+        training:
+          description: Is training a supported workload type.
+          type:
+          - boolean
+          - 'null'
+        distributed:
+          description: Is distributed a supported workload type.
+          type:
+          - boolean
+          - 'null'
+        distFramework:
+          description: The distributed training framework used in the workload.
+          type:
+          - string
+          - 'null'
+          enum:
+          - MPI
+          - PyTorch
+          - TF
+          - XGBoost
+      type:
+      - object
+      - 'null'
+    AssetDatasourceRef:
+      description: Reference information about a datasource asset.
+      required:
+      - id
+      - name
+      - kind
+      properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
+        kind:
+          $ref: '#/components/schemas/AssetKind'
+        overrides:
+          $ref: '#/components/schemas/DataSourceOverrides'
+          deprecated: true
+    UpdateCount:
+      description: the value of an update counter of a data in the system.
+      type: integer
+      format: int64
+      example: 12345
+    AssetName:
+      description: The name of the asset.
+      type: string
+      minLength: 1
+      example: my-asset
   responses:
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
     404NotFound:
       description: The specified resource was not found
       content:
@@ -959,15 +941,24 @@ components:
           example:
             code: 404
             message: Resource id not found.
-    403Forbidden:
-      description: Forbidden
+    503ServiceUnavailable:
+      description: unexpected error
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
           example:
-            code: 403
-            message: You do not have sufficient permissions.
+            code: 503
+            message: Please try again in few minutes.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
     400BadRequest:
       description: Bad request.
       content:
@@ -977,15 +968,6 @@ components:
           example:
             code: 400
             message: Required parameter is missing
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
     202Accepted:
       description: Accepted.
       content:
@@ -995,6 +977,24 @@ components:
           example:
             code: 202
             message: Request has been accepted.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
   securitySchemes:
     bearerAuth:
       type: http

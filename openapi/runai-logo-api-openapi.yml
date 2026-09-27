@@ -85,30 +85,32 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  schemas:
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    LogoCreationRequest:
+      type: object
+      required:
+      - logo
+      properties:
+        logo:
+          type: string
+          description: Base64 logo file
   responses:
-    415UnsupportedMediaType:
-      description: Unsupported media type
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    413RequestEntityTooLarge:
-      description: Request entity too large
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    204NoContent:
-      description: No Content.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -118,6 +120,14 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
+    415UnsupportedMediaType:
+      description: Unsupported media type
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    204NoContent:
+      description: No Content.
     404NotFound:
       description: The specified resource was not found
       content:
@@ -127,6 +137,12 @@ components:
           example:
             code: 404
             message: Resource id not found.
+    413RequestEntityTooLarge:
+      description: Request entity too large
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     403Forbidden:
       description: Forbidden
       content:
@@ -145,6 +161,15 @@ components:
           example:
             code: 500
             message: Something went wrong.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
     400BadRequest:
       description: Bad request.
       content:
@@ -154,31 +179,6 @@ components:
           example:
             code: 400
             message: Required parameter is missing
-  schemas:
-    LogoCreationRequest:
-      type: object
-      required:
-      - logo
-      properties:
-        logo:
-          type: string
-          description: Base64 logo file
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
   securitySchemes:
     bearerAuth:
       type: http

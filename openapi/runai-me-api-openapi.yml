@@ -80,74 +80,6 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    MeAccessRulesResponse:
-      type: object
-      properties:
-        accessRules:
-          type: object
-          required:
-          - totalRecords
-          - displayRecords
-          - accessRules
-          properties:
-            totalRecords:
-              type: integer
-              example: 1
-            displayRecords:
-              type: integer
-              example: 1
-            accessRules:
-              $ref: '#/components/schemas/MeAccessRules'
-    TenantId:
-      description: The id of the tenant.
-      type: integer
-      format: int32
-      example: 1001
-    MeAccessRule:
-      allOf:
-      - $ref: '#/components/schemas/AccessRuleCreationFields'
-      - $ref: '#/components/schemas/EnrichmentDataFields'
-      - required:
-        - tenantId
-      - properties:
-          id:
-            type: integer
-            format: int32
-            example: 32
-          tenantId:
-            $ref: '#/components/schemas/TenantId'
-    ScopeType:
-      type: string
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
-    ClusterId:
-      description: The id of the cluster.
-      type: string
-      format: uuid
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    MeAccessRules:
-      type: array
-      items:
-        $ref: '#/components/schemas/MeAccessRule'
-      x-schema-name: MeAccessRules
-    EnrichmentDataFields:
-      type: object
-      required:
-      - roleName
-      - scopeName
-      properties:
-        roleName:
-          type: string
-          description: The name of the assigned role (e.g., admin, viewer).
-          example: admin
-        scopeName:
-          type: string
-          description: Human-readable name of the scope (e.g., tenant-x).
-          example: tenant-x
     Error:
       required:
       - code
@@ -164,6 +96,30 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    EnrichmentDataFields:
+      type: object
+      required:
+      - roleName
+      - scopeName
+      properties:
+        roleName:
+          type: string
+          description: The name of the assigned role (e.g., admin, viewer).
+          example: admin
+        scopeName:
+          type: string
+          description: Human-readable name of the scope (e.g., tenant-x).
+          example: tenant-x
     AccessRuleCreationFields:
       type: object
       required:
@@ -196,6 +152,37 @@ components:
           - description: 'The type of scope the access rule applies to. Valid values: system, tenant, cluster, department, project.'
         clusterId:
           $ref: '#/components/schemas/ClusterId'
+    MeAccessRules:
+      type: array
+      items:
+        $ref: '#/components/schemas/MeAccessRule'
+      x-schema-name: MeAccessRules
+    ScopeType:
+      type: string
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
+    MeAccessRulesResponse:
+      type: object
+      properties:
+        accessRules:
+          type: object
+          required:
+          - totalRecords
+          - displayRecords
+          - accessRules
+          properties:
+            totalRecords:
+              type: integer
+              example: 1
+            displayRecords:
+              type: integer
+              example: 1
+            accessRules:
+              $ref: '#/components/schemas/MeAccessRules'
     SubjectType:
       type: string
       description: 'Subject type enum for access rules.
@@ -209,35 +196,19 @@ components:
       - app
       - service-account
       - group
-  parameters:
-    Search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test project
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
+    MeAccessRule:
+      allOf:
+      - $ref: '#/components/schemas/AccessRuleCreationFields'
+      - $ref: '#/components/schemas/EnrichmentDataFields'
+      - required:
+        - tenantId
+      - properties:
+          id:
+            type: integer
+            format: int32
+            example: 32
+          tenantId:
+            $ref: '#/components/schemas/TenantId'
   responses:
     503ServiceUnavailable:
       description: unexpected error
@@ -266,6 +237,35 @@ components:
           example:
             code: 400
             message: Required parameter is missing
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
+    Search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test project
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
   securitySchemes:
     bearerAuth:
       type: http

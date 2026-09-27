@@ -226,177 +226,72 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  parameters:
-    Search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test project
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    NodesSortBy:
-      name: sortBy
-      in: query
-      required: false
-      description: Sort results by a parameters.
-      schema:
-        $ref: '#/components/schemas/NodeFilterSortFields'
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
-    TelemetryGroupBy:
-      name: groupBy
-      in: query
-      description: workload fields to group the data by
-      explode: false
-      required: false
-      schema:
-        type: array
-        maxItems: 2
-        items:
-          type: string
-          enum:
-          - ClusterId
-          - Nodepool
-          - Node
-    NodesFilter:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(name|status|nodePool|gpuType|nvLinkDomainUid|nvLinkCliqueId|clusterUuid)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-        example:
-        - name!=some-name
-      explode: false
-    EndRequired:
-      name: end
-      in: query
-      description: End date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-07T12:09:18.211Z'
-    TelemetryType:
-      name: telemetryType
-      in: query
-      required: true
-      description: specifies what data to request
-      schema:
-        $ref: '#/components/schemas/NodeTelemetryType'
-    QueryNodeName:
-      name: nodeName
-      in: query
-      description: Deprecated - use filterBy instead. The node name; Cannot be used together with filterBy, sort, offset, limit or search query params.
-      schema:
-        type: string
-      required: false
-    NodeId:
-      name: nodeId
-      in: path
-      description: The node UUID.
-      schema:
-        type: string
-        format: uuid
-        minLength: 1
-        example: 9f55255e-11ed-47c7-acef-fc4054768dbc
-      required: true
-    FilterByNodepoolName:
-      name: nodepoolName
-      in: query
-      description: Filter using the nodepool.
-      required: false
-      schema:
-        type: string
-        example: default
-    FilterByCluster:
-      name: clusterId
-      in: query
-      description: Filter using the Universally Unique Identifier (UUID) of the cluster.
-      required: false
-      schema:
-        type: string
-        format: uuid
-        example: d73a738f-fab3-430a-8fa3-5241493d7128
-    NodeMetricTypes:
-      name: metricType
-      in: query
-      required: true
-      description: Specify which data to request.
-      explode: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/NodeMetricType'
-    StartRequired:
-      name: start
-      in: query
-      description: Start date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-06T12:09:18.211Z'
-    ClusterUuid:
-      name: clusterUuid
-      in: path
-      required: true
-      description: The Universally Unique Identifier (UUID) of the cluster.
-      schema:
-        type: string
-        format: uuid
-        minLength: 1
-        example: 9f55255e-11ed-47c7-acef-fc4054768dbc
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
-    NumberOfSamples:
-      name: numberOfSamples
-      in: query
-      description: The number of samples to take in the specified time range.
-      required: false
-      schema:
-        type: integer
-        example: 20
-        maximum: 1000
-        minimum: 0
-        default: 20
   schemas:
     ClusterId:
       description: The id of the cluster.
       type: string
       format: uuid
       example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    NodeAdditionalReadFields:
+      type: object
+      required:
+      - clusterUuid
+      - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique identifier of the node.
+        clusterUuid:
+          $ref: '#/components/schemas/ClusterId'
+        updatedAt:
+          type: string
+          format: date-time
+      x-schema-name: NodeAdditionalReadFields
+    Node:
+      allOf:
+      - $ref: '#/components/schemas/NodeInfo'
+      - $ref: '#/components/schemas/NodeAdditionalFields'
+      - $ref: '#/components/schemas/NodeAdditionalReadFields'
+      x-schema-name: Node
+    NodeTaint:
+      type: object
+      required:
+      - key
+      - effect
+      properties:
+        key:
+          type: string
+          description: The taint key to be applied to a node.
+          example: foo
+        value:
+          type: string
+          description: The taint value corresponding to the taint key.
+          example: bar
+        effect:
+          type: string
+          description: The effect of the taint on pods that do not tolerate the taint.
+          enum:
+          - NoSchedule
+          - PreferNoSchedule
+          - NoExecute
+      x-schema-name: NodeTaint
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
     NodeInfo:
       type: object
       required:
@@ -441,81 +336,43 @@ components:
           description: NV Link Clique Id
           example: clique-id
       x-schema-name: NodeInfo
-    NodeTelemetryType:
-      type: string
-      enum:
-      - READY_GPU_NODES
-      - READY_GPUS
-      - TOTAL_GPU_NODES
-      - TOTAL_GPUS
-      - IDLE_ALLOCATED_GPUS
-      - FREE_GPUS
-      - ALLOCATED_GPUS
-      - TOTAL_CPU_CORES
-      - USED_CPU_CORES
-      - ALLOCATED_CPU_CORES
-      - TOTAL_GPU_MEMORY_BYTES
-      - USED_GPU_MEMORY_BYTES
-      - TOTAL_CPU_MEMORY_BYTES
-      - USED_CPU_MEMORY_BYTES
-      - ALLOCATED_CPU_MEMORY_BYTES
-      - FULLY_FREE_GPU_NODES
-    NodeTaint:
-      type: object
-      required:
-      - key
-      - effect
-      properties:
-        key:
-          type: string
-          description: The taint key to be applied to a node.
-          example: foo
-        value:
-          type: string
-          description: The taint value corresponding to the taint key.
-          example: bar
-        effect:
-          type: string
-          description: The effect of the taint on pods that do not tolerate the taint.
-          enum:
-          - NoSchedule
-          - PreferNoSchedule
-          - NoExecute
-      x-schema-name: NodeTaint
-    NodeAdditionalReadFields:
-      type: object
-      required:
-      - clusterUuid
-      - updatedAt
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: The unique identifier of the node.
-        clusterUuid:
-          $ref: '#/components/schemas/ClusterId'
-        updatedAt:
-          type: string
-          format: date-time
-      x-schema-name: NodeAdditionalReadFields
-    NodeStatusConditionDetails:
+    MeasurementResponse:
       type: object
       required:
       - type
-      - reason
+      - values
       properties:
         type:
           type: string
-          description: Type of node condition.
-        reason:
-          type: string
-          description: (brief) reason for the condition's last transition.
-          example: KubeletNotReady
-        message:
-          type: string
-          description: Human readable message indicating details about last transition.
-          example: container runtime status check may not have completed yet
-      x-schema-name: NodeStatusConditionDetails
+          description: specifies what data returned
+          example: ALLOCATED_GPU
+        labels:
+          type:
+          - object
+          - 'null'
+          description: labels of the metric measurement
+          example: '{''gpu'': ''3''}'
+          additionalProperties:
+            type: string
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            required:
+            - value
+            - timestamp
+            properties:
+              value:
+                type: string
+                example: '85'
+              timestamp:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2023-06-06 12:09:18.211'
     NodeFilterSortFields:
       type: string
       enum:
@@ -526,31 +383,50 @@ components:
       - nvLinkDomainUid
       - nvLinkCliqueId
       - clusterUuid
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    MetricsResponse:
+    NodeAdditionalFields:
       type: object
       required:
-      - measurements
+      - name
       properties:
-        measurements:
-          type: array
-          items:
-            $ref: '#/components/schemas/MeasurementResponse'
+        name:
+          type: string
+          description: The name of the node
+          example: worker-node-1
+      x-schema-name: NodeAdditionalFields
+    NodeMetricType:
+      type: string
+      description: Specify which metric data to request.
+      enum:
+      - GPU_UTILIZATION_PER_GPU
+      - GPU_UTILIZATION
+      - GPU_MEMORY_UTILIZATION_PER_GPU
+      - GPU_MEMORY_UTILIZATION
+      - GPU_MEMORY_USAGE_BYTES_PER_GPU
+      - GPU_MEMORY_USAGE_BYTES
+      - GPU_ALLOCATION_PER_GPU
+      - GPU_MEMORY_ALLOCATION_BYTES_PER_GPU
+      - GPU_IDLE_TIME_SECONDS_PER_GPU
+      - CPU_USAGE_CORES
+      - CPU_UTILIZATION
+      - CPU_MEMORY_USAGE_BYTES
+      - CPU_MEMORY_UTILIZATION
+      - GPU_OOMKILL_BURST_COUNT_PER_GPU
+      - GPU_OOMKILL_IDLE_COUNT_PER_GPU
+      - GPU_OOMKILL_SWAP_OUT_OF_RAM_COUNT_PER_GPU
+      - GPU_GRAPHICS_ENGINE_ACTIVITY_PER_GPU
+      - GPU_SM_ACTIVITY_PER_GPU
+      - GPU_SM_OCCUPANCY_PER_GPU
+      - GPU_TENSOR_ACTIVITY_PER_GPU
+      - GPU_FP64_ENGINE_ACTIVITY_PER_GPU
+      - GPU_FP32_ENGINE_ACTIVITY_PER_GPU
+      - GPU_FP16_ENGINE_ACTIVITY_PER_GPU
+      - GPU_MEMORY_BANDWIDTH_UTILIZATION_PER_GPU
+      - GPU_NVLINK_TRANSMITTED_BANDWIDTH_PER_GPU
+      - GPU_NVLINK_RECEIVED_BANDWIDTH_PER_GPU
+      - GPU_PCIE_TRANSMITTED_BANDWIDTH_PER_GPU
+      - GPU_PCIE_RECEIVED_BANDWIDTH_PER_GPU
+      - NVLINK_BANDWIDTH_TOTAL
+      - NVLINK_BANDWIDTH_TOTAL_PER_GPU
     TelemetryResponse:
       type: object
       required:
@@ -595,16 +471,62 @@ components:
                     name:
                       type: string
                       example: department-A
-    NodeAdditionalFields:
+    MetricsResponse:
       type: object
       required:
-      - name
+      - measurements
       properties:
-        name:
+        measurements:
+          type: array
+          items:
+            $ref: '#/components/schemas/MeasurementResponse'
+    Nodes:
+      type: object
+      required:
+      - nodes
+      properties:
+        nodes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Node'
+      x-schema-name: Nodes
+    NodeTelemetryType:
+      type: string
+      enum:
+      - READY_GPU_NODES
+      - READY_GPUS
+      - TOTAL_GPU_NODES
+      - TOTAL_GPUS
+      - IDLE_ALLOCATED_GPUS
+      - FREE_GPUS
+      - ALLOCATED_GPUS
+      - TOTAL_CPU_CORES
+      - USED_CPU_CORES
+      - ALLOCATED_CPU_CORES
+      - TOTAL_GPU_MEMORY_BYTES
+      - USED_GPU_MEMORY_BYTES
+      - TOTAL_CPU_MEMORY_BYTES
+      - USED_CPU_MEMORY_BYTES
+      - ALLOCATED_CPU_MEMORY_BYTES
+      - FULLY_FREE_GPU_NODES
+    NodeStatusConditionDetails:
+      type: object
+      required:
+      - type
+      - reason
+      properties:
+        type:
           type: string
-          description: The name of the node
-          example: worker-node-1
-      x-schema-name: NodeAdditionalFields
+          description: Type of node condition.
+        reason:
+          type: string
+          description: (brief) reason for the condition's last transition.
+          example: KubeletNotReady
+        message:
+          type: string
+          description: Human readable message indicating details about last transition.
+          example: container runtime status check may not have completed yet
+      x-schema-name: NodeStatusConditionDetails
     GpuInfo:
       type:
       - object
@@ -619,94 +541,16 @@ components:
         gpuCount:
           type: integer
       x-schema-name: GpuInfo
-    MeasurementResponse:
-      type: object
-      required:
-      - type
-      - values
-      properties:
-        type:
-          type: string
-          description: specifies what data returned
-          example: ALLOCATED_GPU
-        labels:
-          type:
-          - object
-          - 'null'
-          description: labels of the metric measurement
-          example: '{''gpu'': ''3''}'
-          additionalProperties:
-            type: string
-        values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            required:
-            - value
-            - timestamp
-            properties:
-              value:
-                type: string
-                example: '85'
-              timestamp:
-                type:
-                - string
-                - 'null'
-                format: date-time
-                example: '2023-06-06 12:09:18.211'
-    Nodes:
-      type: object
-      required:
-      - nodes
-      properties:
-        nodes:
-          type: array
-          items:
-            $ref: '#/components/schemas/Node'
-      x-schema-name: Nodes
-    NodeMetricType:
-      type: string
-      description: Specify which metric data to request.
-      enum:
-      - GPU_UTILIZATION_PER_GPU
-      - GPU_UTILIZATION
-      - GPU_MEMORY_UTILIZATION_PER_GPU
-      - GPU_MEMORY_UTILIZATION
-      - GPU_MEMORY_USAGE_BYTES_PER_GPU
-      - GPU_MEMORY_USAGE_BYTES
-      - GPU_ALLOCATION_PER_GPU
-      - GPU_MEMORY_ALLOCATION_BYTES_PER_GPU
-      - GPU_IDLE_TIME_SECONDS_PER_GPU
-      - CPU_USAGE_CORES
-      - CPU_UTILIZATION
-      - CPU_MEMORY_USAGE_BYTES
-      - CPU_MEMORY_UTILIZATION
-      - GPU_OOMKILL_BURST_COUNT_PER_GPU
-      - GPU_OOMKILL_IDLE_COUNT_PER_GPU
-      - GPU_OOMKILL_SWAP_OUT_OF_RAM_COUNT_PER_GPU
-      - GPU_GRAPHICS_ENGINE_ACTIVITY_PER_GPU
-      - GPU_SM_ACTIVITY_PER_GPU
-      - GPU_SM_OCCUPANCY_PER_GPU
-      - GPU_TENSOR_ACTIVITY_PER_GPU
-      - GPU_FP64_ENGINE_ACTIVITY_PER_GPU
-      - GPU_FP32_ENGINE_ACTIVITY_PER_GPU
-      - GPU_FP16_ENGINE_ACTIVITY_PER_GPU
-      - GPU_MEMORY_BANDWIDTH_UTILIZATION_PER_GPU
-      - GPU_NVLINK_TRANSMITTED_BANDWIDTH_PER_GPU
-      - GPU_NVLINK_RECEIVED_BANDWIDTH_PER_GPU
-      - GPU_PCIE_TRANSMITTED_BANDWIDTH_PER_GPU
-      - GPU_PCIE_RECEIVED_BANDWIDTH_PER_GPU
-      - NVLINK_BANDWIDTH_TOTAL
-      - NVLINK_BANDWIDTH_TOTAL_PER_GPU
-    Node:
-      allOf:
-      - $ref: '#/components/schemas/NodeInfo'
-      - $ref: '#/components/schemas/NodeAdditionalFields'
-      - $ref: '#/components/schemas/NodeAdditionalReadFields'
-      x-schema-name: Node
   responses:
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
     500InternalServerError:
       description: unexpected error
       content:
@@ -725,15 +569,6 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
     400BadRequest:
       description: Bad request.
       content:
@@ -743,6 +578,15 @@ components:
           example:
             code: 400
             message: Required parameter is missing
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
     401Unauthorized:
       description: Unauthorized
       content:
@@ -752,15 +596,171 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
+  parameters:
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
+    NodesFilter:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are == Equals, != Not equals, <= Less than or equal, >= Greater than or equal, =@ contains, !@ Does not contains, =^ Starts with and =$ Ends with. Dates are in ISO 8601 timestamp format and available for operators ==, !=, <= and >=.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(name|status|nodePool|gpuType|nvLinkDomainUid|nvLinkCliqueId|clusterUuid)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - name!=some-name
+      explode: false
+    NodesSortBy:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results by a parameters.
+      schema:
+        $ref: '#/components/schemas/NodeFilterSortFields'
+    QueryNodeName:
+      name: nodeName
+      in: query
+      description: Deprecated - use filterBy instead. The node name; Cannot be used together with filterBy, sort, offset, limit or search query params.
+      schema:
+        type: string
+      required: false
+    NodeMetricTypes:
+      name: metricType
+      in: query
+      required: true
+      description: Specify which data to request.
+      explode: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/NodeMetricType'
+    EndRequired:
+      name: end
+      in: query
+      description: End date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-07T12:09:18.211Z'
+    NumberOfSamples:
+      name: numberOfSamples
+      in: query
+      description: The number of samples to take in the specified time range.
+      required: false
+      schema:
+        type: integer
+        example: 20
+        maximum: 1000
+        minimum: 0
+        default: 20
+    TelemetryGroupBy:
+      name: groupBy
+      in: query
+      description: workload fields to group the data by
+      explode: false
+      required: false
+      schema:
+        type: array
+        maxItems: 2
+        items:
+          type: string
+          enum:
+          - ClusterId
+          - Nodepool
+          - Node
+    StartRequired:
+      name: start
+      in: query
+      description: Start date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-06T12:09:18.211Z'
+    FilterByNodepoolName:
+      name: nodepoolName
+      in: query
+      description: Filter using the nodepool.
+      required: false
+      schema:
+        type: string
+        example: default
+    NodeId:
+      name: nodeId
+      in: path
+      description: The node UUID.
+      schema:
+        type: string
+        format: uuid
+        minLength: 1
+        example: 9f55255e-11ed-47c7-acef-fc4054768dbc
+      required: true
+    Search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test project
+    FilterByCluster:
+      name: clusterId
+      in: query
+      description: Filter using the Universally Unique Identifier (UUID) of the cluster.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: d73a738f-fab3-430a-8fa3-5241493d7128
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    ClusterUuid:
+      name: clusterUuid
+      in: path
+      required: true
+      description: The Universally Unique Identifier (UUID) of the cluster.
+      schema:
+        type: string
+        format: uuid
+        minLength: 1
+        example: 9f55255e-11ed-47c7-acef-fc4054768dbc
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    TelemetryType:
+      name: telemetryType
+      in: query
+      required: true
+      description: specifies what data to request
+      schema:
+        $ref: '#/components/schemas/NodeTelemetryType'
   securitySchemes:
     bearerAuth:
       type: http

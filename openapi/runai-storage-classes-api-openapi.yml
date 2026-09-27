@@ -113,58 +113,18 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    StorageClassSpec:
-      type: object
-      required:
-      - isDefault
-      properties:
-        provisioner:
-          type: string
-          description: The provisioner type (unique name)
-          example: kubernetes.io/aws-ebs
-        allowVolumeExpansion:
-          type: boolean
-          description: Indicates whether the storage class allows volume expansion
-          example: true
-        isDefault:
-          type: boolean
-          description: Indicates whether the storage class is the default one
-          example: false
-    StorageClassPermissions:
-      type:
-      - object
-      - 'null'
-      description: Defines the access permissions and behavioral rules for this storage class.
-      properties:
-        allowedForAssets:
-          $ref: '#/components/schemas/AllowedForAssets'
-        allowedForWorkloads:
-          $ref: '#/components/schemas/AllowedForWorkloads'
-        allowedForEphemeralVolumes:
-          $ref: '#/components/schemas/AllowedForEphemeralVolumes'
-        allowedForPersistentVolumes:
-          $ref: '#/components/schemas/AllowedForPersistentVolumes'
-        allowDataSharing:
-          $ref: '#/components/schemas/AllowDataSharing'
-    StorageClassCustomization:
-      description: Optional UI/policy controls that define defaults and requirements when creating PVCs with this storage class.
-      properties:
-        accessMode:
-          $ref: '#/components/schemas/AccessModeCustomization'
-        volumeMode:
-          $ref: '#/components/schemas/VolumeModeCustomization'
-        claimSize:
-          $ref: '#/components/schemas/ClaimSizeCustomization'
-        attributes:
-          $ref: '#/components/schemas/AttributesCustomization'
-      type:
-      - object
-      - 'null'
-    AllowedForAssets:
+    AllowedForEphemeralVolumes:
       type:
       - boolean
       - 'null'
-      description: Determines whether PVC assets can be created using this storage class.
+      description: Allows workloads to create ephemeral volumes using this storage class. When disabled, users cannot (a) create PVC assets with autoDelete=true and ephemeral=true, or (b) include PVC instances with isEphemeral=false that use this storage class.
+    PvcClaimStepSize:
+      description: Defines the incremental step between allowed numeric values (for example, 1, 0.1).
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 1G
     VolumeModeCustomization:
       description: Defines whether the volumeMode field is required when creating PVCs and specifies default and supported modes for the storage class.
       properties:
@@ -196,92 +156,15 @@ components:
       type:
       - object
       - 'null'
-    AllowedForPersistentVolumes:
+    PvcAddedAttributeFormat:
       type:
+      - string
+      - 'null'
+      description: 'Defines the data type the attribute can accept. Enum: "text" "number" "boolean"'
+      enum:
+      - text
+      - number
       - boolean
-      - 'null'
-      description: Allows workloads to create persistent volumes using this storage class. When disabled, users cannot (a) create PVC assets with autoDelete=true and ephemeral=true, or (b) include PVC instances with isEphemeral=false that use this storage class.
-    StorageClass1:
-      type: object
-      required:
-      - storage_class_name
-      properties:
-        cluster_id:
-          type: string
-          format: uuid
-          description: Cluster ID which has sent the resource info
-          example: 550e8400-e29b-41d4-a716-446655440000
-        storage_class_name:
-          type: string
-          description: Storage class name
-          example: my-storage-class
-        Spec:
-          type: object
-          required:
-          - is_default
-          properties:
-            provisioner:
-              type: string
-              description: The provisioner type (unique name)
-              example: kubernetes.io/aws-ebs
-            allow_volume_expansion:
-              type: boolean
-              description: Indicates whether the storage class allows volume expansion
-              example: true
-            is_default:
-              type: boolean
-              description: Indicates whether the storage class is the default one
-              example: false
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    PvcClaimMinSize:
-      description: 'Minimum claim size allowed for PVCs created with this storage class. Mandatory when existingPvc = false. Recommended values: TB, GB, MB, TIB, GIB, MIB.'
-      type:
-      - string
-      - 'null'
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 1G
-    AccessModeCustomization:
-      description: Controls whether PVC access modes are required and what defaults to apply.
-      properties:
-        required:
-          type:
-          - boolean
-          - 'null'
-          description: If true, the accessMode field is mandatory when creating a PVC that uses this storage class.
-        default:
-          $ref: '#/components/schemas/PvcAccessModes'
-        supportedValues:
-          $ref: '#/components/schemas/PvcSupportedAccessModes'
-      type:
-      - object
-      - 'null'
-    PvcClaimMaxSize:
-      description: 'Maximum claim size allowed for PVCs created with this storage class. Mandatory when existingPvc = false. Recommended values: TB, GB, MB, TIB, GIB, MIB.'
-      type:
-      - string
-      - 'null'
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 1G
-    AttributesCustomization:
-      description: Defines additional annotation attributes to be applied to PVCs created under this storage class. Each attribute describes an annotation key and its expected value format, display name, and purpose.
-      type: array
-      items:
-        $ref: '#/components/schemas/PvcAddedAttribute'
     PvcAddedAttribute:
       description: Attribute that is added to any PVC of a given storage class.
       required:
@@ -369,15 +252,49 @@ components:
       type:
       - object
       - 'null'
-    PvcVolumeMode:
-      description: Default volume mode for the PVC. Choose between Filesystem (default) or Block.
+    StorageClasses1:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageClass1'
+    AllowedForAssets:
+      type:
+      - boolean
+      - 'null'
+      description: Determines whether PVC assets can be created using this storage class.
+    PvcClaimSize:
+      description: 'Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB'
       type:
       - string
       - 'null'
-      enum:
-      - Filesystem
-      - Block
-    V1Error:
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 1G
+    StorageClassCustomization:
+      description: Optional UI/policy controls that define defaults and requirements when creating PVCs with this storage class.
+      properties:
+        accessMode:
+          $ref: '#/components/schemas/AccessModeCustomization'
+        volumeMode:
+          $ref: '#/components/schemas/VolumeModeCustomization'
+        claimSize:
+          $ref: '#/components/schemas/ClaimSizeCustomization'
+        attributes:
+          $ref: '#/components/schemas/AttributesCustomization'
+      type:
+      - object
+      - 'null'
+    PvcClaimMinSize:
+      description: 'Minimum claim size allowed for PVCs created with this storage class. Mandatory when existingPvc = false. Recommended values: TB, GB, MB, TIB, GIB, MIB.'
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 1G
+    Error:
       required:
       - code
       - message
@@ -393,34 +310,60 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-    AllowedForEphemeralVolumes:
-      type:
-      - boolean
-      - 'null'
-      description: Allows workloads to create ephemeral volumes using this storage class. When disabled, users cannot (a) create PVC assets with autoDelete=true and ephemeral=true, or (b) include PVC instances with isEphemeral=false that use this storage class.
-    StorageClasses1:
-      type: object
-      required:
-      - items
+    PvcAccessModes:
+      description: Default access mode(s) applied to newly created PVCs unless explicitly overridden.
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/StorageClass1'
-    AllowedForWorkloads:
+        readWriteOnce:
+          description: Mount the volume as read/write by a single node.
+          type:
+          - boolean
+          - 'null'
+          default: true
+        readOnlyMany:
+          description: Mount the volume as read-only by many nodes.
+          type:
+          - boolean
+          - 'null'
+          default: false
+        readWriteMany:
+          description: Mount the volume as read/write by many nodes.
+          type:
+          - boolean
+          - 'null'
+          default: false
+      type:
+      - object
+      - 'null'
+    AllowedForPersistentVolumes:
       type:
       - boolean
       - 'null'
-      description: Allows workloads to include PVCs that use this storage class. When disabled, users cannot (a) include non-existing PVC assets created with this class in asset-based submissions, or (b) attach PVCs with existing=false to workloads using this class.
-    PvcAddedAttributeFormat:
+      description: Allows workloads to create persistent volumes using this storage class. When disabled, users cannot (a) create PVC assets with autoDelete=true and ephemeral=true, or (b) include PVC instances with isEphemeral=false that use this storage class.
+    PvcVolumeMode:
+      description: Default volume mode for the PVC. Choose between Filesystem (default) or Block.
       type:
       - string
       - 'null'
-      description: 'Defines the data type the attribute can accept. Enum: "text" "number" "boolean"'
       enum:
-      - text
-      - number
-      - boolean
+      - Filesystem
+      - Block
+    StorageClassSpec:
+      type: object
+      required:
+      - isDefault
+      properties:
+        provisioner:
+          type: string
+          description: The provisioner type (unique name)
+          example: kubernetes.io/aws-ebs
+        allowVolumeExpansion:
+          type: boolean
+          description: Indicates whether the storage class allows volume expansion
+          example: true
+        isDefault:
+          type: boolean
+          description: Indicates whether the storage class is the default one
+          example: false
     ClaimSizeCustomization:
       description: Defines the default, supported units, and range constraints for PVC claim sizes. These settings control the requested storage capacity when creating a PVC using this storage class.
       properties:
@@ -447,46 +390,85 @@ components:
       type:
       - object
       - 'null'
-    AllowDataSharing:
-      type:
-      - boolean
-      - 'null'
-      description: Allows creation of PVCs using a shared volume.
-    PvcClaimStepSize:
-      description: Defines the incremental step between allowed numeric values (for example, 1, 0.1).
-      type:
-      - string
-      - 'null'
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 1G
-    PvcClaimSize:
-      description: 'Requested size for the PVC. Mandatory when existingPvc is false. Recommended sizes: TB/GB/MB/TIB/GIB/MIB'
-      type:
-      - string
-      - 'null'
-      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-      example: 1G
-    PvcAccessModes:
-      description: Default access mode(s) applied to newly created PVCs unless explicitly overridden.
+    StorageClass1:
+      type: object
+      required:
+      - storage_class_name
       properties:
-        readWriteOnce:
-          description: Mount the volume as read/write by a single node.
+        cluster_id:
+          type: string
+          format: uuid
+          description: Cluster ID which has sent the resource info
+          example: 550e8400-e29b-41d4-a716-446655440000
+        storage_class_name:
+          type: string
+          description: Storage class name
+          example: my-storage-class
+        Spec:
+          type: object
+          required:
+          - is_default
+          properties:
+            provisioner:
+              type: string
+              description: The provisioner type (unique name)
+              example: kubernetes.io/aws-ebs
+            allow_volume_expansion:
+              type: boolean
+              description: Indicates whether the storage class allows volume expansion
+              example: true
+            is_default:
+              type: boolean
+              description: Indicates whether the storage class is the default one
+              example: false
+    StorageClassV2:
+      type: object
+      required:
+      - clusterId
+      - storageClassName
+      - spec
+      properties:
+        clusterId:
+          type: string
+          format: uuid
+          description: Cluster ID which has sent the resource info
+          example: 550e8400-e29b-41d4-a716-446655440000
+        storageClassName:
+          type: string
+          description: Storage class name
+          example: my-storage-class
+        spec:
+          $ref: '#/components/schemas/StorageClassSpec'
+        permissions:
+          $ref: '#/components/schemas/StorageClassPermissions'
+        customization:
+          $ref: '#/components/schemas/StorageClassCustomization'
+    AttributesCustomization:
+      description: Defines additional annotation attributes to be applied to PVCs created under this storage class. Each attribute describes an annotation key and its expected value format, display name, and purpose.
+      type: array
+      items:
+        $ref: '#/components/schemas/PvcAddedAttribute'
+    StorageClassesV2:
+      type: object
+      required:
+      - items
+      properties:
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/StorageClassV2'
+    AccessModeCustomization:
+      description: Controls whether PVC access modes are required and what defaults to apply.
+      properties:
+        required:
           type:
           - boolean
           - 'null'
-          default: true
-        readOnlyMany:
-          description: Mount the volume as read-only by many nodes.
-          type:
-          - boolean
-          - 'null'
-          default: false
-        readWriteMany:
-          description: Mount the volume as read/write by many nodes.
-          type:
-          - boolean
-          - 'null'
-          default: false
+          description: If true, the accessMode field is mandatory when creating a PVC that uses this storage class.
+        default:
+          $ref: '#/components/schemas/PvcAccessModes'
+        supportedValues:
+          $ref: '#/components/schemas/PvcSupportedAccessModes'
       type:
       - object
       - 'null'
@@ -514,38 +496,62 @@ components:
       type:
       - object
       - 'null'
-    StorageClassV2:
-      type: object
+    V1Error:
       required:
-      - clusterId
-      - storageClassName
-      - spec
+      - code
+      - message
       properties:
-        clusterId:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
           type: string
-          format: uuid
-          description: Cluster ID which has sent the resource info
-          example: 550e8400-e29b-41d4-a716-446655440000
-        storageClassName:
+        details:
           type: string
-          description: Storage class name
-          example: my-storage-class
-        spec:
-          $ref: '#/components/schemas/StorageClassSpec'
-        permissions:
-          $ref: '#/components/schemas/StorageClassPermissions'
-        customization:
-          $ref: '#/components/schemas/StorageClassCustomization'
-    StorageClassesV2:
-      type: object
-      required:
-      - items
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    AllowDataSharing:
+      type:
+      - boolean
+      - 'null'
+      description: Allows creation of PVCs using a shared volume.
+    StorageClassPermissions:
+      type:
+      - object
+      - 'null'
+      description: Defines the access permissions and behavioral rules for this storage class.
       properties:
-        items:
-          type: array
-          items:
-            $ref: '#/components/schemas/StorageClassV2'
+        allowedForAssets:
+          $ref: '#/components/schemas/AllowedForAssets'
+        allowedForWorkloads:
+          $ref: '#/components/schemas/AllowedForWorkloads'
+        allowedForEphemeralVolumes:
+          $ref: '#/components/schemas/AllowedForEphemeralVolumes'
+        allowedForPersistentVolumes:
+          $ref: '#/components/schemas/AllowedForPersistentVolumes'
+        allowDataSharing:
+          $ref: '#/components/schemas/AllowDataSharing'
+    AllowedForWorkloads:
+      type:
+      - boolean
+      - 'null'
+      description: Allows workloads to include PVCs that use this storage class. When disabled, users cannot (a) include non-existing PVC assets created with this class in asset-based submissions, or (b) attach PVCs with existing=false to workloads using this class.
+    PvcClaimMaxSize:
+      description: 'Maximum claim size allowed for PVCs created with this storage class. Mandatory when existingPvc = false. Recommended values: TB, GB, MB, TIB, GIB, MIB.'
+      type:
+      - string
+      - 'null'
+      pattern: ^([+]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+      example: 1G
   responses:
+    V1Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/V1Error'
     500InternalServerError:
       description: unexpected error
       content:
@@ -555,6 +561,12 @@ components:
           example:
             code: 500
             message: Something went wrong.
+    V1NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/V1Error'
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -564,36 +576,6 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
-    V1Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/V1Error'
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    V1NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/V1Error'
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
     V1StorageClassNames:
       description: Expected response to a valid request
       content:
@@ -610,6 +592,24 @@ components:
             example:
               storageClasses:
               - standard
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
   parameters:
     nameFilter:
       name: name
@@ -618,6 +618,14 @@ components:
       schema:
         type: string
       required: false
+    uuid:
+      in: path
+      name: uuid
+      description: Unique identifier of the cluster
+      required: true
+      schema:
+        type: string
+        format: uuid
     ClusterIdRequired:
       name: clusterId
       in: query
@@ -627,14 +635,6 @@ components:
         type: string
         format: uuid
         example: d73a738f-fab3-430a-8fa3-5241493d7128
-    uuid:
-      in: path
-      name: uuid
-      description: Unique identifier of the cluster
-      required: true
-      schema:
-        type: string
-        format: uuid
   securitySchemes:
     bearerAuth:
       type: http

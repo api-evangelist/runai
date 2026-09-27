@@ -124,15 +124,43 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
-    SettingsGetResponse:
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    settingsKeyEnum:
+      type: string
+      enum:
+      - autoRedirectSSO
+      - browserSessionTimeout
+      - logoutRedirectUri
+    AutoRedirectSsoSetting:
       type: object
       properties:
-        autoRedirectSSO:
-          $ref: '#/components/schemas/AutoRedirectSsoSetting'
-        browserSessionTimeout:
-          $ref: '#/components/schemas/BrowserSessionTimeoutSetting'
-        logoutRedirectUri:
-          $ref: '#/components/schemas/LogoutRedirectUriSetting'
+        enabled:
+          type:
+          - boolean
+          - 'null'
+        idpAlias:
+          type:
+          - string
+          - 'null'
+          pattern: ^[a-z0-9_-]*$
+      example:
+        enabled: false
+        idpAlias: oidc
     BrowserSessionTimeoutSetting:
       type: object
       description: Settings for user session timeout configuration that manages automatic logout after periods of inactivity.
@@ -155,65 +183,19 @@ components:
           description: The URI where users will be redirected after logging out of the application
           pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
           example: https://example.com/logout
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    AutoRedirectSsoSetting:
-      type: object
-      properties:
-        enabled:
-          type:
-          - boolean
-          - 'null'
-        idpAlias:
-          type:
-          - string
-          - 'null'
-          pattern: ^[a-z0-9_-]*$
-      example:
-        enabled: false
-        idpAlias: oidc
     Settings:
       type: object
       additionalProperties: true
-    settingsKeyEnum:
-      type: string
-      enum:
-      - autoRedirectSSO
-      - browserSessionTimeout
-      - logoutRedirectUri
+    SettingsGetResponse:
+      type: object
+      properties:
+        autoRedirectSSO:
+          $ref: '#/components/schemas/AutoRedirectSsoSetting'
+        browserSessionTimeout:
+          $ref: '#/components/schemas/BrowserSessionTimeoutSetting'
+        logoutRedirectUri:
+          $ref: '#/components/schemas/LogoutRedirectUriSetting'
   responses:
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
     404NotFound:
       description: The specified resource was not found
       content:
@@ -232,15 +214,6 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
     400BadRequest:
       description: Bad request.
       content:
@@ -250,6 +223,33 @@ components:
           example:
             code: 400
             message: Required parameter is missing
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
   parameters:
     settingsKey:
       name: key

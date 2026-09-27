@@ -97,24 +97,30 @@ paths:
           $ref: '#/components/responses/serviceUnavailable'
 components:
   responses:
-    serviceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error1'
-    BadRequest1:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error1'
     ChecksumResponse:
       description: return an object with hashes of a file for validation
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ChecksumResponse'
+    BadRequest1:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error1'
+    NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error1'
+    serviceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error1'
     CLIReleaseResponse:
       description: Get the CLI release.
       content:
@@ -122,40 +128,7 @@ components:
           schema:
             type: string
             format: binary
-    NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error1'
-  schemas:
-    ChecksumResponse:
-      properties:
-        description:
-          type: string
-        md5Hash:
-          type: string
-        crc32c:
-          type: string
-    Error1:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          format: int32
-        message:
-          type: string
   parameters:
-    version:
-      in: path
-      name: version
-      description: run:ai version (semantic version)
-      required: true
-      schema:
-        type: string
-        pattern: ^(v(0|[1-9]\\d*))\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$
     os:
       in: path
       name: os
@@ -166,6 +139,33 @@ components:
         enum:
         - linux
         - darwin
+    version:
+      in: path
+      name: version
+      description: run:ai version (semantic version)
+      required: true
+      schema:
+        type: string
+        pattern: ^(v(0|[1-9]\\d*))\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$
+  schemas:
+    Error1:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+    ChecksumResponse:
+      properties:
+        description:
+          type: string
+        md5Hash:
+          type: string
+        crc32c:
+          type: string
   securitySchemes:
     bearerAuth:
       type: http
