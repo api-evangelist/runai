@@ -168,12 +168,141 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  responses:
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  parameters:
+    WorkloadId:
+      name: workloadId
+      in: path
+      required: true
+      description: The  Universally Unique Identifier (UUID) of the workload.
+      schema:
+        type: string
+        format: uuid
+    RevisionId:
+      name: revisionId
+      in: path
+      required: true
+      description: The  Universally Unique Identifier (UUID) of the revision.
+      schema:
+        type: string
+        format: uuid
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
+    EventsSort:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: desc
   schemas:
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    HistoryRecords1:
+      type: array
+      items:
+        $ref: '#/components/schemas/HistoryRecord1'
+      x-schema-name: HistoryRecords
     ClusterId:
       description: The id of the cluster.
       type: string
       format: uuid
       example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    PhaseUpdate:
+      type:
+      - object
+      - 'null'
+      example: null
+      required:
+      - phase
+      - phaseMessage
+      properties:
+        phase:
+          $ref: '#/components/schemas/Phase'
+        phaseMessage:
+          type: string
+          example: Not enough resources in the requested nodepool
     Event2:
       type:
       - object
@@ -207,37 +336,23 @@ components:
           example: kubelet
         involvedObject:
           $ref: '#/components/schemas/InvolvedObject'
-    HistoryRecordMeta:
-      type: object
-      required:
-      - creationTimestamp
-      - type
-      properties:
-        creationTimestamp:
-          type: string
-          format: date-time
-          example: '2022-01-01T03:49:52.531Z'
-        type:
-          $ref: '#/components/schemas/HistoryRecordType'
-    Events:
-      type: array
-      items:
-        $ref: '#/components/schemas/Event2'
-      x-schema-name: Events
-    PhaseUpdate:
-      type:
-      - object
-      - 'null'
-      example: null
-      required:
-      - phase
-      - phaseMessage
-      properties:
-        phase:
-          $ref: '#/components/schemas/Phase'
-        phaseMessage:
-          type: string
-          example: Not enough resources in the requested nodepool
+    Phase:
+      type: string
+      enum:
+      - Creating
+      - Initializing
+      - Resuming
+      - Pending
+      - Deleting
+      - Running
+      - Updating
+      - Stopped
+      - Stopping
+      - Degraded
+      - Failed
+      - Completed
+      - Terminating
+      - Unknown
     InvolvedObject:
       type: object
       required:
@@ -258,49 +373,16 @@ components:
         namespace:
           type: string
           example: runai-test
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
     HistoryRecordType:
       type: string
       enum:
       - Event
       - PhaseUpdate
-    Phase:
-      type: string
-      enum:
-      - Creating
-      - Initializing
-      - Resuming
-      - Pending
-      - Deleting
-      - Running
-      - Updating
-      - Stopped
-      - Stopping
-      - Degraded
-      - Failed
-      - Completed
-      - Terminating
-      - Unknown
-    HistoryRecords1:
+    Events:
       type: array
       items:
-        $ref: '#/components/schemas/HistoryRecord1'
-      x-schema-name: HistoryRecords
+        $ref: '#/components/schemas/Event2'
+      x-schema-name: Events
     HistoryRecord1:
       type: object
       required:
@@ -316,100 +398,18 @@ components:
               $ref: '#/components/schemas/Event2'
             phaseUpdate:
               $ref: '#/components/schemas/PhaseUpdate'
-  responses:
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
-    WorkloadId:
-      name: workloadId
-      in: path
-      required: true
-      description: The  Universally Unique Identifier (UUID) of the workload.
-      schema:
-        type: string
-        format: uuid
-    RevisionId:
-      name: revisionId
-      in: path
-      required: true
-      description: The  Universally Unique Identifier (UUID) of the revision.
-      schema:
-        type: string
-        format: uuid
-    EventsSort:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: desc
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
+    HistoryRecordMeta:
+      type: object
+      required:
+      - creationTimestamp
+      - type
+      properties:
+        creationTimestamp:
+          type: string
+          format: date-time
+          example: '2022-01-01T03:49:52.531Z'
+        type:
+          $ref: '#/components/schemas/HistoryRecordType'
   securitySchemes:
     bearerAuth:
       type: http

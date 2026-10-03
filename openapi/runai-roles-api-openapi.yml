@@ -78,7 +78,160 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  responses:
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
   schemas:
+    ResourceType:
+      type: string
+      description: "Resource type enum for authorization. \n\nNote: The 'apps' resource type is DEPRECATED. Please use 'service-account' instead for managing service accounts.\n"
+      enum:
+      - department
+      - tenant
+      - project
+      - cluster
+      - cluster-config
+      - nodepools
+      - nodes
+      - settings
+      - security-settings
+      - branding-settings
+      - users
+      - apps
+      - service-account
+      - dashboards-overview
+      - dashboards-analytics
+      - dashboards-consumption
+      - roles
+      - access_rules
+      - jobs
+      - workloads
+      - workspaces
+      - trainings
+      - inferences
+      - environments
+      - pvc-assets
+      - git-assets
+      - host-path-assets
+      - nfs-assets
+      - s3-assets
+      - compute-resources
+      - templates
+      - credentials
+      - events-history
+      - policies
+      - cm-volume-assets
+      - datavolumes
+      - secret-volume-assets
+      - storage-class-configuration
+      - access-keys
+      - workload-properties
+      - network-topologies
+      - registries
+      - scrapeable-metrics
+    Permissions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Permission'
+      x-schema-name: Permissions
+    ResourceTypeGroupId:
+      type: string
+      enum:
+      - organization
+      - physical-resource
+      - iam
+      - dashboard
+      - workload
+      - workload-asset
+    Action:
+      type: string
+      enum:
+      - create
+      - read
+      - update
+      - delete
+      - sync
+    Permission:
+      type: object
+      required:
+      - resourceType
+      - actions
+      - groupId
+      - displayName
+      properties:
+        resourceType:
+          $ref: '#/components/schemas/ResourceType'
+        displayName:
+          type: string
+          example: Projects
+        groupId:
+          $ref: '#/components/schemas/ResourceTypeGroupId'
+        actions:
+          type: array
+          items:
+            $ref: '#/components/schemas/Action'
+    KubernetesPermissions:
+      type: object
+      description: This object indicate what kubernetes cluster permission should this role should get
+      properties:
+        predefinedRole:
+          type:
+          - string
+          - 'null'
+          description: An id of a predefined role to copy the cluster permissions from
+          example: '12'
     Error:
       required:
       - code
@@ -95,15 +248,6 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-    ResourceTypeGroupId:
-      type: string
-      enum:
-      - organization
-      - physical-resource
-      - iam
-      - dashboard
-      - workload
-      - workload-asset
     RoleV1:
       type: object
       required:
@@ -159,150 +303,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/RoleV1'
-    ResourceType:
-      type: string
-      description: "Resource type enum for authorization. \n\nNote: The 'apps' resource type is DEPRECATED. Please use 'service-account' instead for managing service accounts.\n"
-      enum:
-      - department
-      - tenant
-      - project
-      - cluster
-      - cluster-config
-      - nodepools
-      - nodes
-      - settings
-      - security-settings
-      - branding-settings
-      - users
-      - apps
-      - service-account
-      - dashboards-overview
-      - dashboards-analytics
-      - dashboards-consumption
-      - roles
-      - access_rules
-      - jobs
-      - workloads
-      - workspaces
-      - trainings
-      - inferences
-      - environments
-      - pvc-assets
-      - git-assets
-      - host-path-assets
-      - nfs-assets
-      - s3-assets
-      - compute-resources
-      - templates
-      - credentials
-      - events-history
-      - policies
-      - cm-volume-assets
-      - datavolumes
-      - secret-volume-assets
-      - storage-class-configuration
-      - access-keys
-      - workload-properties
-      - network-topologies
-      - registries
-      - scrapeable-metrics
-    KubernetesPermissions:
-      type: object
-      description: This object indicate what kubernetes cluster permission should this role should get
-      properties:
-        predefinedRole:
-          type:
-          - string
-          - 'null'
-          description: An id of a predefined role to copy the cluster permissions from
-          example: '12'
-    Permission:
-      type: object
-      required:
-      - resourceType
-      - actions
-      - groupId
-      - displayName
-      properties:
-        resourceType:
-          $ref: '#/components/schemas/ResourceType'
-        displayName:
-          type: string
-          example: Projects
-        groupId:
-          $ref: '#/components/schemas/ResourceTypeGroupId'
-        actions:
-          type: array
-          items:
-            $ref: '#/components/schemas/Action'
-    Action:
-      type: string
-      enum:
-      - create
-      - read
-      - update
-      - delete
-      - sync
-    Permissions:
-      type: array
-      items:
-        $ref: '#/components/schemas/Permission'
-      x-schema-name: Permissions
-  responses:
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
   parameters:
     RoleIdPath:
       name: roleIdPath

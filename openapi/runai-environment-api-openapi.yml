@@ -160,13 +160,147 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  parameters:
+    includeDescendants:
+      name: includeDescendants
+      in: query
+      required: false
+      description: Indicates whether to include assets from all descendant scopes under the specified scope. When set to true, and a specific scope identifier (for example, clusterId) is provided, the query also returns assets from all nested scopes within it (for example, departments and projects).  Mutually exclusive with scope.
+      schema:
+        type: boolean
+    AssetNameFilter:
+      name: name
+      in: query
+      required: false
+      description: Filter results by name.
+      schema:
+        type: string
+    AssetProjectFilter:
+      name: projectId
+      in: query
+      required: false
+      description: Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets.
+      schema:
+        type: integer
+        format: int32
+    AssetClusterFilter:
+      name: clusterId
+      in: query
+      description: Filter results by Universally Unique Identifier (UUID) of the cluster. If scope filter is cluster, only assets from the specific cluster will be included in the response. Otherwise, the response will include cluster, tenant and system assets.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: d73a738f-fab3-430a-8fa3-5241493d7128
+    DistributedFrameworkQuery:
+      name: distributedFramework
+      in: query
+      required: false
+      description: Filter results to workload of type distributed and distributedFramework.
+      schema:
+        type: string
+      allowReserved: true
+    ComplyToWorkloadType:
+      name: complyToWorkloadType
+      in: query
+      required: false
+      description: Include workload creation compliance information of an asset, for a given workload type, as part of the response. To check compliance, you need to provide both project id and workload type.
+      schema:
+        type: string
+        enum:
+        - Workspace
+        - Training
+        - Distributed
+        - Inference
+    ComplyToProject:
+      name: complyToProject
+      in: query
+      required: false
+      description: Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type.
+      schema:
+        type: integer
+        format: int32
+    AssetId:
+      name: AssetId
+      in: path
+      required: true
+      description: Unique identifier of the asset.
+      schema:
+        type: string
+        format: uuid
+        minLength: 1
+    ComplyToReplicaType:
+      name: complyToReplicaType
+      in: query
+      required: false
+      description: Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well.
+      schema:
+        type: string
+        enum:
+        - Worker
+        - Master
+    AssetDepartmentFilter:
+      name: departmentId
+      in: query
+      description: Filter results by department id. If scope filter is department, only assets from the specific department will be included in the response. Otherwise, the response will include department, cluster, tenant and system assets.
+      required: false
+      schema:
+        type: string
+        example: '1'
+    IsDistributedQuery:
+      name: isDistributed
+      in: query
+      required: false
+      description: Filter results to workload of type distributed.
+      schema:
+        type: boolean
+      allowReserved: true
+    IsWorkspaceQuery:
+      name: isWorkspace
+      in: query
+      required: false
+      description: Filter results to workload of type workspace.
+      schema:
+        type: boolean
+      allowReserved: true
+    IncludeStatus:
+      name: statusInfo
+      in: query
+      required: false
+      description: Whether the query should include asset status information as part of the response.
+      schema:
+        type: boolean
+    IsInferenceQuery:
+      name: isInference
+      in: query
+      required: false
+      description: Filter results to workload of type inference.
+      schema:
+        type: boolean
+      allowReserved: true
+    IncludeUsageInfo:
+      name: usageInfo
+      in: query
+      required: false
+      description: Whether the query should include asset usage information as part of the response.
+      schema:
+        type: boolean
+    AssetScopeFilter:
+      name: scope
+      in: query
+      required: false
+      description: 'Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project.'
+      schema:
+        type: string
+    IsTrainingQuery:
+      name: isTraining
+      in: query
+      required: false
+      description: Filter results to workload of type training.
+      schema:
+        type: boolean
+      allowReserved: true
   schemas:
-    AllowPrivilegeEscalation:
-      description: Allow the container running the workload and all launched processes to gain additional privileges after the workload starts. For more information consult the User Identity in Container guide at https://docs.run.ai/admin/runai-setup/config/non-root-containers/
-      type:
-      - boolean
-      - 'null'
-      example: false
     AssetSyncStatusEnum:
       type: string
       enum:
@@ -178,33 +312,116 @@ components:
       - No issues found
       - No status
       - Updating
-    EnvironmentAsset:
+    EnvironmentUpdateRequest:
       required:
       - meta
       - spec
       properties:
         meta:
-          $ref: '#/components/schemas/AssetMeta'
+          $ref: '#/components/schemas/AssetUpdateRequest'
         spec:
           $ref: '#/components/schemas/EnvironmentAssetSpec'
-        usedBy:
-          $ref: '#/components/schemas/AssetUsageInfo'
-        usageTimes:
-          $ref: '#/components/schemas/UsageTimesInfo'
-        compliance:
-          $ref: '#/components/schemas/ComplianceInfo'
-        status:
-          $ref: '#/components/schemas/AssetClusterStatusInfo'
-    AssetRef:
-      description: Reference information about an asset.
+    EnvironmentCreationRequest:
       required:
-      - id
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetCreationRequest'
+        spec:
+          $ref: '#/components/schemas/EnvironmentAssetSpec'
+    AssetUpdatableFields:
+      required:
       - name
       properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
         name:
           $ref: '#/components/schemas/AssetName'
+        description:
+          $ref: '#/components/schemas/AssetDescription'
+    AssetMeta:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      - $ref: '#/components/schemas/AssetReadOnlyFields'
+      example:
+        name: my-asset
+        scope: tenant
+        id: a418ed33-9399-48c0-a890-122cadd13bfd
+        kind: s3
+        createdBy: test@run.ai
+        createdAt: '2023-02-23T14:25:36.707685Z'
+        updatedBy: test@run.ai
+        updatedAt: '2023-02-23T14:25:36.707685Z'
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          distributed: true
+          distFramework: TF
+    AssetCreationFields:
+      type: object
+      required:
+      - scope
+      properties:
+        scope:
+          $ref: '#/components/schemas/Scope'
+        clusterId:
+          $ref: '#/components/schemas/ClusterIdOptional'
+        departmentId:
+          description: The id of the department. Must be specified for department scoped assets.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+        projectId:
+          description: The id of the project. Must be specified for project scoped assets.
+          type:
+          - integer
+          - 'null'
+          format: int32
+        autoDelete:
+          description: The asset will be deleted automatically. This is intended for internal use.
+          type:
+          - boolean
+          - 'null'
+          default: false
+        workloadSupportedTypes:
+          $ref: '#/components/schemas/WorkloadSupportedTypes'
+        private:
+          description: The asset will be private to the user who created it. supported only for docker registry and generic secrets
+          type:
+          - boolean
+          - 'null'
+          default: false
+    EnvironmentAssetSpec:
+      allOf:
+      - $ref: '#/components/schemas/OverridableSpecFields'
+      - $ref: '#/components/schemas/NonOverridableSpecFields'
+    InternalToolInfo:
+      description: Information of the internal tool.
+      required:
+      - toolType
+      - connectionType
+      - containerPort
+      properties:
+        toolType:
+          $ref: '#/components/schemas/InternalToolType'
+        connectionType:
+          $ref: '#/components/schemas/InternalConnectionType'
+        containerPort:
+          description: The port within the container that the connection exposes.
+          type: integer
+          format: int32
+          minimum: 1
+          maximum: 65535
+        nodePortInfo:
+          $ref: '#/components/schemas/NodePortInfo'
+        externalUrlInfo:
+          $ref: '#/components/schemas/ExternalUrlInfo'
+        servingPortInfo:
+          $ref: '#/components/schemas/ServingPortInfo'
+      type:
+      - object
+      - 'null'
     AssetUsageInfo:
       description: Details about resources that use the asset.
       properties:
@@ -239,155 +456,85 @@ components:
       type:
       - object
       - 'null'
-    AssetDescription:
-      description: The description of the asset.
-      type:
-      - string
-      - 'null'
-      minLength: 1
-      maxLength: 250
-      example: description of my asset.
-    WorkloadRefAndStatus:
-      description: Id, name and status of a workspace or training
-      required:
-      - id
-      - name
-      properties:
-        id:
-          $ref: '#/components/schemas/WorkloadId1'
-        name:
-          $ref: '#/components/schemas/WorkloadName'
-        status:
-          description: The status of the workspace or training.
-          type: string
-          minLength: 1
-    RunAsNonRoot:
-      description: Force the container to run as a non-root user.
+    HostNetwork:
+      description: Whether to enable host networking. Default to false.
       type:
       - boolean
       - 'null'
-      example: true
-    PolicyRuleEnum:
-      description: Indicates which validation rule (e.g., min, max, step, options, required, canEdit, canAdd) conflicted with policy restrictions, causing the asset or template to be rejected.
-      type:
-      - string
-      - 'null'
-      enum:
-      - min
-      - max
-      - step
-      - options
-      - required
-      - canEdit
-      - canAdd
-      - locked
-    AssetId:
-      description: Unique identifier of the asset.
-      type: string
-      format: uuid
-      minLength: 1
-    ComplianceInfoReason:
-      description: An issue preventing the use of a template or asset for creating workloads in a given project.
-      required:
-      - details
-      properties:
-        field:
-          description: For policy related issues, includes a json path to the field in the policy for which the issue applies.
-          type:
-          - string
-          - 'null'
-          pattern: .*
-        details:
-          description: Explanation of the issue.
-          type: string
-          pattern: .*
-        rule:
-          $ref: '#/components/schemas/PolicyRuleEnum'
-    EnvironmentVariableConfigMap:
-      description: Details of the configMap and key use to populate the environment variable
-      properties:
-        name:
-          description: The name of the config-map resource. (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: my-config-map
-          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-        key:
-          description: The key in the config-map resource. (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: MY_POSTGRES_SCHEMA
-          pattern: .*
-      type:
-      - object
-      - 'null'
-    Args:
-      description: Arguments to the command that the container running the workload executes.
+      example: false
+    Image:
+      description: Docker image name. For more information, see [Images](https://kubernetes.io/docs/concepts/containers/images). The image name is mandatory for creating a workload.
       type:
       - string
       - 'null'
       minLength: 1
-      example: -x my-script.py
+      example: python:3.8
       pattern: .*
-    EnvironmentAssetSpec:
-      allOf:
-      - $ref: '#/components/schemas/OverridableSpecFields'
-      - $ref: '#/components/schemas/NonOverridableSpecFields'
-    AssetsUsageRefCompute:
-      allOf:
-      - $ref: '#/components/schemas/AssetRef'
+    WorkingDir:
+      description: Container's working directory. If not specified, the container runtime default will be used. This may be configured in the container image.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      example: /home/myfolder
+      pattern: .*
+    HttpResponse:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+    ProbeHandler:
+      description: The action taken to determine the health of the container. (mandatory)
       type:
       - object
       - 'null'
-    AssetCreationRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      example:
-        name: my-asset
-        scope: tenant
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          inference: false
-          distributed: true
-          distFramework: TF
-    Stdin:
-      description: Whether this container should allocate a buffer for stdin in the container runtime. If this is not set, reads from stdin in the container will always result in EOF
-      type:
-      - boolean
-      - 'null'
-    AssetClusterStatusIssue:
-      type: object
-      required:
-      - scopeId
-      - scopeType
-      - issue
       properties:
-        scopeId:
-          $ref: '#/components/schemas/ScopeId'
-        scopeType:
-          $ref: '#/components/schemas/ScopeType'
-        issue:
-          $ref: '#/components/schemas/AssetClusterStatusIssueEnum'
-    OverridableSpecFields:
+        httpGet:
+          description: An action based on HTTP Get requests.
+          type: object
+          properties:
+            path:
+              description: Path to access on the HTTP server, defaults to /.
+              type:
+              - string
+              - 'null'
+              pattern: ^(\x2F[a-zA-Z0-9\-_.\x2F]*)?$
+              example: /
+            port:
+              description: Number of the port to access on the container.
+              type:
+              - integer
+              - 'null'
+              format: int32
+              minimum: 1
+              maximum: 65535
+            host:
+              description: Host name to connect to, defaults to the pod IP.
+              type:
+              - string
+              - 'null'
+              format: hostname
+              example: example.com
+              pattern: .*
+            scheme:
+              $ref: '#/components/schemas/ProbeHandlerScheme'
+    EnvironmentVariablePodFieldReference:
+      description: Details of the field-reference and key use to populate the environment variable
       properties:
-        args:
-          $ref: '#/components/schemas/Args'
-        command:
-          $ref: '#/components/schemas/Command'
-        environmentVariables:
-          $ref: '#/components/schemas/EnvironmentVariablesOfAsset'
-        runAsGid:
-          $ref: '#/components/schemas/RunAsGid'
-        runAsUid:
-          $ref: '#/components/schemas/RunAsUid'
-        supplementalGroups:
-          $ref: '#/components/schemas/SupplementalGroups'
+        path:
+          description: The field path resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: metadata.name
+          pattern: .*
       type:
       - object
       - 'null'
@@ -433,224 +580,26 @@ components:
           minimum: 1
         handler:
           $ref: '#/components/schemas/ProbeHandler'
-    HostIpc:
-      description: Whether to enable host IPC. Defaults to false.
-      type:
-      - boolean
-      - 'null'
-      example: false
-    EnvironmentVariableCredential:
-      description: Details of the secret and key use to populate the environment variable. (mutually exclusive with value)
+    ServingPortInfo:
       properties:
-        assetId:
-          description: Unique identifier of the asset. (mandatory)
+        protocol:
           type:
           - string
           - 'null'
-          minLength: 1
-          format: uuid
-        key:
-          description: The key in the secret resource. (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: POSTGRES_PASSWORD
+          enum:
+          - grpc
+          - http
       type:
       - object
       - 'null'
-    NodePortInfo:
-      properties:
-        isCustomPort:
-          description: Whether the node port is provided in the specific env of the workspace. Default is false, and in this case the node port is auto generated by the system.
-          type: boolean
-          default: false
-      type:
-      - object
-      - 'null'
-    EnvironmentVariablePodFieldReference:
-      description: Details of the field-reference and key use to populate the environment variable
-      properties:
-        path:
-          description: The field path resource. (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: metadata.name
-          pattern: .*
-      type:
-      - object
-      - 'null'
-    Capability:
-      type: string
-      enum:
-      - AUDIT_CONTROL
-      - AUDIT_READ
-      - AUDIT_WRITE
-      - BLOCK_SUSPEND
-      - CHOWN
-      - DAC_OVERRIDE
-      - DAC_READ_SEARCH
-      - FOWNER
-      - FSETID
-      - IPC_LOCK
-      - IPC_OWNER
-      - KILL
-      - LEASE
-      - LINUX_IMMUTABLE
-      - MAC_ADMIN
-      - MAC_OVERRIDE
-      - MKNOD
-      - NET_ADMIN
-      - NET_BIND_SERVICE
-      - NET_BROADCAST
-      - NET_RAW
-      - SETGID
-      - SETFCAP
-      - SETPCAP
-      - SETUID
-      - SYS_ADMIN
-      - SYS_BOOT
-      - SYS_CHROOT
-      - SYS_MODULE
-      - SYS_NICE
-      - SYS_PACCT
-      - SYS_PTRACE
-      - SYS_RAWIO
-      - SYS_RESOURCE
-      - SYS_TIME
-      - SYS_TTY_CONFIG
-      - SYSLOG
-      - WAKE_ALARM
-    SupplementalGroups:
-      description: Comma separated list of groups that the user running the container belongs to, in addition to the group indicated by runAsGid. Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled. Using an empty string implies reverting the supplementary groups of the image.
+    Command:
+      description: A command to the server as the entry point of the container running the workload.
       type:
       - string
       - 'null'
-      example: 2,3,5,8
+      minLength: 1
+      example: python
       pattern: .*
-    ReadOnlyRootFileSystem:
-      description: If true, mounts the container's root filesystem as read-only.
-      type:
-      - boolean
-      - 'null'
-      example: false
-    InternalConnectionType:
-      description: The type of connection that exposes the container port.
-      type: string
-      minLength: 1
-      enum:
-      - LoadBalancer
-      - NodePort
-      - ExternalUrl
-      - ServingPort
-    EnvironmentVariablesOfAsset:
-      description: Set of environment variables to populate into the container running the workspace.
-      type:
-      - array
-      - 'null'
-      items:
-        $ref: '#/components/schemas/EnvironmentVariableOfAsset'
-    ClusterIdOptional:
-      description: The id of the cluster.
-      type:
-      - string
-      - 'null'
-      format: uuid
-      minLength: 1
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    AssetClusterStatusIssues:
-      type: array
-      items:
-        $ref: '#/components/schemas/AssetClusterStatusIssue'
-    UsageTimesInfo:
-      description: Details about times the asset has been used by workloads, etc.
-      properties:
-        lastUsedByWorkload:
-          description: The time at which the asset were last used by a workload of given type and project. This field requires complyToProject and complyToWorkload types flags of the API, to specify the workload type and project id.
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          format: date-time
-      type:
-      - object
-      - 'null'
-    ProbeHandler:
-      description: The action taken to determine the health of the container. (mandatory)
-      type:
-      - object
-      - 'null'
-      properties:
-        httpGet:
-          description: An action based on HTTP Get requests.
-          type: object
-          properties:
-            path:
-              description: Path to access on the HTTP server, defaults to /.
-              type:
-              - string
-              - 'null'
-              pattern: ^(\x2F[a-zA-Z0-9\-_.\x2F]*)?$
-              example: /
-            port:
-              description: Number of the port to access on the container.
-              type:
-              - integer
-              - 'null'
-              format: int32
-              minimum: 1
-              maximum: 65535
-            host:
-              description: Host name to connect to, defaults to the pod IP.
-              type:
-              - string
-              - 'null'
-              format: hostname
-              example: example.com
-              pattern: .*
-            scheme:
-              $ref: '#/components/schemas/ProbeHandlerScheme'
-    CreateHomeDir:
-      description: When set to `true`, creates a home directory for the container.
-      type:
-      - boolean
-      - 'null'
-    HttpResponse:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-    ExternalToolType:
-      description: The type of external tool that is associated with the connection. External tool typically runs in the cloud and require external url for connecting to it.
-      type: string
-      minLength: 1
-      enum:
-      - wandb
-      - comet
-    Connection:
-      required:
-      - name
-      properties:
-        name:
-          description: A unique name of this connection. This name correlates between the connection information specified at the environment asset, to the information about the connection as specified in SpecificEnv for a specific workspace.
-          type: string
-          minLength: 1
-        isExternal:
-          description: Internal tools (isExternal=false) are tools that run as part of the container. External tools (isExternal=true) run outside the container, typically in the cloud.
-          type: boolean
-          default: false
-        internalToolInfo:
-          $ref: '#/components/schemas/InternalToolInfo'
-        externalToolInfo:
-          $ref: '#/components/schemas/ExternalToolInfo'
     WorkloadSupportedTypes:
       properties:
         inference:
@@ -686,208 +635,115 @@ components:
       type:
       - object
       - 'null'
-    AssetName:
-      description: The name of the asset.
-      type: string
-      minLength: 1
-      example: my-asset
-    ComplianceInfo:
-      description: Compliance of an asset with creation of workloads in a given project.
-      properties:
-        imposed:
-          description: Whether the asset is imposed on created workloads by the administrator.
-          type: boolean
-        compliance:
-          description: Whether the asset info complies with creation of workloads in the project.
-          type: boolean
-        reason:
-          description: For asset that does not comply, specify one or more reason why.
-          type: array
-          items:
-            $ref: '#/components/schemas/ComplianceInfoReason'
-      type:
-      - object
-      - 'null'
-    Image:
-      description: Docker image name. For more information, see [Images](https://kubernetes.io/docs/concepts/containers/images). The image name is mandatory for creating a workload.
-      type:
-      - string
-      - 'null'
-      minLength: 1
-      example: python:3.8
-      pattern: .*
-    EnvironmentCreationRequest:
+    EnvironmentAsset:
       required:
       - meta
       - spec
       properties:
         meta:
-          $ref: '#/components/schemas/AssetCreationRequest'
+          $ref: '#/components/schemas/AssetMeta'
         spec:
           $ref: '#/components/schemas/EnvironmentAssetSpec'
-    AssetUpdateRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      example:
-        name: my-asset
-    ImagePullPolicy:
-      description: Image pull policy. Defaults to `Always` if `:latest` tag is specified, otherwise it is `IfNotPresent`.
-      type:
-      - string
-      - 'null'
-      minLength: 1
-      enum:
-      - Always
-      - Never
-      - IfNotPresent
-    ProbeHandlerScheme:
-      description: Scheme to use for connecting to the host, defaults to HTTP.
-      type:
-      - string
-      - 'null'
-      enum:
-      - HTTP
-      - HTTPS
-    AssetUpdatableFields:
-      required:
-      - name
+        usedBy:
+          $ref: '#/components/schemas/AssetUsageInfo'
+        usageTimes:
+          $ref: '#/components/schemas/UsageTimesInfo'
+        compliance:
+          $ref: '#/components/schemas/ComplianceInfo'
+        status:
+          $ref: '#/components/schemas/AssetClusterStatusInfo'
+    EnvironmentVariableConfigMap:
+      description: Details of the configMap and key use to populate the environment variable
       properties:
         name:
-          $ref: '#/components/schemas/AssetName'
-        description:
-          $ref: '#/components/schemas/AssetDescription'
-    AssetClusterStatusInfo:
-      properties:
-        status:
-          $ref: '#/components/schemas/AssetSyncStatusEnum'
-        issues:
-          $ref: '#/components/schemas/AssetClusterStatusIssues'
-        message:
-          type: string
-        url:
-          type: string
+          description: The name of the config-map resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: my-config-map
+          pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+        key:
+          description: The key in the config-map resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: MY_POSTGRES_SCHEMA
+          pattern: .*
       type:
       - object
       - 'null'
-    SeccompProfileType:
-      description: Indicates which kind of seccomp profile will be applied to the container. The options are a. `RuntimeDefault` - the container runtime default profile should be used. b. `Unconfined` - no profile should be applied. c. `Localhost` is not yet supported by Run:ai.
+    OverridableSpecFields:
+      properties:
+        args:
+          $ref: '#/components/schemas/Args'
+        command:
+          $ref: '#/components/schemas/Command'
+        environmentVariables:
+          $ref: '#/components/schemas/EnvironmentVariablesOfAsset'
+        runAsGid:
+          $ref: '#/components/schemas/RunAsGid'
+        runAsUid:
+          $ref: '#/components/schemas/RunAsUid'
+        supplementalGroups:
+          $ref: '#/components/schemas/SupplementalGroups'
       type:
-      - string
+      - object
       - 'null'
-      enum:
-      - RuntimeDefault
-      - Unconfined
-      - Localhost
-    AssetKind:
-      description: The kind of the asset.
-      type: string
-      minLength: 1
-      enum:
-      - compute
-      - environment
-      - accessKey
-      - dockerRegistry
-      - password
-      - genericSecret
-      - registry
-      - s3
-      - git
-      - nfs
-      - pvc
-      - hostPath
-      - workload-template
-      - model
-      - config-map
-      - secret-volume
-      - data-volume
-      - ngcApiKey
-    WorkloadName:
-      description: The name of the workload.
-      type: string
-      minLength: 1
-      example: my-workload-name
-      pattern: .*
-    UidGidSource:
-      description: Indicate the way to determine the user and group ids of the container. The options are a. `fromTheImage` - user and group ids are determined by the docker image that the container runs. this is the default option. b. `custom` - user and group ids can be specified in the environment asset and/or the workload creation request. c. `idpToken` - user and group IDs are automatically taken from the identity provider (IdP) token (available only in SSO-enabled installations). For more information, see [User Identity](https://docs.run.ai/latest/admin/runai-setup/config/non-root-containers/).
-      type:
-      - string
-      - 'null'
-      enum:
-      - fromTheImage
-      - fromIdpToken
-      - custom
-    Error:
-      required:
-      - code
-      - message
+    EnvironmentVariableOfAsset:
+      description: Details of an environment variable which is populated into the container.
       properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    InternalToolType:
-      description: The type of the internal tool. Internal tool runs within the container and exposes ports associated with the tool using NodePort, LoadBalancer or ExternalUrl.
-      type: string
-      minLength: 1
-      enum:
-      - jupyter-notebook
-      - pycharm
-      - visual-studio-code
-      - tensorboard
-      - rstudio
-      - mlflow
-      - custom
-      - matlab
-      - chatbot-ui
-    EnvironmentUpdateRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetUpdateRequest'
-        spec:
-          $ref: '#/components/schemas/EnvironmentAssetSpec'
-    AssetsUsageRef:
-      description: Reference information about usage of assets by other assets, for example datasources that uses credentials.
-      properties:
-        environment:
+        name:
+          description: The name of the environment variable. (mandatory)
           type:
-          - object
+          - string
           - 'null'
-          description: environment asset.
-          allOf:
-          - $ref: '#/components/schemas/EnvironmentAssetRef'
-          deprecated: true
-        environments:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetRef'
-        compute:
-          $ref: '#/components/schemas/AssetsUsageRefCompute'
-          deprecated: true
-        computes:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetRef'
-        datasources:
-          type: array
-          items:
-            $ref: '#/components/schemas/AssetDatasourceRef'
-    RunAsGid:
-      description: The group id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsGid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
+          minLength: 1
+          example: HOME
+        value:
+          description: The value of the environment variable. (mutually exclusive with credential, configMap and podFieldRef)
+          type:
+          - string
+          - 'null'
+          example: /home/my-folder
+        credential:
+          $ref: '#/components/schemas/EnvironmentVariableCredential'
+        configMap:
+          $ref: '#/components/schemas/EnvironmentVariableConfigMap'
+        podFieldRef:
+          $ref: '#/components/schemas/EnvironmentVariablePodFieldReference'
+        exclude:
+          description: Use 'true' in case the environment variable is defined in defaults of the policy, and you wish to exclude it from the workload.
+          type:
+          - boolean
+          - 'null'
+          example: false
+        description:
+          description: Description of the environment variable.
+          type:
+          - string
+          - 'null'
+          example: Home directory of the user.
       type:
-      - integer
+      - object
       - 'null'
-      format: int64
-      example: 30
+    AssetDescription:
+      description: The description of the asset.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      maxLength: 250
+      example: description of my asset.
+    EnvironmentListResponse:
+      required:
+      - entries
+      properties:
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/EnvironmentAsset'
     EnvironmentAssetRef:
       description: Reference information about environment asset.
       required:
@@ -905,14 +761,95 @@ components:
           - 'null'
           items:
             $ref: '#/components/schemas/ToolType'
-    ScopeType:
+    AssetId:
+      description: Unique identifier of the asset.
       type: string
+      format: uuid
+      minLength: 1
+    AssetClusterStatusInfo:
+      properties:
+        status:
+          $ref: '#/components/schemas/AssetSyncStatusEnum'
+        issues:
+          $ref: '#/components/schemas/AssetClusterStatusIssues'
+        message:
+          type: string
+        url:
+          type: string
+      type:
+      - object
+      - 'null'
+    AssetName:
+      description: The name of the asset.
+      type: string
+      minLength: 1
+      example: my-asset
+    AllowPrivilegeEscalation:
+      description: Allow the container running the workload and all launched processes to gain additional privileges after the workload starts. For more information consult the User Identity in Container guide at https://docs.run.ai/admin/runai-setup/config/non-root-containers/
+      type:
+      - boolean
+      - 'null'
+      example: false
+    InternalToolType:
+      description: The type of the internal tool. Internal tool runs within the container and exposes ports associated with the tool using NodePort, LoadBalancer or ExternalUrl.
+      type: string
+      minLength: 1
       enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
+      - jupyter-notebook
+      - pycharm
+      - visual-studio-code
+      - tensorboard
+      - rstudio
+      - mlflow
+      - custom
+      - matlab
+      - chatbot-ui
+    AssetUpdateRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      example:
+        name: my-asset
+    InternalConnectionType:
+      description: The type of connection that exposes the container port.
+      type: string
+      minLength: 1
+      enum:
+      - LoadBalancer
+      - NodePort
+      - ExternalUrl
+      - ServingPort
+    AssetClusterStatusIssue:
+      type: object
+      required:
+      - scopeId
+      - scopeType
+      - issue
+      properties:
+        scopeId:
+          $ref: '#/components/schemas/ScopeId'
+        scopeType:
+          $ref: '#/components/schemas/ScopeType'
+        issue:
+          $ref: '#/components/schemas/AssetClusterStatusIssueEnum'
+    SupplementalGroups:
+      description: Comma separated list of groups that the user running the container belongs to, in addition to the group indicated by runAsGid. Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled. Using an empty string implies reverting the supplementary groups of the image.
+      type:
+      - string
+      - 'null'
+      example: 2,3,5,8
+      pattern: .*
+    CreateHomeDir:
+      description: When set to `true`, creates a home directory for the container.
+      type:
+      - boolean
+      - 'null'
+    ExternalToolType:
+      description: The type of external tool that is associated with the connection. External tool typically runs in the cloud and require external url for connecting to it.
+      type: string
+      minLength: 1
+      enum:
+      - wandb
+      - comet
     ExternalUrlInfo:
       properties:
         isCustomUrl:
@@ -928,19 +865,77 @@ components:
       type:
       - object
       - 'null'
-    UpdateCount:
-      description: the value of an update counter of a data in the system.
-      type: integer
-      format: int64
-      example: 12345
-    Command:
-      description: A command to the server as the entry point of the container running the workload.
+    ScopeId:
+      type: string
+      description: The id of the cluster, department or project, depending on the scope type.
+    EnvironmentVariableCredential:
+      description: Details of the secret and key use to populate the environment variable. (mutually exclusive with value)
+      properties:
+        assetId:
+          description: Unique identifier of the asset. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          format: uuid
+        key:
+          description: The key in the secret resource. (mandatory)
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: POSTGRES_PASSWORD
+      type:
+      - object
+      - 'null'
+    ProbeHandlerScheme:
+      description: Scheme to use for connecting to the host, defaults to HTTP.
       type:
       - string
       - 'null'
+      enum:
+      - HTTP
+      - HTTPS
+    Scope:
+      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
+      type: string
       minLength: 1
-      example: python
-      pattern: .*
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    RunAsNonRoot:
+      description: Force the container to run as a non-root user.
+      type:
+      - boolean
+      - 'null'
+      example: true
+    Probes:
+      description: Probes are used to determine if the container is healthy and ready to accept traffic.
+      type:
+      - object
+      - 'null'
+      properties:
+        readiness:
+          $ref: '#/components/schemas/Probe'
     AssetReadOnlyFields:
       required:
       - id
@@ -996,173 +991,110 @@ components:
         updateCount:
           $ref: '#/components/schemas/UpdateCount'
       type: object
-    RunAsUid:
-      description: The user id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsUid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
+    Args:
+      description: Arguments to the command that the container running the workload executes.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      example: -x my-script.py
+      pattern: .*
+    RunAsGid:
+      description: The group id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsGid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
       type:
       - integer
       - 'null'
       format: int64
-      example: 500
-    InternalToolInfo:
-      description: Information of the internal tool.
+      example: 30
+    AssetDatasourceRef:
+      description: Reference information about a datasource asset.
       required:
-      - toolType
-      - connectionType
-      - containerPort
+      - id
+      - name
+      - kind
       properties:
-        toolType:
-          $ref: '#/components/schemas/InternalToolType'
-        connectionType:
-          $ref: '#/components/schemas/InternalConnectionType'
-        containerPort:
-          description: The port within the container that the connection exposes.
-          type: integer
-          format: int32
-          minimum: 1
-          maximum: 65535
-        nodePortInfo:
-          $ref: '#/components/schemas/NodePortInfo'
-        externalUrlInfo:
-          $ref: '#/components/schemas/ExternalUrlInfo'
-        servingPortInfo:
-          $ref: '#/components/schemas/ServingPortInfo'
-      type:
-      - object
-      - 'null'
-    AssetCreationFields:
-      type: object
-      required:
-      - scope
-      properties:
-        scope:
-          $ref: '#/components/schemas/Scope'
-        clusterId:
-          $ref: '#/components/schemas/ClusterIdOptional'
-        departmentId:
-          description: The id of the department. Must be specified for department scoped assets.
-          type:
-          - string
-          - 'null'
-          minLength: 1
-        projectId:
-          description: The id of the project. Must be specified for project scoped assets.
-          type:
-          - integer
-          - 'null'
-          format: int32
-        autoDelete:
-          description: The asset will be deleted automatically. This is intended for internal use.
-          type:
-          - boolean
-          - 'null'
-          default: false
-        workloadSupportedTypes:
-          $ref: '#/components/schemas/WorkloadSupportedTypes'
-        private:
-          description: The asset will be private to the user who created it. supported only for docker registry and generic secrets
-          type:
-          - boolean
-          - 'null'
-          default: false
-    DataSourceOverrides:
-      description: specific fields to override in the data source.
-      type:
-      - object
-      - 'null'
-      properties:
-        containerPath:
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: /container/directory
+        id:
+          $ref: '#/components/schemas/AssetId'
+        name:
+          $ref: '#/components/schemas/AssetName'
+        kind:
+          $ref: '#/components/schemas/AssetKind'
+        overrides:
+          $ref: '#/components/schemas/DataSourceOverrides'
+          deprecated: true
     Tty:
       description: Whether this container should allocate a TTY for itself, also requires 'stdin' to be true.
       type:
       - boolean
       - 'null'
-    ExternalToolInfo:
-      description: Information of the external tool.
-      required:
-      - toolType
-      - externalUrl
-      properties:
-        toolType:
-          $ref: '#/components/schemas/ExternalToolType'
-        externalUrl:
-          description: The external url for connecting to the external tool. The url can include environment variables that will be replaced with the value provided for those variables when the workspace is created.
-          example: https://wandb.com/myteam/${PROJECT_NAME}
-          type: string
-          minLength: 1
+    EnvironmentVariablesOfAsset:
+      description: Set of environment variables to populate into the container running the workspace.
       type:
-      - object
+      - array
       - 'null'
-    EnvironmentListResponse:
-      required:
-      - entries
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/EnvironmentAsset'
-    HostNetwork:
-      description: Whether to enable host networking. Default to false.
+      items:
+        $ref: '#/components/schemas/EnvironmentVariableOfAsset'
+    PolicyRuleEnum:
+      description: Indicates which validation rule (e.g., min, max, step, options, required, canEdit, canAdd) conflicted with policy restrictions, causing the asset or template to be rejected.
+      type:
+      - string
+      - 'null'
+      enum:
+      - min
+      - max
+      - step
+      - options
+      - required
+      - canEdit
+      - canAdd
+      - locked
+    Capability:
+      type: string
+      enum:
+      - AUDIT_CONTROL
+      - AUDIT_READ
+      - AUDIT_WRITE
+      - BLOCK_SUSPEND
+      - CHOWN
+      - DAC_OVERRIDE
+      - DAC_READ_SEARCH
+      - FOWNER
+      - FSETID
+      - IPC_LOCK
+      - IPC_OWNER
+      - KILL
+      - LEASE
+      - LINUX_IMMUTABLE
+      - MAC_ADMIN
+      - MAC_OVERRIDE
+      - MKNOD
+      - NET_ADMIN
+      - NET_BIND_SERVICE
+      - NET_BROADCAST
+      - NET_RAW
+      - SETGID
+      - SETFCAP
+      - SETPCAP
+      - SETUID
+      - SYS_ADMIN
+      - SYS_BOOT
+      - SYS_CHROOT
+      - SYS_MODULE
+      - SYS_NICE
+      - SYS_PACCT
+      - SYS_PTRACE
+      - SYS_RAWIO
+      - SYS_RESOURCE
+      - SYS_TIME
+      - SYS_TTY_CONFIG
+      - SYSLOG
+      - WAKE_ALARM
+    ReadOnlyRootFileSystem:
+      description: If true, mounts the container's root filesystem as read-only.
       type:
       - boolean
       - 'null'
       example: false
-    ScopeId:
-      type: string
-      description: The id of the cluster, department or project, depending on the scope type.
-    ToolType:
-      description: Super set of Internal and External tool types.
-      type: string
-      minLength: 1
-      enum:
-      - jupyter-notebook
-      - pycharm
-      - visual-studio-code
-      - tensorboard
-      - rstudio
-      - mlflow
-      - custom
-      - wandb
-      - matlab
-      - comet
-      - chatbot-ui
-    Scope:
-      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
-      type: string
-      minLength: 1
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
-    AssetMeta:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      - $ref: '#/components/schemas/AssetReadOnlyFields'
-      example:
-        name: my-asset
-        scope: tenant
-        id: a418ed33-9399-48c0-a890-122cadd13bfd
-        kind: s3
-        createdBy: test@run.ai
-        createdAt: '2023-02-23T14:25:36.707685Z'
-        updatedBy: test@run.ai
-        updatedAt: '2023-02-23T14:25:36.707685Z'
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          distributed: true
-          distFramework: TF
-    WorkloadId1:
-      description: A unique ID of the workload.
-      type: string
-      format: uuid
     NonOverridableSpecFields:
       allOf:
       - properties:
@@ -1209,6 +1141,81 @@ components:
             default: false
             description: Allow specifying uid/gid as part of create workspace. This is relevant only for custom uigGidSource.
             type: boolean
+    Stdin:
+      description: Whether this container should allocate a buffer for stdin in the container runtime. If this is not set, reads from stdin in the container will always result in EOF
+      type:
+      - boolean
+      - 'null'
+    UidGidSource:
+      description: Indicate the way to determine the user and group ids of the container. The options are a. `fromTheImage` - user and group ids are determined by the docker image that the container runs. this is the default option. b. `custom` - user and group ids can be specified in the environment asset and/or the workload creation request. c. `idpToken` - user and group IDs are automatically taken from the identity provider (IdP) token (available only in SSO-enabled installations). For more information, see [User Identity](https://docs.run.ai/latest/admin/runai-setup/config/non-root-containers/).
+      type:
+      - string
+      - 'null'
+      enum:
+      - fromTheImage
+      - fromIdpToken
+      - custom
+    NodePortInfo:
+      properties:
+        isCustomPort:
+          description: Whether the node port is provided in the specific env of the workspace. Default is false, and in this case the node port is auto generated by the system.
+          type: boolean
+          default: false
+      type:
+      - object
+      - 'null'
+    ImagePullPolicy:
+      description: Image pull policy. Defaults to `Always` if `:latest` tag is specified, otherwise it is `IfNotPresent`.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      enum:
+      - Always
+      - Never
+      - IfNotPresent
+    AssetsUsageRef:
+      description: Reference information about usage of assets by other assets, for example datasources that uses credentials.
+      properties:
+        environment:
+          type:
+          - object
+          - 'null'
+          description: environment asset.
+          allOf:
+          - $ref: '#/components/schemas/EnvironmentAssetRef'
+          deprecated: true
+        environments:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetRef'
+        compute:
+          $ref: '#/components/schemas/AssetsUsageRefCompute'
+          deprecated: true
+        computes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetRef'
+        datasources:
+          type: array
+          items:
+            $ref: '#/components/schemas/AssetDatasourceRef'
+    WorkloadId1:
+      description: A unique ID of the workload.
+      type: string
+      format: uuid
+    DataSourceOverrides:
+      description: specific fields to override in the data source.
+      type:
+      - object
+      - 'null'
+      properties:
+        containerPath:
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          example: /container/directory
     Capabilities:
       description: Add POSIX capabilities to running containers. Defaults to the default set of capabilities granted by the container runtime.
       type:
@@ -1219,243 +1226,227 @@ components:
       example:
       - CHOWN
       - KILL
-    EnvironmentVariableOfAsset:
-      description: Details of an environment variable which is populated into the container.
+    AssetRef:
+      description: Reference information about an asset.
+      required:
+      - id
+      - name
       properties:
+        id:
+          $ref: '#/components/schemas/AssetId'
         name:
-          description: The name of the environment variable. (mandatory)
-          type:
-          - string
-          - 'null'
-          minLength: 1
-          example: HOME
-        value:
-          description: The value of the environment variable. (mutually exclusive with credential, configMap and podFieldRef)
-          type:
-          - string
-          - 'null'
-          example: /home/my-folder
-        credential:
-          $ref: '#/components/schemas/EnvironmentVariableCredential'
-        configMap:
-          $ref: '#/components/schemas/EnvironmentVariableConfigMap'
-        podFieldRef:
-          $ref: '#/components/schemas/EnvironmentVariablePodFieldReference'
-        exclude:
-          description: Use 'true' in case the environment variable is defined in defaults of the policy, and you wish to exclude it from the workload.
-          type:
-          - boolean
-          - 'null'
-          example: false
-        description:
-          description: Description of the environment variable.
-          type:
-          - string
-          - 'null'
-          example: Home directory of the user.
-      type:
-      - object
-      - 'null'
-    WorkingDir:
-      description: Container's working directory. If not specified, the container runtime default will be used. This may be configured in the container image.
-      type:
-      - string
-      - 'null'
+          $ref: '#/components/schemas/AssetName'
+    ToolType:
+      description: Super set of Internal and External tool types.
+      type: string
       minLength: 1
-      example: /home/myfolder
-      pattern: .*
-    Probes:
-      description: Probes are used to determine if the container is healthy and ready to accept traffic.
-      type:
-      - object
-      - 'null'
+      enum:
+      - jupyter-notebook
+      - pycharm
+      - visual-studio-code
+      - tensorboard
+      - rstudio
+      - mlflow
+      - custom
+      - wandb
+      - matlab
+      - comet
+      - chatbot-ui
+    WorkloadRefAndStatus:
+      description: Id, name and status of a workspace or training
+      required:
+      - id
+      - name
       properties:
-        readiness:
-          $ref: '#/components/schemas/Probe'
-    ServingPortInfo:
+        id:
+          $ref: '#/components/schemas/WorkloadId1'
+        name:
+          $ref: '#/components/schemas/WorkloadName'
+        status:
+          description: The status of the workspace or training.
+          type: string
+          minLength: 1
+    ComplianceInfoReason:
+      description: An issue preventing the use of a template or asset for creating workloads in a given project.
+      required:
+      - details
       properties:
-        protocol:
+        field:
+          description: For policy related issues, includes a json path to the field in the policy for which the issue applies.
           type:
           - string
           - 'null'
-          enum:
-          - grpc
-          - http
+          pattern: .*
+        details:
+          description: Explanation of the issue.
+          type: string
+          pattern: .*
+        rule:
+          $ref: '#/components/schemas/PolicyRuleEnum'
+    AssetCreationRequest:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      example:
+        name: my-asset
+        scope: tenant
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          inference: false
+          distributed: true
+          distFramework: TF
+    RunAsUid:
+      description: The user id to run the entrypoint of the container which executes the workspace. Default to the value specified in the environment asset `runAsUid` field (optional). Use only when the source uid/gid of the environment asset is not `fromTheImage`, and `overrideUidGidInWorkspace` is enabled.
       type:
-      - object
+      - integer
       - 'null'
+      format: int64
+      example: 500
+    UpdateCount:
+      description: the value of an update counter of a data in the system.
+      type: integer
+      format: int64
+      example: 12345
     AssetClusterStatusIssueEnum:
       type: string
       enum:
       - ReplicationError
       - LostPhase
       - NotCreated
-    AssetDatasourceRef:
-      description: Reference information about a datasource asset.
+    AssetKind:
+      description: The kind of the asset.
+      type: string
+      minLength: 1
+      enum:
+      - compute
+      - environment
+      - accessKey
+      - dockerRegistry
+      - password
+      - genericSecret
+      - registry
+      - s3
+      - git
+      - nfs
+      - pvc
+      - hostPath
+      - workload-template
+      - model
+      - config-map
+      - secret-volume
+      - data-volume
+      - ngcApiKey
+    Connection:
       required:
-      - id
       - name
-      - kind
       properties:
-        id:
-          $ref: '#/components/schemas/AssetId'
         name:
-          $ref: '#/components/schemas/AssetName'
-        kind:
-          $ref: '#/components/schemas/AssetKind'
-        overrides:
-          $ref: '#/components/schemas/DataSourceOverrides'
-          deprecated: true
-  parameters:
-    AssetDepartmentFilter:
-      name: departmentId
-      in: query
-      description: Filter results by department id. If scope filter is department, only assets from the specific department will be included in the response. Otherwise, the response will include department, cluster, tenant and system assets.
-      required: false
-      schema:
-        type: string
-        example: '1'
-    IsInferenceQuery:
-      name: isInference
-      in: query
-      required: false
-      description: Filter results to workload of type inference.
-      schema:
-        type: boolean
-      allowReserved: true
-    ComplyToProject:
-      name: complyToProject
-      in: query
-      required: false
-      description: Include workload creation compliance information of an asset, for a given project, as part of the response. To check compliance, you need to provide both project id and workload type.
-      schema:
-        type: integer
-        format: int32
-    IsDistributedQuery:
-      name: isDistributed
-      in: query
-      required: false
-      description: Filter results to workload of type distributed.
-      schema:
-        type: boolean
-      allowReserved: true
-    IsWorkspaceQuery:
-      name: isWorkspace
-      in: query
-      required: false
-      description: Filter results to workload of type workspace.
-      schema:
-        type: boolean
-      allowReserved: true
-    AssetScopeFilter:
-      name: scope
-      in: query
-      required: false
-      description: 'Filters results by scope. Returns only assets that belong to the specified scope. Mutually exclusive with includeDescendants. Valid values: tenant, cluster, department, project.'
-      schema:
-        type: string
-    DistributedFrameworkQuery:
-      name: distributedFramework
-      in: query
-      required: false
-      description: Filter results to workload of type distributed and distributedFramework.
-      schema:
-        type: string
-      allowReserved: true
-    AssetId:
-      name: AssetId
-      in: path
-      required: true
-      description: Unique identifier of the asset.
-      schema:
-        type: string
-        format: uuid
-        minLength: 1
-    ComplyToReplicaType:
-      name: complyToReplicaType
-      in: query
-      required: false
-      description: Include workload creation compliance information of an asset, for a given replica type, as part of the response. To check compliance, you need to provide both project id and workload type. For distributed, replica type should be provided as well.
-      schema:
-        type: string
-        enum:
-        - Worker
-        - Master
-    AssetNameFilter:
-      name: name
-      in: query
-      required: false
-      description: Filter results by name.
-      schema:
-        type: string
-    includeDescendants:
-      name: includeDescendants
-      in: query
-      required: false
-      description: Indicates whether to include assets from all descendant scopes under the specified scope. When set to true, and a specific scope identifier (for example, clusterId) is provided, the query also returns assets from all nested scopes within it (for example, departments and projects).  Mutually exclusive with scope.
-      schema:
-        type: boolean
-    AssetProjectFilter:
-      name: projectId
-      in: query
-      required: false
-      description: Filter results by project id. If scope filter is project, only assets from the specific project will be included in the response. Otherwise, the response will include project, department, cluster, tenant and system assets.
-      schema:
-        type: integer
-        format: int32
-    IncludeStatus:
-      name: statusInfo
-      in: query
-      required: false
-      description: Whether the query should include asset status information as part of the response.
-      schema:
-        type: boolean
-    IncludeUsageInfo:
-      name: usageInfo
-      in: query
-      required: false
-      description: Whether the query should include asset usage information as part of the response.
-      schema:
-        type: boolean
-    IsTrainingQuery:
-      name: isTraining
-      in: query
-      required: false
-      description: Filter results to workload of type training.
-      schema:
-        type: boolean
-      allowReserved: true
-    ComplyToWorkloadType:
-      name: complyToWorkloadType
-      in: query
-      required: false
-      description: Include workload creation compliance information of an asset, for a given workload type, as part of the response. To check compliance, you need to provide both project id and workload type.
-      schema:
-        type: string
-        enum:
-        - Workspace
-        - Training
-        - Distributed
-        - Inference
-    AssetClusterFilter:
-      name: clusterId
-      in: query
-      description: Filter results by Universally Unique Identifier (UUID) of the cluster. If scope filter is cluster, only assets from the specific cluster will be included in the response. Otherwise, the response will include cluster, tenant and system assets.
-      required: false
-      schema:
-        type: string
-        format: uuid
-        example: d73a738f-fab3-430a-8fa3-5241493d7128
+          description: A unique name of this connection. This name correlates between the connection information specified at the environment asset, to the information about the connection as specified in SpecificEnv for a specific workspace.
+          type: string
+          minLength: 1
+        isExternal:
+          description: Internal tools (isExternal=false) are tools that run as part of the container. External tools (isExternal=true) run outside the container, typically in the cloud.
+          type: boolean
+          default: false
+        internalToolInfo:
+          $ref: '#/components/schemas/InternalToolInfo'
+        externalToolInfo:
+          $ref: '#/components/schemas/ExternalToolInfo'
+    AssetsUsageRefCompute:
+      allOf:
+      - $ref: '#/components/schemas/AssetRef'
+      type:
+      - object
+      - 'null'
+    UsageTimesInfo:
+      description: Details about times the asset has been used by workloads, etc.
+      properties:
+        lastUsedByWorkload:
+          description: The time at which the asset were last used by a workload of given type and project. This field requires complyToProject and complyToWorkload types flags of the API, to specify the workload type and project id.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+          format: date-time
+      type:
+      - object
+      - 'null'
+    ExternalToolInfo:
+      description: Information of the external tool.
+      required:
+      - toolType
+      - externalUrl
+      properties:
+        toolType:
+          $ref: '#/components/schemas/ExternalToolType'
+        externalUrl:
+          description: The external url for connecting to the external tool. The url can include environment variables that will be replaced with the value provided for those variables when the workspace is created.
+          example: https://wandb.com/myteam/${PROJECT_NAME}
+          type: string
+          minLength: 1
+      type:
+      - object
+      - 'null'
+    ComplianceInfo:
+      description: Compliance of an asset with creation of workloads in a given project.
+      properties:
+        imposed:
+          description: Whether the asset is imposed on created workloads by the administrator.
+          type: boolean
+        compliance:
+          description: Whether the asset info complies with creation of workloads in the project.
+          type: boolean
+        reason:
+          description: For asset that does not comply, specify one or more reason why.
+          type: array
+          items:
+            $ref: '#/components/schemas/ComplianceInfoReason'
+      type:
+      - object
+      - 'null'
+    SeccompProfileType:
+      description: Indicates which kind of seccomp profile will be applied to the container. The options are a. `RuntimeDefault` - the container runtime default profile should be used. b. `Unconfined` - no profile should be applied. c. `Localhost` is not yet supported by Run:ai.
+      type:
+      - string
+      - 'null'
+      enum:
+      - RuntimeDefault
+      - Unconfined
+      - Localhost
+    HostIpc:
+      description: Whether to enable host IPC. Defaults to false.
+      type:
+      - boolean
+      - 'null'
+      example: false
+    AssetClusterStatusIssues:
+      type: array
+      items:
+        $ref: '#/components/schemas/AssetClusterStatusIssue'
+    ScopeType:
+      type: string
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
+    WorkloadName:
+      description: The name of the workload.
+      type: string
+      minLength: 1
+      example: my-workload-name
+      pattern: .*
+    ClusterIdOptional:
+      description: The id of the cluster.
+      type:
+      - string
+      - 'null'
+      format: uuid
+      minLength: 1
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
   responses:
-    202Accepted:
-      description: Accepted.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/HttpResponse'
-          example:
-            code: 202
-            message: Request has been accepted.
     403Forbidden:
       description: Forbidden
       content:
@@ -1465,42 +1456,15 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
-    401Unauthorized:
-      description: Unauthorized
+    202Accepted:
+      description: Accepted.
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Error'
+            $ref: '#/components/schemas/HttpResponse'
           example:
-            code: 401
-            message: Issuer is not familiar.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
+            code: 202
+            message: Request has been accepted.
     409Conflict:
       description: The specified resource already exists
       content:
@@ -1510,6 +1474,42 @@ components:
           example:
             code: 409
             message: Resource with this name already exists
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
   securitySchemes:
     bearerAuth:
       type: http

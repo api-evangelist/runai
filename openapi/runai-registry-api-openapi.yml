@@ -206,62 +206,126 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  responses:
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
   schemas:
+    RegistryUpdateRequest:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetUpdateRequest'
+    Scope:
+      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
+      type: string
+      minLength: 1
+      enum:
+      - system
+      - tenant
+      - cluster
+      - department
+      - project
+    RegistryCreationRequest:
+      required:
+      - meta
+      - spec
+      properties:
+        meta:
+          $ref: '#/components/schemas/AssetCreationRequest'
+        spec:
+          $ref: '#/components/schemas/RegistrySpec'
+    AssetDescription:
+      description: The description of the asset.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      maxLength: 250
+      example: description of my asset.
+    AssetUpdatableFields:
+      required:
+      - name
+      properties:
+        name:
+          $ref: '#/components/schemas/AssetName'
+        description:
+          $ref: '#/components/schemas/AssetDescription'
+    CredentialKind:
+      description: The kind of credential used.
+      type: string
+      minLength: 1
+      example: password
+      enum:
+      - password
+    AssetMeta:
+      allOf:
+      - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
+      - $ref: '#/components/schemas/AssetReadOnlyFields'
+      example:
+        name: my-asset
+        scope: tenant
+        id: a418ed33-9399-48c0-a890-122cadd13bfd
+        kind: s3
+        createdBy: test@run.ai
+        createdAt: '2023-02-23T14:25:36.707685Z'
+        updatedBy: test@run.ai
+        updatedAt: '2023-02-23T14:25:36.707685Z'
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          distributed: true
+          distFramework: TF
+    AssetCreationFields:
+      type: object
+      required:
+      - scope
+      properties:
+        scope:
+          $ref: '#/components/schemas/Scope'
+        clusterId:
+          $ref: '#/components/schemas/ClusterIdOptional'
+        departmentId:
+          description: The id of the department. Must be specified for department scoped assets.
+          type:
+          - string
+          - 'null'
+          minLength: 1
+        projectId:
+          description: The id of the project. Must be specified for project scoped assets.
+          type:
+          - integer
+          - 'null'
+          format: int32
+        autoDelete:
+          description: The asset will be deleted automatically. This is intended for internal use.
+          type:
+          - boolean
+          - 'null'
+          default: false
+        workloadSupportedTypes:
+          $ref: '#/components/schemas/WorkloadSupportedTypes'
+        private:
+          description: The asset will be private to the user who created it. supported only for docker registry and generic secrets
+          type:
+          - boolean
+          - 'null'
+          default: false
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
     AssetReadOnlyFields:
       required:
       - id
@@ -317,71 +381,50 @@ components:
         updateCount:
           $ref: '#/components/schemas/UpdateCount'
       type: object
-    RegistryCreationRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetCreationRequest'
-        spec:
-          $ref: '#/components/schemas/RegistrySpec'
-    AssetCreationFields:
-      type: object
-      required:
-      - scope
-      properties:
-        scope:
-          $ref: '#/components/schemas/Scope'
-        clusterId:
-          $ref: '#/components/schemas/ClusterIdOptional'
-        departmentId:
-          description: The id of the department. Must be specified for department scoped assets.
-          type:
-          - string
-          - 'null'
-          minLength: 1
-        projectId:
-          description: The id of the project. Must be specified for project scoped assets.
-          type:
-          - integer
-          - 'null'
-          format: int32
-        autoDelete:
-          description: The asset will be deleted automatically. This is intended for internal use.
-          type:
-          - boolean
-          - 'null'
-          default: false
-        workloadSupportedTypes:
-          $ref: '#/components/schemas/WorkloadSupportedTypes'
-        private:
-          description: The asset will be private to the user who created it. supported only for docker registry and generic secrets
-          type:
-          - boolean
-          - 'null'
-          default: false
-    AssetUpdateRequest:
+    AssetId:
+      description: Unique identifier of the asset.
+      type: string
+      format: uuid
+      minLength: 1
+    AssetName:
+      description: The name of the asset.
+      type: string
+      minLength: 1
+      example: my-asset
+    AssetCreationRequest:
       allOf:
       - $ref: '#/components/schemas/AssetUpdatableFields'
+      - $ref: '#/components/schemas/AssetCreationFields'
       example:
         name: my-asset
-    AssetDescription:
-      description: The description of the asset.
-      type:
-      - string
-      - 'null'
-      minLength: 1
-      maxLength: 250
-      example: description of my asset.
-    AssetUpdatableFields:
+        scope: tenant
+        workloadSupportedTypes:
+          workspace: false
+          training: false
+          inference: false
+          distributed: true
+          distFramework: TF
+    RegistryListResponse:
       required:
-      - name
+      - entries
       properties:
-        name:
-          $ref: '#/components/schemas/AssetName'
-        description:
-          $ref: '#/components/schemas/AssetDescription'
+        entries:
+          type: array
+          items:
+            $ref: '#/components/schemas/Registry'
+    UpdateCount:
+      description: the value of an update counter of a data in the system.
+      type: integer
+      format: int64
+      example: 12345
+    Repositories:
+      required:
+      - repositories
+      properties:
+        repositories:
+          type: array
+          items:
+            type: string
     AssetKind:
       description: The kind of the asset.
       type: string
@@ -405,86 +448,11 @@ components:
       - secret-volume
       - data-volume
       - ngcApiKey
-    Scope:
-      description: The scope in which an asset can be used. The highest scope, system, is intended for internal purposes only.
-      type: string
-      minLength: 1
-      enum:
-      - system
-      - tenant
-      - cluster
-      - department
-      - project
-    RegistryUpdateRequest:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetUpdateRequest'
-    RepositoryTags:
-      required:
-      - name
-      - tags
-      properties:
-        name:
-          type: string
-        tags:
-          type: array
-          items:
-            type: string
-    AssetMeta:
+    AssetUpdateRequest:
       allOf:
       - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      - $ref: '#/components/schemas/AssetReadOnlyFields'
       example:
         name: my-asset
-        scope: tenant
-        id: a418ed33-9399-48c0-a890-122cadd13bfd
-        kind: s3
-        createdBy: test@run.ai
-        createdAt: '2023-02-23T14:25:36.707685Z'
-        updatedBy: test@run.ai
-        updatedAt: '2023-02-23T14:25:36.707685Z'
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          distributed: true
-          distFramework: TF
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    Registry:
-      required:
-      - meta
-      - spec
-      properties:
-        meta:
-          $ref: '#/components/schemas/AssetMeta'
-        spec:
-          $ref: '#/components/schemas/RegistrySpec'
-    RegistryListResponse:
-      required:
-      - entries
-      properties:
-        entries:
-          type: array
-          items:
-            $ref: '#/components/schemas/Registry'
     RegistrySpec:
       required:
       - url
@@ -509,47 +477,15 @@ components:
           type: string
           example: 12345678
           minLength: 1
-    ClusterIdOptional:
-      description: The id of the cluster.
-      type:
-      - string
-      - 'null'
-      format: uuid
-      minLength: 1
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    AssetCreationRequest:
-      allOf:
-      - $ref: '#/components/schemas/AssetUpdatableFields'
-      - $ref: '#/components/schemas/AssetCreationFields'
-      example:
-        name: my-asset
-        scope: tenant
-        workloadSupportedTypes:
-          workspace: false
-          training: false
-          inference: false
-          distributed: true
-          distFramework: TF
-    CredentialKind:
-      description: The kind of credential used.
-      type: string
-      minLength: 1
-      example: password
-      enum:
-      - password
-    AssetId:
-      description: Unique identifier of the asset.
-      type: string
-      format: uuid
-      minLength: 1
-    Repositories:
+    Registry:
       required:
-      - repositories
+      - meta
+      - spec
       properties:
-        repositories:
-          type: array
-          items:
-            type: string
+        meta:
+          $ref: '#/components/schemas/AssetMeta'
+        spec:
+          $ref: '#/components/schemas/RegistrySpec'
     WorkloadSupportedTypes:
       properties:
         inference:
@@ -585,16 +521,80 @@ components:
       type:
       - object
       - 'null'
-    UpdateCount:
-      description: the value of an update counter of a data in the system.
-      type: integer
-      format: int64
-      example: 12345
-    AssetName:
-      description: The name of the asset.
-      type: string
+    RepositoryTags:
+      required:
+      - name
+      - tags
+      properties:
+        name:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+    ClusterIdOptional:
+      description: The id of the cluster.
+      type:
+      - string
+      - 'null'
+      format: uuid
       minLength: 1
-      example: my-asset
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+  responses:
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
   parameters:
     AssetNameFilter:
       name: name
@@ -603,6 +603,14 @@ components:
       description: Filter results by name.
       schema:
         type: string
+    SearchName:
+      name: searchName
+      in: query
+      required: false
+      description: Filter results that contains searchName.
+      schema:
+        type: string
+      allowReserved: true
     AssetId:
       name: AssetId
       in: path
@@ -612,14 +620,6 @@ components:
         type: string
         format: uuid
         minLength: 1
-    SearchName:
-      name: searchName
-      in: query
-      required: false
-      description: Filter results that contains searchName.
-      schema:
-        type: string
-      allowReserved: true
   securitySchemes:
     bearerAuth:
       type: http

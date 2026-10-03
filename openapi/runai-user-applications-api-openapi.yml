@@ -232,23 +232,99 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  responses:
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
   schemas:
-    Error:
+    UserAppPostResponse:
+      type: object
       required:
-      - code
-      - message
+      - id
+      - name
+      - secret
+      - clientId
+      - createdAt
       properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
+        id:
           type: string
-        details:
+        clientId:
           type: string
+        name:
+          type: string
+        secret:
+          type: string
+        createdAt:
+          format: date-time
+          type:
+          - string
+          - 'null'
       example:
-        code: 400
-        message: Bad request - Resource should have a name
+        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
+        clientId: 5e7b3b7b4b7b4b7b
+        name: app123
+        secret: this-is-the-app-secret
+        createdAt: '2020-01-01T00:00:00Z'
     UserAppCreationRequest:
       type: object
       required:
@@ -260,45 +336,6 @@ components:
           description: The name of the user application. The name must be unique within the user's applications list and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
       example:
         name: app-name
-    UserApps:
-      type: array
-      items:
-        $ref: '#/components/schemas/UserApp'
-    UserApp:
-      type: object
-      required:
-      - name
-      - id
-      - clientId
-      - createdAt
-      - lastLogin
-      properties:
-        name:
-          type: string
-        clientId:
-          type: string
-        id:
-          type: string
-        createdAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        lastLogin:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      example:
-        name: my-user-app
-        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
-        clientId: 3434c-12323ab-4ce2ea6
-        createdAt: '2019-01-01T00:00:00Z'
-        lastLogin: '2020-01-01T00:00:00Z'
-    UserAppsAdministration:
-      type: array
-      items:
-        $ref: '#/components/schemas/UserAppAdministration'
     UserAppAdministration:
       type: object
       required:
@@ -334,34 +371,61 @@ components:
         createdBy: test@run.ai
         createdAt: '2020-01-01T00:00:00Z'
         lastLogin: '2020-01-01T00:00:00Z'
-    UserAppPostResponse:
+    UserAppsAdministration:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserAppAdministration'
+    UserApps:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserApp'
+    UserApp:
       type: object
       required:
-      - id
       - name
-      - secret
+      - id
       - clientId
       - createdAt
+      - lastLogin
       properties:
-        id:
+        name:
           type: string
         clientId:
           type: string
-        name:
-          type: string
-        secret:
+        id:
           type: string
         createdAt:
-          format: date-time
           type:
           - string
           - 'null'
+          format: date-time
+        lastLogin:
+          type:
+          - string
+          - 'null'
+          format: date-time
       example:
-        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
-        clientId: 5e7b3b7b4b7b4b7b
-        name: app123
-        secret: this-is-the-app-secret
-        createdAt: '2020-01-01T00:00:00Z'
+        name: my-user-app
+        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+        clientId: 3434c-12323ab-4ce2ea6
+        createdAt: '2019-01-01T00:00:00Z'
+        lastLogin: '2020-01-01T00:00:00Z'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
   parameters:
     appId:
       name: appId
@@ -370,70 +434,6 @@ components:
       description: The application id to retrieve
       schema:
         type: string
-  responses:
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   securitySchemes:
     bearerAuth:
       type: http

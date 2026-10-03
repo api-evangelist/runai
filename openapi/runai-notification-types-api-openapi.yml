@@ -48,72 +48,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  schemas:
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    NotificationType:
-      type: object
-      required:
-      - category
-      - type
-      - description
-      properties:
-        category:
-          type: string
-        type:
-          type: string
-        description:
-          type: string
-      example:
-        category: Workload status change
-        type: Creating
-        description: Workload and associated resources are being created in the cluster
-    NotificationTypes:
-      type: array
-      items:
-        $ref: '#/components/schemas/NotificationType'
   responses:
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    501NotImplemented:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 501
-            message: Not implemented
     500InternalServerError:
       description: unexpected error
       content:
@@ -132,6 +67,33 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
+    501NotImplemented:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 501
+            message: Not implemented
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -141,6 +103,44 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
+  schemas:
+    NotificationTypes:
+      type: array
+      items:
+        $ref: '#/components/schemas/NotificationType'
+    NotificationType:
+      type: object
+      required:
+      - category
+      - type
+      - description
+      properties:
+        category:
+          type: string
+        type:
+          type: string
+        description:
+          type: string
+      example:
+        category: Workload status change
+        type: Creating
+        description: Workload and associated resources are being created in the cluster
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
   securitySchemes:
     bearerAuth:
       type: http

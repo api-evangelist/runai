@@ -209,35 +209,44 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  responses:
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
   schemas:
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    AppTokenRequest:
+    AppTokenResponse:
       type: object
       required:
-      - id
-      - name
-      - secret
+      - access_token
+      - id_token
       properties:
-        id:
+        access_token:
           type: string
-        name:
-          type: string
-        secret:
+        id_token:
           type: string
     OAuth2TokenResponse:
       type: object
@@ -265,6 +274,40 @@ components:
         scope:
           type: string
           description: The scope of the access token
+    TokenRequestGrantTypeEnum:
+      enum:
+      - app_token
+      - client_credentials
+      - refresh_token
+      - exchange_token
+      - password
+      - external_token_exchange
+    OAuth2Error:
+      type: object
+      description: OAuth 2.0 error response (RFC 6749 Section 5.2)
+      required:
+      - error
+      properties:
+        error:
+          type: string
+          description: A single ASCII error code
+          enum:
+          - invalid_request
+          - invalid_client
+          - invalid_grant
+          - unauthorized_client
+          - unsupported_grant_type
+          - invalid_scope
+          - server_error
+          - temporarily_unavailable
+          example: invalid_client
+        error_description:
+          type: string
+          description: Human-readable ASCII text providing additional information
+          example: Client authentication failed
+        error_uri:
+          type: string
+          description: URI identifying a human-readable web page with information about the error
     TokenResponse:
       type: object
       properties:
@@ -304,78 +347,35 @@ components:
           type: string
         externalToken:
           type: string
-    OAuth2Error:
-      type: object
-      description: OAuth 2.0 error response (RFC 6749 Section 5.2)
-      required:
-      - error
-      properties:
-        error:
-          type: string
-          description: A single ASCII error code
-          enum:
-          - invalid_request
-          - invalid_client
-          - invalid_grant
-          - unauthorized_client
-          - unsupported_grant_type
-          - invalid_scope
-          - server_error
-          - temporarily_unavailable
-          example: invalid_client
-        error_description:
-          type: string
-          description: Human-readable ASCII text providing additional information
-          example: Client authentication failed
-        error_uri:
-          type: string
-          description: URI identifying a human-readable web page with information about the error
-    AppTokenResponse:
+    AppTokenRequest:
       type: object
       required:
-      - access_token
-      - id_token
+      - id
+      - name
+      - secret
       properties:
-        access_token:
+        id:
           type: string
-        id_token:
+        name:
           type: string
-    TokenRequestGrantTypeEnum:
-      enum:
-      - app_token
-      - client_credentials
-      - refresh_token
-      - exchange_token
-      - password
-      - external_token_exchange
-  responses:
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
+        secret:
+          type: string
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
   securitySchemes:
     bearerAuth:
       type: http

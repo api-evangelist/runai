@@ -122,114 +122,6 @@ components:
       type: array
       items:
         $ref: '#/components/schemas/Application1'
-    ApplicationRequestResources:
-      type:
-      - object
-      - 'null'
-      properties:
-        gpu:
-          $ref: '#/components/schemas/RequestResourceCores'
-        gpuMemory:
-          $ref: '#/components/schemas/RequestResourceQuantity'
-        cpu:
-          $ref: '#/components/schemas/RequestResourceCores'
-        cpuMemory:
-          $ref: '#/components/schemas/RequestResourceQuantity'
-    CountResponse:
-      type: object
-      required:
-      - count
-      properties:
-        count:
-          type: integer
-          format: int64
-          example: 1
-    RequestResourceQuantity:
-      type:
-      - object
-      - 'null'
-      properties:
-        limit:
-          type:
-          - string
-          - 'null'
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          example: 2G
-        request:
-          type:
-          - string
-          - 'null'
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          example: 200M
-    RequestResourceCores:
-      type:
-      - object
-      - 'null'
-      properties:
-        limit:
-          type:
-          - number
-          - 'null'
-          format: double
-          example: 1.5
-        request:
-          type:
-          - number
-          - 'null'
-          format: double
-          example: 1
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    ApplicationResource:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        kind:
-          type: string
-    Application1:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        name:
-          type: string
-        source:
-          type: string
-        type:
-          type: string
-        phase:
-          type: string
-        projectId:
-          type: string
-        projectName:
-          type: string
-        resources:
-          type: array
-          items:
-            $ref: '#/components/schemas/ApplicationResource'
-        allocatedResources:
-          $ref: '#/components/schemas/ApplicationAllocatedResources'
-        requestedResources:
-          $ref: '#/components/schemas/ApplicationRequestResources'
     ApplicationAllocatedResources:
       type:
       - object
@@ -261,108 +153,115 @@ components:
           - 'null'
           pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
           example: 0B
-  parameters:
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
-    ApplicationQueryVerbosity:
-      name: verbosity
-      in: query
-      required: false
-      description: response verbosity level.
-      example: full
-      schema:
-        $ref: '#/components/schemas/ApplicationVerbosity'
-    Search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test project
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    ApplicationsSort:
-      name: sortBy
-      in: query
-      required: false
-      description: Sort results by a parameter.
-      schema:
-        type: string
-        enum:
-        - clusterId
-        - name
-        - projectId
-        - projectName
-        - source
-        - type
-    ApplicationsFilter:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`.
-      schema:
-        type: array
-        items:
+    ApplicationRequestResources:
+      type:
+      - object
+      - 'null'
+      properties:
+        gpu:
+          $ref: '#/components/schemas/RequestResourceCores'
+        gpuMemory:
+          $ref: '#/components/schemas/RequestResourceQuantity'
+        cpu:
+          $ref: '#/components/schemas/RequestResourceCores'
+        cpuMemory:
+          $ref: '#/components/schemas/RequestResourceQuantity'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
           type: string
-          pattern: ^(clusterId|name|projectId|projectName|source|type)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-        example:
-        - name!=some-name
-      explode: false
-    ApplicationId:
-      name: aiApplicationId
-      in: path
-      required: true
-      description: The unique identifier of the application.
-      schema:
-        type: string
-        format: uuid
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    RequestResourceQuantity:
+      type:
+      - object
+      - 'null'
+      properties:
+        limit:
+          type:
+          - string
+          - 'null'
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 2G
+        request:
+          type:
+          - string
+          - 'null'
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 200M
+    Application1:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        source:
+          type: string
+        type:
+          type: string
+        phase:
+          type: string
+        projectId:
+          type: string
+        projectName:
+          type: string
+        resources:
+          type: array
+          items:
+            $ref: '#/components/schemas/ApplicationResource'
+        allocatedResources:
+          $ref: '#/components/schemas/ApplicationAllocatedResources'
+        requestedResources:
+          $ref: '#/components/schemas/ApplicationRequestResources'
+    RequestResourceCores:
+      type:
+      - object
+      - 'null'
+      properties:
+        limit:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: 1.5
+        request:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: 1
+    CountResponse:
+      type: object
+      required:
+      - count
+      properties:
+        count:
+          type: integer
+          format: int64
+          example: 1
+    ApplicationResource:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        kind:
+          type: string
   responses:
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
     400BadRequest:
       description: Bad request.
       content:
@@ -381,6 +280,15 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
     401Unauthorized:
       description: Unauthorized
       content:
@@ -390,6 +298,98 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  parameters:
+    ApplicationId:
+      name: aiApplicationId
+      in: path
+      required: true
+      description: The unique identifier of the application.
+      schema:
+        type: string
+        format: uuid
+    ApplicationsFilter:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(clusterId|name|projectId|projectName|source|type)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - name!=some-name
+      explode: false
+    Search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test project
+    ApplicationsSort:
+      name: sortBy
+      in: query
+      required: false
+      description: Sort results by a parameter.
+      schema:
+        type: string
+        enum:
+        - clusterId
+        - name
+        - projectId
+        - projectName
+        - source
+        - type
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    ApplicationQueryVerbosity:
+      name: verbosity
+      in: query
+      required: false
+      description: response verbosity level.
+      example: full
+      schema:
+        $ref: '#/components/schemas/ApplicationVerbosity'
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
   securitySchemes:
     bearerAuth:
       type: http

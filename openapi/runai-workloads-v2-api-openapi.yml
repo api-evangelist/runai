@@ -138,6 +138,75 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   schemas:
+    PriorityClass:
+      description: 'Specifies the priority class for the workload, which determines its scheduling behavior. Valid values are: very-low, low, medium-low, medium, medium-high, high, and very-high. Each workload type has a default priority. To view the default priority for each workload type, use the GET /workload-types endpoint. Once you change the priority from the default value defined for that workload type, the preemptibility field is not automatically updated. Make sure to set the desired preemptibility value.'
+      type:
+      - string
+      - 'null'
+      pattern: .*
+    DepartmentId3:
+      description: The id of the department.
+      type: string
+      minLength: 1
+      example: 2
+      pattern: .*
+    WorkloadId3:
+      description: A unique ID of the workload.
+      type: string
+      format: uuid
+    Preemptibility:
+      description: Specifies whether the workload can be preempted by higher-priority workloads. Valid values are preemptible and non-preemptible. If explicitly set, this value takes precedence. If not set, the system derives the preemptibility from the priorityClassName field, ensuring backward compatibility. Each workload type has a default preemptibility. To view the default preemptibility for each workload type, use the GET /workload-types endpoint.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      enum:
+      - preemptible
+      - non-preemptible
+    DesiredPhase:
+      description: The desired phase of the workload.
+      type: string
+      enum:
+      - Running
+      - Stopped
+      - Deleted
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    ProjectId:
+      description: The id of the project.
+      type: string
+      example: 1
+      pattern: .*
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    WorkloadV2CreateRequest:
+      type: object
+      required:
+      - metadata
+      properties:
+        metadata:
+          $ref: '#/components/schemas/WorkloadV2MetadataCreateParams'
+        manifest:
+          $ref: '#/components/schemas/Manifest'
+        manifestBase64Encoded:
+          $ref: '#/components/schemas/ManifestEncoded'
     WorkloadV2:
       type: object
       required:
@@ -154,33 +223,51 @@ components:
           $ref: '#/components/schemas/Manifest'
         rawManifest:
           $ref: '#/components/schemas/Manifest'
+    Category:
+      description: Specify the workload category assigned to the workload. Categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform.
+      type:
+      - string
+      - 'null'
+      pattern: .*
+    WorkloadV2SyncStatus:
+      type: string
+      enum:
+      - Queued
+      - Applying
+      - Deleting
+      - Synced
+      - Deleted
+      - Failed
+    WorkloadV2MetadataResponse:
+      type: object
+      required:
+      - name
+      - projectId
+      properties:
+        name:
+          $ref: '#/components/schemas/WorkloadName'
+        projectId:
+          $ref: '#/components/schemas/ProjectId'
+        priority:
+          $ref: '#/components/schemas/PriorityClass'
+        category:
+          $ref: '#/components/schemas/Category'
+        preemptibility:
+          $ref: '#/components/schemas/Preemptibility'
+    WorkloadV2GetResponse:
+      type: object
+      required:
+      - workload
+      properties:
+        workload:
+          $ref: '#/components/schemas/WorkloadV2'
+        syncInfo:
+          $ref: '#/components/schemas/WorkloadV2SyncInfo'
     ClusterId:
       description: The id of the cluster.
       type: string
       format: uuid
       example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    ProjectId:
-      description: The id of the project.
-      type: string
-      example: 1
-      pattern: .*
-    WorkloadV2SyncInfo:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          $ref: '#/components/schemas/WorkloadV2SyncStatus'
-        message:
-          type: string
-          pattern: .*
-    DesiredPhase:
-      description: The desired phase of the workload.
-      type: string
-      enum:
-      - Running
-      - Stopped
-      - Deleted
     GVK:
       type: object
       description: Specifies the Group, Version, and Kind (GVK) of the Kubernetes resource that defines the workload.
@@ -210,22 +297,6 @@ components:
           $ref: '#/components/schemas/Manifest'
         manifestBase64Encoded:
           $ref: '#/components/schemas/ManifestEncoded'
-    WorkloadV2Metadata:
-      allOf:
-      - $ref: '#/components/schemas/WorkloadV2MetadataResponse'
-      - $ref: '#/components/schemas/WorkloadV2MetadataAutoFill'
-    DepartmentId3:
-      description: The id of the department.
-      type: string
-      minLength: 1
-      example: 2
-      pattern: .*
-    Category:
-      description: Specify the workload category assigned to the workload. Categories are used to classify and monitor different types of workloads within the NVIDIA Run:ai platform.
-      type:
-      - string
-      - 'null'
-      pattern: .*
     WorkloadV2MetadataAutoFill:
       type: object
       required:
@@ -289,18 +360,19 @@ components:
           format: .*
           description: Identifier of the user who deleted the workload.
           example: user@run.ai
-    WorkloadName:
-      description: The name of the workload.
+    DepartmentName1:
       type: string
-      minLength: 1
-      example: my-workload-name
-      pattern: .*
-    ProjectName2:
-      type: string
-      description: The name of the project
-      example: project-a
+      description: The name of the department
+      example: default
       minLength: 1
       pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
+    WorkloadV2MetadataUpdateParams:
+      type: object
+      properties:
+        priority:
+          $ref: '#/components/schemas/PriorityClass'
+        category:
+          $ref: '#/components/schemas/Category'
     WorkloadV2MetadataCreateParams:
       type: object
       properties:
@@ -324,34 +396,6 @@ components:
           $ref: '#/components/schemas/Category'
         preemptibility:
           $ref: '#/components/schemas/Preemptibility'
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    ManifestEncoded:
-      type: string
-      format: byte
-      example: YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=
-      description: Kubernetes YAML manifest encoded in base 64. Mutually exclusive with manifest.
-    WorkloadV2MetadataUpdateParams:
-      type: object
-      properties:
-        priority:
-          $ref: '#/components/schemas/PriorityClass'
-        category:
-          $ref: '#/components/schemas/Category'
     Manifest:
       type: object
       description: The full Kubernetes manifest for the workload in JSON form. Mutually exclusive with manifestEncodedBase64.
@@ -374,81 +418,46 @@ components:
               containers:
               - name: app
                 image: nginx:latest
-    WorkloadId3:
-      description: A unique ID of the workload.
-      type: string
-      format: uuid
-    Preemptibility:
-      description: Specifies whether the workload can be preempted by higher-priority workloads. Valid values are preemptible and non-preemptible. If explicitly set, this value takes precedence. If not set, the system derives the preemptibility from the priorityClassName field, ensuring backward compatibility. Each workload type has a default preemptibility. To view the default preemptibility for each workload type, use the GET /workload-types endpoint.
-      type:
-      - string
-      - 'null'
-      minLength: 1
-      enum:
-      - preemptible
-      - non-preemptible
-    PriorityClass:
-      description: 'Specifies the priority class for the workload, which determines its scheduling behavior. Valid values are: very-low, low, medium-low, medium, medium-high, high, and very-high. Each workload type has a default priority. To view the default priority for each workload type, use the GET /workload-types endpoint. Once you change the priority from the default value defined for that workload type, the preemptibility field is not automatically updated. Make sure to set the desired preemptibility value.'
-      type:
-      - string
-      - 'null'
-      pattern: .*
-    TenantId:
-      description: The id of the tenant.
-      type: integer
-      format: int32
-      example: 1001
-    WorkloadV2CreateRequest:
+    WorkloadV2SyncInfo:
       type: object
       required:
-      - metadata
+      - status
       properties:
-        metadata:
-          $ref: '#/components/schemas/WorkloadV2MetadataCreateParams'
-        manifest:
-          $ref: '#/components/schemas/Manifest'
-        manifestBase64Encoded:
-          $ref: '#/components/schemas/ManifestEncoded'
-    WorkloadV2SyncStatus:
+        status:
+          $ref: '#/components/schemas/WorkloadV2SyncStatus'
+        message:
+          type: string
+          pattern: .*
+    WorkloadV2Metadata:
+      allOf:
+      - $ref: '#/components/schemas/WorkloadV2MetadataResponse'
+      - $ref: '#/components/schemas/WorkloadV2MetadataAutoFill'
+    ProjectName2:
       type: string
-      enum:
-      - Queued
-      - Applying
-      - Deleting
-      - Synced
-      - Deleted
-      - Failed
-    WorkloadV2MetadataResponse:
-      type: object
-      required:
-      - name
-      - projectId
-      properties:
-        name:
-          $ref: '#/components/schemas/WorkloadName'
-        projectId:
-          $ref: '#/components/schemas/ProjectId'
-        priority:
-          $ref: '#/components/schemas/PriorityClass'
-        category:
-          $ref: '#/components/schemas/Category'
-        preemptibility:
-          $ref: '#/components/schemas/Preemptibility'
-    DepartmentName1:
-      type: string
-      description: The name of the department
-      example: default
+      description: The name of the project
+      example: project-a
       minLength: 1
       pattern: ^[a-z0-9]([a-z0-9-]*[a-z0-9])?$
-    WorkloadV2GetResponse:
-      type: object
-      required:
-      - workload
-      properties:
-        workload:
-          $ref: '#/components/schemas/WorkloadV2'
-        syncInfo:
-          $ref: '#/components/schemas/WorkloadV2SyncInfo'
+    WorkloadName:
+      description: The name of the workload.
+      type: string
+      minLength: 1
+      example: my-workload-name
+      pattern: .*
+    ManifestEncoded:
+      type: string
+      format: byte
+      example: YXBpVmVyc2lvbjogdjEKa2luZDogUG9kCm1ldGFkYXRhOgogIG5hbWU6IG15LXBvZApzcGVjOgogIGNvbnRhaW5lcnM6CiAgLSBuYW1lOiBuZ2lueAogICAgaW1hZ2U6IG5naW54OmxhdGVzdAo=
+      description: Kubernetes YAML manifest encoded in base 64. Mutually exclusive with manifest.
+  parameters:
+    WorkloadV2Id:
+      name: WorkloadV2Id
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+        description: The ID of the workload.
   responses:
     404NotFound:
       description: The specified resource was not found
@@ -459,33 +468,6 @@ components:
           example:
             code: 404
             message: Resource id not found.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
     400BadRequest:
       description: Bad request.
       content:
@@ -504,6 +486,15 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
     401Unauthorized:
       description: Unauthorized
       content:
@@ -513,15 +504,24 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-  parameters:
-    WorkloadV2Id:
-      name: WorkloadV2Id
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-        description: The ID of the workload.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
   securitySchemes:
     bearerAuth:
       type: http

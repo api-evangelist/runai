@@ -79,33 +79,53 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  responses:
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
   schemas:
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
+    MeAccessRule:
+      allOf:
+      - $ref: '#/components/schemas/AccessRuleCreationFields'
+      - $ref: '#/components/schemas/EnrichmentDataFields'
+      - required:
+        - tenantId
+      - properties:
+          id:
+            type: integer
+            format: int32
+            example: 32
+          tenantId:
+            $ref: '#/components/schemas/TenantId'
     ClusterId:
       description: The id of the cluster.
       type: string
       format: uuid
       example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    TenantId:
-      description: The id of the tenant.
-      type: integer
-      format: int32
-      example: 1001
     EnrichmentDataFields:
       type: object
       required:
@@ -120,6 +140,24 @@ components:
           type: string
           description: Human-readable name of the scope (e.g., tenant-x).
           example: tenant-x
+    SubjectType:
+      type: string
+      description: 'Subject type enum for access rules.
+
+
+        Note: The ''app'' subject type is DEPRECATED. Please use ''service-account'' instead for service accounts.
+
+        '
+      enum:
+      - user
+      - app
+      - service-account
+      - group
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
     AccessRuleCreationFields:
       type: object
       required:
@@ -183,61 +221,40 @@ components:
               example: 1
             accessRules:
               $ref: '#/components/schemas/MeAccessRules'
-    SubjectType:
-      type: string
-      description: 'Subject type enum for access rules.
-
-
-        Note: The ''app'' subject type is DEPRECATED. Please use ''service-account'' instead for service accounts.
-
-        '
-      enum:
-      - user
-      - app
-      - service-account
-      - group
-    MeAccessRule:
-      allOf:
-      - $ref: '#/components/schemas/AccessRuleCreationFields'
-      - $ref: '#/components/schemas/EnrichmentDataFields'
-      - required:
-        - tenantId
-      - properties:
-          id:
-            type: integer
-            format: int32
-            example: 32
-          tenantId:
-            $ref: '#/components/schemas/TenantId'
-  responses:
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
   parameters:
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    Search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test project
     Limit:
       name: limit
       in: query
@@ -249,23 +266,6 @@ components:
         default: 50
         minimum: 1
         maximum: 500
-    Search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test project
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
   securitySchemes:
     bearerAuth:
       type: http

@@ -49,107 +49,7 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  schemas:
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    BatchResponse:
-      type: object
-      required:
-      - id
-      properties:
-        id:
-          $ref: '#/components/schemas/BatchId'
-        succeeded:
-          $ref: '#/components/schemas/IdsList'
-        failed:
-          type: array
-          description: The IDs that failed to update.
-          items:
-            $ref: '#/components/schemas/BatchResponseFailureItem'
-    BatchResponseFailureItem:
-      type: object
-      required:
-      - id
-      - code
-      - message
-      properties:
-        id:
-          type: string
-          format: uuid
-        code:
-          $ref: '#/components/schemas/ErrorCode'
-        message:
-          $ref: '#/components/schemas/ErrorMessage'
-    BatchId:
-      type: string
-      format: uuid
-      description: The ID of the batch operation.
-    ErrorCode:
-      type: integer
-      format: int32
-      description: A numeric code representing the error type.
-    WorkloadBatch:
-      type: object
-      description: The ids and action to perform on a batch of workloads. The number of ids is limited to 100.
-      required:
-      - ids
-      - action
-      properties:
-        ids:
-          $ref: '#/components/schemas/IdsList'
-        action:
-          $ref: '#/components/schemas/Action1'
-    ErrorMessage:
-      type: string
-      description: The error message.
-    IdsList:
-      type: array
-      description: List of ids to perform the action on.
-      items:
-        type: string
-        format: uuid
-        description: Id to perform the action on.
-      minLength: 1
-    Action1:
-      type: string
-      description: The action to perform on the list of ids.
-      enum:
-      - delete
-      - suspend
-      - resume
   responses:
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
     500InternalServerError:
       description: unexpected error
       content:
@@ -177,6 +77,106 @@ components:
           example:
             code: 400
             message: Required parameter is missing
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+  schemas:
+    IdsList:
+      type: array
+      description: List of ids to perform the action on.
+      items:
+        type: string
+        format: uuid
+        description: Id to perform the action on.
+      minLength: 1
+    WorkloadBatch:
+      type: object
+      description: The ids and action to perform on a batch of workloads. The number of ids is limited to 100.
+      required:
+      - ids
+      - action
+      properties:
+        ids:
+          $ref: '#/components/schemas/IdsList'
+        action:
+          $ref: '#/components/schemas/Action1'
+    BatchResponse:
+      type: object
+      required:
+      - id
+      properties:
+        id:
+          $ref: '#/components/schemas/BatchId'
+        succeeded:
+          $ref: '#/components/schemas/IdsList'
+        failed:
+          type: array
+          description: The IDs that failed to update.
+          items:
+            $ref: '#/components/schemas/BatchResponseFailureItem'
+    ErrorCode:
+      type: integer
+      format: int32
+      description: A numeric code representing the error type.
+    BatchResponseFailureItem:
+      type: object
+      required:
+      - id
+      - code
+      - message
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          $ref: '#/components/schemas/ErrorCode'
+        message:
+          $ref: '#/components/schemas/ErrorMessage'
+    ErrorMessage:
+      type: string
+      description: The error message.
+    BatchId:
+      type: string
+      format: uuid
+      description: The ID of the batch operation.
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    Action1:
+      type: string
+      description: The action to perform on the list of ids.
+      enum:
+      - delete
+      - suspend
+      - resume
   securitySchemes:
     bearerAuth:
       type: http

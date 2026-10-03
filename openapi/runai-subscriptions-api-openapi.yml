@@ -134,52 +134,71 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
+  responses:
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    501NotImplemented:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 501
+            message: Not implemented
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
   schemas:
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    Subscription:
-      type: object
-      required:
-      - events
-      - channels
-      allOf:
-      - $ref: '#/components/schemas/SubscriptionForPut'
-      - type: object
-        properties:
-          id:
-            type: string
-      example:
-        id: 1234
-        events:
-        - category: cat1
-          types:
-          - type1
-          - type2
-        - category: cat2
-          types:
-          - type3
-          - type4
-        channels:
-        - email
-        - email1
-    SubscriptionEvents:
-      type: array
-      items:
-        $ref: '#/components/schemas/SubscriptionEvent'
     SubscriptionEvent:
       type: object
       required:
@@ -192,6 +211,10 @@ components:
           type: array
           items:
             type: string
+    Subscriptions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Subscription'
     SubscriptionForPut:
       type: object
       required:
@@ -217,74 +240,51 @@ components:
         channels:
         - email
         - email1
-    Subscriptions:
+    SubscriptionEvents:
       type: array
       items:
-        $ref: '#/components/schemas/Subscription'
-  responses:
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    501NotImplemented:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 501
-            message: Not implemented
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
+        $ref: '#/components/schemas/SubscriptionEvent'
+    Subscription:
+      type: object
+      required:
+      - events
+      - channels
+      allOf:
+      - $ref: '#/components/schemas/SubscriptionForPut'
+      - type: object
+        properties:
+          id:
+            type: string
+      example:
+        id: 1234
+        events:
+        - category: cat1
+          types:
+          - type1
+          - type2
+        - category: cat2
+          types:
+          - type3
+          - type4
+        channels:
+        - email
+        - email1
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
   parameters:
     SubscriptionId:
       name: id

@@ -97,6 +97,13 @@ paths:
           $ref: '#/components/responses/serviceUnavailable'
 components:
   responses:
+    CLIReleaseResponse:
+      description: Get the CLI release.
+      content:
+        application/x-tar:
+          schema:
+            type: string
+            format: binary
     ChecksumResponse:
       description: return an object with hashes of a file for validation
       content:
@@ -121,13 +128,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error1'
-    CLIReleaseResponse:
-      description: Get the CLI release.
-      content:
-        application/x-tar:
-          schema:
-            type: string
-            format: binary
   parameters:
     os:
       in: path

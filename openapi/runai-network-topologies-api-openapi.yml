@@ -158,36 +158,48 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  parameters:
-    NetworkTopologiesFilterBy:
-      name: filterBy
-      in: query
-      required: false
-      description: 'Filter results by a parameter. Use the format field-name operator value. Supported operators:  == Equals  != Not equals  <= Less than or equal  >= Greater than or equal  =@ Contains !@ Does not contain  =^ Starts with  =$ Ends with Date values must be in ISO 8601 timestamp format. Only the following operators support dates: ==, !=, <=, >=.'
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(name|clusterId|source|phase)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-        example:
-        - clusterId==123e4567-e89b-12d3-a456-426614174000
-        - source=@Run.ai
-      explode: false
-    NetworkTopologyId:
-      name: networkTopologyId
-      in: path
-      required: true
-      schema:
-        type: string
-        format: uuid
-      description: The unique identifier for the network topology
-      example: 123e4567-e89b-12d3-a456-426614174000
   schemas:
-    ClusterId:
-      description: The id of the cluster.
+    NetworkTopologiesSource:
       type: string
-      format: uuid
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+      description: Identifier of the the source of the topology. Useful for tracking where the topology data originated (i.e. Run:ai, Cluster).
+      example: Run.ai
+      minLength: 1
+      maxLength: 63
+      pattern: ^[a-zA-Z0-9][a-zA-Z0-9_.-]*[a-zA-Z0-9]$
+    NetworkTopologyCreateRequest:
+      allOf:
+      - $ref: '#/components/schemas/NetworkTopologyUpdateFields'
+      - type: object
+        required:
+        - name
+        - clusterId
+        properties:
+          name:
+            $ref: '#/components/schemas/NetworkTopologyName'
+          clusterId:
+            $ref: '#/components/schemas/ClusterId'
+      x-schema-name: NetworkTopologyCreateRequest
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
     NetworkTopologyLevels:
       type: array
       items:
@@ -200,11 +212,6 @@ components:
       - cloud.provider.com/topology-block
       - cloud.provider.com/topology-rack
       - kubernetes.io/hostname
-    NetworkTopologyId:
-      type: string
-      format: uuid
-      description: The unique identifier for the network topology
-      example: 123e4567-e89b-12d3-a456-426614174000
     NetworkTopology:
       allOf:
       - $ref: '#/components/schemas/NetworkTopologyCreateRequest'
@@ -244,13 +251,23 @@ components:
             example:
             - a100
       x-schema-name: NetworkTopology
-    NetworkTopologiesSource:
+    ClusterId:
+      description: The id of the cluster.
       type: string
-      description: Identifier of the the source of the topology. Useful for tracking where the topology data originated (i.e. Run:ai, Cluster).
-      example: Run.ai
-      minLength: 1
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    NetworkTopologyName:
+      type: string
+      description: Name of the network topology
       maxLength: 63
-      pattern: ^[a-zA-Z0-9][a-zA-Z0-9_.-]*[a-zA-Z0-9]$
+      minLength: 1
+      pattern: ^[a-z]([a-z0-9-]*[a-z0-9])?$
+      example: default-topology
+    NetworkTopologyId:
+      type: string
+      format: uuid
+      description: The unique identifier for the network topology
+      example: 123e4567-e89b-12d3-a456-426614174000
     CountResponse:
       type: object
       required:
@@ -260,22 +277,6 @@ components:
           type: integer
           format: int64
           example: 1
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
     NetworkTopologyUpdateFields:
       type: object
       required:
@@ -284,31 +285,6 @@ components:
         levels:
           $ref: '#/components/schemas/NetworkTopologyLevels'
       x-schema-name: NetworkTopologyUpdateFields
-    TenantId:
-      description: The id of the tenant.
-      type: integer
-      format: int32
-      example: 1001
-    NetworkTopologyCreateRequest:
-      allOf:
-      - $ref: '#/components/schemas/NetworkTopologyUpdateFields'
-      - type: object
-        required:
-        - name
-        - clusterId
-        properties:
-          name:
-            $ref: '#/components/schemas/NetworkTopologyName'
-          clusterId:
-            $ref: '#/components/schemas/ClusterId'
-      x-schema-name: NetworkTopologyCreateRequest
-    NetworkTopologyName:
-      type: string
-      description: Name of the network topology
-      maxLength: 63
-      minLength: 1
-      pattern: ^[a-z]([a-z0-9-]*[a-z0-9])?$
-      example: default-topology
   responses:
     404NotFound:
       description: The specified resource was not found
@@ -319,26 +295,6 @@ components:
           example:
             code: 404
             message: Resource id not found.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    204NoContent:
-      description: No Content.
     400BadRequest:
       description: Bad request.
       content:
@@ -357,6 +313,15 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
     401Unauthorized:
       description: Unauthorized
       content:
@@ -366,6 +331,41 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    204NoContent:
+      description: No Content.
+  parameters:
+    NetworkTopologiesFilterBy:
+      name: filterBy
+      in: query
+      required: false
+      description: 'Filter results by a parameter. Use the format field-name operator value. Supported operators:  == Equals  != Not equals  <= Less than or equal  >= Greater than or equal  =@ Contains !@ Does not contain  =^ Starts with  =$ Ends with Date values must be in ISO 8601 timestamp format. Only the following operators support dates: ==, !=, <=, >=.'
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(name|clusterId|source|phase)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - clusterId==123e4567-e89b-12d3-a456-426614174000
+        - source=@Run.ai
+      explode: false
+    NetworkTopologyId:
+      name: networkTopologyId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+      description: The unique identifier for the network topology
+      example: 123e4567-e89b-12d3-a456-426614174000
   securitySchemes:
     bearerAuth:
       type: http
