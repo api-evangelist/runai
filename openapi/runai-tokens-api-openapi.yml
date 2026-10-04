@@ -238,6 +238,34 @@ components:
             code: 503
             message: Please try again in few minutes.
   schemas:
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    TokenResponse:
+      type: object
+      properties:
+        accessToken:
+          type: string
+        idToken:
+          type: string
+        refreshToken:
+          type: string
+        expiresIn:
+          type: integer
+          description: Token lifetime in seconds
     AppTokenResponse:
       type: object
       required:
@@ -274,14 +302,6 @@ components:
         scope:
           type: string
           description: The scope of the access token
-    TokenRequestGrantTypeEnum:
-      enum:
-      - app_token
-      - client_credentials
-      - refresh_token
-      - exchange_token
-      - password
-      - external_token_exchange
     OAuth2Error:
       type: object
       description: OAuth 2.0 error response (RFC 6749 Section 5.2)
@@ -308,18 +328,6 @@ components:
         error_uri:
           type: string
           description: URI identifying a human-readable web page with information about the error
-    TokenResponse:
-      type: object
-      properties:
-        accessToken:
-          type: string
-        idToken:
-          type: string
-        refreshToken:
-          type: string
-        expiresIn:
-          type: integer
-          description: Token lifetime in seconds
     TokenRequest:
       type: object
       properties:
@@ -347,6 +355,14 @@ components:
           type: string
         externalToken:
           type: string
+    TokenRequestGrantTypeEnum:
+      enum:
+      - app_token
+      - client_credentials
+      - refresh_token
+      - exchange_token
+      - password
+      - external_token_exchange
     AppTokenRequest:
       type: object
       required:
@@ -360,22 +376,6 @@ components:
           type: string
         secret:
           type: string
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
   securitySchemes:
     bearerAuth:
       type: http

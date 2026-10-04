@@ -96,7 +96,38 @@ paths:
         '503':
           $ref: '#/components/responses/serviceUnavailable'
 components:
+  parameters:
+    version:
+      in: path
+      name: version
+      description: run:ai version (semantic version)
+      required: true
+      schema:
+        type: string
+        pattern: ^(v(0|[1-9]\\d*))\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$
+    os:
+      in: path
+      name: os
+      description: The operating system
+      required: true
+      schema:
+        type: string
+        enum:
+        - linux
+        - darwin
   responses:
+    ChecksumResponse:
+      description: return an object with hashes of a file for validation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ChecksumResponse'
+    serviceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error1'
     CLIReleaseResponse:
       description: Get the CLI release.
       content:
@@ -104,12 +135,6 @@ components:
           schema:
             type: string
             format: binary
-    ChecksumResponse:
-      description: return an object with hashes of a file for validation
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ChecksumResponse'
     BadRequest1:
       description: Bad request.
       content:
@@ -122,31 +147,6 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error1'
-    serviceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error1'
-  parameters:
-    os:
-      in: path
-      name: os
-      description: The operating system
-      required: true
-      schema:
-        type: string
-        enum:
-        - linux
-        - darwin
-    version:
-      in: path
-      name: version
-      description: run:ai version (semantic version)
-      required: true
-      schema:
-        type: string
-        pattern: ^(v(0|[1-9]\\d*))\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)(?:-((?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\\.(?:0|[1-9]\\d*|\\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\\+([0-9a-zA-Z-]+(?:\\.[0-9a-zA-Z-]+)*))?$
   schemas:
     Error1:
       required:

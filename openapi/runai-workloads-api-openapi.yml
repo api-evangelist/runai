@@ -205,6 +205,177 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   parameters:
+    FilterByPhases:
+      name: filterByPhases
+      in: query
+      required: false
+      description: Filter workloads by specific phases. If not specified, all phases are included.
+      explode: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/Phase'
+        example:
+        - Running
+        - Failed
+    WorkloadMetricTypes:
+      name: metricType
+      in: query
+      required: true
+      description: Specify which data to request.
+      explode: false
+      schema:
+        type: array
+        items:
+          $ref: '#/components/schemas/WorkloadMetricType'
+    FilterByCluster:
+      name: clusterId
+      in: query
+      description: Filter using the Universally Unique Identifier (UUID) of the cluster.
+      required: false
+      schema:
+        type: string
+        format: uuid
+        example: d73a738f-fab3-430a-8fa3-5241493d7128
+    StartRequired:
+      name: start
+      in: query
+      description: Start date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-06T12:09:18.211Z'
+    Offset:
+      name: offset
+      in: query
+      required: false
+      description: The offset of the first item returned in the collection.
+      schema:
+        type: integer
+        format: int32
+        example: 100
+    NumberOfSamples:
+      name: numberOfSamples
+      in: query
+      description: The number of samples to take in the specified time range.
+      required: false
+      schema:
+        type: integer
+        example: 20
+        maximum: 1000
+        minimum: 0
+        default: 20
+    EndRequired:
+      name: end
+      in: query
+      description: End date of time range to fetch data in ISO 8601 timestamp format.
+      required: true
+      schema:
+        type: string
+        format: date-time
+        example: '2023-06-07T12:09:18.211Z'
+    FilterByNodepoolName:
+      name: nodepoolName
+      in: query
+      description: Filter using the nodepool.
+      required: false
+      schema:
+        type: string
+        example: default
+    TelemetryType2:
+      name: telemetryType
+      in: query
+      required: true
+      description: Specifies the telemetry type.
+      schema:
+        $ref: '#/components/schemas/WorkloadTelemetryType'
+    Search:
+      name: search
+      in: query
+      required: false
+      description: Filter results by a free text search.
+      schema:
+        type: string
+        example: test project
+    FilterByDepartment:
+      name: departmentId
+      in: query
+      description: Filter using the department id.
+      required: false
+      schema:
+        type: string
+        example: '1'
+    SortOrder:
+      name: sortOrder
+      in: query
+      required: false
+      description: Sort results in descending or ascending order.
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: asc
+    TelemetryGroupBy1:
+      name: groupBy
+      in: query
+      description: Group workloads by field.
+      explode: false
+      required: false
+      schema:
+        type: array
+        maxItems: 2
+        items:
+          type: string
+          enum:
+          - ClusterId
+          - DepartmentId
+          - ProjectId
+          - Type
+          - CurrentNodepools
+          - Phase
+          - Category
+    WorkloadId:
+      name: workloadId
+      in: path
+      required: true
+      description: The  Universally Unique Identifier (UUID) of the workload.
+      schema:
+        type: string
+        format: uuid
+    WorkloadsFilter:
+      name: filterBy
+      in: query
+      required: false
+      description: Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`.
+      schema:
+        type: array
+        items:
+          type: string
+          pattern: ^(type|name|clusterId|projectId|projectName|departmentId|departmentName|createdAt|deletedAt|submittedBy|phase|completedAt|nodepool|distributedFramework|allocatedGPU|idleGpus|idleAllocatedGpus|phaseUpdatedAt|category|totalPendingTimeSeconds|totalRunningTimeSeconds|priority|priorityClassName|guaranteedRuntimeEndsAt|aiApplicationId|aiApplicationName)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
+        example:
+        - name!=some-workload-name
+        - allocatedGPU>=2
+        - createdAt>=2021-01-01T00:00:00Z
+      explode: false
+    Deleted:
+      name: deleted
+      in: query
+      description: Return only deleted resources when `true`.
+      schema:
+        type: boolean
+    Limit:
+      name: limit
+      in: query
+      required: false
+      description: The maximum number of entries to return.
+      schema:
+        type: integer
+        format: int32
+        default: 50
+        minimum: 1
+        maximum: 500
     WorkloadsSort:
       name: sortBy
       in: query
@@ -239,391 +410,24 @@ components:
         - guaranteedRuntimeEndsAt
         - aiApplicationId
         - aiApplicationName
-    WorkloadId:
-      name: workloadId
-      in: path
-      required: true
-      description: The  Universally Unique Identifier (UUID) of the workload.
-      schema:
-        type: string
-        format: uuid
-    TelemetryType2:
-      name: telemetryType
-      in: query
-      required: true
-      description: Specifies the telemetry type.
-      schema:
-        $ref: '#/components/schemas/WorkloadTelemetryType'
-    FilterByCluster:
-      name: clusterId
-      in: query
-      description: Filter using the Universally Unique Identifier (UUID) of the cluster.
-      required: false
-      schema:
-        type: string
-        format: uuid
-        example: d73a738f-fab3-430a-8fa3-5241493d7128
-    FilterByPhases:
-      name: filterByPhases
-      in: query
-      required: false
-      description: Filter workloads by specific phases. If not specified, all phases are included.
-      explode: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/Phase'
-        example:
-        - Running
-        - Failed
-    EndRequired:
-      name: end
-      in: query
-      description: End date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-07T12:09:18.211Z'
-    WorkloadsFilter:
-      name: filterBy
-      in: query
-      required: false
-      description: Filter results by a parameter. Use the format field-name operator value. Operators are `==` Equals, `!=` Not equals, `<=` Less than or equal, `>=` Greater than or equal, `=@` contains, `!@` Does not contain, `=^` Starts with and `=$` Ends with. Dates are in ISO 8601 timestamp format and available for operators `==`, `!=`, `<=` and `>=`.
-      schema:
-        type: array
-        items:
-          type: string
-          pattern: ^(type|name|clusterId|projectId|projectName|departmentId|departmentName|createdAt|deletedAt|submittedBy|phase|completedAt|nodepool|distributedFramework|allocatedGPU|idleGpus|idleAllocatedGpus|phaseUpdatedAt|category|totalPendingTimeSeconds|totalRunningTimeSeconds|priority|priorityClassName|guaranteedRuntimeEndsAt|aiApplicationId|aiApplicationName)(==|!=|<=|>=|=@|!@|=\^|=\$).+$
-        example:
-        - name!=some-workload-name
-        - allocatedGPU>=2
-        - createdAt>=2021-01-01T00:00:00Z
-      explode: false
-    NumberOfSamples:
-      name: numberOfSamples
-      in: query
-      description: The number of samples to take in the specified time range.
-      required: false
-      schema:
-        type: integer
-        example: 20
-        maximum: 1000
-        minimum: 0
-        default: 20
-    Search:
-      name: search
-      in: query
-      required: false
-      description: Filter results by a free text search.
-      schema:
-        type: string
-        example: test project
-    TelemetryGroupBy1:
-      name: groupBy
-      in: query
-      description: Group workloads by field.
-      explode: false
-      required: false
-      schema:
-        type: array
-        maxItems: 2
-        items:
-          type: string
-          enum:
-          - ClusterId
-          - DepartmentId
-          - ProjectId
-          - Type
-          - CurrentNodepools
-          - Phase
-          - Category
-    FilterByNodepoolName:
-      name: nodepoolName
-      in: query
-      description: Filter using the nodepool.
-      required: false
-      schema:
-        type: string
-        example: default
-    StartRequired:
-      name: start
-      in: query
-      description: Start date of time range to fetch data in ISO 8601 timestamp format.
-      required: true
-      schema:
-        type: string
-        format: date-time
-        example: '2023-06-06T12:09:18.211Z'
-    WorkloadMetricTypes:
-      name: metricType
-      in: query
-      required: true
-      description: Specify which data to request.
-      explode: false
-      schema:
-        type: array
-        items:
-          $ref: '#/components/schemas/WorkloadMetricType'
-    SortOrder:
-      name: sortOrder
-      in: query
-      required: false
-      description: Sort results in descending or ascending order.
-      schema:
-        type: string
-        enum:
-        - asc
-        - desc
-        default: asc
-    FilterByDepartment:
-      name: departmentId
-      in: query
-      description: Filter using the department id.
-      required: false
-      schema:
-        type: string
-        example: '1'
-    Deleted:
-      name: deleted
-      in: query
-      description: Return only deleted resources when `true`.
-      schema:
-        type: boolean
-    Offset:
-      name: offset
-      in: query
-      required: false
-      description: The offset of the first item returned in the collection.
-      schema:
-        type: integer
-        format: int32
-        example: 100
-    Limit:
-      name: limit
-      in: query
-      required: false
-      description: The maximum number of entries to return.
-      schema:
-        type: integer
-        format: int32
-        default: 50
-        minimum: 1
-        maximum: 500
-  responses:
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   schemas:
-    TenantId:
-      description: The id of the tenant.
-      type: integer
-      format: int32
-      example: 1001
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    WorkloadsExtendedResources:
-      description: Set of extended resources with their quantity
-      type:
-      - array
-      - 'null'
-      items:
-        $ref: '#/components/schemas/WorkloadsExtendedResource'
-    GpuRequestType:
-      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
-      type:
-      - string
-      - 'null'
-      minLength: 1
-      enum:
-      - portion
-      - memory
-    OrgType:
+    Phase:
       type: string
       enum:
-      - PROJECT
-      - DEPARTMENT
-    PhaseReason:
-      type: string
-      enum:
-      - NonPreemptibleOverQuota
-      - OverLimit
-    WorkloadDetailed:
-      allOf:
-      - $ref: '#/components/schemas/Workload'
-      - type: object
-        properties:
-          pendingSchedulingMessages:
-            type:
-            - array
-            - 'null'
-            items:
-              $ref: '#/components/schemas/PendingSchedulingMessage'
-    WorkloadTelemetryType:
-      type: string
-      description: Select a telemetry type.
-      enum:
-      - WORKLOADS_COUNT
-      - GPU_ALLOCATION
-      - PENDING_TIME_DISTRIBUTION
-    RequestResourceQuantity:
-      type:
-      - object
-      - 'null'
-      properties:
-        limit:
-          type:
-          - string
-          - 'null'
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          example: 2G
-        request:
-          type:
-          - string
-          - 'null'
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          example: 200M
-    RequestedPods:
-      type: object
-      properties:
-        number:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: 1
-        min:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: 2
-        max:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          example: 5
-        parallelism:
-          type:
-          - integer
-          - 'null'
-          format: int32
-          description: specifies how many Pods can run in parallel
-          example: 3
-        completions:
-          type:
-          - integer
-          - 'null'
-          description: specifies how many Pods should terminate successfully before the Workload is completed
-          format: int32
-          example: 5
-    Environment:
-      type: object
-      required:
-      - name
-      - id
-      properties:
-        connections:
-          type: array
-          items:
-            $ref: '#/components/schemas/Connection1'
-        name:
-          type: string
-          example: pytorch
-        id:
-          type: string
-          format: uuid
-        replicaType:
-          $ref: '#/components/schemas/ReplicaType'
-    Datasource:
-      type: object
-      required:
-      - name
-      - id
-      properties:
-        type:
-          type: string
-          example: pvc
-        name:
-          type: string
-          example: my-pvc-datasource-1
-        id:
-          type: string
-          format: uuid
-    ReplicaType:
-      type:
-      - string
-      - 'null'
-      enum:
-      - Master
-      - Worker
-      - Leader
+      - Creating
+      - Initializing
+      - Resuming
+      - Pending
+      - Deleting
+      - Running
+      - Updating
+      - Stopped
+      - Stopping
+      - Degraded
+      - Failed
+      - Completed
+      - Terminating
+      - Unknown
     MetricsCompositeResponse:
       type: object
       required:
@@ -688,11 +492,39 @@ components:
               p50: '0.0823'
               p90: '0.2134'
               p99: '0.3156'
-    Conditions:
-      type: array
-      items:
-        $ref: '#/components/schemas/Condition1'
-      x-schema-name: Conditions
+    WorkloadAllocatedResources:
+      type:
+      - object
+      - 'null'
+      properties:
+        gpu:
+          type:
+          - number
+          - 'null'
+          format: double
+          example: 1.5
+          description: Required if and only if gpuRequestType is portion. States the number of GPUs allocated for the created workload. The default is no allocated GPUs.
+        gpuMemory:
+          type:
+          - string
+          - 'null'
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 200Mi
+        cpu:
+          type:
+          - number
+          - 'null'
+          format: double
+          description: States the amount of CPU cores used by the workload running.
+          example: 0.5
+        cpuMemory:
+          type:
+          - string
+          - 'null'
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 0B
+        extendedResources:
+          $ref: '#/components/schemas/WorkloadsExtendedResources'
     WorkloadMetricType:
       type: string
       description: Specify which metric data to request.
@@ -720,235 +552,45 @@ components:
       - NIM_TIME_TO_FIRST_TOKEN_SECONDS_PERCENTILES
       - NIM_E2E_REQUEST_LATENCY_SECONDS_PERCENTILES
       - NVLINK_BANDWIDTH_TOTAL
-    ActionsSupport:
-      description: The actions support provided for the workload.
-      type: object
-      properties:
-        delete:
-          type: boolean
-          example: true
-        suspend:
-          description: This permission includes resume as well as suspend.
-          type: boolean
-          example: true
-    ClusterId:
-      description: The id of the cluster.
-      type: string
-      format: uuid
-      example: 71f69d83-ba66-4822-adf5-55ce55efd210
-    HistogramSeries:
-      type: object
-      required:
-      - type
-      - values
-      properties:
-        type:
-          type: string
-          description: specifies what data returned
-          example: NIM_TIME_TO_FIRST_TOKEN_SECONDS
-        values:
-          type: array
-          items:
-            $ref: '#/components/schemas/HistogramValue'
-    MeasurementResponse:
-      type: object
-      required:
-      - type
-      - values
-      properties:
-        type:
-          type: string
-          description: specifies what data returned
-          example: ALLOCATED_GPU
-        labels:
-          type:
-          - object
-          - 'null'
-          description: labels of the metric measurement
-          example: '{''gpu'': ''3''}'
-          additionalProperties:
-            type: string
-        values:
-          type:
-          - array
-          - 'null'
-          items:
-            type: object
-            required:
-            - value
-            - timestamp
-            properties:
-              value:
-                type: string
-                example: '85'
-              timestamp:
-                type:
-                - string
-                - 'null'
-                format: date-time
-                example: '2023-06-06 12:09:18.211'
-    HistogramValue:
-      type: object
-      required:
-      - timestamp
-      - data
-      properties:
-        timestamp:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        data:
-          type: object
-          additionalProperties:
-            type: string
-    Workloads:
+    Conditions:
       type: array
       items:
-        $ref: '#/components/schemas/Workload'
-      x-schema-name: Workloads
-    PendingSchedulingMessage:
-      type: object
-      required:
-      - nodePool
-      - phaseReason
-      - reason
-      properties:
-        nodePool:
-          type: string
-          example: default
-        phaseReason:
-          $ref: '#/components/schemas/PhaseReason'
-        reason:
-          type: string
-          example: Non-preemptible over quota
-        orgType:
-          type:
-          - string
-          - 'null'
-          allOf:
-          - $ref: '#/components/schemas/OrgType'
-        userMessage:
-          type:
-          - string
-          - 'null'
-          example: You have reached the limit of non-preemptible resources
-    Phase:
-      type: string
-      enum:
-      - Creating
-      - Initializing
-      - Resuming
-      - Pending
-      - Deleting
-      - Running
-      - Updating
-      - Stopped
-      - Stopping
-      - Degraded
-      - Failed
-      - Completed
-      - Terminating
-      - Unknown
-    WorkloadsExtendedResource:
-      description: Quantity of an extended resource.
-      type:
-      - object
-      - 'null'
-      properties:
-        resource:
-          description: The name of the extended resource (mandatory)
-          type:
-          - string
-          - 'null'
-          example: hardware-vendor.example/foo
-          minLength: 1
-        quantity:
-          description: The requested quantity for the given resource.
-          type:
-          - string
-          - 'null'
-          example: 2
-          minLength: 1
-        exclude:
-          description: Whether to exclude this extended resource from the workload. This is necessary in case the extended resource is inherited from the policy defaults and it is desired not to include it in this workload.
-          type:
-          - boolean
-          - 'null'
-          example: false
-    WorkloadRequestResources:
-      type:
-      - object
-      - 'null'
-      properties:
-        gpuRequestType:
-          $ref: '#/components/schemas/GpuRequestType'
-        gpu:
-          $ref: '#/components/schemas/RequestResourceCores'
-        gpuMemory:
-          $ref: '#/components/schemas/RequestResourceQuantity'
-        cpu:
-          $ref: '#/components/schemas/RequestResourceCores'
-        cpuMemory:
-          $ref: '#/components/schemas/RequestResourceQuantity'
-        extendedResources:
-          $ref: '#/components/schemas/WorkloadsExtendedResources'
-    Source:
-      type: string
-      enum:
-      - CLI
-      - Control-plane
-      - Other
-    TelemetryResponse:
+        $ref: '#/components/schemas/Condition1'
+      x-schema-name: Conditions
+    TenantId:
+      description: The id of the tenant.
+      type: integer
+      format: int32
+      example: 1001
+    Condition1:
       type: object
       required:
       - type
-      - timestamp
-      - values
+      - status
       properties:
         type:
+          description: The type of the condition, such as Failed or Available. See Types of domain status conditions.
           type: string
-          description: specifies what data returned
-          example: ALLOCATION_RATIO
-        timestamp:
+          example: Ready
+        status:
           type: string
+          description: The status of the condition, such as True, False or Unknown.
+          example: 'False'
+        message:
+          type: string
+          description: An optional, human-readable message providing more details about the condition.
+          example: 'Resource validation failed: ...'
+        reason:
+          type: string
+          description: The reason for the Failed condition. Not applicable to other types of condition.
+          example: ErrorConfig
+        lastTransitionTime:
+          description: A timestamp of when the condition was created or the last time the condition transitioned from one status to another.
+          type:
+          - string
+          - 'null'
           format: date-time
-          example: '2023-06-06 12:09:18.211'
-        values:
-          type: array
-          items:
-            type: object
-            required:
-            - value
-            properties:
-              value:
-                type: string
-                example: '85'
-              groups:
-                type: array
-                description: columns the data is grouped by
-                maxItems: 2
-                items:
-                  type: object
-                  required:
-                  - key
-                  - value
-                  properties:
-                    key:
-                      type: string
-                      example: department
-                    value:
-                      type: string
-                      example: '1'
-                    name:
-                      type: string
-                      example: department-A
-    SourceApi:
-      type:
-      - string
-      - 'null'
-      enum:
-      - WorkloadsV2
+          example: '2022-01-01T03:49:52.531Z'
     Workload:
       type: object
       required:
@@ -1193,23 +835,188 @@ components:
               type: string
             requiredPlacement:
               type: string
-    RequestResourceCores:
+    RequestResourceQuantity:
       type:
       - object
       - 'null'
       properties:
         limit:
           type:
-          - number
+          - string
           - 'null'
-          format: double
-          example: 1.5
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 2G
         request:
           type:
-          - number
+          - string
           - 'null'
-          format: double
+          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
+          example: 200M
+    WorkloadTelemetryType:
+      type: string
+      description: Select a telemetry type.
+      enum:
+      - WORKLOADS_COUNT
+      - GPU_ALLOCATION
+      - PENDING_TIME_DISTRIBUTION
+    HistogramValue:
+      type: object
+      required:
+      - timestamp
+      - data
+      properties:
+        timestamp:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        data:
+          type: object
+          additionalProperties:
+            type: string
+    HistogramSeries:
+      type: object
+      required:
+      - type
+      - values
+      properties:
+        type:
+          type: string
+          description: specifies what data returned
+          example: NIM_TIME_TO_FIRST_TOKEN_SECONDS
+        values:
+          type: array
+          items:
+            $ref: '#/components/schemas/HistogramValue'
+    ClusterId:
+      description: The id of the cluster.
+      type: string
+      format: uuid
+      example: 71f69d83-ba66-4822-adf5-55ce55efd210
+    OrgType:
+      type: string
+      enum:
+      - PROJECT
+      - DEPARTMENT
+    ReplicaType:
+      type:
+      - string
+      - 'null'
+      enum:
+      - Master
+      - Worker
+      - Leader
+    Datasource:
+      type: object
+      required:
+      - name
+      - id
+      properties:
+        type:
+          type: string
+          example: pvc
+        name:
+          type: string
+          example: my-pvc-datasource-1
+        id:
+          type: string
+          format: uuid
+    RequestedPods:
+      type: object
+      properties:
+        number:
+          type:
+          - integer
+          - 'null'
+          format: int32
           example: 1
+        min:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 2
+        max:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          example: 5
+        parallelism:
+          type:
+          - integer
+          - 'null'
+          format: int32
+          description: specifies how many Pods can run in parallel
+          example: 3
+        completions:
+          type:
+          - integer
+          - 'null'
+          description: specifies how many Pods should terminate successfully before the Workload is completed
+          format: int32
+          example: 5
+    WorkloadsExtendedResources:
+      description: Set of extended resources with their quantity
+      type:
+      - array
+      - 'null'
+      items:
+        $ref: '#/components/schemas/WorkloadsExtendedResource'
+    WorkloadRequestResources:
+      type:
+      - object
+      - 'null'
+      properties:
+        gpuRequestType:
+          $ref: '#/components/schemas/GpuRequestType'
+        gpu:
+          $ref: '#/components/schemas/RequestResourceCores'
+        gpuMemory:
+          $ref: '#/components/schemas/RequestResourceQuantity'
+        cpu:
+          $ref: '#/components/schemas/RequestResourceCores'
+        cpuMemory:
+          $ref: '#/components/schemas/RequestResourceQuantity'
+        extendedResources:
+          $ref: '#/components/schemas/WorkloadsExtendedResources'
+    MeasurementResponse:
+      type: object
+      required:
+      - type
+      - values
+      properties:
+        type:
+          type: string
+          description: specifies what data returned
+          example: ALLOCATED_GPU
+        labels:
+          type:
+          - object
+          - 'null'
+          description: labels of the metric measurement
+          example: '{''gpu'': ''3''}'
+          additionalProperties:
+            type: string
+        values:
+          type:
+          - array
+          - 'null'
+          items:
+            type: object
+            required:
+            - value
+            - timestamp
+            properties:
+              value:
+                type: string
+                example: '85'
+              timestamp:
+                type:
+                - string
+                - 'null'
+                format: date-time
+                example: '2023-06-06 12:09:18.211'
     Connection1:
       type: object
       description: Connection that either expose port from the container (a port is associated with a tool that the container runs), or URL to be used for connecting to an external tool that is related to the action of the container (such as Weights & Biases).
@@ -1267,68 +1074,261 @@ components:
           type: integer
           format: int32
           example: 8080
-    WorkloadAllocatedResources:
+    SourceApi:
+      type:
+      - string
+      - 'null'
+      enum:
+      - WorkloadsV2
+    ActionsSupport:
+      description: The actions support provided for the workload.
+      type: object
+      properties:
+        delete:
+          type: boolean
+          example: true
+        suspend:
+          description: This permission includes resume as well as suspend.
+          type: boolean
+          example: true
+    GpuRequestType:
+      description: Sets the unit type for GPU resources requests. Stated in terms of portion or memory. Sets the unit type for other GPU request fields. If `gpuDevicesRequest > 1`, only `portion` is supported. If `gpuDeviceRequest = 1`, the request type can be stated as `portion` or `memory`.
+      type:
+      - string
+      - 'null'
+      minLength: 1
+      enum:
+      - portion
+      - memory
+    WorkloadsExtendedResource:
+      description: Quantity of an extended resource.
       type:
       - object
       - 'null'
       properties:
-        gpu:
+        resource:
+          description: The name of the extended resource (mandatory)
+          type:
+          - string
+          - 'null'
+          example: hardware-vendor.example/foo
+          minLength: 1
+        quantity:
+          description: The requested quantity for the given resource.
+          type:
+          - string
+          - 'null'
+          example: 2
+          minLength: 1
+        exclude:
+          description: Whether to exclude this extended resource from the workload. This is necessary in case the extended resource is inherited from the policy defaults and it is desired not to include it in this workload.
+          type:
+          - boolean
+          - 'null'
+          example: false
+    PhaseReason:
+      type: string
+      enum:
+      - NonPreemptibleOverQuota
+      - OverLimit
+    WorkloadDetailed:
+      allOf:
+      - $ref: '#/components/schemas/Workload'
+      - type: object
+        properties:
+          pendingSchedulingMessages:
+            type:
+            - array
+            - 'null'
+            items:
+              $ref: '#/components/schemas/PendingSchedulingMessage'
+    RequestResourceCores:
+      type:
+      - object
+      - 'null'
+      properties:
+        limit:
           type:
           - number
           - 'null'
           format: double
           example: 1.5
-          description: Required if and only if gpuRequestType is portion. States the number of GPUs allocated for the created workload. The default is no allocated GPUs.
-        gpuMemory:
-          type:
-          - string
-          - 'null'
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          example: 200Mi
-        cpu:
+        request:
           type:
           - number
           - 'null'
           format: double
-          description: States the amount of CPU cores used by the workload running.
-          example: 0.5
-        cpuMemory:
+          example: 1
+    Workloads:
+      type: array
+      items:
+        $ref: '#/components/schemas/Workload'
+      x-schema-name: Workloads
+    PendingSchedulingMessage:
+      type: object
+      required:
+      - nodePool
+      - phaseReason
+      - reason
+      properties:
+        nodePool:
+          type: string
+          example: default
+        phaseReason:
+          $ref: '#/components/schemas/PhaseReason'
+        reason:
+          type: string
+          example: Non-preemptible over quota
+        orgType:
           type:
           - string
           - 'null'
-          pattern: ^([+-]?[0-9.]+)([eEinumkKMGTP]*[-+]?[0-9]*)$
-          example: 0B
-        extendedResources:
-          $ref: '#/components/schemas/WorkloadsExtendedResources'
-    Condition1:
+          allOf:
+          - $ref: '#/components/schemas/OrgType'
+        userMessage:
+          type:
+          - string
+          - 'null'
+          example: You have reached the limit of non-preemptible resources
+    TelemetryResponse:
       type: object
       required:
       - type
-      - status
+      - timestamp
+      - values
       properties:
         type:
-          description: The type of the condition, such as Failed or Available. See Types of domain status conditions.
           type: string
-          example: Ready
-        status:
+          description: specifies what data returned
+          example: ALLOCATION_RATIO
+        timestamp:
           type: string
-          description: The status of the condition, such as True, False or Unknown.
-          example: 'False'
+          format: date-time
+          example: '2023-06-06 12:09:18.211'
+        values:
+          type: array
+          items:
+            type: object
+            required:
+            - value
+            properties:
+              value:
+                type: string
+                example: '85'
+              groups:
+                type: array
+                description: columns the data is grouped by
+                maxItems: 2
+                items:
+                  type: object
+                  required:
+                  - key
+                  - value
+                  properties:
+                    key:
+                      type: string
+                      example: department
+                    value:
+                      type: string
+                      example: '1'
+                    name:
+                      type: string
+                      example: department-A
+    Environment:
+      type: object
+      required:
+      - name
+      - id
+      properties:
+        connections:
+          type: array
+          items:
+            $ref: '#/components/schemas/Connection1'
+        name:
+          type: string
+          example: pytorch
+        id:
+          type: string
+          format: uuid
+        replicaType:
+          $ref: '#/components/schemas/ReplicaType'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
         message:
           type: string
-          description: An optional, human-readable message providing more details about the condition.
-          example: 'Resource validation failed: ...'
-        reason:
+        details:
           type: string
-          description: The reason for the Failed condition. Not applicable to other types of condition.
-          example: ErrorConfig
-        lastTransitionTime:
-          description: A timestamp of when the condition was created or the last time the condition transitioned from one status to another.
-          type:
-          - string
-          - 'null'
-          format: date-time
-          example: '2022-01-01T03:49:52.531Z'
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+    Source:
+      type: string
+      enum:
+      - CLI
+      - Control-plane
+      - Other
+  responses:
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
   securitySchemes:
     bearerAuth:
       type: http

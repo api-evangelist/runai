@@ -82,35 +82,41 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  responses:
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   schemas:
+    Permissions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Permission'
+      x-schema-name: Permissions
+    PermittedScopes:
+      type: object
+      properties:
+        system:
+          type: boolean
+          example: false
+        tenants:
+          type: array
+          items:
+            type: string
+            example: '1'
+        tenant:
+          deprecated: true
+          type: string
+          example: '1'
+        clusters:
+          type: array
+          items:
+            type: string
+            example: a418ed33-9399-48c0-a890-122cadd13bfd
+        departments:
+          type: array
+          items:
+            type: string
+            example: '7'
+        projects:
+          type: array
+          items:
+            type: string
     ResourceType:
       type: string
       description: "Resource type enum for authorization. \n\nNote: The 'apps' resource type is DEPRECATED. Please use 'service-account' instead for managing service accounts.\n"
@@ -158,44 +164,6 @@ components:
       - network-topologies
       - registries
       - scrapeable-metrics
-    Permissions:
-      type: array
-      items:
-        $ref: '#/components/schemas/Permission'
-      x-schema-name: Permissions
-    PermittedScopesActions:
-      type: object
-      required:
-      - create
-      - read
-      - update
-      - delete
-      properties:
-        create:
-          $ref: '#/components/schemas/PermittedScopes'
-        read:
-          $ref: '#/components/schemas/PermittedScopes'
-        update:
-          $ref: '#/components/schemas/PermittedScopes'
-        delete:
-          $ref: '#/components/schemas/PermittedScopes'
-    ResourceTypeGroupId:
-      type: string
-      enum:
-      - organization
-      - physical-resource
-      - iam
-      - dashboard
-      - workload
-      - workload-asset
-    Action:
-      type: string
-      enum:
-      - create
-      - read
-      - update
-      - delete
-      - sync
     Permission:
       type: object
       required:
@@ -215,6 +183,39 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Action'
+    Action:
+      type: string
+      enum:
+      - create
+      - read
+      - update
+      - delete
+      - sync
+    ResourceTypeGroupId:
+      type: string
+      enum:
+      - organization
+      - physical-resource
+      - iam
+      - dashboard
+      - workload
+      - workload-asset
+    PermittedScopesActions:
+      type: object
+      required:
+      - create
+      - read
+      - update
+      - delete
+      properties:
+        create:
+          $ref: '#/components/schemas/PermittedScopes'
+        read:
+          $ref: '#/components/schemas/PermittedScopes'
+        update:
+          $ref: '#/components/schemas/PermittedScopes'
+        delete:
+          $ref: '#/components/schemas/PermittedScopes'
     Error:
       required:
       - code
@@ -231,35 +232,34 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-    PermittedScopes:
-      type: object
-      properties:
-        system:
-          type: boolean
-          example: false
-        tenants:
-          type: array
-          items:
-            type: string
-            example: '1'
-        tenant:
-          deprecated: true
-          type: string
-          example: '1'
-        clusters:
-          type: array
-          items:
-            type: string
-            example: a418ed33-9399-48c0-a890-122cadd13bfd
-        departments:
-          type: array
-          items:
-            type: string
-            example: '7'
-        projects:
-          type: array
-          items:
-            type: string
+  responses:
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
   securitySchemes:
     bearerAuth:
       type: http

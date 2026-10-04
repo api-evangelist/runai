@@ -238,24 +238,6 @@ components:
           example:
             code: 400
             message: Required parameter is missing
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
     404NotFound:
       description: The specified resource was not found
       content:
@@ -265,15 +247,6 @@ components:
           example:
             code: 404
             message: Resource id not found.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
     403Forbidden:
       description: Forbidden
       content:
@@ -283,6 +256,24 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -292,113 +283,24 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+  parameters:
+    accessKeyId:
+      name: accessKeyId
+      in: path
+      required: true
+      description: The access key ID
+      schema:
+        type: string
   schemas:
-    AccessKeyCreationRequest1:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
-          description: The name of the access key. The name must be unique within the user's access keys list and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
-      example:
-        name: access-key-name
-    AccessKeysAdministration:
-      type: object
-      required:
-      - accessKeys
-      properties:
-        accessKeys:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessKeyAdministration'
-      example:
-        accessKeys:
-        - name: my-access-key
-          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
-          clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
-          createdBy: test@run.ai
-          createdAt: '2020-01-01T00:00:00Z'
-          lastLogin: '2020-01-01T00:00:00Z'
-        - name: another-access-key
-          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
-          clientId: 2545e-234344bc-5df4gc8-d66he-fg566f
-          createdBy: user@run.ai
-          createdAt: '2020-01-01T00:00:00Z'
-          lastLogin: '2020-01-01T00:00:00Z'
-    AccessKeys:
-      type: object
-      required:
-      - accessKeys
-      properties:
-        accessKeys:
-          type: array
-          items:
-            $ref: '#/components/schemas/AccessKey1'
-      example:
-        accessKeys:
-        - name: my-access-key
-          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
-          clientId: 3434c-12323ab-4ce2ea6
-          createdAt: '2019-01-01T00:00:00Z'
-          lastLogin: '2020-01-01T00:00:00Z'
-        - name: another-access-key
-          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
-          clientId: 5656d-45645cd-6de3fb7
-          createdAt: '2019-01-01T00:00:00Z'
-          lastLogin: '2020-01-01T00:00:00Z'
-    AccessKeyAdministration:
-      type: object
-      required:
-      - name
-      - id
-      - clientId
-      - createdBy
-      - createdAt
-      - lastLogin
-      properties:
-        name:
-          type: string
-        id:
-          type: string
-        clientId:
-          type: string
-        createdBy:
-          type: string
-        createdAt:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        lastLogin:
-          type:
-          - string
-          - 'null'
-          format: date-time
-      example:
-        name: my-access-key
-        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
-        clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
-        createdBy: test@run.ai
-        createdAt: '2020-01-01T00:00:00Z'
-        lastLogin: '2020-01-01T00:00:00Z'
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
     AccessKeyPostResponse:
       type: object
       required:
@@ -432,6 +334,27 @@ components:
         name: access-key-123
         clientSecret: this-is-the-access-key-secret
         createdAt: '2020-01-01T00:00:00Z'
+    AccessKeys:
+      type: object
+      required:
+      - accessKeys
+      properties:
+        accessKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessKey1'
+      example:
+        accessKeys:
+        - name: my-access-key
+          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+          clientId: 3434c-12323ab-4ce2ea6
+          createdAt: '2019-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+        - name: another-access-key
+          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
+          clientId: 5656d-45645cd-6de3fb7
+          createdAt: '2019-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
     AccessKey1:
       type: object
       required:
@@ -468,14 +391,91 @@ components:
         clientId: 3434c-12323ab-4ce2ea6
         createdAt: '2019-01-01T00:00:00Z'
         lastLogin: '2020-01-01T00:00:00Z'
-  parameters:
-    accessKeyId:
-      name: accessKeyId
-      in: path
-      required: true
-      description: The access key ID
-      schema:
-        type: string
+    AccessKeyCreationRequest1:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
+          description: The name of the access key. The name must be unique within the user's access keys list and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
+      example:
+        name: access-key-name
+    AccessKeyAdministration:
+      type: object
+      required:
+      - name
+      - id
+      - clientId
+      - createdBy
+      - createdAt
+      - lastLogin
+      properties:
+        name:
+          type: string
+        id:
+          type: string
+        clientId:
+          type: string
+        createdBy:
+          type: string
+        createdAt:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        lastLogin:
+          type:
+          - string
+          - 'null'
+          format: date-time
+      example:
+        name: my-access-key
+        id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+        clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
+        createdBy: test@run.ai
+        createdAt: '2020-01-01T00:00:00Z'
+        lastLogin: '2020-01-01T00:00:00Z'
+    AccessKeysAdministration:
+      type: object
+      required:
+      - accessKeys
+      properties:
+        accessKeys:
+          type: array
+          items:
+            $ref: '#/components/schemas/AccessKeyAdministration'
+      example:
+        accessKeys:
+        - name: my-access-key
+          id: 3434c-12323ab-4ce2ea6-b44fc-db344d
+          clientId: 1434c-123233ab-4ce2ea6-b44fc-db344d
+          createdBy: test@run.ai
+          createdAt: '2020-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+        - name: another-access-key
+          id: 5656d-45645cd-6de3fb7-c55gd-ef455e
+          clientId: 2545e-234344bc-5df4gc8-d66he-fg566f
+          createdBy: user@run.ai
+          createdAt: '2020-01-01T00:00:00Z'
+          lastLogin: '2020-01-01T00:00:00Z'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
   securitySchemes:
     bearerAuth:
       type: http

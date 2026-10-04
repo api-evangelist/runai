@@ -257,6 +257,15 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   responses:
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
     500InternalServerError:
       description: unexpected error
       content:
@@ -275,24 +284,6 @@ components:
           example:
             code: 401
             message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -302,39 +293,15 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
-  parameters:
-    DocumentName:
-      name: documentName
-      in: path
-      required: true
-      description: The manual document name.
-      schema:
-        type: string
-        minLength: 4
-        pattern: ^[A-Za-z0-9_]+\.md$
-        example: runai.md
-    OperatingSystem:
-      name: operatingSystem
-      in: path
-      required: true
-      description: The operating system name.
-      schema:
-        type: string
-        enum:
-        - linux
-        - windows
-        - darwin
-        minLength: 4
-        example: linux
-    Architecture:
-      name: architecture
-      in: path
-      required: true
-      description: The architecture type.
-      schema:
-        type: string
-        minLength: 4
-        example: arm64
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
   schemas:
     Command1:
       type: object
@@ -361,6 +328,39 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
+  parameters:
+    Architecture:
+      name: architecture
+      in: path
+      required: true
+      description: The architecture type.
+      schema:
+        type: string
+        minLength: 4
+        example: arm64
+    DocumentName:
+      name: documentName
+      in: path
+      required: true
+      description: The manual document name.
+      schema:
+        type: string
+        minLength: 4
+        pattern: ^[A-Za-z0-9_]+\.md$
+        example: runai.md
+    OperatingSystem:
+      name: operatingSystem
+      in: path
+      required: true
+      description: The operating system name.
+      schema:
+        type: string
+        enum:
+        - linux
+        - windows
+        - darwin
+        minLength: 4
+        example: linux
   securitySchemes:
     bearerAuth:
       type: http

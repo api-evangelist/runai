@@ -205,42 +205,6 @@ paths:
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
   responses:
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
     400BadRequest:
       description: Bad request.
       content:
@@ -259,6 +223,33 @@ components:
           example:
             code: 403
             message: You do not have sufficient permissions.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
     503ServiceUnavailable:
       description: unexpected error
       content:
@@ -268,7 +259,53 @@ components:
           example:
             code: 503
             message: Please try again in few minutes.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+  parameters:
+    appId:
+      name: appId
+      in: path
+      required: true
+      description: The application id to retrieve
+      schema:
+        type: string
   schemas:
+    ApplicationPostResponse:
+      type: object
+      required:
+      - id
+      - name
+      - secret
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        secret:
+          type: string
+        clientId:
+          type: string
+      example:
+        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
+        name: app123
+        secret: asdasidjn9d
+        clientId: app123
+    ApplicationPatchRequest:
+      type: object
+      required:
+      - enabled
+      properties:
+        enabled:
+          type: boolean
+      example:
+        enabled: true
     Application:
       type: object
       required:
@@ -318,50 +355,6 @@ components:
         lastLogin: '2020-01-01T00:00:00Z'
         id: 3434c-12323ab-4ce2ea6-b44fc-db344d
         clientId: app123
-    Applications:
-      type: array
-      items:
-        $ref: '#/components/schemas/Application'
-    ApplicationPostResponse:
-      type: object
-      required:
-      - id
-      - name
-      - secret
-      properties:
-        id:
-          type: string
-        name:
-          type: string
-        secret:
-          type: string
-        clientId:
-          type: string
-      example:
-        id: 0eeaf222-e503-4f35-9d9c-c419816272e3
-        name: app123
-        secret: asdasidjn9d
-        clientId: app123
-    ApplicationCreationRequest:
-      type: object
-      required:
-      - name
-      properties:
-        name:
-          type: string
-          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
-          description: The name of the application. The name must be unique within the organization and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
-      example:
-        name: app-123
-    ApplicationPatchRequest:
-      type: object
-      required:
-      - enabled
-      properties:
-        enabled:
-          type: boolean
-      example:
-        enabled: true
     Error:
       required:
       - code
@@ -378,14 +371,21 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
-  parameters:
-    appId:
-      name: appId
-      in: path
-      required: true
-      description: The application id to retrieve
-      schema:
-        type: string
+    ApplicationCreationRequest:
+      type: object
+      required:
+      - name
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][-_a-z0-9]*[a-z0-9]$
+          description: The name of the application. The name must be unique within the organization and can only contain lowercase alphanumeric characters and hyphens. It must start and end with a letter.
+      example:
+        name: app-123
+    Applications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Application'
   securitySchemes:
     bearerAuth:
       type: http

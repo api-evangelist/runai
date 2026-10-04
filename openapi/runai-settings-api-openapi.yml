@@ -123,77 +123,25 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  responses:
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   schemas:
-    AutoRedirectSsoSetting:
+    Settings:
+      type: object
+      additionalProperties: true
+    settingsKeyEnum:
+      type: string
+      enum:
+      - autoRedirectSSO
+      - browserSessionTimeout
+      - logoutRedirectUri
+    SettingsGetResponse:
       type: object
       properties:
-        enabled:
-          type:
-          - boolean
-          - 'null'
-        idpAlias:
-          type:
-          - string
-          - 'null'
-          pattern: ^[a-z0-9_-]*$
-      example:
-        enabled: false
-        idpAlias: oidc
+        autoRedirectSSO:
+          $ref: '#/components/schemas/AutoRedirectSsoSetting'
+        browserSessionTimeout:
+          $ref: '#/components/schemas/BrowserSessionTimeoutSetting'
+        logoutRedirectUri:
+          $ref: '#/components/schemas/LogoutRedirectUriSetting'
     LogoutRedirectUriSetting:
       type: object
       description: Settings for configuring the logout redirect URI that determines where users are redirected after logging out.
@@ -205,35 +153,6 @@ components:
           description: The URI where users will be redirected after logging out of the application
           pattern: /^(https?://)?([a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(:[0-9]{1,5})?(/[^\s]*)?$|^$/
           example: https://example.com/logout
-    SettingsGetResponse:
-      type: object
-      properties:
-        autoRedirectSSO:
-          $ref: '#/components/schemas/AutoRedirectSsoSetting'
-        browserSessionTimeout:
-          $ref: '#/components/schemas/BrowserSessionTimeoutSetting'
-        logoutRedirectUri:
-          $ref: '#/components/schemas/LogoutRedirectUriSetting'
-    BrowserSessionTimeoutSetting:
-      type: object
-      description: Settings for user session timeout configuration that manages automatic logout after periods of inactivity.
-      properties:
-        idleTimeout:
-          type:
-          - number
-          - 'null'
-          description: Duration in minutes that a user can remain inactive before their browser session automatically expires and requires re-authentication
-          default: 60
-          minimum: 1
-    settingsKeyEnum:
-      type: string
-      enum:
-      - autoRedirectSSO
-      - browserSessionTimeout
-      - logoutRedirectUri
-    Settings:
-      type: object
-      additionalProperties: true
     Error:
       required:
       - code
@@ -250,6 +169,87 @@ components:
       example:
         code: 400
         message: Bad request - Resource should have a name
+    BrowserSessionTimeoutSetting:
+      type: object
+      description: Settings for user session timeout configuration that manages automatic logout after periods of inactivity.
+      properties:
+        idleTimeout:
+          type:
+          - number
+          - 'null'
+          description: Duration in minutes that a user can remain inactive before their browser session automatically expires and requires re-authentication
+          default: 60
+          minimum: 1
+    AutoRedirectSsoSetting:
+      type: object
+      properties:
+        enabled:
+          type:
+          - boolean
+          - 'null'
+        idpAlias:
+          type:
+          - string
+          - 'null'
+          pattern: ^[a-z0-9_-]*$
+      example:
+        enabled: false
+        idpAlias: oidc
+  responses:
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
   parameters:
     settingsKey:
       name: key

@@ -250,110 +250,22 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  responses:
-    501NotImplemented:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 501
-            message: Not implemented
-    404NotFound:
-      description: The specified resource was not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 404
-            message: Resource id not found.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
-    409Conflict:
-      description: The specified resource already exists
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 409
-            message: Resource with this name already exists
   schemas:
+    CreateSlackAppResponse:
+      type: object
+      required:
+      - slackAppUrl
+      properties:
+        slackAppUrl:
+          type: string
+      example:
+        slackAppUrl: https://api.slack.com/apps/A089PHD5S0Q
     NotificationChannelType:
       type: string
       enum:
       - email
       - slack
       default: email
-    EmailAuthType:
-      type: string
-      enum:
-      - auth_login
-      - auth_plain
-      - auth_none
-      - ''
-      default: auth_login
-    SlackNotificationChannelConfig:
-      type: object
-      properties:
-        recipients:
-          type: array
-          items:
-            type: string
-          default: []
-        directNotifications:
-          type:
-          - boolean
-          - 'null'
-        apiToken:
-          type: string
-      example:
-        apiToken: <your_api_token>
     NotificationChannelResponse:
       type: object
       required:
@@ -366,46 +278,6 @@ components:
         properties:
           name:
             type: string
-    CreateSlackAppRequestBody:
-      type: object
-      required:
-      - accessToken
-      properties:
-        accessToken:
-          type: string
-          description: The access token required for creating slack app
-      example:
-        accessToken: REDACTED_SLACK_TOKEN
-    Error:
-      required:
-      - code
-      - message
-      properties:
-        code:
-          type: integer
-          minimum: 100
-          maximum: 599
-        message:
-          type: string
-        details:
-          type: string
-      example:
-        code: 400
-        message: Bad request - Resource should have a name
-    NotificationChannelConfig:
-      type: object
-      allOf:
-      - $ref: '#/components/schemas/EmailNotificationChannelConfig'
-      - $ref: '#/components/schemas/SlackNotificationChannelConfig'
-    CreateSlackAppResponse:
-      type: object
-      required:
-      - slackAppUrl
-      properties:
-        slackAppUrl:
-          type: string
-      example:
-        slackAppUrl: https://api.slack.com/apps/A089PHD5S0Q
     EmailNotificationChannelConfig:
       type: object
       properties:
@@ -451,27 +323,40 @@ components:
         smtpHost: smtp.gmail.com
         from: email@gmail.com
         subject: My subject
-    NotificationChannelForValidate:
-      type: object
-      required:
-      - type
-      - config
-      allOf:
-      - $ref: '#/components/schemas/NotificationChannelForPatch'
-    NotificationChannelForPatch:
+    SlackNotificationChannelConfig:
       type: object
       properties:
-        type:
-          $ref: '#/components/schemas/NotificationChannelType'
-        config:
-          allOf:
-          - $ref: '#/components/schemas/NotificationChannelConfig'
-          example:
-            username: email@gmail.com
-            password: 123456
-            smtpHost: smtp.gmail.com
-            from: email@gmail.com
-            subject: My subject
+        recipients:
+          type: array
+          items:
+            type: string
+          default: []
+        directNotifications:
+          type:
+          - boolean
+          - 'null'
+        apiToken:
+          type: string
+      example:
+        apiToken: <your_api_token>
+    EmailAuthType:
+      type: string
+      enum:
+      - auth_login
+      - auth_plain
+      - auth_none
+      - ''
+      default: auth_login
+    CreateSlackAppRequestBody:
+      type: object
+      required:
+      - accessToken
+      properties:
+        accessToken:
+          type: string
+          description: The access token required for creating slack app
+      example:
+        accessToken: REDACTED_SLACK_TOKEN
     NotificationChannel:
       type: object
       required:
@@ -496,6 +381,121 @@ components:
       example:
         name: my-email
         type: email
+    NotificationChannelForValidate:
+      type: object
+      required:
+      - type
+      - config
+      allOf:
+      - $ref: '#/components/schemas/NotificationChannelForPatch'
+    NotificationChannelForPatch:
+      type: object
+      properties:
+        type:
+          $ref: '#/components/schemas/NotificationChannelType'
+        config:
+          allOf:
+          - $ref: '#/components/schemas/NotificationChannelConfig'
+          example:
+            username: email@gmail.com
+            password: 123456
+            smtpHost: smtp.gmail.com
+            from: email@gmail.com
+            subject: My subject
+    NotificationChannelConfig:
+      type: object
+      allOf:
+      - $ref: '#/components/schemas/EmailNotificationChannelConfig'
+      - $ref: '#/components/schemas/SlackNotificationChannelConfig'
+    Error:
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          minimum: 100
+          maximum: 599
+        message:
+          type: string
+        details:
+          type: string
+      example:
+        code: 400
+        message: Bad request - Resource should have a name
+  responses:
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    409Conflict:
+      description: The specified resource already exists
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 409
+            message: Resource with this name already exists
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
+    404NotFound:
+      description: The specified resource was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 404
+            message: Resource id not found.
+    501NotImplemented:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 501
+            message: Not implemented
   parameters:
     NotificationChannelName:
       name: name

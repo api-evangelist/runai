@@ -49,61 +49,11 @@ paths:
         '503':
           $ref: '#/components/responses/503ServiceUnavailable'
 components:
-  responses:
-    500InternalServerError:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 500
-            message: Something went wrong.
-    401Unauthorized:
-      description: Unauthorized
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 401
-            message: Issuer is not familiar.
-    400BadRequest:
-      description: Bad request.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 400
-            message: Required parameter is missing
-    403Forbidden:
-      description: Forbidden
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 403
-            message: You do not have sufficient permissions.
-    503ServiceUnavailable:
-      description: unexpected error
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-          example:
-            code: 503
-            message: Please try again in few minutes.
   schemas:
-    IdsList:
-      type: array
-      description: List of ids to perform the action on.
-      items:
-        type: string
-        format: uuid
-        description: Id to perform the action on.
-      minLength: 1
+    ErrorCode:
+      type: integer
+      format: int32
+      description: A numeric code representing the error type.
     WorkloadBatch:
       type: object
       description: The ids and action to perform on a batch of workloads. The number of ids is limited to 100.
@@ -129,10 +79,21 @@ components:
           description: The IDs that failed to update.
           items:
             $ref: '#/components/schemas/BatchResponseFailureItem'
-    ErrorCode:
-      type: integer
-      format: int32
-      description: A numeric code representing the error type.
+    ErrorMessage:
+      type: string
+      description: The error message.
+    BatchId:
+      type: string
+      format: uuid
+      description: The ID of the batch operation.
+    IdsList:
+      type: array
+      description: List of ids to perform the action on.
+      items:
+        type: string
+        format: uuid
+        description: Id to perform the action on.
+      minLength: 1
     BatchResponseFailureItem:
       type: object
       required:
@@ -147,13 +108,6 @@ components:
           $ref: '#/components/schemas/ErrorCode'
         message:
           $ref: '#/components/schemas/ErrorMessage'
-    ErrorMessage:
-      type: string
-      description: The error message.
-    BatchId:
-      type: string
-      format: uuid
-      description: The ID of the batch operation.
     Error:
       required:
       - code
@@ -177,6 +131,52 @@ components:
       - delete
       - suspend
       - resume
+  responses:
+    400BadRequest:
+      description: Bad request.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 400
+            message: Required parameter is missing
+    403Forbidden:
+      description: Forbidden
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 403
+            message: You do not have sufficient permissions.
+    500InternalServerError:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 500
+            message: Something went wrong.
+    503ServiceUnavailable:
+      description: unexpected error
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 503
+            message: Please try again in few minutes.
+    401Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: 401
+            message: Issuer is not familiar.
   securitySchemes:
     bearerAuth:
       type: http
